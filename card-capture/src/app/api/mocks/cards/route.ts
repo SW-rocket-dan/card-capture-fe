@@ -24,6 +24,7 @@ export async function GET(request: Request) {
               height: 100,
               rotate: 0,
               zIndex: 2,
+              opacity: 1,
             },
             content: {
               url: 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQgByBT5IiAT_a2x9pUVb4VMoOrlzHH7Jrzj-HB5jzHlR4lNLMS',
@@ -43,6 +44,7 @@ export async function GET(request: Request) {
               height: 50,
               rotate: 0,
               zIndex: 1,
+              opacity: 1,
             },
             content: {
               url: 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQgByBT5IiAT_a2x9pUVb4VMoOrlzHH7Jrzj-HB5jzHlR4lNLMS',
