@@ -16,8 +16,6 @@ export type Layer = {
   type: 'text' | 'image' | 'shape' | 'illust';
   content: Image | Shape | Text | Illust;
   id: number;
-  opacity: number;
-  zIndex: number; // array 쓰는 방식도 있긴함, sort 최적화문제 걱정 x
   position: Position;
 };
 
@@ -49,4 +47,6 @@ export type Position = {
   width: number;
   height: number;
   rotate: number;
+  zIndex: number; // array 쓰는 방식도 있긴함, sort 최적화문제 걱정 x
+  opacity: number;
 };

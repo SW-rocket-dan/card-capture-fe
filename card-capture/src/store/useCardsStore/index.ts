@@ -9,16 +9,16 @@ import { Draft, produce } from 'immer';
  */
 type useCardsStore = {
   cards: Card[];
-  setCard: (card: Card) => void;
+  setCard: (card: Card[]) => void;
 };
 
 export const useCardsStore = create<useCardsStore>()(set => ({
   cards: [],
-  setCard: (card: Card) =>
+  setCard: (cards: Card[]) =>
     set(
       //immer를 활용하여 불변성 유지
       produce((draft: Draft<{ cards: Card[] }>) => {
-        draft.cards = [card];
+        draft.cards = cards;
       }),
     ),
 }));
