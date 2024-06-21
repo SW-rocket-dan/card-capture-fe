@@ -3,7 +3,6 @@
 import FocusBox from '@/components/editor/FocusBox';
 import LayerBox from '@/components/editor/LayerBox';
 import { useCardsStore } from '@/store/useCardsStore';
-import { Card } from '@/store/useCardsStore/type';
 import { useEffect, useState } from 'react';
 
 type Props = {};
@@ -38,7 +37,7 @@ const page = ({}: Props) => {
 
   return (
     <div
-      className="w-96 h-96 bg-slate-400 relative"
+      className="w-96 h-96 bg-slate-400 relative ml-8"
       onClick={unFocusLayerHandler}
     >
       {/* 현재는 카드가 한장이라고 고정하고 구현 */}
