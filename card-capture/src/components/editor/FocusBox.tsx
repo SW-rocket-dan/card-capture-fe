@@ -219,10 +219,9 @@ const FocusBox = ({ component, layerId }: Props) => {
     setPosition(layerId, { ...curPosition, height, y });
   };
 
-  console.log(layer.position);
   return (
     <div
-      className="absolute border"
+      className={`absolute border ${isDrag ? 'cursor-grabbing' : 'cursor-grab'}`}
       style={{
         left: curPosition.x,
         top: curPosition.y,
@@ -237,10 +236,54 @@ const FocusBox = ({ component, layerId }: Props) => {
       onClick={stopPropagation}
     >
       {/* 11시,1시,5시,7시 크기조절 바 */}
-      <div className="absolute -top-4 -left-4 border w-2 h-2 bg-slate-200 cursor-nwse-resize rounded-sm"></div>
-      <div className="absolute -top-4 -right-4 border w-2 h-2 bg-slate-200 cursor-nesw-resize rounded-sm"></div>
-      <div className="absolute -bottom-4 -left-4 border w-2 h-2 bg-slate-200 cursor-nwse-resize rounded-sm"></div>
-      <div className="absolute -bottom-4 -right-4 border w-2 h-2 bg-slate-200 cursor-nesw-resize rounded-sm"></div>
+      <div
+        className="absolute -top-4 -left-4 border w-2 h-2 bg-slate-200 cursor-nwse-resize rounded-sm"
+        onMouseDown={resizeMouseDownHandler}
+        onMouseMove={e => {
+          resizeTopHandler(e);
+          resizeLeftHandler(e);
+        }}
+        onMouseUp={e => {
+          resizeTopMouseUpHandler(e);
+          resizeLeftMouseUpHandler(e);
+        }}
+      ></div>
+      <div
+        className="absolute -top-4 -right-4 border w-2 h-2 bg-slate-200 cursor-nesw-resize rounded-sm"
+        onMouseDown={resizeMouseDownHandler}
+        onMouseMove={e => {
+          resizeTopHandler(e);
+          resizeRightHandler(e);
+        }}
+        onMouseUp={e => {
+          resizeTopMouseUpHandler(e);
+          resizeRightMouseUpHandler(e);
+        }}
+      ></div>
+      <div
+        className="absolute -bottom-4 -left-4 border w-2 h-2 bg-slate-200 cursor-nesw-resize rounded-sm"
+        onMouseDown={resizeMouseDownHandler}
+        onMouseMove={e => {
+          resizeBottomHandler(e);
+          resizeLeftHandler(e);
+        }}
+        onMouseUp={e => {
+          resizeBottomMouseUpHandler(e);
+          resizeLeftMouseUpHandler(e);
+        }}
+      ></div>
+      <div
+        className="absolute -bottom-4 -right-4 border w-2 h-2 bg-slate-200 cursor-nwse-resize rounded-sm"
+        onMouseDown={resizeMouseDownHandler}
+        onMouseMove={e => {
+          resizeBottomHandler(e);
+          resizeRightHandler(e);
+        }}
+        onMouseUp={e => {
+          resizeBottomMouseUpHandler(e);
+          resizeRightMouseUpHandler(e);
+        }}
+      ></div>
       {/* 대각선 */}
       <div
         className="absolute border -top-3 -left-3 -z-10"
