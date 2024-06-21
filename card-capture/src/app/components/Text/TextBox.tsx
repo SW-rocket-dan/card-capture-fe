@@ -1,9 +1,7 @@
 import { useEffect, useRef } from 'react';
-import Delta, { Sources } from 'quill';
-import ReactQuill, { UnprivilegedEditor } from 'react-quill';
+import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useTextStore } from '@/store/useTextStore';
-import DeltaStatic from 'quill';
 
 const Font = ReactQuill.Quill.import('formats/font');
 Font.whitelist = ['mirza', 'roboto'];
@@ -20,13 +18,12 @@ function TextBox() {
   const editorRef = useRef<ReactQuill | null>(null);
   const { text, format, ref, setText, setRef } = useTextStore();
 
-  const changeHandler: any = (
-    value: string,
-    delta: DeltaStatic,
-    source: Sources,
-    editor: UnprivilegedEditor,
+  const changeHandler: ReactQuill.ReactQuillProps['onChange'] = (
+    value,
+    delta,
+    source,
+    editor,
   ) => {
-    console.log(text);
     setText(editor.getContents());
   };
 

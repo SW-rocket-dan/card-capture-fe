@@ -1,12 +1,10 @@
 import { useTextStore } from '@/store/useTextStore';
 import 'react-quill/dist/quill.snow.css';
-import { Quill } from 'react-quill';
-
-export const fontSize = ['12px', '16px', '18px', '24px', '28px', '32px'];
-
-let Size = Quill.import('attributors/style/size');
-Size.whitelist = fontSize;
-Quill.register(Size, true);
+import './TextFormat';
+import {
+  availableLetterSpacing,
+  availableLineHeight,
+} from '@/app/components/Text/TextFormat';
 
 const TextToolbar = () => {
   const { format, ref, setFormat } = useTextStore();
@@ -34,6 +32,7 @@ const TextToolbar = () => {
   return (
     <div id="toolbar" className="flex flex-row gap-5">
       <div className="flex flex-col mr-10">
+        <p className="bg-blue-100 p-1">format</p>
         <button className="" onClick={() => clickTextFormatHandler('bold')}>
           Bold
         </button>
@@ -48,12 +47,14 @@ const TextToolbar = () => {
         </button>
       </div>
       <div className="flex flex-col mr-10">
+        <p className="bg-blue-100 p-1">font size</p>
         <button onClick={() => changeHandler('size', '12px')}>Small</button>
         <button onClick={() => changeHandler('size', '16px')}>Medium</button>
         <button onClick={() => changeHandler('size', '24px')}>Large</button>
         <button onClick={() => changeHandler('size', '32px')}>Huge</button>
       </div>
       <div className="flex flex-col mr-10">
+        <p className="bg-blue-100 p-1">text alignment</p>
         <button onClick={() => changeHandler('align', '')}>Left</button>
         <button onClick={() => changeHandler('align', 'center')}>Center</button>
         <button onClick={() => changeHandler('align', 'right')}>Right</button>
@@ -61,10 +62,29 @@ const TextToolbar = () => {
           Justify
         </button>
       </div>
-      <input
-        type="color"
-        onChange={e => changeHandler('color', e.target.value)}
-      />
+      <div className="flex flex-col mr-10">
+        <p className="bg-blue-100 p-1">letter spacing</p>
+        {availableLetterSpacing.map(size => (
+          <button onClick={() => changeHandler('letter-spacing', size)}>
+            {size}
+          </button>
+        ))}
+      </div>
+      <div className="flex flex-col mr-10">
+        <p className="bg-blue-100 p-1">line height</p>
+        {availableLineHeight.map(size => (
+          <button onClick={() => changeHandler('line-height', size)}>
+            {size}
+          </button>
+        ))}
+      </div>
+      <div className="flex flex-col mr-10">
+        <p className="bg-blue-100 p-1">color</p>
+        <input
+          type="color"
+          onChange={e => changeHandler('color', e.target.value)}
+        />
+      </div>
     </div>
   );
 };
