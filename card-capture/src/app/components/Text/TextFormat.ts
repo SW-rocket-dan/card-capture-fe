@@ -2,6 +2,13 @@ import ReactQuill, { Quill } from 'react-quill';
 
 const Parchment = Quill.import('parchment');
 
+// 폰트 종류
+export const fontFamily = ['Pretendard', 'NanumGothic'];
+
+const Font = Quill.import('formats/font');
+Font.whitelist = fontFamily;
+Quill.register(Font, true);
+
 // 폰트 사이즈
 export const fontSize = ['12px', '16px', '18px', '24px', '28px', '32px'];
 
@@ -18,7 +25,7 @@ const LetterSpacingStyle = new Parchment.Attributor.Style(
   'letter-spacing',
   {
     scope: Parchment.Scope.INLINE,
-    whiteList: availableLetterSpacing,
+    whitelist: availableLetterSpacing,
   },
 );
 Quill.register(LetterSpacingStyle, true);
@@ -32,7 +39,7 @@ const LineHeightStyle = new Parchment.Attributor.Style(
   'line-height',
   {
     scope: Parchment.Scope.BLOCK,
-    whiteList: availableLineHeight,
+    whitelist: availableLineHeight,
   },
 );
 Quill.register(LineHeightStyle, true);
@@ -50,5 +57,15 @@ const FontStretchStyle = new Parchment.Attributor.Style(
   },
 );
 Quill.register(FontStretchStyle, true);
+
+// 외곽선 (Outline)
+
+export const availableOutline = ['small', 'medium', 'large'];
+
+const OutlineStyle = new Parchment.Attributor.Class('outline', 'ql-outline', {
+  scope: Parchment.Scope.INLINE,
+  whitelist: availableOutline,
+});
+Quill.register(OutlineStyle, true);
 
 export { LetterSpacingStyle, LineHeightStyle, FontStretchStyle };

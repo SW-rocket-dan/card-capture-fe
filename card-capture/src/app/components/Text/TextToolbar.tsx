@@ -4,6 +4,8 @@ import './TextFormat';
 import {
   availableLetterSpacing,
   availableLineHeight,
+  availableOutline,
+  fontFamily,
 } from '@/app/components/Text/TextFormat';
 
 const TextToolbar = () => {
@@ -47,6 +49,12 @@ const TextToolbar = () => {
         </button>
       </div>
       <div className="flex flex-col mr-10">
+        <p className="bg-blue-100 p-1">font family</p>
+        {fontFamily.map(type => (
+          <button onClick={() => changeHandler('font', type)}>{type}</button>
+        ))}
+      </div>
+      <div className="flex flex-col mr-10">
         <p className="bg-blue-100 p-1">font size</p>
         <button onClick={() => changeHandler('size', '12px')}>Small</button>
         <button onClick={() => changeHandler('size', '16px')}>Medium</button>
@@ -76,6 +84,12 @@ const TextToolbar = () => {
           <button onClick={() => changeHandler('line-height', size)}>
             {size}
           </button>
+        ))}
+      </div>
+      <div className="flex flex-col mr-10">
+        <p className="bg-blue-100 p-1">outline</p>
+        {availableOutline.map(size => (
+          <button onClick={() => changeHandler('outline', size)}>{size}</button>
         ))}
       </div>
       <div className="flex flex-col mr-10">

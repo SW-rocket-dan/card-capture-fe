@@ -2,10 +2,7 @@ import { useEffect, useRef } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useTextStore } from '@/store/useTextStore';
-
-const Font = ReactQuill.Quill.import('formats/font');
-Font.whitelist = ['mirza', 'roboto'];
-ReactQuill.Quill.register(Font, true);
+import './TextStyles.css';
 
 const modules = {
   toolbar: {
