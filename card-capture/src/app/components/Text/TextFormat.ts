@@ -1,5 +1,4 @@
-import ReactQuill, { Quill } from 'react-quill';
-
+import { Quill } from 'react-quill';
 const Parchment = Quill.import('parchment');
 
 // 폰트 종류

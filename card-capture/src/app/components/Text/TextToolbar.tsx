@@ -9,11 +9,16 @@ import {
 } from '@/app/components/Text/TextFormat';
 
 const TextToolbar = () => {
-  const { format, ref, setFormat } = useTextStore();
+  const { index, ref } = useTextStore();
+  const editorRef = ref[index]; // 현재 포커스 된 요소를 가져옴
 
+  /**
+   * 텍스트 포맷 (bold, italic, underline) 적용 함수.
+   * 두 번 클릭하면 스타일을 제거하는 기능이 적용됨
+   */
   const clickTextFormatHandler = (type: string) => {
-    if (ref && ref.current) {
-      const editor = ref.current.getEditor();
+    if (editorRef && editorRef.current) {
+      const editor = editorRef.current.getEditor();
       const currentFormat = editor.getFormat();
 
       if (currentFormat[type]) {
@@ -24,9 +29,13 @@ const TextToolbar = () => {
     }
   };
 
+  /**
+   * 기본 포맷 적용 함수.
+   * 현재 선택된 요소(ref)의 값에 접근해 스타일을 적용시킴
+   */
   const changeHandler = (type: string, val: string) => {
-    if (ref && ref.current) {
-      const editor = ref.current.getEditor();
+    if (editorRef && editorRef.current) {
+      const editor = editorRef.current.getEditor();
       editor.format(type, val);
     }
   };
