@@ -2,6 +2,7 @@ import TextToolbar from '@/app/components/Text/TextToolbar';
 import TextBox from '@/app/components/Text/TextBox';
 import 'react-quill/dist/quill.snow.css';
 import { useTextStore } from '@/store/useTextStore';
+import { Delta } from 'quill';
 
 const TextTest = () => {
   const { text, addTextBox, setText } = useTextStore();
@@ -13,6 +14,53 @@ const TextTest = () => {
     addTextBox();
   };
 
+  const addTempHandler = () => {
+    const temp: Delta = {
+      ops: [
+        {
+          insert: 's',
+        },
+        {
+          attributes: {
+            color: '#b21010',
+          },
+          insert: 'ss',
+        },
+        {
+          attributes: {
+            size: '24px',
+            color: '#b21010',
+          },
+          insert: 'ss',
+        },
+        {
+          attributes: {
+            size: '24px',
+          },
+          insert: 's',
+        },
+        {
+          attributes: {
+            'letter-spacing': '4px',
+            size: '24px',
+          },
+          insert: 'sss',
+        },
+        {
+          attributes: {
+            'letter-spacing': '4px',
+          },
+          insert: 'ss',
+        },
+        {
+          insert: '\n',
+        },
+      ],
+    };
+    addTextBox();
+    setText(text.length, temp);
+  };
+
   return (
     <div className="flex flex-col gap-5 m-3 border-2 p-5 items-start">
       <TextToolbar />
@@ -21,6 +69,12 @@ const TextTest = () => {
         onClick={addTextBoxHandler}
       >
         텍스트 추가하기
+      </button>
+      <button
+        className="p-2 bg-gray-200 border-2 rounded-md"
+        onClick={addTempHandler}
+      >
+        정해진 형식 가져오기
       </button>
       {text.map((_, index) => (
         <TextBox key={index} index={index} />
