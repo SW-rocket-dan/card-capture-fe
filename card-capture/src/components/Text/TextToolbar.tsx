@@ -6,7 +6,7 @@ import {
   availableLineHeight,
   availableOutline,
   fontFamily,
-} from '@/app/components/Text/TextFormat';
+} from '@/components/Text/TextFormat';
 
 const TextToolbar = () => {
   const index = useTextStore(state => state.index);
