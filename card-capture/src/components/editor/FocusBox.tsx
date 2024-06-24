@@ -1,7 +1,8 @@
 //FocusBox.tsx
 
 import { useCardsStore } from '@/store/useCardsStore';
-import { useState } from 'react';
+import { Position } from '@/store/useCardsStore/type';
+import { useEffect, useState } from 'react';
 
 type Props = {
   component: JSX.Element;
@@ -38,6 +39,8 @@ type ResizeOffset = {
   startHeight: number;
 };
 
+type Direction = 'none' | 's' | 'w' | 'e' | 'n' | 'ne' | 'nw' | 'se' | 'sw';
+
 /**
  * Focus(수정상태) 가 된 정보
  * @param component Box안에 띄어줄 컴포넌트
@@ -51,21 +54,21 @@ const FocusBox = ({ component, layerId }: Props) => {
 
   const [isDrag, setIsDrag] = useState(false);
   const [curPosition, setCurPosition] = useState(layer.position);
-  const [offset, setOffset] = useState<Offset>({ ...INITIALOFFSET });
+  const [offset, setOffset] = useState<Offset>({ ...INITIALOFFSET }); // 위치이동시 사용되는 임시 변수
   const [resizeOffset, setResizeOffset] = useState<ResizeOffset>({
     ...INITIALRESIZEOFFSET,
-  });
+  }); // 크기 조절시 사용되는 임시 변수
 
-  const [isResizing, setIsResizing] = useState(false);
+  const [resizeState, setResizeState] = useState<Direction>('none');
 
-  //클릭해도 Focus상태가 풀리지 않게
+  //클릭해도 Focus상태가 풀리지 않게하기위한 이벤트 전파 방지
   const stopPropagation = (e: React.MouseEvent) => {
     e.stopPropagation();
   };
 
   /* 드래그 관련 로직 */
-  //드레그 이벤트를 해당  하면 마우스가 빠르게 움직일 시 무시될 수 있음 <- 조치 필요 ( 혹은 회의 필요 )
-  const mouseDownHandler = (e: React.MouseEvent) => {
+  //@FIXME: 드래그 이벤트도 window에서 동작하게 하는것이 필요함
+  const mouseDownDragHandler = (e: React.MouseEvent) => {
     setIsDrag(true);
     setOffset(prev => {
       return {
@@ -76,7 +79,7 @@ const FocusBox = ({ component, layerId }: Props) => {
     });
   };
 
-  const mouseMoveHandler = (e: React.MouseEvent) => {
+  const mouseMoveDragHandler = (e: React.MouseEvent) => {
     if (!isDrag) return;
     const diffX = e.clientX - offset.x;
     const diffY = e.clientY - offset.y;
@@ -89,8 +92,8 @@ const FocusBox = ({ component, layerId }: Props) => {
     });
   };
 
-  //이동이 끝날 때 전역상태가 업데이트 되도록
-  const mouseUpHandler = (e: React.MouseEvent) => {
+  //이동이 끝날 때 cardStore에 저장
+  const mouseUpDragHandler = (e: React.MouseEvent) => {
     const diffX = e.clientX - offset.x;
     const diffY = e.clientY - offset.y;
 
@@ -100,12 +103,16 @@ const FocusBox = ({ component, layerId }: Props) => {
   };
 
   /* 크기 resize 로직 */
-  // 리팩토링 필요 로직 ( 묶어낼 수 있을걸로 보임 )
-  // 현재 마우스가 너무 빠르면 이벤트 리스너가 부착안된곳으로 커서가 가서 이동이 안되는 버그 존재
-  const resizeMouseDownHandler = (e: React.MouseEvent) => {
+
+  //MOUSEDOWN 핸들러
+  const resizeMouseDownHandler = (
+    e: React.MouseEvent,
+    direction: Direction,
+  ) => {
     e.stopPropagation();
 
-    setIsResizing(true);
+    setResizeState(direction);
+
     setResizeOffset(prev => {
       return {
         ...prev,
@@ -119,105 +126,191 @@ const FocusBox = ({ component, layerId }: Props) => {
     });
   };
 
-  const resizeRightHandler = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!isResizing) return;
-    const diff = e.clientX - resizeOffset.startClientX;
-    const width = resizeOffset.startWidth + diff;
+  /* resize 좌표 계산 함수들 */
+  const calculateN = (e: MouseEvent) => {
+    const diffY = e.clientY - resizeOffset.startClientY;
+    const height = resizeOffset.startHeight - diffY;
+    const y = resizeOffset.startY + diffY;
 
+    return { ...curPosition, height, y };
+  };
+
+  const calculateS = (e: MouseEvent) => {
+    const diffY = e.clientY - resizeOffset.startClientY;
+    const height = resizeOffset.startHeight + diffY;
+
+    return { ...curPosition, height };
+  };
+
+  const calculateE = (e: MouseEvent) => {
+    const diffX = e.clientX - resizeOffset.startClientX;
+    const width = resizeOffset.startWidth + diffX;
+
+    return { ...curPosition, width };
+  };
+
+  const calculateW = (e: MouseEvent) => {
+    const diffX = e.clientX - resizeOffset.startClientX;
+    const width = resizeOffset.startWidth - diffX;
+    const x = resizeOffset.startX + diffX;
+
+    return { ...curPosition, width, x };
+  };
+
+  const calculateNE = (e: MouseEvent) => {
+    const diffX = e.clientX - resizeOffset.startClientX;
+    const width = resizeOffset.startWidth + diffX;
+    const diffY = e.clientY - resizeOffset.startClientY;
+    const height = resizeOffset.startHeight - diffY;
+    const y = resizeOffset.startY + diffY;
+
+    return { ...curPosition, width, height, y };
+  };
+  const calculateNW = (e: MouseEvent) => {
+    const diffX = e.clientX - resizeOffset.startClientX;
+    const width = resizeOffset.startWidth - diffX;
+    const x = resizeOffset.startX + diffX;
+    const diffY = e.clientY - resizeOffset.startClientY;
+    const height = resizeOffset.startHeight - diffY;
+    const y = resizeOffset.startY + diffY;
+
+    return { ...curPosition, width, height, x, y };
+  };
+  const calculateSE = (e: MouseEvent) => {
+    const diffX = e.clientX - resizeOffset.startClientX;
+    const width = resizeOffset.startWidth - diffX;
+    const x = resizeOffset.startX + diffX;
+    const diffY = e.clientY - resizeOffset.startClientY;
+    const height = resizeOffset.startHeight + diffY;
+
+    return { ...curPosition, width, height, x };
+  };
+  const calculateSW = (e: MouseEvent) => {
+    const diffX = e.clientX - resizeOffset.startClientX;
+    const width = resizeOffset.startWidth + diffX;
+    const diffY = e.clientY - resizeOffset.startClientY;
+    const height = resizeOffset.startHeight + diffY;
+
+    return { ...curPosition, width, height };
+  };
+
+  // resize MouseMove 공통 로직
+  const resizeMouseMoveWrap = (
+    e: MouseEvent,
+    calculateFn: (e: MouseEvent) => Position,
+  ) => {
+    // 공통 로직
+    e.stopPropagation();
+    if (resizeState === 'none') return;
+
+    const { width, height, x, y } = calculateFn(e);
+
+    //@NOTE: 박스크기는 변경하지만 이동중에 cardStore를 변경하진 않음
     setCurPosition(prev => {
-      return {
-        ...prev,
-        width,
-      };
+      return { ...prev, width, height, x, y };
     });
   };
 
-  const resizeLeftHandler = (e: React.MouseEvent) => {
+  /* resize MouseMove Handler 정의 */
+  const resizeEHandler = (e: MouseEvent) => resizeMouseMoveWrap(e, calculateE);
+  const resizeWHandler = (e: MouseEvent) => resizeMouseMoveWrap(e, calculateW);
+  const resizeNHandler = (e: MouseEvent) => resizeMouseMoveWrap(e, calculateN);
+  const resizeSHandler = (e: MouseEvent) => resizeMouseMoveWrap(e, calculateS);
+
+  const resizeNEHandler = (e: MouseEvent) =>
+    resizeMouseMoveWrap(e, calculateNE);
+  const resizeNWHandler = (e: MouseEvent) =>
+    resizeMouseMoveWrap(e, calculateNW);
+  const resizeSEHandler = (e: MouseEvent) =>
+    resizeMouseMoveWrap(e, calculateSE);
+  const resizeSWHandler = (e: MouseEvent) =>
+    resizeMouseMoveWrap(e, calculateSW);
+
+  //resize MouseUp 공통 로직
+  const resizeMouseUpHandlerWrap = (
+    e: MouseEvent,
+    calculateFn: (e: MouseEvent) => Position,
+  ) => {
     e.stopPropagation();
-    if (!isResizing) return;
-    const diff = e.clientX - resizeOffset.startClientX;
-    const width = resizeOffset.startWidth - diff;
-    const x = resizeOffset.startX + diff;
-    setCurPosition(prev => {
-      return {
-        ...prev,
-        width,
-        x,
-      };
-    });
-  };
 
-  const resizeTopHandler = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!isResizing) return;
-    const diff = e.clientY - resizeOffset.startClientY;
-    const height = resizeOffset.startHeight - diff;
-    const y = resizeOffset.startY + diff;
-    setCurPosition(prev => {
-      return {
-        ...prev,
-        height,
-        y,
-      };
-    });
-  };
+    const { width, height, x, y } = calculateFn(e);
 
-  const resizeBottomHandler = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!isResizing) return;
-    const diff = e.clientY - resizeOffset.startClientY;
-    const height = resizeOffset.startHeight + diff;
-
-    setCurPosition(prev => {
-      return {
-        ...prev,
-        height,
-      };
-    });
-  };
-
-  const resizeRightMouseUpHandler = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const diff = e.clientX - resizeOffset.startClientX;
-    const width = resizeOffset.startWidth + diff;
-
+    //공통로직
     setResizeOffset({ ...INITIALRESIZEOFFSET });
-    setIsResizing(false);
-    setPosition(layerId, { ...curPosition, width });
+    setResizeState('none');
+    setPosition(layerId, { ...curPosition, width, height, x, y });
   };
 
-  const resizeLeftMouseUpHandler = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const diff = e.clientX - resizeOffset.startClientX;
-    const width = resizeOffset.startWidth - diff;
-    const x = resizeOffset.startX + diff;
+  /* resize MouseUp 이벤트 정의 */
+  const resizeEMouseUpHandler = (e: MouseEvent) =>
+    resizeMouseUpHandlerWrap(e, calculateE);
 
-    setResizeOffset({ ...INITIALRESIZEOFFSET });
-    setIsResizing(false);
-    setPosition(layerId, { ...curPosition, width, x });
+  const resizeWMouseUpHandler = (e: MouseEvent) =>
+    resizeMouseUpHandlerWrap(e, calculateW);
+
+  const resizeSMouseUpHandler = (e: MouseEvent) =>
+    resizeMouseUpHandlerWrap(e, calculateS);
+
+  const resizeNMouseUpHandler = (e: MouseEvent) =>
+    resizeMouseUpHandlerWrap(e, calculateN);
+
+  const resizeNEMouseUpHandler = (e: MouseEvent) =>
+    resizeMouseUpHandlerWrap(e, calculateNE);
+
+  const resizeNWMouseUpHandler = (e: MouseEvent) =>
+    resizeMouseUpHandlerWrap(e, calculateNW);
+
+  const resizeSEMouseUpHandler = (e: MouseEvent) =>
+    resizeMouseUpHandlerWrap(e, calculateSE);
+
+  const resizeSWMouseUpHandler = (e: MouseEvent) =>
+    resizeMouseUpHandlerWrap(e, calculateSW);
+
+  //resize Handler MAP
+  //if문 사용을 안하기 위해 채택
+  const resizeMouseMoveHandlerMap = {
+    n: resizeNHandler,
+    e: resizeEHandler,
+    s: resizeSHandler,
+    w: resizeWHandler,
+    nw: resizeNWHandler,
+    ne: resizeNEHandler,
+    sw: resizeSWHandler,
+    se: resizeSEHandler,
   };
 
-  const resizeBottomMouseUpHandler = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const diff = e.clientY - resizeOffset.startClientY;
-    const height = resizeOffset.startHeight + diff;
-
-    setResizeOffset({ ...INITIALRESIZEOFFSET });
-    setIsResizing(false);
-    setPosition(layerId, { ...curPosition, height });
+  const resizeMouseUpHandlerMap = {
+    n: resizeNMouseUpHandler,
+    e: resizeEMouseUpHandler,
+    s: resizeSMouseUpHandler,
+    w: resizeWMouseUpHandler,
+    nw: resizeNWMouseUpHandler,
+    ne: resizeNEMouseUpHandler,
+    sw: resizeSWMouseUpHandler,
+    se: resizeSEMouseUpHandler,
   };
 
-  const resizeTopMouseUpHandler = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const diff = e.clientY - resizeOffset.startClientY;
-    const height = resizeOffset.startHeight - diff;
-    const y = resizeOffset.startY + diff;
+  //resize 이벤트 등록
+  useEffect(() => {
+    if (resizeState === 'none') return;
 
-    setResizeOffset({ ...INITIALRESIZEOFFSET });
-    setIsResizing(false);
-    setPosition(layerId, { ...curPosition, height, y });
-  };
+    window.addEventListener(
+      'mousemove',
+      resizeMouseMoveHandlerMap[resizeState],
+    );
+    window.addEventListener('mouseup', resizeMouseUpHandlerMap[resizeState]);
+
+    return () => {
+      window.removeEventListener(
+        'mousemove',
+        resizeMouseMoveHandlerMap[resizeState],
+      );
+      window.removeEventListener(
+        'mouseup',
+        resizeMouseUpHandlerMap[resizeState],
+      );
+    };
+  }, [resizeState]);
 
   return (
     <div
@@ -230,61 +323,29 @@ const FocusBox = ({ component, layerId }: Props) => {
         zIndex: 10000, // focus되면 z-index가 상위로 와야함 (수치는 회의해야함!)
         opacity: curPosition.opacity,
       }}
-      onMouseDown={mouseDownHandler}
-      onMouseMove={mouseMoveHandler}
-      onMouseUp={mouseUpHandler}
+      onMouseDown={mouseDownDragHandler}
+      onMouseMove={mouseMoveDragHandler}
+      onMouseUp={mouseUpDragHandler}
       onClick={stopPropagation}
     >
       {/* 11시,1시,5시,7시 크기조절 바 */}
       <div
         className="absolute -top-4 -left-4 border w-2 h-2 bg-slate-200 cursor-nwse-resize rounded-sm"
-        onMouseDown={resizeMouseDownHandler}
-        onMouseMove={e => {
-          resizeTopHandler(e);
-          resizeLeftHandler(e);
-        }}
-        onMouseUp={e => {
-          resizeTopMouseUpHandler(e);
-          resizeLeftMouseUpHandler(e);
-        }}
+        onMouseDown={e => resizeMouseDownHandler(e, 'nw')}
       ></div>
       <div
         className="absolute -top-4 -right-4 border w-2 h-2 bg-slate-200 cursor-nesw-resize rounded-sm"
-        onMouseDown={resizeMouseDownHandler}
-        onMouseMove={e => {
-          resizeTopHandler(e);
-          resizeRightHandler(e);
-        }}
-        onMouseUp={e => {
-          resizeTopMouseUpHandler(e);
-          resizeRightMouseUpHandler(e);
-        }}
+        onMouseDown={e => resizeMouseDownHandler(e, 'ne')}
       ></div>
       <div
         className="absolute -bottom-4 -left-4 border w-2 h-2 bg-slate-200 cursor-nesw-resize rounded-sm"
-        onMouseDown={resizeMouseDownHandler}
-        onMouseMove={e => {
-          resizeBottomHandler(e);
-          resizeLeftHandler(e);
-        }}
-        onMouseUp={e => {
-          resizeBottomMouseUpHandler(e);
-          resizeLeftMouseUpHandler(e);
-        }}
+        onMouseDown={e => resizeMouseDownHandler(e, 'se')}
       ></div>
       <div
         className="absolute -bottom-4 -right-4 border w-2 h-2 bg-slate-200 cursor-nwse-resize rounded-sm"
-        onMouseDown={resizeMouseDownHandler}
-        onMouseMove={e => {
-          resizeBottomHandler(e);
-          resizeRightHandler(e);
-        }}
-        onMouseUp={e => {
-          resizeBottomMouseUpHandler(e);
-          resizeRightMouseUpHandler(e);
-        }}
+        onMouseDown={e => resizeMouseDownHandler(e, 'sw')}
       ></div>
-      {/* 대각선 */}
+      {/* 크기조절 바탕선 */}
       <div
         className="absolute border -top-3 -left-3 -z-10"
         onMouseDown={stopPropagation}
@@ -298,27 +359,19 @@ const FocusBox = ({ component, layerId }: Props) => {
       {/* 12시,3시,6시,9시 크기조절 바 */}
       <div
         className="absolute border -top-4 left-2/4 w-6 h-2 bg-slate-200 -translate-x-1/2 rounded-sm cursor-row-resize"
-        onMouseDown={resizeMouseDownHandler}
-        onMouseMove={resizeTopHandler}
-        onMouseUp={resizeTopMouseUpHandler}
+        onMouseDown={e => resizeMouseDownHandler(e, 'n')}
       ></div>
       <div
         className="absolute border -right-4 top-1/2 w-2 h-6 bg-slate-200 -translate-y-1/2 rounded-sm cursor-col-resize"
-        onMouseDown={resizeMouseDownHandler}
-        onMouseMove={resizeRightHandler}
-        onMouseUp={resizeRightMouseUpHandler}
+        onMouseDown={e => resizeMouseDownHandler(e, 'e')}
       ></div>
       <div
         className="absolute border -bottom-4 left-2/4 w-6 h-2 bg-slate-200 -translate-x-1/2 rounded-sm cursor-row-resize"
-        onMouseDown={resizeMouseDownHandler}
-        onMouseMove={resizeBottomHandler}
-        onMouseUp={resizeBottomMouseUpHandler}
+        onMouseDown={e => resizeMouseDownHandler(e, 's')}
       ></div>
       <div
         className="absolute border -left-4 top-1/2 w-2 h-6 bg-slate-200 -translate-y-1/2 rounded-sm cursor-col-resize"
-        onMouseDown={resizeMouseDownHandler}
-        onMouseMove={resizeLeftHandler}
-        onMouseUp={resizeLeftMouseUpHandler}
+        onMouseDown={e => resizeMouseDownHandler(e, 'w')}
       ></div>
       {component}
     </div>
