@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+
+.ql-editor {
+    font-size: 16px;
+}
+
+.ql-font-NanumGothic {
+    font-family: "Nanum Gothic", sans-serif;
+}
+
+.ql-font-Pretendard {
+    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;;
+}
+
+.ql-outline-small {
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: #1ea7fd;
+}
+
+.ql-outline-medium {
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: #1ea7fd;
+}
+
+.ql-outline-large {
+    -webkit-text-stroke-width: 3px;
+    -webkit-text-stroke-color: #1ea7fd;
+}
