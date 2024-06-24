@@ -2,10 +2,12 @@ import TextToolbar from '@/app/components/Text/TextToolbar';
 import TextBox from '@/app/components/Text/TextBox';
 import 'react-quill/dist/quill.snow.css';
 import { useTextStore } from '@/store/useTextStore';
-import { Delta } from 'quill';
+import {Delta, DeltaOperation} from 'quill';
 
 const TextTest = () => {
-  const { text, addTextBox, setText } = useTextStore();
+  const text = useTextStore(state => state.text);
+  const setText = useTextStore(state=> state.setText)
+  const addTextBox = useTextStore(state=> state.addTextBox);
 
   /**
    * 새로운 TextBox 생성을 위해 text, ref 저장할 공간 마련
@@ -15,7 +17,7 @@ const TextTest = () => {
   };
 
   const addTempHandler = () => {
-    const temp: Delta = {
+    const temp: {ops : DeltaOperation[]} = {
       ops: [
         {
           insert: 's',
@@ -58,7 +60,7 @@ const TextTest = () => {
       ],
     };
     addTextBox();
-    setText(text.length, temp);
+    setText(text.length, temp as Delta);
   };
 
   return (

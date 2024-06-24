@@ -29,7 +29,6 @@ const TextBox = ({ index }: { index: number }) => {
     editor,
   ) => {
     setText(index, editor.getContents());
-    console.log(editor.getContents());
   };
 
   /**

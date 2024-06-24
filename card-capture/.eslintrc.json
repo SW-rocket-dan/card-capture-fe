@@ -25,7 +25,6 @@
     "plugin:react/recommended",
     "plugin:prettier/recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/parser",
     "plugin:storybook/recommended",
     "plugin:storybook/recommended"
   ],

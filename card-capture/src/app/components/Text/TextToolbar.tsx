@@ -9,7 +9,8 @@ import {
 } from '@/app/components/Text/TextFormat';
 
 const TextToolbar = () => {
-  const { index, ref } = useTextStore();
+  const index = useTextStore(state => state.index);
+  const ref = useTextStore(state => state.ref);
   const editorRef = ref[index]; // 현재 포커스 된 요소를 가져옴
 
   /**
@@ -17,15 +18,15 @@ const TextToolbar = () => {
    * 두 번 클릭하면 스타일을 제거하는 기능이 적용됨
    */
   const clickTextFormatHandler = (type: string) => {
-    if (editorRef && editorRef.current) {
-      const editor = editorRef.current.getEditor();
-      const currentFormat = editor.getFormat();
+    if (!editorRef || !editorRef.current) return;
 
-      if (currentFormat[type]) {
-        editor.format(type, false);
-      } else {
-        editor.format(type, true);
-      }
+    const editor = editorRef.current.getEditor();
+    const currentFormat = editor.getFormat();
+
+    if (currentFormat[type]) {
+      editor.format(type, false);
+    } else {
+      editor.format(type, true);
     }
   };
 
@@ -34,26 +35,19 @@ const TextToolbar = () => {
    * 현재 선택된 요소(ref)의 값에 접근해 스타일을 적용시킴
    */
   const changeHandler = (type: string, val: string) => {
-    if (editorRef && editorRef.current) {
-      const editor = editorRef.current.getEditor();
-      editor.format(type, val);
-    }
+    if (!editorRef || !editorRef.current) return;
+
+    const editor = editorRef.current.getEditor();
+    editor.format(type, val);
   };
 
   return (
     <div id="toolbar" className="flex flex-row gap-5">
       <div className="flex flex-col mr-10">
         <p className="bg-blue-100 p-1">format</p>
-        <button className="" onClick={() => clickTextFormatHandler('bold')}>
-          Bold
-        </button>
-        <button className="" onClick={() => clickTextFormatHandler('italic')}>
-          Italic
-        </button>
-        <button
-          className=""
-          onClick={() => clickTextFormatHandler('underline')}
-        >
+        <button onClick={() => clickTextFormatHandler('bold')}>Bold</button>
+        <button onClick={() => clickTextFormatHandler('italic')}>Italic</button>
+        <button onClick={() => clickTextFormatHandler('underline')}>
           Underline
         </button>
       </div>
