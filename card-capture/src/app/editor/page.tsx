@@ -1,6 +1,6 @@
 //page.tsx
 'use client';
-import FocusBox from '@/components/editor/FocusBox';
+import FocusBox from '@/components/editor/FocusBox/FocusBox';
 import LayerBox from '@/components/editor/LayerBox';
 import { useCardsStore } from '@/store/useCardsStore';
 import { useEffect, useState } from 'react';

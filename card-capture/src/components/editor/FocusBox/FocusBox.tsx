@@ -3,20 +3,21 @@
 import { useCardsStore } from '@/store/useCardsStore';
 import { Position } from '@/store/useCardsStore/type';
 import { useEffect, useState } from 'react';
+import { Direction, Offset, ResizeOffset } from './FocusBox.type';
 
 type Props = {
   component: JSX.Element;
   layerId: number;
 };
 
-const INITIALOFFSET = Object.freeze({
+const INITIAL_OFFSET = Object.freeze({
   y: 0,
   x: 0,
   width: 0,
   height: 0,
 });
 
-const INITIALRESIZEOFFSET = Object.freeze({
+const INITIAL_RESIZE_OFFSET = Object.freeze({
   startClientX: 0,
   startClientY: 0,
   startX: 0,
@@ -24,22 +25,6 @@ const INITIALRESIZEOFFSET = Object.freeze({
   startWidth: 0,
   startHeight: 0,
 });
-
-type Offset = {
-  y: number;
-  x: number;
-};
-
-type ResizeOffset = {
-  startClientX: number;
-  startClientY: number;
-  startX: number;
-  startY: number;
-  startWidth: number;
-  startHeight: number;
-};
-
-type Direction = 'none' | 's' | 'w' | 'e' | 'n' | 'ne' | 'nw' | 'se' | 'sw';
 
 /**
  * Focus(수정상태) 가 된 정보
@@ -53,20 +38,21 @@ const FocusBox = ({ component, layerId }: Props) => {
   const setPosition = useCardsStore(state => state.setPosition);
 
   const [isDrag, setIsDrag] = useState(false);
-  const [curPosition, setCurPosition] = useState(layer.position);
-  const [offset, setOffset] = useState<Offset>({ ...INITIALOFFSET }); // 위치이동시 사용되는 임시 변수
-  const [resizeOffset, setResizeOffset] = useState<ResizeOffset>({
-    ...INITIALRESIZEOFFSET,
-  }); // 크기 조절시 사용되는 임시 변수
-
   const [resizeState, setResizeState] = useState<Direction>('none');
+  const [curPosition, setCurPosition] = useState(layer.position);
+  const [offset, setOffset] = useState<Offset>({ ...INITIAL_OFFSET }); // 위치이동시 사용되는 임시 변수
+  const [resizeOffset, setResizeOffset] = useState<ResizeOffset>({
+    ...INITIAL_RESIZE_OFFSET,
+  }); // 크기 조절시 사용되는 임시 변수
 
   //클릭해도 Focus상태가 풀리지 않게하기위한 이벤트 전파 방지
   const stopPropagation = (e: React.PointerEvent | React.MouseEvent) => {
     e.stopPropagation();
   };
 
+  //              //
   /* 드래그 관련 로직 */
+  //              //
   const mouseDownDragHandler = (e: React.PointerEvent) => {
     setIsDrag(true);
 
@@ -93,12 +79,14 @@ const FocusBox = ({ component, layerId }: Props) => {
     });
   };
 
-  //이동이 끝날 때 cardStore에 저장
+  /**
+   * @NOTE: 이동이 끝날 때 cardStore에 저장
+   */
   const pointerUpDragHandler = (e: PointerEvent) => {
     const diffX = e.clientX - offset.x;
     const diffY = e.clientY - offset.y;
 
-    setOffset({ ...INITIALOFFSET });
+    setOffset({ ...INITIAL_OFFSET });
     setIsDrag(false);
     setPosition(layerId, { ...curPosition, y: diffY, x: diffX });
   };
@@ -119,9 +107,14 @@ const FocusBox = ({ component, layerId }: Props) => {
     };
   }, [isDrag]);
 
+  //                //
   /* 크기 resize 로직 */
+  //                //
 
-  //MOUSEDOWN 핸들러
+  /**
+   * resize 시작 핸들러
+   * @param direction 방향 (N,S,E,W,NE,NW,SE,SW)
+   */
   const resizeMouseDownHandler = (
     e: React.PointerEvent,
     direction: Direction,
@@ -143,7 +136,9 @@ const FocusBox = ({ component, layerId }: Props) => {
     });
   };
 
+  //                     //
   /* resize 좌표 계산 함수들 */
+  //                     //
   const calculateN = (e: PointerEvent) => {
     const diffY = e.clientY - resizeOffset.startClientY;
     const height = resizeOffset.startHeight - diffY;
@@ -217,7 +212,6 @@ const FocusBox = ({ component, layerId }: Props) => {
     calculateFn: (e: PointerEvent) => Position,
   ) => {
     // 공통 로직
-
     e.stopPropagation();
     if (resizeState === 'none') return;
 
@@ -262,7 +256,7 @@ const FocusBox = ({ component, layerId }: Props) => {
     const { width, height, x, y } = calculateFn(e);
 
     //공통로직
-    setResizeOffset({ ...INITIALRESIZEOFFSET });
+    setResizeOffset({ ...INITIAL_RESIZE_OFFSET });
     setResizeState('none');
     setPosition(layerId, { ...curPosition, width, height, x, y });
   };
@@ -293,7 +287,6 @@ const FocusBox = ({ component, layerId }: Props) => {
     resizePointerUpHandlerWrap(e, calculateSW);
 
   //resize Handler MAP
-  //if문 사용을 안하기 위해 채택
   const resizePointerMoveHandlerMap = {
     n: resizeNHandler,
     e: resizeEHandler,
