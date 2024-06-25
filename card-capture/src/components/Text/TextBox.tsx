@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
+import Quill, { SelectionChangeHandler } from 'quill';
 import 'react-quill/dist/quill.snow.css';
 import './TextStyles.css';
 import { useCardsStore } from '@/store/useCardsStore';
@@ -16,9 +17,10 @@ const modules = {
 
 const TextBox = ({ cardId, layerId }: { cardId: number; layerId: number }) => {
   const editorRef = useRef<ReactQuill | null>(null);
-  const setRef = useCardsStore(state => state.setCurrentLayerRef);
+  const setLayer = useCardsStore(state => state.setCurrentLayer);
   const setLayerText = useCardsStore(state => state.setLayerText);
   const [text, setText] = useState<ReactQuill.Value>('');
+  const [isDragging, setIsDragging] = useState(false);
 
   /**
    * 변경되는 텍스트 값을 상태에 저장하는 함수.
@@ -38,7 +40,7 @@ const TextBox = ({ cardId, layerId }: { cardId: number; layerId: number }) => {
    */
   const focusHandler = () => {
     if (!editorRef || !editorRef.current) return;
-    setRef(editorRef);
+    setLayer({ ref: editorRef });
   };
 
   /**
@@ -46,8 +48,44 @@ const TextBox = ({ cardId, layerId }: { cardId: number; layerId: number }) => {
    */
   const blurHandler = () => {
     setLayerText(cardId, layerId, text);
-    setRef(null);
+    setLayer({ ref: null });
   };
+
+  useEffect(() => {
+    const quillInstance = editorRef.current?.getEditor();
+
+    if (!quillInstance) return;
+
+    /**
+     * 현재 선택된 부분(range)이 있으면 드래그 된 것으로 상태 변경
+     */
+    const selectionHandler: SelectionChangeHandler = (
+      range,
+      oldRange,
+      source,
+    ) => {
+      if (range && range.length > 0 && source === 'user') {
+        setIsDragging(true);
+      } else {
+        setIsDragging(false);
+      }
+    };
+
+    // 드래그 이벤트가(selection-change)가 발생하면 드래그 상태변경 핸들러 실행
+    quillInstance.on('selection-change', selectionHandler);
+
+    return () => {
+      quillInstance.off('selection-change', selectionHandler);
+    };
+  }, []);
+
+  /**
+   * 드래그 상태가 변경되면 전역 store에 드래그 상태를 저장
+   * @NOTE 드래그 상태를 툴바가 알아야 하기 때문에 전역으로 저장
+   */
+  useEffect(() => {
+    setLayer({ isDragging });
+  }, [isDragging]);
 
   return (
     <div className="min-w-20 border-2">

@@ -10,28 +10,39 @@ import ReactQuill from 'react-quill';
  * useProjectStore도 설계되면 스토어를 조각으로 합쳐야 함
  */
 type useCardsStore = {
-  currentLayerRef: MutableRefObject<ReactQuill | null> | null;
+  currentLayer: {
+    ref: MutableRefObject<ReactQuill | null> | null;
+    isDragging: boolean;
+  };
   cards: Card[];
 
-  setCurrentLayerRef: (ref: MutableRefObject<ReactQuill | null> | null) => void;
+  setCurrentLayer: ({
+    ref,
+    isDragging,
+  }: {
+    ref?: MutableRefObject<ReactQuill | null> | null;
+    isDragging?: boolean;
+  }) => void;
+
   setLayerText: (
     cardId: number,
     layerId: number,
     text: ReactQuill.Value,
   ) => void;
+
   setCard: (card: Card[]) => void;
   setPosition: (layerId: number, position: Position) => void;
   addTextLayer: (cardId: number) => void;
 };
 
 export const useCardsStore = create<useCardsStore>()(set => ({
-  currentLayerRef: null,
+  currentLayer: { ref: null, isDragging: false },
   cards: [],
 
-  setCurrentLayerRef: (ref: MutableRefObject<ReactQuill | null> | null) =>
+  setCurrentLayer: ({ ref, isDragging }) =>
     set(
       produce(draft => {
-        draft.currentLayerRef = { ...ref };
+        draft.currentLayer = { ref: { ...ref }, isDragging: isDragging };
       }),
     ),
   setLayerText: (cardId, layerId, text) => {
