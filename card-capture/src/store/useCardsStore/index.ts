@@ -1,7 +1,7 @@
 import { create } from 'zustand';
-import { Card, Layer, LayerType, Position } from './type';
+import { Card, Position } from './type';
 import { Draft, produce } from 'immer';
-import React, { MutableRefObject } from 'react';
+import { MutableRefObject } from 'react';
 import ReactQuill from 'react-quill';
 
 /**
@@ -35,7 +35,6 @@ export const useCardsStore = create<useCardsStore>()(set => ({
       }),
     ),
   setLayerText: (cardId, layerId, text) => {
-    console.log('hi');
     return set(
       produce((draft: Draft<{ cards: Card[] }>) => {
         draft.cards[cardId].layers = draft.cards[cardId].layers.map(v =>
