@@ -63,13 +63,7 @@ const page = ({}: Props) => {
           ) : (
             <LayerBox
               key={idx}
-              component={
-                <p
-                  style={{ background: 'green', width: '100%', height: '100%' }}
-                >
-                  TEST
-                </p> // 후에 <Image/>,<Text/> 등 실제 내용을 넘겨줄 자리
-              }
+              component={<TextBox key={idx} cardId={0} layerId={layer.id} />}
               position={layer.position}
               onClick={e => makeFocusLayerHandler(e, layer.id)}
             />
