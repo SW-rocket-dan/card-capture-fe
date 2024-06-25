@@ -1,8 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { useTextStore } from '@/store/useTextStore';
 import './TextStyles.css';
+import { useCardsStore } from '@/store/useCardsStore';
 
 /**
  * #toolbar를 id로 갖는 요소를 툴바로 사용하겠다고 선언
@@ -14,13 +14,15 @@ const modules = {
   },
 };
 
-const TextBox = ({ index }: { index: number }) => {
+const TextBox = ({ cardId, layerId }: { cardId: number; layerId: number }) => {
   const editorRef = useRef<ReactQuill | null>(null);
-  const { text, setText, setRef, setIndex } = useTextStore();
+  const setRef = useCardsStore(state => state.setCurrentLayerRef);
+  const setLayerText = useCardsStore(state => state.setLayerText);
+  const [text, setText] = useState<ReactQuill.Value>('');
 
   /**
-   * 변경되는 텍스트 값을 스토어에 저장하는 함수.
-   * 현재 인덱스에 해당하는 위치에 저장하기 위해 index 값도 함께 전달
+   * 변경되는 텍스트 값을 상태에 저장하는 함수.
+   * 변경될 때마다 store에 저장하는 것은 비효율적이기 때문에 임시로 저장
    */
   const changeHandler: ReactQuill.ReactQuillProps['onChange'] = (
     value,
@@ -28,29 +30,33 @@ const TextBox = ({ index }: { index: number }) => {
     source,
     editor,
   ) => {
-    setText(index, editor.getContents());
+    setText(editor.getContents());
   };
 
   /**
-   * 현재 포커스된 TextBox의 인덱스를 저장
+   * 현재 포커스된 TextBox의 ref를 store에 저장
    */
   const focusHandler = () => {
-    setIndex(index);
+    if (!editorRef || !editorRef.current) return;
+    setRef(editorRef);
   };
 
-  useEffect(() => {
-    if (editorRef) {
-      setRef(index, editorRef);
-    }
-  }, []);
+  /**
+   * 텍스트 박스에서 blur 되면 store에 변경된 값을 저장
+   */
+  const blurHandler = () => {
+    setLayerText(cardId, layerId, text);
+    setRef(null);
+  };
 
   return (
     <div className="min-w-20 border-2">
       <ReactQuill
         ref={editorRef}
-        value={text[index] || ''}
+        value={text}
         onChange={changeHandler}
         onFocus={focusHandler}
+        onBlur={blurHandler}
         modules={modules}
         placeholder="Text"
       />
