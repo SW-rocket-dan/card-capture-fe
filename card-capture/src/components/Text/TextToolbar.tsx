@@ -1,4 +1,3 @@
-import { useTextStore } from '@/store/useTextStore';
 import 'react-quill/dist/quill.snow.css';
 import './TextFormat';
 import {
@@ -7,7 +6,6 @@ import {
   availableOutline,
   fontFamily,
 } from '@/components/Text/TextFormat';
-import { useCardsStore } from '@/store/useCardsStore';
 import { useFocusStore } from '@/store/useFocusStore';
 
 const TextToolbar = () => {

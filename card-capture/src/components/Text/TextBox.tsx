@@ -17,14 +17,15 @@ const modules = {
 };
 
 const TextBox = ({ cardId, layerId }: { cardId: number; layerId: number }) => {
-  const [text, setText] = useState<ReactQuill.Value>('');
-  const [isDragging, setIsDragging] = useState(false);
-
-  const editorRef = useRef<ReactQuill | null>(null);
+  const prevText = useCardsStore(state => state.getLayerText(cardId, layerId));
 
   const setLayerText = useCardsStore(state => state.setLayerText);
   const setCurrentRef = useFocusStore(state => state.setCurrentRef);
   const setCurrentDragging = useFocusStore(state => state.setIsDragging);
+
+  const [text, setText] = useState<ReactQuill.Value | null>(prevText);
+  const [isDragging, setIsDragging] = useState(false);
+  const editorRef = useRef<ReactQuill | null>(null);
 
   /**
    * 변경되는 텍스트 값을 상태에 저장하는 함수.
@@ -52,6 +53,7 @@ const TextBox = ({ cardId, layerId }: { cardId: number; layerId: number }) => {
    * 텍스트 박스에서 blur 되면 store에 변경된 값을 저장
    */
   const blurHandler = () => {
+    if (!text) return;
     setLayerText(cardId, layerId, text);
   };
 
@@ -95,7 +97,7 @@ const TextBox = ({ cardId, layerId }: { cardId: number; layerId: number }) => {
     <div className="min-w-20 border-2">
       <ReactQuill
         ref={editorRef}
-        value={text}
+        value={text || ''}
         onChange={changeHandler}
         onFocus={focusHandler}
         onBlur={blurHandler}

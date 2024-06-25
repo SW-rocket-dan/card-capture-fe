@@ -1,13 +1,15 @@
 // app/api/v1/users/login/route.ts
 
-import { Card, Cards } from '@/store/useCardsStore/type';
+import { Cards } from '@/store/useCardsStore/type';
+import ReactQuill from 'react-quill';
 
 //GET요청 mock 데이터
 export async function GET(request: Request) {
   // 임시로 만들어둔 카드 1장 ( 프로젝트 아님!! 나중에 바꿔나가며 생각해야함)
-  const mockCard = {
+  const mockCard: Cards = {
     cards: [
       {
+        id: 0,
         background: {
           url: '',
           opacity: 1,
@@ -27,7 +29,13 @@ export async function GET(request: Request) {
               opacity: 1,
             },
             content: {
-              content: '1번',
+              content: {
+                ops: [
+                  {
+                    insert: '1번',
+                  },
+                ],
+              } as ReactQuill.Value,
             },
           },
           {
@@ -43,7 +51,13 @@ export async function GET(request: Request) {
               opacity: 1,
             },
             content: {
-              content: '2번',
+              content: {
+                ops: [
+                  {
+                    insert: '2번',
+                  },
+                ],
+              } as ReactQuill.Value,
             },
           },
           {
@@ -59,7 +73,13 @@ export async function GET(request: Request) {
               opacity: 1,
             },
             content: {
-              content: '3번',
+              content: {
+                ops: [
+                  {
+                    insert: '3번',
+                  },
+                ],
+              } as ReactQuill.Value,
             },
           },
         ],
