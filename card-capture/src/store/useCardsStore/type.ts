@@ -1,3 +1,5 @@
+import ReactQuill from 'react-quill';
+
 export type Cards = {
   cards: Card[];
 };
@@ -12,8 +14,10 @@ export type Background = {
   color: string;
 };
 
+export type LayerType = 'text' | 'image' | 'shape' | 'illust';
+
 export type Layer = {
-  type: 'text' | 'image' | 'shape' | 'illust';
+  type: LayerType;
   content: Image | Shape | Text | Illust;
   id: number;
   position: Position;
@@ -36,9 +40,8 @@ export type Illust = {
   url: string;
 };
 
-//기술검토 필요
 export type Text = {
-  content: string;
+  content: ReactQuill.Value;
 };
 
 export type Position = {
@@ -47,6 +50,6 @@ export type Position = {
   width: number;
   height: number;
   rotate: number;
-  zIndex: number; // array 쓰는 방식도 있긴함, sort 최적화문제 걱정 x
+  zIndex: number;
   opacity: number;
 };

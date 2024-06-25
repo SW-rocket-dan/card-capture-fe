@@ -6,12 +6,11 @@ import {
   availableLineHeight,
   availableOutline,
   fontFamily,
-} from '@/app/components/Text/TextFormat';
+} from '@/components/Text/TextFormat';
+import { useCardsStore } from '@/store/useCardsStore';
 
 const TextToolbar = () => {
-  const index = useTextStore(state => state.index);
-  const ref = useTextStore(state => state.ref);
-  const editorRef = ref[index]; // 현재 포커스 된 요소를 가져옴
+  const editorRef = useCardsStore(state => state.currentLayerRef);
 
   /**
    * 텍스트 포맷 (bold, italic, underline) 적용 함수.
@@ -53,8 +52,10 @@ const TextToolbar = () => {
       </div>
       <div className="flex flex-col mr-10">
         <p className="bg-blue-100 p-1">font family</p>
-        {fontFamily.map(type => (
-          <button onClick={() => changeHandler('font', type)}>{type}</button>
+        {fontFamily.map((type, idx) => (
+          <button key={idx} onClick={() => changeHandler('font', type)}>
+            {type}
+          </button>
         ))}
       </div>
       <div className="flex flex-col mr-10">
@@ -75,24 +76,29 @@ const TextToolbar = () => {
       </div>
       <div className="flex flex-col mr-10">
         <p className="bg-blue-100 p-1">letter spacing</p>
-        {availableLetterSpacing.map(size => (
-          <button onClick={() => changeHandler('letter-spacing', size)}>
+        {availableLetterSpacing.map((size, idx) => (
+          <button
+            key={idx}
+            onClick={() => changeHandler('letter-spacing', size)}
+          >
             {size}
           </button>
         ))}
       </div>
       <div className="flex flex-col mr-10">
         <p className="bg-blue-100 p-1">line height</p>
-        {availableLineHeight.map(size => (
-          <button onClick={() => changeHandler('line-height', size)}>
+        {availableLineHeight.map((size, idx) => (
+          <button key={idx} onClick={() => changeHandler('line-height', size)}>
             {size}
           </button>
         ))}
       </div>
       <div className="flex flex-col mr-10">
         <p className="bg-blue-100 p-1">outline</p>
-        {availableOutline.map(size => (
-          <button onClick={() => changeHandler('outline', size)}>{size}</button>
+        {availableOutline.map((size, idx) => (
+          <button key={idx} onClick={() => changeHandler('outline', size)}>
+            {size}
+          </button>
         ))}
       </div>
       <div className="flex flex-col mr-10">

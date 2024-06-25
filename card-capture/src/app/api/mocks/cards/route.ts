@@ -16,7 +16,7 @@ export async function GET(request: Request) {
         layers: [
           {
             id: 1,
-            type: 'image',
+            type: 'text',
             position: {
               x: 100,
               y: 100,
@@ -27,16 +27,12 @@ export async function GET(request: Request) {
               opacity: 1,
             },
             content: {
-              url: 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQgByBT5IiAT_a2x9pUVb4VMoOrlzHH7Jrzj-HB5jzHlR4lNLMS',
-              cropStartX: 0,
-              cropStartY: 0,
-              cropWidth: 100,
-              cropHeight: 100,
+              content: '1번',
             },
           },
           {
             id: 2,
-            type: 'image',
+            type: 'text',
             position: {
               x: 180,
               y: 180,
@@ -47,16 +43,12 @@ export async function GET(request: Request) {
               opacity: 1,
             },
             content: {
-              url: 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQgByBT5IiAT_a2x9pUVb4VMoOrlzHH7Jrzj-HB5jzHlR4lNLMS',
-              cropStartX: 0,
-              cropStartY: 0,
-              cropWidth: 100,
-              cropHeight: 100,
+              content: '2번',
             },
           },
           {
             id: 3,
-            type: 'image',
+            type: 'text',
             position: {
               x: 200,
               y: 200,
@@ -67,11 +59,7 @@ export async function GET(request: Request) {
               opacity: 1,
             },
             content: {
-              url: 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQgByBT5IiAT_a2x9pUVb4VMoOrlzHH7Jrzj-HB5jzHlR4lNLMS',
-              cropStartX: 0,
-              cropStartY: 0,
-              cropWidth: 100,
-              cropHeight: 100,
+              content: '3번',
             },
           },
         ],
