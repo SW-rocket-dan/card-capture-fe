@@ -79,7 +79,7 @@ const FocusBox = ({ component, layerId }: Props) => {
     });
   };
 
-  const mouseMoveDragHandler = (e: React.MouseEvent) => {
+  const mouseMoveDragHandler = (e: MouseEvent) => {
     if (!isDrag) return;
     const diffX = e.clientX - offset.x;
     const diffY = e.clientY - offset.y;
@@ -93,7 +93,7 @@ const FocusBox = ({ component, layerId }: Props) => {
   };
 
   //이동이 끝날 때 cardStore에 저장
-  const mouseUpDragHandler = (e: React.MouseEvent) => {
+  const mouseUpDragHandler = (e: MouseEvent) => {
     const diffX = e.clientX - offset.x;
     const diffY = e.clientY - offset.y;
 
@@ -101,6 +101,21 @@ const FocusBox = ({ component, layerId }: Props) => {
     setIsDrag(false);
     setPosition(layerId, { ...curPosition, y: diffY, x: diffX });
   };
+
+  /**
+   * 드래그 이벤트 등록
+   */
+  useEffect(() => {
+    if (!isDrag) return;
+
+    window.addEventListener('mousemove', mouseMoveDragHandler);
+    window.addEventListener('mouseup', mouseUpDragHandler);
+
+    return () => {
+      window.removeEventListener('mousemove', mouseMoveDragHandler);
+      window.removeEventListener('mouseup', mouseUpDragHandler);
+    };
+  }, [isDrag]);
 
   /* 크기 resize 로직 */
 
@@ -324,8 +339,6 @@ const FocusBox = ({ component, layerId }: Props) => {
         opacity: curPosition.opacity,
       }}
       onMouseDown={mouseDownDragHandler}
-      onMouseMove={mouseMoveDragHandler}
-      onMouseUp={mouseUpDragHandler}
       onClick={stopPropagation}
     >
       {/* 11시,1시,5시,7시 크기조절 바 */}
