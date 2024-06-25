@@ -10,41 +10,21 @@ import ReactQuill from 'react-quill';
  * useProjectStore도 설계되면 스토어를 조각으로 합쳐야 함
  */
 type useCardsStore = {
-  currentLayer: {
-    ref: MutableRefObject<ReactQuill | null> | null;
-    isDragging: boolean;
-  };
   cards: Card[];
-
-  setCurrentLayer: ({
-    ref,
-    isDragging,
-  }: {
-    ref?: MutableRefObject<ReactQuill | null> | null;
-    isDragging?: boolean;
-  }) => void;
 
   setLayerText: (
     cardId: number,
     layerId: number,
     text: ReactQuill.Value,
   ) => void;
-
   setCard: (card: Card[]) => void;
   setPosition: (layerId: number, position: Position) => void;
   addTextLayer: (cardId: number) => void;
 };
 
 export const useCardsStore = create<useCardsStore>()(set => ({
-  currentLayer: { ref: null, isDragging: false },
   cards: [],
 
-  setCurrentLayer: ({ ref, isDragging }) =>
-    set(
-      produce(draft => {
-        draft.currentLayer = { ref: { ...ref }, isDragging: isDragging };
-      }),
-    ),
   setLayerText: (cardId, layerId, text) => {
     return set(
       produce((draft: Draft<{ cards: Card[] }>) => {
@@ -61,6 +41,7 @@ export const useCardsStore = create<useCardsStore>()(set => ({
       }),
     );
   },
+
   setCard: (cards: Card[]) =>
     set(
       //immer를 활용하여 불변성 유지
@@ -68,6 +49,7 @@ export const useCardsStore = create<useCardsStore>()(set => ({
         draft.cards = cards;
       }),
     ),
+
   setPosition: (layerId: number, position: Position) =>
     set(
       //position 변경
@@ -77,6 +59,7 @@ export const useCardsStore = create<useCardsStore>()(set => ({
         );
       }),
     ),
+
   addTextLayer: (cardId: number) =>
     set(
       produce((draft: Draft<{ cards: Card[] }>) => {

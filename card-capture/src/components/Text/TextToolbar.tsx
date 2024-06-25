@@ -8,10 +8,11 @@ import {
   fontFamily,
 } from '@/components/Text/TextFormat';
 import { useCardsStore } from '@/store/useCardsStore';
+import { useFocusStore } from '@/store/useFocusStore';
 
 const TextToolbar = () => {
-  const editorRef = useCardsStore(state => state.currentLayer.ref);
-  const isDragging = useCardsStore(state => state.currentLayer.isDragging);
+  const editorRef = useFocusStore(state => state.currentRef);
+  const isDragging = useFocusStore(state => state.isDragging);
 
   /**
    * 텍스트 포맷 (bold, italic, underline) 적용 함수.
@@ -24,6 +25,8 @@ const TextToolbar = () => {
     const editor = editorRef.current.getEditor();
     const currentFormat = editor.getFormat();
     const range = editor.getSelection();
+
+    console.log(range, editor);
 
     if (range && range.length > 0 && isDragging) {
       currentFormat[type]

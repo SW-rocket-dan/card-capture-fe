@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
-import Quill, { SelectionChangeHandler } from 'quill';
+import { SelectionChangeHandler } from 'quill';
 import 'react-quill/dist/quill.snow.css';
 import './TextStyles.css';
 import { useCardsStore } from '@/store/useCardsStore';
+import { useFocusStore } from '@/store/useFocusStore';
 
 /**
  * #toolbar를 id로 갖는 요소를 툴바로 사용하겠다고 선언
@@ -16,11 +17,14 @@ const modules = {
 };
 
 const TextBox = ({ cardId, layerId }: { cardId: number; layerId: number }) => {
-  const editorRef = useRef<ReactQuill | null>(null);
-  const setLayer = useCardsStore(state => state.setCurrentLayer);
-  const setLayerText = useCardsStore(state => state.setLayerText);
   const [text, setText] = useState<ReactQuill.Value>('');
   const [isDragging, setIsDragging] = useState(false);
+
+  const editorRef = useRef<ReactQuill | null>(null);
+
+  const setLayerText = useCardsStore(state => state.setLayerText);
+  const setCurrentRef = useFocusStore(state => state.setCurrentRef);
+  const setCurrentDragging = useFocusStore(state => state.setIsDragging);
 
   /**
    * 변경되는 텍스트 값을 상태에 저장하는 함수.
@@ -40,7 +44,8 @@ const TextBox = ({ cardId, layerId }: { cardId: number; layerId: number }) => {
    */
   const focusHandler = () => {
     if (!editorRef || !editorRef.current) return;
-    setLayer({ ref: editorRef });
+
+    setCurrentRef(editorRef);
   };
 
   /**
@@ -48,7 +53,6 @@ const TextBox = ({ cardId, layerId }: { cardId: number; layerId: number }) => {
    */
   const blurHandler = () => {
     setLayerText(cardId, layerId, text);
-    setLayer({ ref: null });
   };
 
   useEffect(() => {
@@ -84,7 +88,7 @@ const TextBox = ({ cardId, layerId }: { cardId: number; layerId: number }) => {
    * @NOTE 드래그 상태를 툴바가 알아야 하기 때문에 전역으로 저장
    */
   useEffect(() => {
-    setLayer({ isDragging });
+    setCurrentDragging(isDragging);
   }, [isDragging]);
 
   return (
