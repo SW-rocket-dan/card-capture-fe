@@ -320,7 +320,7 @@ const FocusBox = ({ component, layerId }: Props) => {
         top: curPosition.y,
         width: curPosition.width,
         height: curPosition.height,
-        zIndex: 10000, // focus되면 z-index가 상위로 와야함 (수치는 회의해야함!)
+        zIndex: 10000, //NOTE: focus되면 z-index가 상위로 와야함 (수치는 회의해야함!)
         opacity: curPosition.opacity,
       }}
       onMouseDown={mouseDownDragHandler}
