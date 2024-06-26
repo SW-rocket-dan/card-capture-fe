@@ -10,6 +10,10 @@ const config: Config = {
     extend: {
       colors: {
         main: '#6F6CFF',
+        border: '#DDDDDD',
+      },
+      fontFamily: {
+        Pretendard: ['Pretendard'],
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
