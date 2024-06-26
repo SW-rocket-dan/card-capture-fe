@@ -66,7 +66,6 @@ const FocusBox = ({ component, layerId }: Props) => {
   };
 
   const PointerMoveDragHandler = (e: PointerEvent) => {
-    console.log('in');
     if (!isDrag) return;
     const diffX = e.clientX - offset.x;
     const diffY = e.clientY - offset.y;
