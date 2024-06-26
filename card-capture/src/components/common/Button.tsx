@@ -13,11 +13,11 @@ const Button = ({ type, className, onClick, children }: ButtonProps) => {
       className={`${type === 'default' ? 'border-[1.5px] border-main' : 'bg-main'} flex flex-row justify-center items-center rounded-[8px] ${className}`}
       onClick={onClick}
     >
-      <p
-        className={`${type === 'default' ? 'text-main' : 'text-white'} font-bold`}
+      <div
+        className={`${type === 'default' ? 'text-main' : 'text-white'} font-extrabold`}
       >
         {children}
-      </p>
+      </div>
     </button>
   );
 };
