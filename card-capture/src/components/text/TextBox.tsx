@@ -17,13 +17,13 @@ const modules = {
 };
 
 const TextBox = ({ cardId, layerId }: { cardId: number; layerId: number }) => {
-  const prevText = useCardsStore(state => state.getLayerText(cardId, layerId));
-
   const setLayerText = useCardsStore(state => state.setLayerText);
   const setCurrentRef = useFocusStore(state => state.setCurrentRef);
   const setCurrentDragging = useFocusStore(state => state.setIsDragging);
 
+  const prevText = useCardsStore(state => state.getLayerText(cardId, layerId));
   const [text, setText] = useState<ReactQuill.Value | null>(prevText);
+
   const [isDragging, setIsDragging] = useState(false);
   const editorRef = useRef<ReactQuill | null>(null);
 
@@ -54,6 +54,7 @@ const TextBox = ({ cardId, layerId }: { cardId: number; layerId: number }) => {
    */
   const blurHandler = () => {
     if (!text) return;
+
     setLayerText(cardId, layerId, text);
   };
 

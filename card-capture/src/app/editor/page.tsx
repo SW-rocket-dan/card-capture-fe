@@ -4,8 +4,8 @@ import FocusBox from '@/components/editor/FocusBox/FocusBox';
 import LayerBox from '@/components/editor/LayerBox';
 import { useCardsStore } from '@/store/useCardsStore';
 import { useEffect, useState } from 'react';
-import TextBox from '@/components/Text/TextBox';
-import TextToolbar from '@/components/Text/TextToolbar';
+import TextBox from '@/components/text/TextBox';
+import TextToolbar from '@/components/text/TextToolbar';
 
 type Props = {};
 const page = ({}: Props) => {

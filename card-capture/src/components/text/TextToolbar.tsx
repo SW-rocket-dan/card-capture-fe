@@ -1,11 +1,10 @@
 import 'react-quill/dist/quill.snow.css';
-import './TextFormat';
 import {
   availableLetterSpacing,
   availableLineHeight,
   availableOutline,
-  fontFamily,
-} from '@/components/Text/TextFormat';
+  availableFontFamily,
+} from '@/components/text/TextFormat';
 import { useFocusStore } from '@/store/useFocusStore';
 
 const TextToolbar = () => {
@@ -23,8 +22,6 @@ const TextToolbar = () => {
     const editor = editorRef.current.getEditor();
     const currentFormat = editor.getFormat();
     const range = editor.getSelection();
-
-    console.log(range, editor);
 
     if (range && range.length > 0 && isDragging) {
       currentFormat[type]
@@ -67,7 +64,7 @@ const TextToolbar = () => {
       </div>
       <div className="flex flex-col mr-10">
         <p className="bg-blue-100 p-1">font family</p>
-        {fontFamily.map((type, idx) => (
+        {availableFontFamily.map((type, idx) => (
           <button key={idx} onClick={() => changeHandler('font', type)}>
             {type}
           </button>

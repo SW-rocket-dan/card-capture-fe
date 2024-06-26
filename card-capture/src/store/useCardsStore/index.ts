@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { Card, Position, Text } from './type';
 import { Draft, produce } from 'immer';
 import ReactQuill from 'react-quill';
+
 /**
  * Card 1장을 받아 저장하는 스토어
  * 나중에는 여러장을 받을 수 있게 구조 변경해야함!!!!!
