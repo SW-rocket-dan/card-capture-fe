@@ -33,7 +33,7 @@ export type Image = {
 };
 
 export type Shape = {
-  type: 'rect' | 'circle' | 'triangle'; // svg로 쓸까?
+  type: 'rect' | 'circle' | 'triangle' | 'star'; // svg로 쓸까?
   color: string;
 };
 

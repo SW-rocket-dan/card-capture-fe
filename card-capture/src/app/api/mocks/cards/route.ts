@@ -91,7 +91,41 @@ export async function GET(request: Request) {
             },
             content: {
               type: 'triangle',
-              color: '#333333',
+              color: '#420481',
+            } as Shape,
+          },
+          {
+            id: 5,
+            type: 'shape',
+            position: {
+              x: 50,
+              y: 100,
+              width: 100,
+              height: 100,
+              rotate: 0,
+              zIndex: 5,
+              opacity: 1,
+            },
+            content: {
+              type: 'circle',
+              color: '#555555',
+            } as Shape,
+          },
+          {
+            id: 6,
+            type: 'shape',
+            position: {
+              x: 150,
+              y: 100,
+              width: 100,
+              height: 100,
+              rotate: 0,
+              zIndex: 5,
+              opacity: 1,
+            },
+            content: {
+              type: 'star',
+              color: '#192739',
             } as Shape,
           },
         ],
