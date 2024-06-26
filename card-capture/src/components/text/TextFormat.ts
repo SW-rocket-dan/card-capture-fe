@@ -3,18 +3,25 @@ const Parchment = Quill.import('parchment');
 
 // 폰트 종류
 
-export const fontFamily = ['Pretendard', 'NanumGothic'];
+export const availableFontFamily = ['Pretendard', 'NanumGothic'];
 
 const Font = Quill.import('formats/font');
-Font.whitelist = fontFamily;
+Font.whitelist = availableFontFamily;
 Quill.register(Font, true);
 
 // 폰트 사이즈
 
-export const fontSize = ['12px', '16px', '18px', '24px', '28px', '32px'];
+export const availableFontSize = [
+  '12px',
+  '16px',
+  '18px',
+  '24px',
+  '28px',
+  '32px',
+];
 
 let Size = Quill.import('attributors/style/size');
-Size.whitelist = fontSize;
+Size.whitelist = availableFontSize;
 Quill.register(Size, true);
 
 // 자간 (Letter Spacing)

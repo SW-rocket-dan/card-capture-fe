@@ -1,19 +1,19 @@
-import { useTextStore } from '@/store/useTextStore';
 import 'react-quill/dist/quill.snow.css';
-import './TextFormat';
 import {
   availableLetterSpacing,
   availableLineHeight,
   availableOutline,
-  fontFamily,
-} from '@/components/Text/TextFormat';
-import { useCardsStore } from '@/store/useCardsStore';
+  availableFontFamily,
+} from '@/components/text/TextFormat';
+import { useFocusStore } from '@/store/useFocusStore';
 
 const TextToolbar = () => {
-  const editorRef = useCardsStore(state => state.currentLayerRef);
+  const editorRef = useFocusStore(state => state.currentRef);
+  const isDragging = useFocusStore(state => state.isDragging);
 
   /**
    * 텍스트 포맷 (bold, italic, underline) 적용 함수.
+   * 드래그 된 상태면 부분 적용 / 드래그 안 된 상태면 전체 적용
    * 두 번 클릭하면 스타일을 제거하는 기능이 적용됨
    */
   const clickTextFormatHandler = (type: string) => {
@@ -21,23 +21,35 @@ const TextToolbar = () => {
 
     const editor = editorRef.current.getEditor();
     const currentFormat = editor.getFormat();
+    const range = editor.getSelection();
 
-    if (currentFormat[type]) {
-      editor.format(type, false);
+    if (range && range.length > 0 && isDragging) {
+      currentFormat[type]
+        ? editor.format(type, false)
+        : editor.format(type, true);
     } else {
-      editor.format(type, true);
+      currentFormat[type]
+        ? editor.formatText(0, editor.getLength(), type, false)
+        : editor.formatText(0, editor.getLength(), type, true);
     }
   };
 
   /**
    * 기본 포맷 적용 함수.
    * 현재 선택된 요소(ref)의 값에 접근해 스타일을 적용시킴
+   * 드래그 된 상태면 부분 적용 / 드래그 안 된 상태면 전체 적용
    */
   const changeHandler = (type: string, val: string) => {
     if (!editorRef || !editorRef.current) return;
 
     const editor = editorRef.current.getEditor();
-    editor.format(type, val);
+    const range = editor.getSelection();
+
+    if (range && range.length > 0 && isDragging) {
+      editor.format(type, val);
+    } else {
+      editor.formatText(0, editor.getLength(), type, val); // 전체 적용
+    }
   };
 
   return (
@@ -52,7 +64,7 @@ const TextToolbar = () => {
       </div>
       <div className="flex flex-col mr-10">
         <p className="bg-blue-100 p-1">font family</p>
-        {fontFamily.map((type, idx) => (
+        {availableFontFamily.map((type, idx) => (
           <button key={idx} onClick={() => changeHandler('font', type)}>
             {type}
           </button>

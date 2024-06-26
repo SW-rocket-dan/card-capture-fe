@@ -5,6 +5,7 @@ export type Cards = {
 };
 
 export type Card = {
+  id: number;
   background: Background;
   layers: Layer[];
 };

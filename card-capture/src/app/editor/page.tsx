@@ -4,8 +4,8 @@ import FocusBox from '@/components/editor/FocusBox/FocusBox';
 import LayerBox from '@/components/editor/LayerBox';
 import { useCardsStore } from '@/store/useCardsStore';
 import { useEffect, useState } from 'react';
-import TextBox from '@/components/Text/TextBox';
-import TextToolbar from '@/components/Text/TextToolbar';
+import TextBox from '@/components/text/TextBox';
+import TextToolbar from '@/components/text/TextToolbar';
 
 type Props = {};
 const page = ({}: Props) => {
@@ -63,13 +63,7 @@ const page = ({}: Props) => {
           ) : (
             <LayerBox
               key={idx}
-              component={
-                <p
-                  style={{ background: 'green', width: '100%', height: '100%' }}
-                >
-                  TEST
-                </p> // 후에 <Image/>,<Text/> 등 실제 내용을 넘겨줄 자리
-              }
+              component={<TextBox key={idx} cardId={0} layerId={layer.id} />}
               position={layer.position}
               onClick={e => makeFocusLayerHandler(e, layer.id)}
             />
