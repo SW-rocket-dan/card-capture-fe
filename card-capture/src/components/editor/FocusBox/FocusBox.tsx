@@ -2,8 +2,9 @@
 
 import { useCardsStore } from '@/store/useCardsStore';
 import { Position } from '@/store/useCardsStore/type';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Direction, Offset, ResizeOffset } from './FocusBox.type';
+import { FaArrowRotateLeft } from 'react-icons/fa6';
 
 type Props = {
   component: JSX.Element;
@@ -38,12 +39,17 @@ const FocusBox = ({ component, layerId }: Props) => {
   const setPosition = useCardsStore(state => state.setPosition);
 
   const [isDrag, setIsDrag] = useState(false);
+
   const [resizeState, setResizeState] = useState<Direction>('none');
   const [curPosition, setCurPosition] = useState(layer.position);
+
   const [offset, setOffset] = useState<Offset>({ ...INITIAL_OFFSET }); // 위치이동시 사용되는 임시 변수
   const [resizeOffset, setResizeOffset] = useState<ResizeOffset>({
     ...INITIAL_RESIZE_OFFSET,
   }); // 크기 조절시 사용되는 임시 변수
+
+  const [isRotate, setIsRotate] = useState(false);
+  const boxRef = useRef<HTMLDivElement>(null);
 
   //클릭해도 Focus상태가 풀리지 않게하기위한 이벤트 전파 방지
   const stopPropagation = (e: React.PointerEvent | React.MouseEvent) => {
@@ -97,12 +103,12 @@ const FocusBox = ({ component, layerId }: Props) => {
   useEffect(() => {
     if (!isDrag) return;
 
-    window.addEventListener('pointermove', PointerMoveDragHandler, true);
-    window.addEventListener('pointerup', pointerUpDragHandler, true);
+    window.addEventListener('pointermove', PointerMoveDragHandler);
+    window.addEventListener('pointerup', pointerUpDragHandler);
 
     return () => {
-      window.removeEventListener('pointermove', PointerMoveDragHandler, true);
-      window.removeEventListener('pointerup', pointerUpDragHandler, true);
+      window.removeEventListener('pointermove', PointerMoveDragHandler);
+      window.removeEventListener('pointerup', pointerUpDragHandler);
     };
   }, [isDrag]);
 
@@ -338,6 +344,53 @@ const FocusBox = ({ component, layerId }: Props) => {
     };
   }, [resizeState]);
 
+  //            //
+  /* rotate 로직 */
+  //            //
+  const pointerDownRotateHandler = (e: React.PointerEvent) => {
+    e.stopPropagation();
+    setIsRotate(true);
+  };
+
+  const pointerMoveRotateHandler = (e: PointerEvent) => {
+    e.stopPropagation();
+    if (!isRotate) return;
+
+    // 요소의 중심점 계산
+    if (!boxRef.current) return;
+    const rect = boxRef.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    // 다음 각도 계산
+    //@NOTE: arctan을 활용한 각도 구하기
+    const nxAngle = Math.atan2(e.clientX - centerX, centerY - e.clientY);
+    let rotationDegrees = nxAngle * (180 / Math.PI); //라디안 변경
+
+    setCurPosition(prev => ({
+      ...prev,
+      rotate: rotationDegrees,
+    }));
+  };
+
+  const pointerUpRotateHandler = (e: PointerEvent) => {
+    setIsRotate(false);
+    setPosition(layerId, { ...curPosition, rotate: curPosition.rotate });
+  };
+
+  //rotate 이벤트 등록
+  //@NOTE : 캡처링 단계에서 실행되는 이벤트
+  useEffect(() => {
+    if (!isRotate) return;
+    window.addEventListener('pointermove', pointerMoveRotateHandler, true);
+    window.addEventListener('pointerup', pointerUpRotateHandler, true);
+
+    return () => {
+      window.removeEventListener('pointermove', pointerMoveRotateHandler, true);
+      window.removeEventListener('pointerup', pointerUpRotateHandler, true);
+    };
+  }, [isRotate]);
+
   return (
     <div
       className={`absolute border ${isDrag ? 'cursor-grabbing' : 'cursor-grab'}`}
@@ -348,9 +401,12 @@ const FocusBox = ({ component, layerId }: Props) => {
         height: curPosition.height,
         zIndex: 10000, //NOTE: focus되면 z-index가 상위로 와야함 (수치는 회의해야함!)
         opacity: curPosition.opacity,
+        transform: `rotate(${curPosition.rotate}deg)`,
+        transformOrigin: 'center',
       }}
       onPointerDown={mouseDownDragHandler}
       onClick={stopPropagation}
+      ref={boxRef}
     >
       {/* 11시,1시,5시,7시 크기조절 바 */}
       <div
@@ -397,6 +453,13 @@ const FocusBox = ({ component, layerId }: Props) => {
         className="absolute border -left-4 top-1/2 w-2 h-6 bg-slate-200 -translate-y-1/2 rounded-sm cursor-col-resize"
         onPointerDown={e => resizeMouseDownHandler(e, 'w')}
       ></div>
+      {/* rotate button */}
+      <div
+        className="absolute -top-10 left-2/4  -translate-x-1/2 bg-slate-200 rounded-full w-3 h-3 flex justify-center items-center"
+        onPointerDown={pointerDownRotateHandler}
+      >
+        <FaArrowRotateLeft size={8} />
+      </div>
       {component}
     </div>
   );
