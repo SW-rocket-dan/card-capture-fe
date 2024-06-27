@@ -25,8 +25,8 @@ const INITIAL_RESIZE_OFFSET = Object.freeze({
   startY: 0,
   startWidth: 0,
   startHeight: 0,
-  centerX: 0,
-  centerY: 0,
+  startCenterX: 0,
+  startCenterY: 0,
 });
 
 /**
@@ -170,10 +170,8 @@ const FocusBox = ({ component, layerId }: Props) => {
     setResizeState(direction);
 
     // 요소 중앙 좌표 계산
-    if (!boxRef.current) return;
-    const rect = boxRef.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
+    const startCenterX = curPosition.x + curPosition.width / 2;
+    const startCenterY = curPosition.y + curPosition.height / 2;
 
     setResizeOffset(prev => {
       return {
@@ -184,8 +182,8 @@ const FocusBox = ({ component, layerId }: Props) => {
         startY: curPosition.y,
         startWidth: curPosition.width,
         startHeight: curPosition.height,
-        centerX,
-        centerY,
+        startCenterX,
+        startCenterY,
       };
     });
   };
@@ -206,16 +204,16 @@ const FocusBox = ({ component, layerId }: Props) => {
     const relativeCoord = rotatePoint(
       x,
       y,
-      resizeOffset.centerX,
-      resizeOffset.centerY,
+      resizeOffset.startCenterX,
+      resizeOffset.startCenterY,
       curPosition.rotate,
     );
 
     const relativeStartCoord = rotatePoint(
       startX,
       startY,
-      resizeOffset.centerX,
-      resizeOffset.centerY,
+      resizeOffset.startCenterX,
+      resizeOffset.startCenterY,
       curPosition.rotate,
     );
 
@@ -281,6 +279,21 @@ const FocusBox = ({ component, layerId }: Props) => {
     return { ...curPosition, width, height };
   };
 
+  /**
+   * 중앙좌표 & width,height로 현재의 x,y position값을 계산
+   * 절대좌표 - 상대좌표에서 바뀌지 않는 값들
+   */
+  const calculateNextXY = (
+    width: number,
+    height: number,
+    diffX: number,
+    diffY: number,
+  ) => {
+    const { startCenterX, startCenterY } = resizeOffset;
+
+    const curCenterX = startCenterX + diffX;
+  };
+
   // resize PointerMove 공통 로직
   const resizePointerMoveWrap = (
     e: PointerEvent,
@@ -297,9 +310,27 @@ const FocusBox = ({ component, layerId }: Props) => {
       resizeOffset.startClientX,
       resizeOffset.startClientY,
     );
-    console.log(diffX, diffY);
 
-    const { width, height, x, y } = calculateFn(e, diffX, diffY);
+    const { width, height } = calculateFn(e, diffX, diffY);
+
+    //절대좌표계에서의 diff를 계산
+    const absoluteDiffX = e.clientX - resizeOffset.startClientX;
+    const absoluteDiffY = e.clientY - resizeOffset.startClientY;
+
+    const curCenterX = resizeOffset.startCenterX + absoluteDiffX / 2;
+    const curCenterY = resizeOffset.startCenterY + absoluteDiffY / 2;
+
+    //최종 계산
+    const x = curCenterX - width / 2;
+    const y = curCenterY - height / 2;
+    // console.log('startX', resizeOffset.startX);
+    // console.log('startY', resizeOffset.startY);
+    console.log(
+      'startCenterX',
+      resizeOffset.startCenterX,
+      resizeOffset.startCenterY,
+    );
+    console.log('x', x, 'y', y);
 
     //@NOTE: 박스크기는 변경하지만 이동중에 cardStore를 변경하진 않음
     setCurPosition(prev => {

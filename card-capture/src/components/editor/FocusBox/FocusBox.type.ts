@@ -10,8 +10,8 @@ export type ResizeOffset = {
   startY: number;
   startWidth: number;
   startHeight: number;
-  centerX: number;
-  centerY: number;
+  startCenterX: number;
+  startCenterY: number;
 };
 
 export type Direction =
@@ -24,3 +24,11 @@ export type Direction =
   | 'nw'
   | 'se'
   | 'sw';
+
+export type calculateCoord = {
+  e: PointerEvent;
+  diffX: number;
+  diffY: number;
+  startX: number;
+  startY: number;
+};
