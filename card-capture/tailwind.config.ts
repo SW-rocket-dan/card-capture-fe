@@ -11,6 +11,8 @@ const config: Config = {
       colors: {
         main: '#6F6CFF',
         border: '#DDDDDD',
+        icon: '#8E99A3',
+        editorbg: '#F0F0F0',
       },
       fontFamily: {
         Pretendard: ['Pretendard'],
