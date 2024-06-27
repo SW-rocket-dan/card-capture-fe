@@ -11,7 +11,7 @@ type Props = {
   layerId: number;
 };
 
-const INITIAL_OFFSET = Object.freeze({
+const INITIAL_DRAG_OFFSET = Object.freeze({
   y: 0,
   x: 0,
   width: 0,
@@ -25,6 +25,8 @@ const INITIAL_RESIZE_OFFSET = Object.freeze({
   startY: 0,
   startWidth: 0,
   startHeight: 0,
+  centerX: 0,
+  centerY: 0,
 });
 
 /**
@@ -33,23 +35,62 @@ const INITIAL_RESIZE_OFFSET = Object.freeze({
  * @param position 위치정보에 따라서 위치를 렌더링해줌
  * **/
 const FocusBox = ({ component, layerId }: Props) => {
+  //store update
   const layer = useCardsStore(
     state => state.cards[0].layers.filter(v => v.id === layerId)[0],
   );
   const setPosition = useCardsStore(state => state.setPosition);
 
+  //drag
   const [isDrag, setIsDrag] = useState(false);
 
+  //resize
   const [resizeState, setResizeState] = useState<Direction>('none');
   const [curPosition, setCurPosition] = useState(layer.position);
 
-  const [offset, setOffset] = useState<Offset>({ ...INITIAL_OFFSET }); // 위치이동시 사용되는 임시 변수
+  const [dragOffset, setDragOffset] = useState<Offset>({
+    ...INITIAL_DRAG_OFFSET,
+  }); // 위치이동시 사용되는 임시 변수
   const [resizeOffset, setResizeOffset] = useState<ResizeOffset>({
     ...INITIAL_RESIZE_OFFSET,
   }); // 크기 조절시 사용되는 임시 변수
 
+  //rotate
   const [isRotate, setIsRotate] = useState(false);
   const boxRef = useRef<HTMLDivElement>(null);
+
+  //rotate + resize
+  /**
+   * 절대 좌표계 -> 상대 좌표계로 변경해주는 func
+   */
+  const rotatePoint = (
+    x: number,
+    y: number,
+    centerX: number,
+    centerY: number,
+    angle: number,
+  ) => {
+    const radians = (angle * Math.PI) / 180;
+    const cos = Math.cos(radians);
+    const sin = Math.sin(radians);
+    const nx = cos * (x - centerX) + sin * (y - centerY) + centerX;
+    const ny = cos * (y - centerY) - sin * (x - centerX) + centerY;
+    return { x: nx, y: ny };
+  };
+
+  /**
+   * 상대 좌표계 -> 절대 좌표계로 변경해주는 func
+   */
+  const unrotatePoint = (
+    x: number,
+    y: number,
+    centerX: number,
+    centerY: number,
+    angle: number,
+  ) => {
+    const radians = (-angle * Math.PI) / 180;
+    return rotatePoint(x, y, centerX, centerY, radians * (180 / Math.PI));
+  };
 
   //클릭해도 Focus상태가 풀리지 않게하기위한 이벤트 전파 방지
   const stopPropagation = (e: React.PointerEvent | React.MouseEvent) => {
@@ -62,7 +103,7 @@ const FocusBox = ({ component, layerId }: Props) => {
   const mouseDownDragHandler = (e: React.PointerEvent) => {
     setIsDrag(true);
 
-    setOffset(prev => {
+    setDragOffset(prev => {
       return {
         ...prev,
         y: e.clientY - layer.position.y,
@@ -73,8 +114,8 @@ const FocusBox = ({ component, layerId }: Props) => {
 
   const PointerMoveDragHandler = (e: PointerEvent) => {
     if (!isDrag) return;
-    const diffX = e.clientX - offset.x;
-    const diffY = e.clientY - offset.y;
+    const diffX = e.clientX - dragOffset.x;
+    const diffY = e.clientY - dragOffset.y;
     setCurPosition(prev => {
       return {
         ...prev,
@@ -88,10 +129,10 @@ const FocusBox = ({ component, layerId }: Props) => {
    * @NOTE: 이동이 끝날 때 cardStore에 저장
    */
   const pointerUpDragHandler = (e: PointerEvent) => {
-    const diffX = e.clientX - offset.x;
-    const diffY = e.clientY - offset.y;
+    const diffX = e.clientX - dragOffset.x;
+    const diffY = e.clientY - dragOffset.y;
 
-    setOffset({ ...INITIAL_OFFSET });
+    setDragOffset({ ...INITIAL_DRAG_OFFSET });
     setIsDrag(false);
     setPosition(layerId, { ...curPosition, y: diffY, x: diffX });
   };
@@ -128,6 +169,12 @@ const FocusBox = ({ component, layerId }: Props) => {
 
     setResizeState(direction);
 
+    // 요소 중앙 좌표 계산
+    if (!boxRef.current) return;
+    const rect = boxRef.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
     setResizeOffset(prev => {
       return {
         ...prev,
@@ -137,6 +184,8 @@ const FocusBox = ({ component, layerId }: Props) => {
         startY: curPosition.y,
         startWidth: curPosition.width,
         startHeight: curPosition.height,
+        centerX,
+        centerY,
       };
     });
   };
@@ -144,68 +193,89 @@ const FocusBox = ({ component, layerId }: Props) => {
   //                     //
   /* resize 좌표 계산 함수들 */
   //                     //
-  const calculateN = (e: PointerEvent) => {
-    const diffY = e.clientY - resizeOffset.startClientY;
+
+  /**
+   * 절대좌표계를 상대좌표계로 바꾸고 수치를 가져올 수 있음
+   */
+  const getDiffInRelative = (
+    x: number,
+    y: number,
+    startX: number,
+    startY: number,
+  ) => {
+    const relativeCoord = rotatePoint(
+      x,
+      y,
+      resizeOffset.centerX,
+      resizeOffset.centerY,
+      curPosition.rotate,
+    );
+
+    const relativeStartCoord = rotatePoint(
+      startX,
+      startY,
+      resizeOffset.centerX,
+      resizeOffset.centerY,
+      curPosition.rotate,
+    );
+
+    return {
+      diffX: relativeCoord.x - relativeStartCoord.x,
+      diffY: relativeCoord.y - relativeStartCoord.y,
+    };
+  };
+
+  //각 방향별 계산
+  const calculateN = (e: PointerEvent, diffX: number, diffY: number) => {
     const height = resizeOffset.startHeight - diffY;
     const y = resizeOffset.startY + diffY;
 
     return { ...curPosition, height, y };
   };
 
-  const calculateS = (e: PointerEvent) => {
-    const diffY = e.clientY - resizeOffset.startClientY;
+  const calculateS = (e: PointerEvent, diffX: number, diffY: number) => {
     const height = resizeOffset.startHeight + diffY;
 
     return { ...curPosition, height };
   };
 
-  const calculateE = (e: PointerEvent) => {
-    const diffX = e.clientX - resizeOffset.startClientX;
+  const calculateE = (e: PointerEvent, diffX: number, diffY: number) => {
     const width = resizeOffset.startWidth + diffX;
 
     return { ...curPosition, width };
   };
 
-  const calculateW = (e: PointerEvent) => {
-    const diffX = e.clientX - resizeOffset.startClientX;
+  const calculateW = (e: PointerEvent, diffX: number, diffY: number) => {
     const width = resizeOffset.startWidth - diffX;
     const x = resizeOffset.startX + diffX;
 
     return { ...curPosition, width, x };
   };
 
-  const calculateNE = (e: PointerEvent) => {
-    const diffX = e.clientX - resizeOffset.startClientX;
+  const calculateNE = (e: PointerEvent, diffX: number, diffY: number) => {
     const width = resizeOffset.startWidth + diffX;
-    const diffY = e.clientY - resizeOffset.startClientY;
     const height = resizeOffset.startHeight - diffY;
     const y = resizeOffset.startY + diffY;
 
     return { ...curPosition, width, height, y };
   };
-  const calculateNW = (e: PointerEvent) => {
-    const diffX = e.clientX - resizeOffset.startClientX;
+  const calculateNW = (e: PointerEvent, diffX: number, diffY: number) => {
     const width = resizeOffset.startWidth - diffX;
     const x = resizeOffset.startX + diffX;
-    const diffY = e.clientY - resizeOffset.startClientY;
     const height = resizeOffset.startHeight - diffY;
     const y = resizeOffset.startY + diffY;
 
     return { ...curPosition, width, height, x, y };
   };
-  const calculateSE = (e: PointerEvent) => {
-    const diffX = e.clientX - resizeOffset.startClientX;
+  const calculateSE = (e: PointerEvent, diffX: number, diffY: number) => {
     const width = resizeOffset.startWidth - diffX;
     const x = resizeOffset.startX + diffX;
-    const diffY = e.clientY - resizeOffset.startClientY;
     const height = resizeOffset.startHeight + diffY;
 
     return { ...curPosition, width, height, x };
   };
-  const calculateSW = (e: PointerEvent) => {
-    const diffX = e.clientX - resizeOffset.startClientX;
+  const calculateSW = (e: PointerEvent, diffX: number, diffY: number) => {
     const width = resizeOffset.startWidth + diffX;
-    const diffY = e.clientY - resizeOffset.startClientY;
     const height = resizeOffset.startHeight + diffY;
 
     return { ...curPosition, width, height };
@@ -214,13 +284,22 @@ const FocusBox = ({ component, layerId }: Props) => {
   // resize PointerMove 공통 로직
   const resizePointerMoveWrap = (
     e: PointerEvent,
-    calculateFn: (e: PointerEvent) => Position,
+    calculateFn: (e: PointerEvent, diffX: number, diffY: number) => Position,
   ) => {
     // 공통 로직
     e.stopPropagation();
     if (resizeState === 'none') return;
 
-    const { width, height, x, y } = calculateFn(e);
+    //상대좌표계에서의 diff를 계산
+    const { diffX, diffY } = getDiffInRelative(
+      e.clientX,
+      e.clientY,
+      resizeOffset.startClientX,
+      resizeOffset.startClientY,
+    );
+    console.log(diffX, diffY);
+
+    const { width, height, x, y } = calculateFn(e, diffX, diffY);
 
     //@NOTE: 박스크기는 변경하지만 이동중에 cardStore를 변경하진 않음
     setCurPosition(prev => {
@@ -254,11 +333,19 @@ const FocusBox = ({ component, layerId }: Props) => {
    */
   const resizePointerUpHandlerWrap = (
     e: PointerEvent,
-    calculateFn: (e: PointerEvent) => Position,
+    calculateFn: (e: PointerEvent, diffX: number, diffY: number) => Position,
   ) => {
     e.stopPropagation();
 
-    const { width, height, x, y } = calculateFn(e);
+    const { diffX, diffY } = getDiffInRelative(
+      e.clientX,
+      e.clientY,
+      resizeOffset.startClientX,
+      resizeOffset.startClientY,
+    );
+    const { width, height, x, y } = calculateFn(e, diffX, diffY);
+    console.log('width', width, 'height', height);
+    console.log('x', x, 'y', y);
 
     //공통로직
     setResizeOffset({ ...INITIAL_RESIZE_OFFSET });
@@ -267,6 +354,7 @@ const FocusBox = ({ component, layerId }: Props) => {
   };
 
   /* resize PointerUp 이벤트 정의 */
+
   const resizeEPointerUpHandler = (e: PointerEvent) =>
     resizePointerUpHandlerWrap(e, calculateE);
 
@@ -374,8 +462,19 @@ const FocusBox = ({ component, layerId }: Props) => {
   };
 
   const pointerUpRotateHandler = (e: PointerEvent) => {
+    e.stopPropagation();
     setIsRotate(false);
-    setPosition(layerId, { ...curPosition, rotate: curPosition.rotate });
+    // 요소의 중심점 계산
+    if (!boxRef.current) return;
+    const rect = boxRef.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    // 다음 각도 계산
+    //@NOTE: arctan을 활용한 각도 구하기
+    const nxAngle = Math.atan2(e.clientX - centerX, centerY - e.clientY);
+    let rotationDegrees = nxAngle * (180 / Math.PI); //라디안 변경
+    setPosition(layerId, { ...curPosition, rotate: rotationDegrees });
   };
 
   //rotate 이벤트 등록

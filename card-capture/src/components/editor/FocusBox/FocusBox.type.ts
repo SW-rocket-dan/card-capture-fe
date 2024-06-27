@@ -10,6 +10,8 @@ export type ResizeOffset = {
   startY: number;
   startWidth: number;
   startHeight: number;
+  centerX: number;
+  centerY: number;
 };
 
 export type Direction =
