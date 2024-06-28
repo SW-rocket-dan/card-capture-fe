@@ -47,6 +47,8 @@
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "postcss": "^8",
+    "prettier": "^3.3.2",
+    "prettier-plugin-tailwindcss": "^0.6.5",
     "storybook": "^8.1.10",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"

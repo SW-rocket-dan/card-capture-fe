@@ -10,5 +10,6 @@
   "proseWrap": "never",
   "endOfLine": "auto",
   "keepEmptyLines": true,
-  "maxEmptyLines": 3
+  "maxEmptyLines": 3,
+  "plugins": ["prettier-plugin-tailwindcss"]
 }
