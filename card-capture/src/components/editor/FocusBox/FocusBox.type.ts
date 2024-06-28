@@ -6,8 +6,6 @@ export type Offset = {
 export type ResizeOffset = {
   startClientX: number;
   startClientY: number;
-  startX: number;
-  startY: number;
   startWidth: number;
   startHeight: number;
   startCenterX: number;
