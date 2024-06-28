@@ -1,6 +1,6 @@
 // app/api/v1/users/login/route.ts
 
-import { Cards } from '@/store/useCardsStore/type';
+import { Cards, Shape } from '@/store/useCardsStore/type';
 import ReactQuill from 'react-quill';
 
 //GET요청 mock 데이터
@@ -18,7 +18,7 @@ export async function GET(request: Request) {
         layers: [
           {
             id: 1,
-            type: 'text',
+            type: 'shape',
             position: {
               x: 100,
               y: 100,
@@ -29,14 +29,9 @@ export async function GET(request: Request) {
               opacity: 1,
             },
             content: {
-              content: {
-                ops: [
-                  {
-                    insert: '1번',
-                  },
-                ],
-              } as ReactQuill.Value,
-            },
+              type: 'rect',
+              color: '#333333',
+            } as Shape,
           },
           {
             id: 2,
@@ -81,6 +76,57 @@ export async function GET(request: Request) {
                 ],
               } as ReactQuill.Value,
             },
+          },
+          {
+            id: 4,
+            type: 'shape',
+            position: {
+              x: 50,
+              y: 50,
+              width: 100,
+              height: 100,
+              rotate: 0,
+              zIndex: 5,
+              opacity: 1,
+            },
+            content: {
+              type: 'triangle',
+              color: '#420481',
+            } as Shape,
+          },
+          {
+            id: 5,
+            type: 'shape',
+            position: {
+              x: 50,
+              y: 100,
+              width: 100,
+              height: 100,
+              rotate: 0,
+              zIndex: 5,
+              opacity: 1,
+            },
+            content: {
+              type: 'circle',
+              color: '#555555',
+            } as Shape,
+          },
+          {
+            id: 6,
+            type: 'shape',
+            position: {
+              x: 150,
+              y: 100,
+              width: 100,
+              height: 100,
+              rotate: 0,
+              zIndex: 5,
+              opacity: 1,
+            },
+            content: {
+              type: 'star',
+              color: '#192739',
+            } as Shape,
           },
         ],
       },

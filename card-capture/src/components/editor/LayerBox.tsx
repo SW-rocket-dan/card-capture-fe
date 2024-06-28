@@ -28,6 +28,8 @@ const LayerBox = ({ component, position, onClick }: Props) => {
         height: position.height,
         zIndex: position.zIndex,
         opacity: position.opacity,
+        transform: `rotate(${position.rotate}deg)`,
+        transformOrigin: 'center',
       }}
       onClick={onClick}
     >
