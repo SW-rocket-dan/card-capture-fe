@@ -13,6 +13,9 @@ const config: Config = {
         border: '#DDDDDD',
         icon: '#8E99A3',
         editorbg: '#F0F0F0',
+        itembg: '#F5F5F5',
+        gray1: '#666666',
+        gray2: '#555555',
       },
       fontFamily: {
         Pretendard: ['Pretendard'],

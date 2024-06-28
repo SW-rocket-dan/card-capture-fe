@@ -12,7 +12,7 @@ const Tab = () => {
   return (
     <div className="flex h-full w-[420px] flex-row justify-start">
       <MainTab currentTab={currenTab} onChange={changeTabHandler} />
-      <EditTab />
+      {currenTab === 'edit' && <EditTab />}
     </div>
   );
 };
