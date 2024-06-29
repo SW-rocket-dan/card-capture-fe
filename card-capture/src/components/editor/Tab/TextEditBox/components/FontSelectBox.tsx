@@ -24,6 +24,7 @@ const FontSelectBox = ({ list }: SelectBoxProps) => {
 
   const selectFontHandler = (idx: number) => {
     setSelectedIndex(idx);
+
     if (!recentFontIndex.includes(idx)) {
       setRecentFontIndex(prev => [idx, ...prev].slice(0, 2));
     }
@@ -37,16 +38,16 @@ const FontSelectBox = ({ list }: SelectBoxProps) => {
       >
         <p className="text-[16px]">{list[selectedIndex]}</p>
         {isOpen ? (
-          <UpArrowIcon width={12} className="text-gray1" />
+          <UpArrowIcon width={15} className="text-gray1" />
         ) : (
-          <DownArrowIcon width={12} className="text-gray1" />
+          <DownArrowIcon width={15} className="text-gray1" />
         )}
       </div>
 
       {/* 폰트 셀렉트 박스 */}
       {isOpen && (
         <div
-          className="z-3 absolute mt-[10px] flex w-full flex-col gap-[10px] p-[12px]"
+          className="absolute z-10 mt-[10px] flex w-full flex-col gap-[10px] rounded-xl bg-white p-[12px]"
           style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08' }}
         >
           <div className="flex flex-row items-center justify-between gap-3 rounded-[8px] border-[1px] border-border p-[10px]">

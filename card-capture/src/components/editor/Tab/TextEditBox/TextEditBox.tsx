@@ -1,5 +1,9 @@
 import FontSelectBox from '@/components/editor/Tab/TextEditBox/components/FontSelectBox';
-import { availableFontFamily } from '@/components/text/TextFormat';
+import {
+  availableFontFamily,
+  availableFontSize,
+} from '@/components/text/TextFormat';
+import SizeSelectBox from '@/components/editor/Tab/TextEditBox/components/SizeSelectBox';
 
 const TextEditBox = () => {
   return (
@@ -7,8 +11,11 @@ const TextEditBox = () => {
       <div className="flex px-[20px] py-[19px] text-[17px] font-extrabold">
         텍스트
       </div>
-      <div className="px-[15px]">
+      <div className="flex flex-col gap-[12px] px-[15px]">
         <FontSelectBox list={availableFontFamily} />
+        <div>
+          <SizeSelectBox sizeList={availableFontSize} />
+        </div>
       </div>
     </div>
   );
