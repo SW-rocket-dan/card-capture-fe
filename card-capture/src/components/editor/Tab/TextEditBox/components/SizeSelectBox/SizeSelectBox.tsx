@@ -25,9 +25,9 @@ const SizeSelectBox = ({ sizeList }: SizeSelectBoxProps) => {
     <div className="relative">
       <div
         onClick={openHandler}
-        className="flex max-w-32 flex-row justify-between rounded-md bg-itembg p-[10px]"
+        className="flex min-w-36 flex-row justify-between rounded-md bg-itembg p-[10px]"
       >
-        <p>{sizeList[selectedIndex].slice(0,-2)}</p>
+        <p>{sizeList[selectedIndex].slice(0, -2)}</p>
         {isOpen ? (
           <UpArrowIcon width={15} className="text-gray1" />
         ) : (
@@ -37,7 +37,7 @@ const SizeSelectBox = ({ sizeList }: SizeSelectBoxProps) => {
 
       {isOpen && (
         <div
-          className="absolute z-10 mt-[10px] flex w-full max-w-32 flex-col overflow-hidden rounded-xl bg-white"
+          className="absolute z-10 mt-[10px] flex w-full max-w-36 flex-col overflow-hidden rounded-xl bg-white"
           style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08' }}
         >
           <ul className="flex max-h-48 flex-col overflow-y-auto">
@@ -50,7 +50,7 @@ const SizeSelectBox = ({ sizeList }: SizeSelectBoxProps) => {
               ) : (
                 <li
                   onClick={() => selectSizeHandler(index)}
-                  className="px-[12px] py-[8px]"
+                  className="px-[12px] py-[8px] hover:bg-itembg"
                 >
                   {size.slice(0, -2)}
                 </li>
