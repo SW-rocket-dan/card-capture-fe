@@ -16,6 +16,7 @@ const config: Config = {
         itembg: '#F5F5F5',
         gray1: '#666666',
         gray2: '#555555',
+        defaultBlack: '#111111',
       },
       fontFamily: {
         Pretendard: ['Pretendard'],
