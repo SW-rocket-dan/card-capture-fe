@@ -1,6 +1,7 @@
 import AlignButton from '@/components/editor/Tab/TextEditBox/components/StyleBox/components/AlignButton';
 import SpacingButton from '@/components/editor/Tab/TextEditBox/components/StyleBox/components/SpacingButton';
 import ListButton from '@/components/editor/Tab/TextEditBox/components/StyleBox/components/ListButton';
+import ColorButton from '@/components/editor/Tab/TextEditBox/components/StyleBox/components/ColorButton';
 
 const StyleBox = () => {
   return (
@@ -8,6 +9,7 @@ const StyleBox = () => {
       <AlignButton />
       <SpacingButton />
       <ListButton />
+      <ColorButton />
     </div>
   );
 };
