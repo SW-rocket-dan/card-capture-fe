@@ -9,10 +9,10 @@ const AlignButton = () => {
   const [alignment, setAlignment] = useState('left');
 
   const currentAlignmentIcon = (align: string) => {
-    if (align === 'left') return <AlignLeftIcon height={15} className="text-defaultBlack" />;
-    if (align === 'right') return <AlignRightIcon height={15} className="text-defaultBlack" />;
-    if (align === 'center') return <AlignCenterIcon height={15} className="text-defaultBlack" />;
-    return <AlignJustifyIcon height={15} />;
+    if (align === 'left') return <AlignLeftIcon height={17} className="text-defaultBlack" />;
+    if (align === 'right') return <AlignRightIcon height={17} className="text-defaultBlack" />;
+    if (align === 'center') return <AlignCenterIcon height={17} className="text-defaultBlack" />;
+    return <AlignJustifyIcon height={17} />;
   };
 
   const openHandler = () => {
@@ -21,7 +21,10 @@ const AlignButton = () => {
 
   return (
     <div className="relative">
-      <button onClick={openHandler} className="rounded-md px-2 py-3 hover:bg-itembg">
+      <button
+        onClick={openHandler}
+        className="flex h-[37px] w-[37px] items-center justify-center rounded-md hover:bg-itembg"
+      >
         {currentAlignmentIcon(alignment)}
       </button>
       {isOpen && (
