@@ -3,7 +3,17 @@ const Parchment = Quill.import('parchment');
 
 // 폰트 종류
 
-export const availableFontFamily = ['Pretendard', 'NanumGothic'];
+export const availableFontFamily = [
+  'Pretendard',
+  'NanumGothic',
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+];
 
 const Font = Quill.import('formats/font');
 Font.whitelist = availableFontFamily;

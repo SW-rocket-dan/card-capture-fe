@@ -1,5 +1,5 @@
 {
-  "printWidth": 80,
+  "printWidth": 120,
   "tabWidth": 2,
   "useTabs": false,
   "semi": true,
@@ -10,5 +10,8 @@
   "proseWrap": "never",
   "endOfLine": "auto",
   "keepEmptyLines": true,
-  "maxEmptyLines": 3
+  "maxEmptyLines": 3,
+  "plugins": [
+    "prettier-plugin-tailwindcss"
+  ]
 }
