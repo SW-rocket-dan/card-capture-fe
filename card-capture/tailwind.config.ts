@@ -21,6 +21,11 @@ const config = {
         itembg: '#F5F5F5',
         gray1: '#666666',
         gray2: '#555555',
+        gray3: '#707070',
+        gray4: '#777777',
+        gray5: '#999999',
+        gray6: '#DDDDDD',
+        'light-gray': '#F9F9F9',
         defaultBlack: '#111111',
       },
       fontFamily: {
