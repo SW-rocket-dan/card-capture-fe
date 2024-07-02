@@ -4,6 +4,7 @@ import SizeSelectBox from '@/components/editor/Tab/TextEditBox/components/SizeSe
 import FormatBox from '@/components/editor/Tab/TextEditBox/components/FormatBox/FormatBox';
 import StyleBox from '@/components/editor/Tab/TextEditBox/components/StyleBox/StyleBox';
 import OutlineBox from '@/components/editor/Tab/TextEditBox/components/OutlineBox/OutlineBox';
+import OrderBox from '@/components/editor/Tab/components/OrderBox';
 
 const TextEditBox = () => {
   return (
@@ -18,6 +19,7 @@ const TextEditBox = () => {
         </div>
         <StyleBox />
         <OutlineBox />
+        <OrderBox />
       </div>
     </div>
   );
