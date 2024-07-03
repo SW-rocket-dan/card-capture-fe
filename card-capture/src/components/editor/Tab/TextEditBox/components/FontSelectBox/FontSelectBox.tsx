@@ -4,6 +4,7 @@ import DownArrowIcon from '@/components/common/Icon/DownArrowIcon';
 import FindIcon from '@/components/common/Icon/FindIcon';
 import ClockIcon from '@/components/common/Icon/ClockIcon';
 import FontIcon from '@/components/common/Icon/FontIcon';
+import useTextFormatting from '@/components/editor/Tab/TextEditBox/hooks/useTextFormatting';
 
 type SelectBoxProps = {
   list: string[];
@@ -17,6 +18,7 @@ const FontSelectBox = ({ list }: SelectBoxProps) => {
     index,
     font: list[index],
   }));
+  const { changeStyleHandler } = useTextFormatting();
 
   const openHandler = () => {
     setIsOpen(prev => !prev);
@@ -24,6 +26,7 @@ const FontSelectBox = ({ list }: SelectBoxProps) => {
 
   const selectFontHandler = (idx: number) => {
     setSelectedIndex(idx);
+    changeStyleHandler('font', list[idx]);
 
     if (!recentFontIndex.includes(idx)) {
       setRecentFontIndex(prev => [idx, ...prev].slice(0, 2));
@@ -32,10 +35,7 @@ const FontSelectBox = ({ list }: SelectBoxProps) => {
 
   return (
     <div className="relative">
-      <div
-        className="flex flex-row items-center justify-between rounded-md bg-itembg p-[11px]"
-        onClick={openHandler}
-      >
+      <div className="flex flex-row items-center justify-between rounded-md bg-itembg p-[11px]" onClick={openHandler}>
         <p className="text-[16px]">{list[selectedIndex]}</p>
         {isOpen ? (
           <UpArrowIcon width={15} className="text-gray1" />
@@ -59,12 +59,12 @@ const FontSelectBox = ({ list }: SelectBoxProps) => {
           <div>
             <div className="flex flex-row gap-[8px] px-[3px] py-[7px]">
               <ClockIcon width={16} className="text-gray2" />
-              <p className="text-gray2 text-sm">최근사용 글꼴</p>
+              <p className="text-sm text-gray2">최근사용 글꼴</p>
             </div>
             <ul className="flex flex-col">
               {recentFonts.map(({ index, font }) => (
-                <li className="p-2" onClick={() => selectFontHandler(index)}>
-                  {font}
+                <li className="cursor-pointer p-2 hover:bg-gray-100" onClick={() => selectFontHandler(index)}>
+                  <div className={`ql-font-${font}`}>{font}</div>
                 </li>
               ))}
             </ul>
@@ -74,16 +74,12 @@ const FontSelectBox = ({ list }: SelectBoxProps) => {
           <div>
             <div className="flex flex-row gap-[8px] px-[3px] py-[7px]">
               <FontIcon width={16} className="text-gray2" />
-              <p className="text-gray2 text-sm">모든 글꼴</p>
+              <p className="text-sm text-gray2">모든 글꼴</p>
             </div>
             <ul className="flex max-h-52 flex-col overflow-y-auto">
               {list.map((fontFamily, idx) => (
-                <li
-                  key={idx}
-                  className="cursor-pointer p-2 hover:bg-gray-100"
-                  onClick={() => selectFontHandler(idx)}
-                >
-                  {fontFamily}
+                <li key={idx} className="cursor-pointer p-2 hover:bg-gray-100" onClick={() => selectFontHandler(idx)}>
+                  <div className={`ql-font-${fontFamily}`}>{fontFamily}</div>
                 </li>
               ))}
             </ul>

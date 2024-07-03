@@ -1,9 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@100..900&family=Noto+Serif+KR:wght@200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Jua&family=Noto+Sans+KR:wght@100..900&family=Noto+Serif+KR:wght@200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap');
 
 .ql-editor {
     font-size: 16px;
 }
+
+/* 폰트 설정 */
 
 .ql-font-NanumGothic {
     font-family: "Nanum Gothic", sans-serif;
@@ -12,6 +19,29 @@
 .ql-font-Pretendard {
     font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;;
 }
+
+.ql-font-Jua {
+    font-family: "Jua", sans-serif;
+}
+
+.ql-font-NotoSans {
+    font-family: "Noto Sans KR", sans-serif;
+}
+
+.ql-font-NotoSerif {
+    font-family: "Noto Serif KR", serif;
+}
+
+.ql-font-BlackHanSans {
+    font-family: "Black Han Sans", sans-serif;
+}
+
+.ql-font-DoHyeon {
+    font-family: "Do Hyeon", sans-serif;
+}
+
+
+/** 외곽선 설정 **/
 
 .ql-outline-small {
     -webkit-text-stroke-width: 1px;
