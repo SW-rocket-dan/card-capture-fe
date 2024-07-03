@@ -9,6 +9,7 @@ export type Card = {
   background: Background;
   layers: Layer[];
 };
+
 export type Background = {
   url: string;
   opacity: number;

@@ -1,6 +1,7 @@
 'use client';
 import NavigationBar from '@/components/common/NavigationBar/NavigationBar';
 import Tab from '@/components/editor/Tab/Tab';
+import EditingArea from '@/components/editor/Tab/EditingArea/EditingArea';
 
 const EditorPage = () => {
   return (
@@ -8,7 +9,7 @@ const EditorPage = () => {
       <NavigationBar />
       <div className="flex h-full flex-row">
         <Tab />
-        <div className="bg-editorbg flex-1" />
+        <EditingArea />
       </div>
     </div>
   );

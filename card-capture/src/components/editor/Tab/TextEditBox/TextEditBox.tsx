@@ -5,10 +5,11 @@ import FormatBox from '@/components/editor/Tab/TextEditBox/components/FormatBox/
 import StyleBox from '@/components/editor/Tab/TextEditBox/components/StyleBox/StyleBox';
 import OutlineBox from '@/components/editor/Tab/TextEditBox/components/OutlineBox/OutlineBox';
 import OrderBox from '@/components/editor/Tab/components/OrderBox';
+import './TextEditBox.styles.css';
 
 const TextEditBox = () => {
   return (
-    <div className="flex w-full flex-col">
+    <div id="toolbar" className="flex w-full flex-col">
       <div className="flex px-[20px] py-[19px] text-[17px] font-extrabold">텍스트</div>
 
       <div className="flex flex-col gap-[12px] px-[15px]">

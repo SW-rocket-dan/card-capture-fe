@@ -31,12 +31,7 @@ const TextBox = ({ cardId, layerId }: { cardId: number; layerId: number }) => {
    * 변경되는 텍스트 값을 상태에 저장하는 함수.
    * 변경될 때마다 store에 저장하는 것은 비효율적이기 때문에 임시로 저장
    */
-  const changeHandler: ReactQuill.ReactQuillProps['onChange'] = (
-    value,
-    delta,
-    source,
-    editor,
-  ) => {
+  const changeHandler: ReactQuill.ReactQuillProps['onChange'] = (value, delta, source, editor) => {
     setText(editor.getContents());
   };
 
@@ -66,11 +61,7 @@ const TextBox = ({ cardId, layerId }: { cardId: number; layerId: number }) => {
     /**
      * 현재 선택된 부분(range)이 있으면 드래그 된 것으로 상태 변경
      */
-    const selectionHandler: SelectionChangeHandler = (
-      range,
-      oldRange,
-      source,
-    ) => {
+    const selectionHandler: SelectionChangeHandler = (range, oldRange, source) => {
       if (range && range.length > 0 && source === 'user') {
         setIsDragging(true);
       } else {
