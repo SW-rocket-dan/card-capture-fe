@@ -5,6 +5,7 @@ import 'react-quill/dist/quill.snow.css';
 import './TextStyles.css';
 import { useCardsStore } from '@/store/useCardsStore';
 import { useFocusStore } from '@/store/useFocusStore';
+import 'react-quill/dist/quill.snow.css';
 
 /**
  * #toolbar를 id로 갖는 요소를 툴바로 사용하겠다고 선언

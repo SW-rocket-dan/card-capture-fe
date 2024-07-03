@@ -5,7 +5,6 @@ import TextBox from '@/components/text/TextBox';
 import LayerBox from '@/components/editor/LayerBox';
 import { Shape } from '@/store/useCardsStore/type';
 import ShapeBox from '@/components/Shape/ShapeBox';
-import 'react-quill/dist/quill.snow.css';
 
 const EditingArea = () => {
   // 아직 react-query 적용 안해둠(TEST 용도)

@@ -5,3 +5,7 @@
 .ql-toolbar {
     all: unset;
 }
+
+button {
+    all: unset;
+}
