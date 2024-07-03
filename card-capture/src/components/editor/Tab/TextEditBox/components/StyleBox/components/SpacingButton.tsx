@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import SpacingIcon from '@/components/common/Icon/SpacingIcon';
 import { Slider } from '@/components/ui/slider';
+import useTextFormatting from '@/components/editor/Tab/TextEditBox/hooks/useTextFormatting';
 
 const SpacingButton = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [letterSpacing, setLetterSpacing] = useState<number>(5);
-  const [lineHeight, setLineHeight] = useState<number>(20);
+  const [letterSpacing, setLetterSpacing] = useState<number>(0);
+  const [lineHeight, setLineHeight] = useState<number>(15);
   const [fontStretch, setFontStretch] = useState<number>(100);
+  const { changeStyleHandler } = useTextFormatting();
 
   const openHandler = () => {
     setIsOpen(prev => !prev);
@@ -14,24 +16,30 @@ const SpacingButton = () => {
 
   const handleChangeLetterSpacing = (value: number[]) => {
     setLetterSpacing(value[0]);
+    changeStyleHandler('letter-spacing', `${value[0]}px`);
   };
 
   const handleChangeLineHeight = (value: number[]) => {
     setLineHeight(value[0]);
+    changeStyleHandler('line-height', `${value[0]}px`);
   };
 
+  /**
+   * @FIXME 장평 적용안되는 오류 있음. 추후 수정 요망
+   */
   const handleChangeFontStretch = (value: number[]) => {
     setFontStretch(value[0]);
+    changeStyleHandler('font-stretch', `${value[0]}`);
   };
 
   return (
     <div className="relative">
-      <button
+      <div
         onClick={openHandler}
-        className="flex h-[37px] w-[37px] items-center justify-center rounded-md hover:bg-itembg"
+        className="flex h-[37px] w-[37px] cursor-pointer items-center justify-center rounded-md hover:bg-itembg"
       >
         <SpacingIcon height={22} />
-      </button>
+      </div>
 
       {isOpen && (
         <div

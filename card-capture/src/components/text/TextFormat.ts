@@ -28,7 +28,7 @@ Quill.register(Size, true);
 
 // 자간 (Letter Spacing)
 
-export const availableLetterSpacing = ['0px', '1px', '2px', '3px', '4px'];
+export const availableLetterSpacing = ['0px', '1px', '2px', '3px', '4px', '5px', '6px', '7px', '8px', '9px', '10px'];
 
 const LetterSpacingStyle = new Parchment.Attributor.Style('letter-spacing', 'letter-spacing', {
   scope: Parchment.Scope.INLINE,
@@ -38,7 +38,7 @@ Quill.register(LetterSpacingStyle, true);
 
 // 행간 (Line Height)
 
-export const availableLineHeight = ['12px', '16px', '20px', '24px', '28px'];
+export const availableLineHeight = ['10px', '15px', '20px', '25px', '30px'];
 
 const LineHeightStyle = new Parchment.Attributor.Style('line-height', 'line-height', {
   scope: Parchment.Scope.BLOCK,
@@ -48,9 +48,9 @@ Quill.register(LineHeightStyle, true);
 
 // 장평 (Font Stretch)
 
-export const availableFontStretch = ['50%', '75%', '100%', '125%'];
+export const availableFontStretch = ['50', '75', '100', '125', '150'];
 
-const FontStretchStyle = new Parchment.Attributor.Style('font-stretch', 'font-stretch', {
+const FontStretchStyle = new Parchment.Attributor.Class('font-stretch', 'ql-fontStretch', {
   scope: Parchment.Scope.INLINE,
   whiteList: availableFontStretch,
 });

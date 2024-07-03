@@ -57,3 +57,24 @@
     -webkit-text-stroke-width: 3px;
     -webkit-text-stroke-color: #1ea7fd;
 }
+
+/** 장평 설정 **/
+.ql-fontStretch-50 {
+    font-stretch: 50%;
+}
+
+.ql-fontStretch-75 {
+    font-stretch: 75%;
+}
+
+.ql-fontStretch-100 {
+    font-stretch: 100%;
+}
+
+.ql-fontStretch-125 {
+    font-stretch: 125%;
+}
+
+.ql-fontStretch-150 {
+    font-stretch: 150%;
+}
