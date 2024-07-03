@@ -2,6 +2,7 @@ import { useState } from 'react';
 import DownArrowIcon from '@/components/common/Icon/DownArrowIcon';
 import UpArrowIcon from '@/components/common/Icon/UpArrowIcon';
 import CheckIcon from '@/components/common/Icon/CheckIcon';
+import useTextFormatting from '@/components/editor/Tab/TextEditBox/hooks/useTextFormatting';
 
 type SizeSelectBoxProps = {
   sizeList: string[];
@@ -10,6 +11,7 @@ type SizeSelectBoxProps = {
 const SizeSelectBox = ({ sizeList }: SizeSelectBoxProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const { changeStyleHandler } = useTextFormatting();
 
   const openHandler = () => {
     setIsOpen(prev => !prev);
@@ -17,16 +19,14 @@ const SizeSelectBox = ({ sizeList }: SizeSelectBoxProps) => {
 
   const selectSizeHandler = (idx: number) => {
     setSelectedIndex(idx);
+    changeStyleHandler('size', sizeList[idx]);
   };
 
   // @TODO 크기 숫자로 입력받는 것과 Small,Large 선택지도 만들어야 함
 
   return (
     <div className="relative">
-      <div
-        onClick={openHandler}
-        className="flex min-w-36 flex-row justify-between rounded-md bg-itembg p-[10px]"
-      >
+      <div onClick={openHandler} className="flex min-w-36 flex-row justify-between rounded-md bg-itembg p-[10px]">
         <p>{sizeList[selectedIndex].slice(0, -2)}</p>
         {isOpen ? (
           <UpArrowIcon width={15} className="text-gray1" />
@@ -48,10 +48,7 @@ const SizeSelectBox = ({ sizeList }: SizeSelectBoxProps) => {
                   <CheckIcon className="text-white" width={12} />
                 </li>
               ) : (
-                <li
-                  onClick={() => selectSizeHandler(index)}
-                  className="px-[12px] py-[8px] hover:bg-itembg"
-                >
+                <li onClick={() => selectSizeHandler(index)} className="px-[12px] py-[8px] hover:bg-itembg">
                   {size.slice(0, -2)}
                 </li>
               ),

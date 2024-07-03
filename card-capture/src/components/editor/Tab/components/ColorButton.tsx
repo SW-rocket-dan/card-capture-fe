@@ -25,7 +25,7 @@ const ColorButton = ({ className = '', hover = true, disabled = false }: ColorBu
         <button
           disabled={disabled}
           onClick={openHandler}
-          className={`rounded-md border-2 border-border ${className ? `${className}` : 'h-[24px] w-[24px]'} `}
+          className={`rounded-md border-2 border-border ${className ? `${className}` : '!h-[24px] !w-[24px]'} `}
           style={{ backgroundColor: color.hex }}
         />
       </div>

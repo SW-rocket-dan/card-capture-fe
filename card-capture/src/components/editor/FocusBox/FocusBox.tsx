@@ -5,10 +5,7 @@ import { Position } from '@/store/useCardsStore/type';
 import { useEffect, useRef, useState } from 'react';
 import { Direction, Offset, ResizeOffset } from './FocusBox.type';
 import { FaArrowRotateLeft } from 'react-icons/fa6';
-import {
-  INITIAL_DRAG_OFFSET,
-  INITIAL_RESIZE_OFFSET,
-} from './FocusBox.constant';
+import { INITIAL_DRAG_OFFSET, INITIAL_RESIZE_OFFSET } from './FocusBox.constant';
 
 type Props = {
   component: JSX.Element;
@@ -21,9 +18,7 @@ type Props = {
  * @param position 위치정보에 따라서 위치를 렌더링해줌
  * **/
 const FocusBox = ({ component, layerId }: Props) => {
-  const layer = useCardsStore(
-    state => state.cards[0].layers.filter(v => v.id === layerId)[0],
-  );
+  const layer = useCardsStore(state => state.cards[0].layers.filter(v => v.id === layerId)[0]);
   const setPosition = useCardsStore(state => state.setPosition);
 
   const [curPosition, setCurPosition] = useState(layer.position); //현재 위치를 스토어에 업로드 하지 않고 관리하기위한 state
@@ -114,10 +109,7 @@ const FocusBox = ({ component, layerId }: Props) => {
    * resize 시작 핸들러
    * @param direction 방향 (N,S,E,W,NE,NW,SE,SW)
    */
-  const resizePointerDownHandler = (
-    e: React.PointerEvent,
-    direction: Direction,
-  ) => {
+  const resizePointerDownHandler = (e: React.PointerEvent, direction: Direction) => {
     e.stopPropagation();
 
     setResizeState(direction);
@@ -147,13 +139,7 @@ const FocusBox = ({ component, layerId }: Props) => {
    * 절대 좌표계 -> 상대 좌표계로 변경해주는 func
    * rotate,resize가 공존할때 사용
    */
-  const rotatePoint = (
-    x: number,
-    y: number,
-    centerX: number,
-    centerY: number,
-    angle: number,
-  ) => {
+  const rotatePoint = (x: number, y: number, centerX: number, centerY: number, angle: number) => {
     const radians = (angle * Math.PI) / 180;
     const cos = Math.cos(radians);
     const sin = Math.sin(radians);
@@ -165,28 +151,11 @@ const FocusBox = ({ component, layerId }: Props) => {
   /**
    * 절대좌표계를 상대좌표계로 바꾸고 수치를 가져올 수 있음
    */
-  const getDiffInRelative = (
-    x: number,
-    y: number,
-    startX: number,
-    startY: number,
-  ) => {
+  const getDiffInRelative = (x: number, y: number, startX: number, startY: number) => {
     const { startCenterX, startCenterY } = resizeOffset;
-    const relativeCoord = rotatePoint(
-      x,
-      y,
-      startCenterX,
-      startCenterY,
-      curPosition.rotate,
-    );
+    const relativeCoord = rotatePoint(x, y, startCenterX, startCenterY, curPosition.rotate);
 
-    const relativeStartCoord = rotatePoint(
-      startX,
-      startY,
-      startCenterX,
-      startCenterY,
-      curPosition.rotate,
-    );
+    const relativeStartCoord = rotatePoint(startX, startY, startCenterX, startCenterY, curPosition.rotate);
 
     return {
       diffX: relativeCoord.x - relativeStartCoord.x,
@@ -245,23 +214,14 @@ const FocusBox = ({ component, layerId }: Props) => {
   };
 
   // resize PointerMove 공통 로직
-  const resizePointerMoveWrap = (
-    e: PointerEvent,
-    calculateFn: (diffX: number, diffY: number) => Position,
-  ) => {
+  const resizePointerMoveWrap = (e: PointerEvent, calculateFn: (diffX: number, diffY: number) => Position) => {
     // 공통 로직
     e.stopPropagation();
     if (resizeState === 'none') return;
-    const { startClientX, startClientY, startCenterX, startCenterY } =
-      resizeOffset;
+    const { startClientX, startClientY, startCenterX, startCenterY } = resizeOffset;
 
     //상대좌표계에서의 diff를 계산
-    const { diffX, diffY } = getDiffInRelative(
-      e.clientX,
-      e.clientY,
-      startClientX,
-      startClientY,
-    );
+    const { diffX, diffY } = getDiffInRelative(e.clientX, e.clientY, startClientX, startClientY);
 
     //resize할 box의 width, height를 계산
     const { width, height } = calculateFn(diffX, diffY);
@@ -303,10 +263,7 @@ const FocusBox = ({ component, layerId }: Props) => {
    * @param e
    * @param calculateFn
    */
-  const resizePointerUpHandlerWrap = (
-    e: PointerEvent,
-    calculateFn: (diffX: number, diffY: number) => Position,
-  ) => {
+  const resizePointerUpHandlerWrap = (e: PointerEvent, calculateFn: (diffX: number, diffY: number) => Position) => {
     e.stopPropagation();
 
     const { diffX, diffY } = getDiffInRelative(
@@ -317,8 +274,7 @@ const FocusBox = ({ component, layerId }: Props) => {
     );
     const { width, height } = calculateFn(diffX, diffY);
 
-    const { startClientX, startClientY, startCenterX, startCenterY } =
-      resizeOffset;
+    const { startClientX, startClientY, startCenterX, startCenterY } = resizeOffset;
 
     //절대좌표계에서의 diff를 계산
     const absoluteDiffX = e.clientX - startClientX;
@@ -440,24 +396,24 @@ const FocusBox = ({ component, layerId }: Props) => {
     >
       {/* 11시,1시,5시,7시 크기조절 바 */}
       <div
-        className="absolute -top-4 -left-4 border w-2 h-2 bg-slate-200 cursor-nwse-resize rounded-sm"
+        className="absolute -left-4 -top-4 h-2 w-2 cursor-nwse-resize rounded-full border bg-gray6"
         onPointerDown={e => resizePointerDownHandler(e, 'nw')}
       ></div>
       <div
-        className="absolute -top-4 -right-4 border w-2 h-2 bg-slate-200 cursor-nesw-resize rounded-sm"
+        className="absolute -right-4 -top-4 h-2 w-2 cursor-nesw-resize rounded-full border bg-gray6"
         onPointerDown={e => resizePointerDownHandler(e, 'ne')}
       ></div>
       <div
-        className="absolute -bottom-4 -left-4 border w-2 h-2 bg-slate-200 cursor-nesw-resize rounded-sm"
+        className="absolute -bottom-4 -left-4 h-2 w-2 cursor-nesw-resize rounded-full border bg-gray6"
         onPointerDown={e => resizePointerDownHandler(e, 'se')}
       ></div>
       <div
-        className="absolute -bottom-4 -right-4 border w-2 h-2 bg-slate-200 cursor-nwse-resize rounded-sm"
+        className="absolute -bottom-4 -right-4 h-2 w-2 cursor-nwse-resize rounded-full border bg-gray6"
         onPointerDown={e => resizePointerDownHandler(e, 'sw')}
       ></div>
       {/* 크기조절 바탕선 */}
       <div
-        className="absolute border -top-3 -left-3 -z-10"
+        className="absolute -left-3 -top-3 -z-10 border"
         onPointerDown={stopPropagation}
         onPointerMove={stopPropagation}
         onPointerUp={stopPropagation}
@@ -468,24 +424,24 @@ const FocusBox = ({ component, layerId }: Props) => {
       ></div>
       {/* 12시,3시,6시,9시 크기조절 바 */}
       <div
-        className="absolute border -top-4 left-2/4 w-6 h-2 bg-slate-200 -translate-x-1/2 rounded-sm cursor-row-resize"
+        className="absolute -top-4 left-2/4 h-2 w-6 -translate-x-1/2 cursor-row-resize rounded-sm border bg-gray6"
         onPointerDown={e => resizePointerDownHandler(e, 'n')}
       ></div>
       <div
-        className="absolute border -right-4 top-1/2 w-2 h-6 bg-slate-200 -translate-y-1/2 rounded-sm cursor-col-resize"
+        className="absolute -right-4 top-1/2 h-6 w-2 -translate-y-1/2 cursor-col-resize rounded-sm border bg-gray6"
         onPointerDown={e => resizePointerDownHandler(e, 'e')}
       ></div>
       <div
-        className="absolute border -bottom-4 left-2/4 w-6 h-2 bg-slate-200 -translate-x-1/2 rounded-sm cursor-row-resize"
+        className="absolute -bottom-4 left-2/4 h-2 w-6 -translate-x-1/2 cursor-row-resize rounded-sm border bg-gray6"
         onPointerDown={e => resizePointerDownHandler(e, 's')}
       ></div>
       <div
-        className="absolute border -left-4 top-1/2 w-2 h-6 bg-slate-200 -translate-y-1/2 rounded-sm cursor-col-resize"
+        className="absolute -left-4 top-1/2 h-6 w-2 -translate-y-1/2 cursor-col-resize rounded-sm border bg-gray6"
         onPointerDown={e => resizePointerDownHandler(e, 'w')}
       ></div>
       {/* rotate button */}
       <div
-        className="absolute -top-10 left-2/4  -translate-x-1/2 bg-slate-200 rounded-full w-3 h-3 flex justify-center items-center"
+        className="absolute -top-10 left-2/4 flex h-3 w-3 -translate-x-1/2 items-center justify-center rounded-full bg-gray6"
         onPointerDown={pointerDownRotateHandler}
       >
         <FaArrowRotateLeft size={8} />
