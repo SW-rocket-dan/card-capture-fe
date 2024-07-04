@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import DownArrowIcon from '@/components/common/Icon/DownArrowIcon';
-import UpArrowIcon from '@/components/common/Icon/UpArrowIcon';
+import DownIcon from '@/components/common/Icon/DownIcon';
+import UpIcon from '@/components/common/Icon/UpIcon';
 import CheckIcon from '@/components/common/Icon/CheckIcon';
 import useTextFormatting from '@/components/editor/Tab/TextEditBox/hooks/useTextFormatting';
 
@@ -28,11 +28,7 @@ const SizeSelectBox = ({ sizeList }: SizeSelectBoxProps) => {
     <div className="relative">
       <div onClick={openHandler} className="flex min-w-36 flex-row justify-between rounded-md bg-itembg p-[10px]">
         <p>{sizeList[selectedIndex].slice(0, -2)}</p>
-        {isOpen ? (
-          <UpArrowIcon width={15} className="text-gray1" />
-        ) : (
-          <DownArrowIcon width={15} className="text-gray1" />
-        )}
+        {isOpen ? <UpIcon width={15} className="text-gray1" /> : <DownIcon width={15} className="text-gray1" />}
       </div>
 
       {isOpen && (

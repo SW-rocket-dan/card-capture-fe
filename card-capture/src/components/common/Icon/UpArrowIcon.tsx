@@ -2,16 +2,11 @@ import { SVGProps } from 'react';
 
 const UpArrowIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      viewBox="0 0 14 14"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
+    <svg viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path
-        d="M2.79993 8.40009L6.75972 4.44029L10.7195 8.40009"
+        d="M13 7L7 1M7 1L1 7M7 1V15"
         stroke="currentColor"
-        stroke-width="1.4"
+        stroke-width="1.5"
         stroke-linecap="round"
         stroke-linejoin="round"
       />

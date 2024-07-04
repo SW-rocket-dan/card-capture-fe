@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import UpArrowIcon from '@/components/common/Icon/UpArrowIcon';
-import DownArrowIcon from '@/components/common/Icon/DownArrowIcon';
+import UpIcon from '@/components/common/Icon/UpIcon';
+import DownIcon from '@/components/common/Icon/DownIcon';
 import FindIcon from '@/components/common/Icon/FindIcon';
 import ClockIcon from '@/components/common/Icon/ClockIcon';
 import FontIcon from '@/components/common/Icon/FontIcon';
@@ -37,11 +37,7 @@ const FontSelectBox = ({ list }: SelectBoxProps) => {
     <div className="relative">
       <div className="flex flex-row items-center justify-between rounded-md bg-itembg p-[11px]" onClick={openHandler}>
         <p className="text-[16px]">{list[selectedIndex]}</p>
-        {isOpen ? (
-          <UpArrowIcon width={15} className="text-gray1" />
-        ) : (
-          <DownArrowIcon width={15} className="text-gray1" />
-        )}
+        {isOpen ? <UpIcon width={15} className="text-gray1" /> : <DownIcon width={15} className="text-gray1" />}
       </div>
 
       {/* 폰트 셀렉트 박스 */}
