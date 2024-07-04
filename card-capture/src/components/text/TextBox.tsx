@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
 import { SelectionChangeHandler } from 'quill';
-import 'react-quill/dist/quill.snow.css';
 import './TextStyles.css';
 import { useCardsStore } from '@/store/useCardsStore';
 import { useFocusStore } from '@/store/useFocusStore';

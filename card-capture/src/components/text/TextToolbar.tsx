@@ -1,4 +1,3 @@
-import 'react-quill/dist/quill.snow.css';
 import {
   availableLetterSpacing,
   availableLineHeight,
@@ -24,9 +23,7 @@ const TextToolbar = () => {
     const range = editor.getSelection();
 
     if (range && range.length > 0 && isDragging) {
-      currentFormat[type]
-        ? editor.format(type, false)
-        : editor.format(type, true);
+      currentFormat[type] ? editor.format(type, false) : editor.format(type, true);
     } else {
       currentFormat[type]
         ? editor.formatText(0, editor.getLength(), type, false)
@@ -54,15 +51,13 @@ const TextToolbar = () => {
 
   return (
     <div id="toolbar" className="flex flex-row gap-5">
-      <div className="flex flex-col mr-10">
+      <div className="mr-10 flex flex-col">
         <p className="bg-blue-100 p-1">format</p>
         <button onClick={() => clickTextFormatHandler('bold')}>Bold</button>
         <button onClick={() => clickTextFormatHandler('italic')}>Italic</button>
-        <button onClick={() => clickTextFormatHandler('underline')}>
-          Underline
-        </button>
+        <button onClick={() => clickTextFormatHandler('underline')}>Underline</button>
       </div>
-      <div className="flex flex-col mr-10">
+      <div className="mr-10 flex flex-col">
         <p className="bg-blue-100 p-1">font family</p>
         {availableFontFamily.map((type, idx) => (
           <button key={idx} onClick={() => changeHandler('font', type)}>
@@ -70,34 +65,29 @@ const TextToolbar = () => {
           </button>
         ))}
       </div>
-      <div className="flex flex-col mr-10">
+      <div className="mr-10 flex flex-col">
         <p className="bg-blue-100 p-1">font size</p>
         <button onClick={() => changeHandler('size', '12px')}>Small</button>
         <button onClick={() => changeHandler('size', '16px')}>Medium</button>
         <button onClick={() => changeHandler('size', '24px')}>Large</button>
         <button onClick={() => changeHandler('size', '32px')}>Huge</button>
       </div>
-      <div className="flex flex-col mr-10">
+      <div className="mr-10 flex flex-col">
         <p className="bg-blue-100 p-1">text alignment</p>
         <button onClick={() => changeHandler('align', '')}>Left</button>
         <button onClick={() => changeHandler('align', 'center')}>Center</button>
         <button onClick={() => changeHandler('align', 'right')}>Right</button>
-        <button onClick={() => changeHandler('align', 'justify')}>
-          Justify
-        </button>
+        <button onClick={() => changeHandler('align', 'justify')}>Justify</button>
       </div>
-      <div className="flex flex-col mr-10">
+      <div className="mr-10 flex flex-col">
         <p className="bg-blue-100 p-1">letter spacing</p>
         {availableLetterSpacing.map((size, idx) => (
-          <button
-            key={idx}
-            onClick={() => changeHandler('letter-spacing', size)}
-          >
+          <button key={idx} onClick={() => changeHandler('letter-spacing', size)}>
             {size}
           </button>
         ))}
       </div>
-      <div className="flex flex-col mr-10">
+      <div className="mr-10 flex flex-col">
         <p className="bg-blue-100 p-1">line height</p>
         {availableLineHeight.map((size, idx) => (
           <button key={idx} onClick={() => changeHandler('line-height', size)}>
@@ -105,7 +95,7 @@ const TextToolbar = () => {
           </button>
         ))}
       </div>
-      <div className="flex flex-col mr-10">
+      <div className="mr-10 flex flex-col">
         <p className="bg-blue-100 p-1">outline</p>
         {availableOutline.map((size, idx) => (
           <button key={idx} onClick={() => changeHandler('outline', size)}>
@@ -113,12 +103,9 @@ const TextToolbar = () => {
           </button>
         ))}
       </div>
-      <div className="flex flex-col mr-10">
+      <div className="mr-10 flex flex-col">
         <p className="bg-blue-100 p-1">color</p>
-        <input
-          type="color"
-          onChange={e => changeHandler('color', e.target.value)}
-        />
+        <input type="color" onChange={e => changeHandler('color', e.target.value)} />
       </div>
     </div>
   );
