@@ -1,7 +1,21 @@
 import { create } from 'zustand';
-import { Card, Position, Text } from './type';
+import { Card, Cards, Position, Text } from './type';
 import { Draft, produce } from 'immer';
 import ReactQuill from 'react-quill';
+
+export const INITIAL_CARD: Card = {
+  id: 0,
+  background: {
+    url: '',
+    opacity: 1,
+    color: '#FFFFFF',
+  },
+  layers: [],
+};
+
+export const INITIAL_CARDS: Cards = {
+  cards: [],
+};
 
 /**
  * Card 1장을 받아 저장하는 스토어
@@ -10,21 +24,35 @@ import ReactQuill from 'react-quill';
  */
 type useCardsStore = {
   cards: Card[];
+
   setCard: (card: Card[]) => void;
+  addCard: () => void;
 
   getLayerText: (cardId: number, layerId: number) => ReactQuill.Value | null;
-  setLayerText: (
-    cardId: number,
-    layerId: number,
-    text: ReactQuill.Value,
-  ) => void;
+  setLayerText: (cardId: number, layerId: number, text: ReactQuill.Value) => void;
 
   setPosition: (layerId: number, position: Position) => void;
+
   addTextLayer: (cardId: number) => void;
 };
 
 export const useCardsStore = create<useCardsStore>()((set, get) => ({
   cards: [],
+
+  setCard: (cards: Card[]) =>
+    set(
+      //immer를 활용하여 불변성 유지
+      produce((draft: Draft<{ cards: Card[] }>) => {
+        draft.cards = cards;
+      }),
+    ),
+
+  addCard: () =>
+    set(
+      produce((draft: Draft<{ cards: Card[] }>) => {
+        draft.cards.push(INITIAL_CARD);
+      }),
+    ),
 
   getLayerText: (cardId, layerId) => {
     const card = get().cards.find(({ id }) => id === cardId);
@@ -56,21 +84,11 @@ export const useCardsStore = create<useCardsStore>()((set, get) => ({
     );
   },
 
-  setCard: (cards: Card[]) =>
-    set(
-      //immer를 활용하여 불변성 유지
-      produce((draft: Draft<{ cards: Card[] }>) => {
-        draft.cards = cards;
-      }),
-    ),
-
   setPosition: (layerId: number, position: Position) =>
     set(
       //position 변경
       produce((draft: Draft<{ cards: Card[] }>) => {
-        draft.cards[0].layers = draft.cards[0].layers.map(v =>
-          v.id === layerId ? { ...v, position: position } : v,
-        );
+        draft.cards[0].layers = draft.cards[0].layers.map(v => (v.id === layerId ? { ...v, position: position } : v));
       }),
     ),
 
@@ -84,8 +102,8 @@ export const useCardsStore = create<useCardsStore>()((set, get) => ({
             content: '',
           },
           position: {
-            x: 150,
-            y: 150,
+            x: 300,
+            y: 300,
             width: 100,
             height: 100,
             rotate: 0,
