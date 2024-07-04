@@ -1,17 +1,16 @@
 import ListIcon from '@/components/common/Icon/ListIcon';
+import useTextFormatting from '@/components/editor/Tab/TextEditBox/hooks/useTextFormatting';
 
 const ListButton = () => {
-  const handleClickList = () => {
-    // 기능 추가 예정
-  };
+  const { changeTextFormatHandler } = useTextFormatting();
 
   return (
-    <button
-      onClick={handleClickList}
+    <div
+      onClick={() => changeTextFormatHandler('list')}
       className="flex h-[37px] w-[37px] items-center justify-center rounded-md hover:bg-itembg"
     >
       <ListIcon height={20} className="text-defaultBlack" />
-    </button>
+    </div>
   );
 };
 
