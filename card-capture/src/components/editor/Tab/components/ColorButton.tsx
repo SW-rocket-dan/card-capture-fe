@@ -1,7 +1,8 @@
 import ColorPicker from '@/components/common/ColorPicker/ColorPicker';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useColor } from 'react-color-palette';
 import CloseIcon from '@/components/common/Icon/CloseIcon';
+import useTextFormatting from '@/components/editor/Tab/TextEditBox/hooks/useTextFormatting';
 
 type ColorButtonProps = {
   className?: string;
@@ -12,10 +13,15 @@ type ColorButtonProps = {
 const ColorButton = ({ className = '', hover = true, disabled = false }: ColorButtonProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [color, setColor] = useColor('#000000');
+  const { changeStyleHandler } = useTextFormatting();
 
   const openHandler = () => {
     setIsOpen(prev => !prev);
   };
+
+  useEffect(() => {
+    changeStyleHandler('color', color.hex);
+  }, [color]);
 
   return (
     <div className="relative">
