@@ -13,5 +13,8 @@
   "maxEmptyLines": 3,
   "plugins": [
     "prettier-plugin-tailwindcss"
-  ]
+  ],
+  "css": {
+    "ignoreFiles": "*.css"
+  }
 }

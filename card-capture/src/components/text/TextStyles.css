@@ -8,6 +8,18 @@
 
 .ql-editor {
     font-size: 16px;
+    border: none;
+    outline: none;
+}
+
+.ql-container {
+    border: none !important;
+    outline: none !important;
+}
+
+.ql-snow {
+    border: none !important;
+    outline: none !important;
 }
 
 /* 폰트 설정 */

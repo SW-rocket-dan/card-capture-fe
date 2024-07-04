@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
 import { SelectionChangeHandler } from 'quill';
-import './TextStyles.css';
 import { useCardsStore } from '@/store/useCardsStore';
 import { useFocusStore } from '@/store/useFocusStore';
 import 'react-quill/dist/quill.snow.css';
+import './TextStyles.css';
 
 /**
  * #toolbar를 id로 갖는 요소를 툴바로 사용하겠다고 선언
@@ -86,7 +86,7 @@ const TextBox = ({ cardId, layerId }: { cardId: number; layerId: number }) => {
   }, [isDragging]);
 
   return (
-    <div className="min-w-20 border-2">
+    <div className="min-w-20">
       <ReactQuill
         ref={editorRef}
         value={text || ''}
