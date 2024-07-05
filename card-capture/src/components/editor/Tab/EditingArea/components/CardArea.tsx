@@ -56,34 +56,34 @@ const CardArea = () => {
           if (layer.type === 'text') {
             //텍스트 Focus Box
             return (
-              <FocusBox key={idx} layerId={layer.id} component={<TextBox key={idx} cardId={0} layerId={layer.id} />} />
+              <FocusBox key={idx} layerId={layer.id}>
+                <TextBox key={idx} cardId={0} layerId={layer.id} />
+              </FocusBox>
             );
           } else if (layer.type === 'shape') {
             // 도형 Focus Box
             const { type, color } = layer.content as Shape;
-            return <FocusBox key={idx} layerId={layer.id} component={<ShapeBox shapeType={type} color={color} />} />;
+            return (
+              <FocusBox key={idx} layerId={layer.id}>
+                <ShapeBox shapeType={type} color={color} />
+              </FocusBox>
+            );
           }
         } else {
           if (layer.type === 'text') {
             // Text Layer Box
             return (
-              <LayerBox
-                key={idx}
-                component={<TextBox key={idx} cardId={0} layerId={layer.id} />}
-                position={layer.position}
-                onClick={e => makeFocusLayerHandler(e, layer.id)}
-              />
+              <LayerBox key={idx} position={layer.position} onClick={e => makeFocusLayerHandler(e, layer.id)}>
+                <TextBox key={idx} cardId={0} layerId={layer.id} />
+              </LayerBox>
             );
           } else if (layer.type === 'shape') {
             // 도형 Layer Box
             const { type, color } = layer.content as Shape;
             return (
-              <LayerBox
-                key={idx}
-                component={<ShapeBox shapeType={type} color={color} />}
-                position={layer.position}
-                onClick={e => makeFocusLayerHandler(e, layer.id)}
-              />
+              <LayerBox key={idx} position={layer.position} onClick={e => makeFocusLayerHandler(e, layer.id)}>
+                <ShapeBox shapeType={type} color={color} />
+              </LayerBox>
             );
           }
         }
