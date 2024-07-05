@@ -17,15 +17,22 @@ const modules = {
 };
 
 const TextBox = ({ cardId, layerId }: { cardId: number; layerId: number }) => {
-  const setLayerText = useCardsStore(state => state.setLayerText);
-  const setCurrentRef = useFocusStore(state => state.setCurrentRef);
-  const setCurrentDragging = useFocusStore(state => state.setIsDragging);
-
-  const prevText = useCardsStore(state => state.getLayerText(cardId, layerId));
-  const [text, setText] = useState<ReactQuill.Value | null>(prevText);
-
-  const [isDragging, setIsDragging] = useState(false);
   const editorRef = useRef<ReactQuill | null>(null);
+
+  const layer = useCardsStore(state => state.cards[0].layers.filter(v => v.id === layerId)[0]);
+  const setPosition = useCardsStore(state => state.setPosition);
+
+  const updateLayerSize = () => {
+    if (editorRef.current) {
+      const editorElement = editorRef.current.getEditor().root;
+
+      editorElement.style.maxWidth = '700px';
+
+      const { width, height } = editorElement.getBoundingClientRect();
+      console.log('Updating layer size:', width, height);
+      setPosition(layerId, { ...layer.position, width, height });
+    }
+  };
 
   /**
    * 변경되는 텍스트 값을 상태에 저장하는 함수.
@@ -33,11 +40,13 @@ const TextBox = ({ cardId, layerId }: { cardId: number; layerId: number }) => {
    */
   const changeHandler: ReactQuill.ReactQuillProps['onChange'] = (value, delta, source, editor) => {
     setText(editor.getContents());
+    updateLayerSize();
   };
 
   /**
    * 현재 포커스된 TextBox의 ref를 store에 저장
    */
+  const setCurrentRef = useFocusStore(state => state.setCurrentRef);
   const focusHandler = () => {
     if (!editorRef || !editorRef.current) return;
 
@@ -47,11 +56,17 @@ const TextBox = ({ cardId, layerId }: { cardId: number; layerId: number }) => {
   /**
    * 텍스트 박스에서 blur 되면 store에 변경된 값을 저장
    */
+  const prevText = useCardsStore(state => state.getLayerText(cardId, layerId));
+  const [text, setText] = useState<ReactQuill.Value | null>(prevText);
+
+  const setLayerText = useCardsStore(state => state.setLayerText);
   const blurHandler = () => {
     if (!text) return;
 
     setLayerText(cardId, layerId, text);
   };
+
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     const quillInstance = editorRef.current?.getEditor();
@@ -81,12 +96,14 @@ const TextBox = ({ cardId, layerId }: { cardId: number; layerId: number }) => {
    * 드래그 상태가 변경되면 전역 store에 드래그 상태를 저장
    * @NOTE 드래그 상태를 툴바가 알아야 하기 때문에 전역으로 저장
    */
+  const setCurrentDragging = useFocusStore(state => state.setIsDragging);
+
   useEffect(() => {
     setCurrentDragging(isDragging);
   }, [isDragging]);
 
   return (
-    <div className="min-w-20">
+    <div>
       <ReactQuill
         ref={editorRef}
         value={text || ''}
@@ -94,6 +111,7 @@ const TextBox = ({ cardId, layerId }: { cardId: number; layerId: number }) => {
         onFocus={focusHandler}
         onBlur={blurHandler}
         modules={modules}
+        style={{ minWidth: '100px', maxWidth: '700px', width: '100%' }}
         placeholder="Text"
       />
     </div>

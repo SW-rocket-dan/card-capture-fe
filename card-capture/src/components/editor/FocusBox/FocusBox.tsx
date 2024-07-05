@@ -44,6 +44,13 @@ const FocusBox = ({ component, layerId }: Props) => {
     e.stopPropagation();
   };
 
+  /**
+   * 내부 컴포넌트(TextBox)의 크기가 벼
+   */
+  useEffect(() => {
+    setCurPosition(layer.position);
+  }, [layer.position]);
+
   //              //
   /* 드래그 관련 로직 */
   //              //
@@ -389,6 +396,7 @@ const FocusBox = ({ component, layerId }: Props) => {
         opacity: curPosition.opacity,
         transform: `rotate(${curPosition.rotate}deg)`,
         transformOrigin: 'center',
+        wordWrap: 'break-word',
       }}
       onPointerDown={pointerDownDragHandler}
       onClick={stopPropagation}
