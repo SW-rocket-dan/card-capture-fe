@@ -5,6 +5,7 @@ import { useCardsStore } from '@/store/useCardsStore';
 import { useFocusStore } from '@/store/useFocusStore';
 import 'react-quill/dist/quill.snow.css';
 import './TextStyles.css';
+import useTextFormatting from '@/components/editor/Tab/TextEditBox/hooks/useTextFormatting';
 
 /**
  * #toolbar를 id로 갖는 요소를 툴바로 사용하겠다고 선언
@@ -16,20 +17,20 @@ const modules = {
   },
 };
 
-const TextBox = ({ cardId, layerId }: { cardId: number; layerId: number }) => {
+const TextBox = ({ cardId, layerId, clickedCount }: { cardId: number; layerId: number; clickedCount: number }) => {
   const editorRef = useRef<ReactQuill | null>(null);
 
   const layer = useCardsStore(state => state.cards[0].layers.filter(v => v.id === layerId)[0]);
   const setPosition = useCardsStore(state => state.setPosition);
 
+  /**
+   * 입력하면서 quill의 크기가 변경되면 해당 크기를 스토어의 position 값에 업데이트함
+   */
   const updateLayerSize = () => {
     if (editorRef.current) {
       const editorElement = editorRef.current.getEditor().root;
-
-      editorElement.style.maxWidth = '700px';
-
       const { width, height } = editorElement.getBoundingClientRect();
-      console.log('Updating layer size:', width, height);
+
       setPosition(layerId, { ...layer.position, width, height });
     }
   };
@@ -67,6 +68,7 @@ const TextBox = ({ cardId, layerId }: { cardId: number; layerId: number }) => {
   };
 
   const [isDragging, setIsDragging] = useState(false);
+  const { saveCurrentRange, applySavedRange } = useTextFormatting();
 
   useEffect(() => {
     const quillInstance = editorRef.current?.getEditor();
@@ -79,6 +81,9 @@ const TextBox = ({ cardId, layerId }: { cardId: number; layerId: number }) => {
     const selectionHandler: SelectionChangeHandler = (range, oldRange, source) => {
       if (range && range.length > 0 && source === 'user') {
         setIsDragging(true);
+        console.log(range);
+        if (range) saveCurrentRange(range);
+        console.log(editorRef);
       } else {
         setIsDragging(false);
       }
@@ -92,6 +97,8 @@ const TextBox = ({ cardId, layerId }: { cardId: number; layerId: number }) => {
     };
   }, []);
 
+  const isReadOnly = clickedCount <= 1;
+
   /**
    * 드래그 상태가 변경되면 전역 store에 드래그 상태를 저장
    * @NOTE 드래그 상태를 툴바가 알아야 하기 때문에 전역으로 저장
@@ -102,6 +109,11 @@ const TextBox = ({ cardId, layerId }: { cardId: number; layerId: number }) => {
     setCurrentDragging(isDragging);
   }, [isDragging]);
 
+  // useEffect(() => {
+  //   setCurrentRef(editorRef);
+  //   console.log(editorRef);
+  // }, [editorRef]);
+
   return (
     <div>
       <ReactQuill
@@ -111,8 +123,9 @@ const TextBox = ({ cardId, layerId }: { cardId: number; layerId: number }) => {
         onFocus={focusHandler}
         onBlur={blurHandler}
         modules={modules}
-        style={{ minWidth: '100px', maxWidth: '700px', width: '100%' }}
+        style={{ minWidth: '200px', maxWidth: '700px', width: '100%', cursor: isReadOnly ? 'pointer' : 'auto' }}
         placeholder="Text"
+        readOnly={isReadOnly}
       />
     </div>
   );

@@ -2,13 +2,13 @@
 
 import { useCardsStore } from '@/store/useCardsStore';
 import { Position } from '@/store/useCardsStore/type';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Direction, Offset, ResizeOffset } from './FocusBox.type';
 import { FaArrowRotateLeft } from 'react-icons/fa6';
 import { INITIAL_DRAG_OFFSET, INITIAL_RESIZE_OFFSET } from './FocusBox.constant';
 
 type Props = {
-  component: JSX.Element;
+  children: React.ReactElement<{ clickedCount: number }>;
   layerId: number;
 };
 
@@ -17,7 +17,7 @@ type Props = {
  * @param component Box안에 띄어줄 컴포넌트
  * @param position 위치정보에 따라서 위치를 렌더링해줌
  * **/
-const FocusBox = ({ component, layerId }: Props) => {
+const FocusBox = ({ children, layerId }: Props) => {
   const layer = useCardsStore(state => state.cards[0].layers.filter(v => v.id === layerId)[0]);
   const setPosition = useCardsStore(state => state.setPosition);
 
@@ -39,13 +39,20 @@ const FocusBox = ({ component, layerId }: Props) => {
   const [isRotate, setIsRotate] = useState(false);
   const boxRef = useRef<HTMLDivElement>(null);
 
-  //클릭해도 Focus상태가 풀리지 않게하기위한 이벤트 전파 방지
+  //클릭해도 Focus 상태가 풀리지 않게하기위한 이벤트 전파 방지
   const stopPropagation = (e: React.PointerEvent | React.MouseEvent) => {
     e.stopPropagation();
   };
 
+  const [clickedCount, setClickedCount] = useState(0);
+
+  const clickFocusBoxHandler = (e: React.PointerEvent | React.MouseEvent) => {
+    setClickedCount(prev => prev + 1);
+    e.stopPropagation();
+  };
+
   /**
-   * 내부 컴포넌트(TextBox)의 크기가 벼
+   * 내부 컴포넌트(TextBox)의 크기가 변경되면 확인해서 FocusBox의 크기 업데이트됨
    */
   useEffect(() => {
     setCurPosition(layer.position);
@@ -66,7 +73,7 @@ const FocusBox = ({ component, layerId }: Props) => {
     });
   };
 
-  const PointerMoveDragHandler = (e: PointerEvent) => {
+  const pointerMoveDragHandler = (e: PointerEvent) => {
     if (!isDrag) return;
 
     const diffX = e.clientX - dragOffset.x;
@@ -98,12 +105,13 @@ const FocusBox = ({ component, layerId }: Props) => {
    */
   useEffect(() => {
     if (!isDrag) return;
+    if (clickedCount % 2 === 1) return;
 
-    window.addEventListener('pointermove', PointerMoveDragHandler);
+    window.addEventListener('pointermove', pointerMoveDragHandler);
     window.addEventListener('pointerup', pointerUpDragHandler);
 
     return () => {
-      window.removeEventListener('pointermove', PointerMoveDragHandler);
+      window.removeEventListener('pointermove', pointerMoveDragHandler);
       window.removeEventListener('pointerup', pointerUpDragHandler);
     };
   }, [isDrag]);
@@ -399,7 +407,7 @@ const FocusBox = ({ component, layerId }: Props) => {
         wordWrap: 'break-word',
       }}
       onPointerDown={pointerDownDragHandler}
-      onClick={stopPropagation}
+      onClick={clickFocusBoxHandler}
       ref={boxRef}
     >
       {/* 11시,1시,5시,7시 크기조절 바 */}
@@ -454,7 +462,9 @@ const FocusBox = ({ component, layerId }: Props) => {
       >
         <FaArrowRotateLeft size={8} />
       </div>
-      {component}
+      {layer.type === 'text' && React.isValidElement(children)
+        ? React.cloneElement(children, { clickedCount })
+        : children}
     </div>
   );
 };
