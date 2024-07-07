@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useColor } from 'react-color-palette';
 import CloseIcon from '@/components/common/Icon/CloseIcon';
 import useTextFormatting from '@/components/editor/Tab/TextEditBox/hooks/useTextFormatting';
+import useClickOutside from '@/hooks/useClickOutside';
 
 type ColorButtonProps = {
   className?: string;
@@ -23,8 +24,11 @@ const ColorButton = ({ className = '', hover = true, disabled = false }: ColorBu
     changeStyleHandler('color', color.hex);
   }, [color]);
 
+  // 컴포넌트 외부 클릭시 모달 닫는 hook
+  const ref = useClickOutside(() => setIsOpen(false));
+
   return (
-    <div className="relative">
+    <div ref={ref} className="relative">
       <div
         className={`flex h-[37px] w-[37px] items-center justify-center rounded-md ${hover ? 'hover:bg-itembg' : ''}`}
       >

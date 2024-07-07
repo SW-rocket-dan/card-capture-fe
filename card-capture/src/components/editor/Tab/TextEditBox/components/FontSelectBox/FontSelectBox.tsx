@@ -5,6 +5,7 @@ import FindIcon from '@/components/common/Icon/FindIcon';
 import ClockIcon from '@/components/common/Icon/ClockIcon';
 import FontIcon from '@/components/common/Icon/FontIcon';
 import useTextFormatting from '@/components/editor/Tab/TextEditBox/hooks/useTextFormatting';
+import useClickOutside from '@/hooks/useClickOutside';
 
 type SelectBoxProps = {
   list: string[];
@@ -44,8 +45,11 @@ const FontSelectBox = ({ list }: SelectBoxProps) => {
     }
   };
 
+  // 컴포넌트 외부 클릭시 모달 닫는 hook
+  const ref = useClickOutside(() => setIsOpen(false));
+
   return (
-    <div className="relative">
+    <div ref={ref} className="relative">
       <button
         className="!flex !h-full !w-full !flex-row !items-center !justify-between !rounded-md !bg-itembg !p-[11px] hover:bg-defaultBlack"
         onClick={openHandler}

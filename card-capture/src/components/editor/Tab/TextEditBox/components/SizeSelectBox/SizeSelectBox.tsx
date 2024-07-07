@@ -3,19 +3,27 @@ import DownIcon from '@/components/common/Icon/DownIcon';
 import UpIcon from '@/components/common/Icon/UpIcon';
 import CheckIcon from '@/components/common/Icon/CheckIcon';
 import useTextFormatting from '@/components/editor/Tab/TextEditBox/hooks/useTextFormatting';
+import useClickOutside from '@/hooks/useClickOutside';
 
 type SizeSelectBoxProps = {
   sizeList: string[];
 };
 
 const SizeSelectBox = ({ sizeList }: SizeSelectBoxProps) => {
+  /**
+   * 사이즈 드롭다운을 여닫는 click handler
+   */
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedIndex, setSelectedIndex] = useState<number>(0);
-  const { changeStyleHandler } = useTextFormatting();
 
   const openHandler = () => {
     setIsOpen(prev => !prev);
   };
+
+  /**
+   * 선택된 사이즈를 텍스트에 적용하는 로직
+   */
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const { changeStyleHandler } = useTextFormatting();
 
   const selectSizeHandler = (idx: number) => {
     setSelectedIndex(idx);
@@ -24,8 +32,11 @@ const SizeSelectBox = ({ sizeList }: SizeSelectBoxProps) => {
 
   // @TODO 크기 숫자로 입력받는 것과 Small,Large 선택지도 만들어야 함
 
+  // 컴포넌트 외부 클릭시 모달 닫는 hook
+  const ref = useClickOutside(() => setIsOpen(false));
+
   return (
-    <div className="relative">
+    <div ref={ref} className="relative">
       <button onClick={openHandler} className="flex min-w-36 flex-row justify-between rounded-md bg-itembg p-[10px]">
         <p>{sizeList[selectedIndex].slice(0, -2)}</p>
         {isOpen ? <UpIcon width={15} className="text-gray1" /> : <DownIcon width={15} className="text-gray1" />}
