@@ -58,7 +58,7 @@ const FontSelectBox = ({ list }: SelectBoxProps) => {
       {/* 폰트 셀렉트 박스 */}
       {isOpen && (
         <div
-          className="absolute z-10 mt-[55px] flex w-full flex-col gap-[10px] rounded-xl bg-white p-[12px]"
+          className="absolute z-10 mt-[10px] flex w-full flex-col gap-[10px] rounded-xl bg-white p-[12px]"
           style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08' }}
         >
           <div className="flex flex-row items-center justify-between gap-3 rounded-[8px] border-[1px] border-border p-[10px]">

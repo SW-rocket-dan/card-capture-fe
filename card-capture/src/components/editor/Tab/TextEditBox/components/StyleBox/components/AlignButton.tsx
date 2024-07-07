@@ -28,41 +28,41 @@ const AlignButton = () => {
 
   return (
     <div className="relative">
-      <div
+      <button
         onClick={openHandler}
         className="flex h-[37px] w-[37px] cursor-pointer items-center justify-center rounded-md hover:bg-itembg"
       >
         {currentAlignmentIcon(alignment)}
-      </div>
+      </button>
       {isOpen && (
         <div
           className="absolute left-[-10px] z-10 mt-[10px] flex flex-row gap-[10px] rounded-lg bg-white p-2.5"
           style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08' }}
         >
-          <div
+          <button
             onClick={() => changeAlignmentHandler('left')}
             className={`flex h-[35px] w-[35px] items-center justify-center rounded-[5px] ${alignment === 'left' ? 'bg-main' : 'hover:bg-itembg'}`}
           >
             <AlignLeftIcon height={15} className={alignment === 'left' ? 'text-white' : 'text-defaultBlack'} />
-          </div>
-          <div
+          </button>
+          <button
             onClick={() => changeAlignmentHandler('center')}
             className={`flex h-[35px] w-[35px] items-center justify-center rounded-[5px] ${alignment === 'center' ? 'bg-main' : 'hover:bg-itembg'}`}
           >
             <AlignCenterIcon height={15} className={alignment === 'center' ? 'text-white' : 'text-defaultBlack'} />
-          </div>
-          <div
+          </button>
+          <button
             onClick={() => changeAlignmentHandler('right')}
             className={`flex h-[35px] w-[35px] items-center justify-center rounded-[5px] ${alignment === 'right' ? 'bg-main' : 'hover:bg-itembg'}`}
           >
             <AlignRightIcon height={15} className={alignment === 'right' ? 'text-white' : 'text-defaultBlack'} />
-          </div>
-          <div
+          </button>
+          <button
             onClick={() => changeAlignmentHandler('justify')}
             className={`flex h-[35px] w-[35px] items-center justify-center rounded-[5px] ${alignment === 'justify' ? 'bg-main' : 'hover:bg-itembg'}`}
           >
             <AlignJustifyIcon height={15} className={alignment === 'justify' ? 'text-white' : 'text-defaultBlack'} />
-          </div>
+          </button>
         </div>
       )}
     </div>

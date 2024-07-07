@@ -34,12 +34,12 @@ const SpacingButton = () => {
 
   return (
     <div className="relative">
-      <div
+      <button
         onClick={openHandler}
         className="flex h-[37px] w-[37px] cursor-pointer items-center justify-center rounded-md hover:bg-itembg"
       >
         <SpacingIcon height={22} />
-      </div>
+      </button>
 
       {isOpen && (
         <div
