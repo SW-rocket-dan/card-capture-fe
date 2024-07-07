@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import AlignLeftIcon from '@/components/common/Icon/AlignLeftIcon';
 import AlignRightIcon from '@/components/common/Icon/AlignRightIcon';
 import AlignCenterIcon from '@/components/common/Icon/AlignCenterIcon';
 import AlignJustifyIcon from '@/components/common/Icon/AlignJustifyIcon';
 import useTextFormatting from '@/components/editor/Tab/TextEditBox/hooks/useTextFormatting';
+import useClickOutside from '@/hooks/useClickOutside';
 
 const AlignButton = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -26,8 +27,10 @@ const AlignButton = () => {
     changeStyleHandler('align', align === 'left' ? '' : align);
   };
 
+  const ref = useClickOutside(() => setIsOpen(false));
+
   return (
-    <div className="relative">
+    <div ref={ref} className="relative">
       <button
         onClick={openHandler}
         className="flex h-[37px] w-[37px] cursor-pointer items-center justify-center rounded-md hover:bg-itembg"
