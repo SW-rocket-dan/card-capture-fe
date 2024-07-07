@@ -37,7 +37,7 @@ const FontSelectBox = ({ list }: SelectBoxProps) => {
    */
   const selectFontHandler = (idx: number) => {
     setSelectedIndex(idx);
-    changeStyleHandler('font', list[selectedIndex]);
+    changeStyleHandler('font', list[idx]);
 
     if (!recentFontIndex.includes(idx)) {
       setRecentFontIndex(prev => [idx, prev[0]]);

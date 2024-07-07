@@ -26,10 +26,10 @@ const SizeSelectBox = ({ sizeList }: SizeSelectBoxProps) => {
 
   return (
     <div className="relative">
-      <div onClick={openHandler} className="flex min-w-36 flex-row justify-between rounded-md bg-itembg p-[10px]">
+      <button onClick={openHandler} className="flex min-w-36 flex-row justify-between rounded-md bg-itembg p-[10px]">
         <p>{sizeList[selectedIndex].slice(0, -2)}</p>
         {isOpen ? <UpIcon width={15} className="text-gray1" /> : <DownIcon width={15} className="text-gray1" />}
-      </div>
+      </button>
 
       {isOpen && (
         <div
@@ -39,14 +39,17 @@ const SizeSelectBox = ({ sizeList }: SizeSelectBoxProps) => {
           <ul className="flex max-h-48 flex-col overflow-y-auto">
             {sizeList.map((size, index) =>
               selectedIndex === index ? (
-                <li className="flex flex-row justify-between bg-main px-[12px] py-[8px]">
+                <button className="flex flex-row items-center justify-between bg-main px-[12px] py-[8px]">
                   <p className="text-white">{size.slice(0, -2)}</p>
                   <CheckIcon className="text-white" width={12} />
-                </li>
+                </button>
               ) : (
-                <li onClick={() => selectSizeHandler(index)} className="px-[12px] py-[8px] hover:bg-itembg">
+                <button
+                  onClick={() => selectSizeHandler(index)}
+                  className="flex justify-start px-[12px] py-[8px] hover:bg-itembg"
+                >
                   {size.slice(0, -2)}
-                </li>
+                </button>
               ),
             )}
           </ul>
