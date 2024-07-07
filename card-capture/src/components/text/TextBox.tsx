@@ -29,7 +29,7 @@ const TextBox = ({ cardId, layerId, clickedCount = 0 }: { cardId: number; layerI
       const editorElement = editorRef.current.getEditor().root;
       const { width, height } = editorElement.getBoundingClientRect();
 
-      setPosition(layerId, { ...layer.position, width, height });
+      setPosition(layerId, { ...layer.position, height });
     }
   };
 
@@ -81,7 +81,7 @@ const TextBox = ({ cardId, layerId, clickedCount = 0 }: { cardId: number; layerI
         onFocus={focusHandler}
         onBlur={blurHandler}
         modules={modules}
-        style={{ minWidth: '200px', maxWidth: '700px', width: '100%', cursor: isReadOnly ? 'pointer' : 'auto' }}
+        style={{ minWidth: '200px', maxWidth: '700px', cursor: isReadOnly ? 'pointer' : 'auto' }}
         placeholder="Text"
         readOnly={isReadOnly}
       />

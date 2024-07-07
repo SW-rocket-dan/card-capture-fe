@@ -394,7 +394,7 @@ const FocusBox = ({ children, layerId }: Props) => {
 
   return (
     <div
-      className={`absolute border ${isDrag ? 'cursor-grabbing' : 'cursor-grab'}`}
+      className={`absolute border ${isDrag ? 'cursor-grabbing' : 'cursor-grab'} ${clickedCount >= 2 && 'border-2 border-main'}`}
       style={{
         left: curPosition.x,
         top: curPosition.y,

@@ -104,8 +104,8 @@ export const useCardsStore = create<useCardsStore>()((set, get) => ({
           position: {
             x: 300,
             y: 300,
-            width: 100,
-            height: 100,
+            width: 200,
+            height: 50,
             rotate: 0,
             zIndex: 2,
             opacity: 1,
