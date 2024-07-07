@@ -43,8 +43,7 @@ const FocusBox = ({ children, layerId }: Props) => {
   const stopPropagation = (e: React.PointerEvent | React.MouseEvent) => {
     e.stopPropagation();
   };
-
-  const [clickedCount, setClickedCount] = useState(0);
+  const [clickedCount, setClickedCount] = useState(1);
 
   const clickFocusBoxHandler = (e: React.PointerEvent | React.MouseEvent) => {
     setClickedCount(prev => prev + 1);
@@ -105,7 +104,7 @@ const FocusBox = ({ children, layerId }: Props) => {
    */
   useEffect(() => {
     if (!isDrag) return;
-    if (clickedCount % 2 === 1) return;
+    if (clickedCount > 1) return;
 
     window.addEventListener('pointermove', pointerMoveDragHandler);
     window.addEventListener('pointerup', pointerUpDragHandler);
@@ -394,7 +393,7 @@ const FocusBox = ({ children, layerId }: Props) => {
 
   return (
     <div
-      className={`absolute border ${isDrag ? 'cursor-grabbing' : 'cursor-grab'} ${clickedCount >= 2 && 'border-2 border-main'}`}
+      className={`absolute border ${isDrag ? 'cursor-grabbing' : 'cursor-grab'} ${clickedCount > 1 && 'border-2 border-main'}`}
       style={{
         left: curPosition.x,
         top: curPosition.y,

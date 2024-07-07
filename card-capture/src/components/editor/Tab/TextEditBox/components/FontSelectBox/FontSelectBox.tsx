@@ -40,6 +40,7 @@ const FontSelectBox = ({ list }: SelectBoxProps) => {
     setSelectedIndex(idx);
     changeStyleHandler('font', list[idx]);
 
+    // 최근 사용된 폰트 2개만 저장하는 로직
     if (!recentFontIndex.includes(idx)) {
       setRecentFontIndex(prev => [idx, prev[0]]);
     }
