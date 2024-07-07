@@ -37,7 +37,10 @@ const SizeSelectBox = ({ sizeList }: SizeSelectBoxProps) => {
 
   return (
     <div ref={ref} className="relative">
-      <button onClick={openHandler} className="flex min-w-36 flex-row justify-between rounded-md bg-itembg p-[10px]">
+      <button
+        onClick={openHandler}
+        className="flex min-w-36 flex-row items-center justify-between rounded-md bg-itembg p-[10px]"
+      >
         <p>{sizeList[selectedIndex].slice(0, -2)}</p>
         {isOpen ? <UpIcon width={15} className="text-gray1" /> : <DownIcon width={15} className="text-gray1" />}
       </button>
