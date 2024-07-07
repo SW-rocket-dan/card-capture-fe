@@ -2,7 +2,6 @@ import { useFocusStore } from '@/store/useFocusStore';
 
 const useTextFormatting = () => {
   const editorRef = useFocusStore(state => state.currentRef);
-  const isDragging = useFocusStore(state => state.isDragging);
 
   /**
    * 텍스트 포맷 (bold, italic, underline) 적용 함수.
@@ -16,7 +15,7 @@ const useTextFormatting = () => {
     const currentFormat = editor.getFormat();
     const range = editor.getSelection();
 
-    if (range && range.length > 0 && isDragging) {
+    if (range && range.length > 0) {
       currentFormat[type] ? editor.format(type, false) : editor.format(type, true);
     } else {
       currentFormat[type]
@@ -36,7 +35,7 @@ const useTextFormatting = () => {
     const editor = editorRef.current.getEditor();
     const range = editor.getSelection();
 
-    if (range && range.length > 0 && isDragging) {
+    if (range && range.length > 0) {
       editor.format(type, val);
     } else {
       editor.formatText(0, editor.getLength(), type, val); // 전체 적용

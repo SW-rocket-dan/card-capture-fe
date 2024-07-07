@@ -1,11 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
-import { SelectionChangeHandler } from 'quill';
 import { useCardsStore } from '@/store/useCardsStore';
 import { useFocusStore } from '@/store/useFocusStore';
 import './custom-quill-styles.css';
 import './TextStyles.css';
-import useTextFormatting from '@/components/editor/Tab/TextEditBox/hooks/useTextFormatting';
 
 /**
  * #toolbar를 id로 갖는 요소를 툴바로 사용하겠다고 선언
@@ -20,12 +18,12 @@ const modules = {
 const TextBox = ({ cardId, layerId, clickedCount = 0 }: { cardId: number; layerId: number; clickedCount?: number }) => {
   const editorRef = useRef<ReactQuill | null>(null);
 
-  const layer = useCardsStore(state => state.cards[0].layers.filter(v => v.id === layerId)[0]);
-  const setPosition = useCardsStore(state => state.setPosition);
-
   /**
    * 입력하면서 quill의 크기가 변경되면 해당 크기를 스토어의 position 값에 업데이트함
    */
+  const layer = useCardsStore(state => state.cards[0].layers.filter(v => v.id === layerId)[0]);
+  const setPosition = useCardsStore(state => state.setPosition);
+
   const updateLayerSize = () => {
     if (editorRef.current) {
       const editorElement = editorRef.current.getEditor().root;
@@ -48,6 +46,7 @@ const TextBox = ({ cardId, layerId, clickedCount = 0 }: { cardId: number; layerI
    * 현재 포커스된 TextBox의 ref를 store에 저장
    */
   const setCurrentRef = useFocusStore(state => state.setCurrentRef);
+
   const focusHandler = () => {
     if (!editorRef || !editorRef.current) return;
 
@@ -61,52 +60,17 @@ const TextBox = ({ cardId, layerId, clickedCount = 0 }: { cardId: number; layerI
   const [text, setText] = useState<ReactQuill.Value | null>(prevText);
 
   const setLayerText = useCardsStore(state => state.setLayerText);
+
   const blurHandler = () => {
     if (!text) return;
 
     setLayerText(cardId, layerId, text);
   };
 
-  const [isDragging, setIsDragging] = useState(false);
-  const { saveCurrentRange, applySavedRange } = useTextFormatting();
-
-  useEffect(() => {
-    const quillInstance = editorRef.current?.getEditor();
-
-    if (!quillInstance) return;
-
-    /**
-     * 현재 선택된 부분(range)이 있으면 드래그 된 것으로 상태 변경
-     */
-    const selectionHandler: SelectionChangeHandler = (range, oldRange, source) => {
-      if (range && range.length > 0 && source === 'user') {
-        setIsDragging(true);
-        console.log('drag', range);
-        if (range) saveCurrentRange(range);
-      } else {
-        setIsDragging(false);
-      }
-    };
-
-    // 드래그 이벤트가(selection-change)가 발생하면 드래그 상태변경 핸들러 실행
-    quillInstance.on('selection-change', selectionHandler);
-
-    return () => {
-      quillInstance.off('selection-change', selectionHandler);
-    };
-  }, []);
-
-  const isReadOnly = clickedCount <= 1;
-
   /**
-   * 드래그 상태가 변경되면 전역 store에 드래그 상태를 저장
-   * @NOTE 드래그 상태를 툴바가 알아야 하기 때문에 전역으로 저장
+   *  두번 클릭했을 시에만 입력 가능하도록 하기 위해서 클릭 횟수를 확인해서 입력 활성화 여부 결정
    */
-  const setCurrentDragging = useFocusStore(state => state.setIsDragging);
-
-  useEffect(() => {
-    setCurrentDragging(isDragging);
-  }, [isDragging]);
+  const isReadOnly = clickedCount <= 1;
 
   return (
     <div>

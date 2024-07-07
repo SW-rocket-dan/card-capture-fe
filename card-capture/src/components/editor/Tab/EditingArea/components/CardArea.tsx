@@ -18,7 +18,7 @@ const CardArea = () => {
   useEffect(() => {
     // const func = async () => {
     //   const data = await (
-    //     await fetch('http://localhost:3000/api/m임cks/cards')
+    //     await fetch('http://localhost:3000/api/mocks/cards')
     //   ) //@FIXME:주소도 .env 설정하고 넣어야함!
     //     .json();
     //   setCard(data.cards);
