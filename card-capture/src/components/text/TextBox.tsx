@@ -3,7 +3,7 @@ import ReactQuill from 'react-quill';
 import { SelectionChangeHandler } from 'quill';
 import { useCardsStore } from '@/store/useCardsStore';
 import { useFocusStore } from '@/store/useFocusStore';
-import 'react-quill/dist/quill.snow.css';
+import './custom-quill-styles.css';
 import './TextStyles.css';
 import useTextFormatting from '@/components/editor/Tab/TextEditBox/hooks/useTextFormatting';
 
@@ -17,7 +17,7 @@ const modules = {
   },
 };
 
-const TextBox = ({ cardId, layerId, clickedCount }: { cardId: number; layerId: number; clickedCount: number }) => {
+const TextBox = ({ cardId, layerId, clickedCount = 0 }: { cardId: number; layerId: number; clickedCount?: number }) => {
   const editorRef = useRef<ReactQuill | null>(null);
 
   const layer = useCardsStore(state => state.cards[0].layers.filter(v => v.id === layerId)[0]);
@@ -81,9 +81,8 @@ const TextBox = ({ cardId, layerId, clickedCount }: { cardId: number; layerId: n
     const selectionHandler: SelectionChangeHandler = (range, oldRange, source) => {
       if (range && range.length > 0 && source === 'user') {
         setIsDragging(true);
-        console.log(range);
+        console.log('drag', range);
         if (range) saveCurrentRange(range);
-        console.log(editorRef);
       } else {
         setIsDragging(false);
       }
@@ -108,11 +107,6 @@ const TextBox = ({ cardId, layerId, clickedCount }: { cardId: number; layerId: n
   useEffect(() => {
     setCurrentDragging(isDragging);
   }, [isDragging]);
-
-  // useEffect(() => {
-  //   setCurrentRef(editorRef);
-  //   console.log(editorRef);
-  // }, [editorRef]);
 
   return (
     <div>
