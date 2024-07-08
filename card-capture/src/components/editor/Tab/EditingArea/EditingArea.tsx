@@ -1,6 +1,6 @@
 import CardArea from '@/components/editor/Tab/EditingArea/components/CardArea';
 import LayerAddBox from '@/components/editor/Tab/EditingArea/components/LayerAddBox';
-import Button from '@/components/common/Button';
+import Button from '@/components/common/Button/Button';
 import CardAddBox from '@/components/editor/Tab/EditingArea/components/CardAddBox';
 
 const EditingArea = () => {
