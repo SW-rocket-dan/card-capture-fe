@@ -3,11 +3,11 @@ import SquareIcon from '@/components/common/Icon/SquareIcon';
 import DownIcon from '@/components/common/Icon/DownIcon';
 import { useCardsStore } from '@/store/useCardsStore';
 
-const LayerAddBox = () => {
+const LayerAddBox = ({ cardId }: { cardId: number }) => {
   const addTextLayer = useCardsStore(state => state.addTextLayer);
 
   const addTextLayerHandler = () => {
-    addTextLayer(0);
+    addTextLayer(cardId);
   };
 
   return (

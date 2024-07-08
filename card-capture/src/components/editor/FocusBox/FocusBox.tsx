@@ -8,7 +8,10 @@ import { FaArrowRotateLeft } from 'react-icons/fa6';
 import { INITIAL_DRAG_OFFSET, INITIAL_RESIZE_OFFSET } from './FocusBox.constant';
 
 type Props = {
-  children: React.ReactElement<{ clickedCount: number }>;
+  children: React.ReactElement<{
+    clickedCount: number;
+  }>;
+  cardId: number;
   layerId: number;
 };
 
@@ -17,8 +20,8 @@ type Props = {
  * @param component Box안에 띄어줄 컴포넌트
  * @param position 위치정보에 따라서 위치를 렌더링해줌
  * **/
-const FocusBox = ({ children, layerId }: Props) => {
-  const layer = useCardsStore(state => state.cards[0].layers.filter(v => v.id === layerId)[0]);
+const FocusBox = ({ children, cardId, layerId }: Props) => {
+  const layer = useCardsStore(state => state.cards[cardId].layers.filter(v => v.id === layerId)[0]);
   const setPosition = useCardsStore(state => state.setPosition);
 
   const [curPosition, setCurPosition] = useState(layer.position); //현재 위치를 스토어에 업로드 하지 않고 관리하기위한 state
