@@ -70,7 +70,7 @@ const TextBox = ({ cardId, layerId, clickedCount = 0 }: { cardId: number; layerI
   /**
    *  두번 클릭했을 시에만 입력 가능하도록 하기 위해서 클릭 횟수를 확인해서 입력 활성화 여부 결정
    */
-  const isReadOnly = clickedCount < 1;
+  const isReadOnly = clickedCount <= 1;
 
   return (
     <div>

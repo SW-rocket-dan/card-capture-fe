@@ -4,6 +4,9 @@ const useClickOutside = (callback: () => void) => {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    /**
+     * 클릭한 부분(target)이 현재 컴포넌트(ref)가 아니라면 모달을 닫는 callback 실행
+     */
     function handleClickOutside(event: MouseEvent) {
       const target = event.target as Node;
 
