@@ -21,7 +21,7 @@ const TextBox = ({ cardId, layerId, clickedCount = 0 }: { cardId: number; layerI
   /**
    * 입력하면서 quill의 크기가 변경되면 해당 크기를 스토어의 position 값에 업데이트함
    */
-  const layer = useCardsStore(state => state.cards[0].layers.filter(v => v.id === layerId)[0]);
+  const layer = useCardsStore(state => state.cards[cardId].layers.filter(v => v.id === layerId)[0]);
   const setPosition = useCardsStore(state => state.setPosition);
 
   const updateLayerSize = () => {
@@ -37,6 +37,9 @@ const TextBox = ({ cardId, layerId, clickedCount = 0 }: { cardId: number; layerI
    * 변경되는 텍스트 값을 상태에 저장하는 함수.
    * 변경될 때마다 store에 저장하는 것은 비효율적이기 때문에 임시로 저장
    */
+  const prevText = useCardsStore(state => state.getLayerText(cardId, layerId));
+  const [text, setText] = useState<ReactQuill.Value | null>(prevText);
+
   const changeHandler: ReactQuill.ReactQuillProps['onChange'] = (value, delta, source, editor) => {
     setText(editor.getContents());
     updateLayerSize();
@@ -56,8 +59,7 @@ const TextBox = ({ cardId, layerId, clickedCount = 0 }: { cardId: number; layerI
   /**
    * 텍스트 박스에서 blur 되면 store에 변경된 값을 저장
    */
-  const prevText = useCardsStore(state => state.getLayerText(cardId, layerId));
-  const [text, setText] = useState<ReactQuill.Value | null>(prevText);
+  //@FIXME: onBlur 안되는 이유 찾아서 해결하기
 
   const setLayerText = useCardsStore(state => state.setLayerText);
 
@@ -70,10 +72,10 @@ const TextBox = ({ cardId, layerId, clickedCount = 0 }: { cardId: number; layerI
   /**
    *  두번 클릭했을 시에만 입력 가능하도록 하기 위해서 클릭 횟수를 확인해서 입력 활성화 여부 결정
    */
-  const isReadOnly = clickedCount <= 1;
+  const isReadOnly = clickedCount < 1;
 
   return (
-    <div>
+    <div onBlur={blurHandler}>
       <ReactQuill
         ref={editorRef}
         value={text || ''}
