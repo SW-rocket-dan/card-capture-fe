@@ -2,17 +2,13 @@ import { SVGProps } from 'react';
 
 const DownArrowIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      viewBox="0 0 10 10"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
+    <svg viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path
-        d="M2 4L4.82843 6.82843L7.65685 4"
+        d="M13 9L7 15M7 15L1 9M7 15V1"
         stroke="currentColor"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

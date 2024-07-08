@@ -1,48 +1,64 @@
 import { useState } from 'react';
-import UpArrowIcon from '@/components/common/Icon/UpArrowIcon';
-import DownArrowIcon from '@/components/common/Icon/DownArrowIcon';
+import UpIcon from '@/components/common/Icon/UpIcon';
+import DownIcon from '@/components/common/Icon/DownIcon';
 import FindIcon from '@/components/common/Icon/FindIcon';
 import ClockIcon from '@/components/common/Icon/ClockIcon';
 import FontIcon from '@/components/common/Icon/FontIcon';
+import useTextFormatting from '@/components/editor/Tab/TextEditBox/hooks/useTextFormatting';
+import useClickOutside from '@/hooks/useClickOutside';
 
 type SelectBoxProps = {
   list: string[];
 };
 
 const FontSelectBox = ({ list }: SelectBoxProps) => {
+  /**
+   * 폰트 리스트 드롭다운을 여는 click handler
+   */
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedIndex, setSelectedIndex] = useState<number>(0);
-  const [recentFontIndex, setRecentFontIndex] = useState<number[]>([]);
-  const recentFonts = recentFontIndex.map(index => ({
-    index,
-    font: list[index],
-  }));
 
   const openHandler = () => {
     setIsOpen(prev => !prev);
   };
 
+  // 선택된 폰트 관리하는 state
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+
+  const [recentFontIndex, setRecentFontIndex] = useState<number[]>([]); // 최근 사용한 폰트 2개
+  const recentFonts = recentFontIndex.map(index => ({
+    index,
+    font: list[index],
+  }));
+
+  // 텍스트 스타일 적용 hook
+  const { changeStyleHandler } = useTextFormatting();
+
+  /**
+   * 선택된 폰트의 인덱스를 저장하고, 폰트를 적용하는 로직
+   */
   const selectFontHandler = (idx: number) => {
     setSelectedIndex(idx);
+    changeStyleHandler('font', list[idx]);
 
+    // 최근 사용된 폰트 2개만 저장하는 로직
     if (!recentFontIndex.includes(idx)) {
-      setRecentFontIndex(prev => [idx, ...prev].slice(0, 2));
+      setRecentFontIndex(prev => [idx, prev[0]]);
     }
   };
 
+  // 컴포넌트 외부 클릭시 모달 닫는 hook
+  const ref = useClickOutside(() => setIsOpen(false));
+
   return (
-    <div className="relative">
-      <div
-        className="flex flex-row items-center justify-between rounded-md bg-itembg p-[11px]"
+    <div ref={ref} className="relative">
+      <button
+        className="!flex !h-full !w-full !flex-row !items-center !justify-between !rounded-md !bg-itembg !p-[11px] hover:bg-defaultBlack"
         onClick={openHandler}
       >
         <p className="text-[16px]">{list[selectedIndex]}</p>
-        {isOpen ? (
-          <UpArrowIcon width={15} className="text-gray1" />
-        ) : (
-          <DownArrowIcon width={15} className="text-gray1" />
-        )}
-      </div>
+
+        {isOpen ? <UpIcon width={15} className="text-gray1" /> : <DownIcon width={15} className="text-gray1" />}
+      </button>
 
       {/* 폰트 셀렉트 박스 */}
       {isOpen && (
@@ -59,13 +75,17 @@ const FontSelectBox = ({ list }: SelectBoxProps) => {
           <div>
             <div className="flex flex-row gap-[8px] px-[3px] py-[7px]">
               <ClockIcon width={16} className="text-gray2" />
-              <p className="text-gray2 text-sm">최근사용 글꼴</p>
+              <p className="text-sm text-gray2">최근사용 글꼴</p>
             </div>
             <ul className="flex flex-col">
               {recentFonts.map(({ index, font }) => (
-                <li className="p-2" onClick={() => selectFontHandler(index)}>
-                  {font}
-                </li>
+                <button
+                  key={index + font}
+                  className="flex cursor-pointer justify-start p-2 hover:bg-gray-100"
+                  onClick={() => selectFontHandler(index)}
+                >
+                  <div className={`ql-font-${font} `}>{font}</div>
+                </button>
               ))}
             </ul>
           </div>
@@ -74,17 +94,17 @@ const FontSelectBox = ({ list }: SelectBoxProps) => {
           <div>
             <div className="flex flex-row gap-[8px] px-[3px] py-[7px]">
               <FontIcon width={16} className="text-gray2" />
-              <p className="text-gray2 text-sm">모든 글꼴</p>
+              <p className="text-sm text-gray2">모든 글꼴</p>
             </div>
             <ul className="flex max-h-52 flex-col overflow-y-auto">
               {list.map((fontFamily, idx) => (
-                <li
+                <button
                   key={idx}
-                  className="cursor-pointer p-2 hover:bg-gray-100"
+                  className="flex cursor-pointer justify-start !p-2 hover:bg-gray-100"
                   onClick={() => selectFontHandler(idx)}
                 >
-                  {fontFamily}
-                </li>
+                  <div className={`ql-font-${fontFamily}`}>{fontFamily}</div>
+                </button>
               ))}
             </ul>
           </div>

@@ -5,22 +5,40 @@ import FormatBox from '@/components/editor/Tab/TextEditBox/components/FormatBox/
 import StyleBox from '@/components/editor/Tab/TextEditBox/components/StyleBox/StyleBox';
 import OutlineBox from '@/components/editor/Tab/TextEditBox/components/OutlineBox/OutlineBox';
 import OrderBox from '@/components/editor/Tab/components/OrderBox';
+import './TextEditBox.styles.css';
+import UpIcon from '@/components/common/Icon/UpIcon';
+import DownIcon from '@/components/common/Icon/DownIcon';
+import { useState } from 'react';
 
 const TextEditBox = () => {
-  return (
-    <div className="flex w-full flex-col">
-      <div className="flex px-[20px] py-[19px] text-[17px] font-extrabold">텍스트</div>
+  const [isOpen, setIsOpen] = useState<boolean>(true);
 
-      <div className="flex flex-col gap-[12px] px-[15px]">
-        <FontSelectBox list={availableFontFamily} />
-        <div className="flex flex-row">
-          <SizeSelectBox sizeList={availableFontSize} />
-          <FormatBox />
-        </div>
-        <StyleBox />
-        <OutlineBox />
-        <OrderBox />
+  const openHandler = () => {
+    setIsOpen(prev => !prev);
+  };
+
+  return (
+    <div id="toolbar" className="flex w-full flex-col">
+      <div
+        onClick={openHandler}
+        className={`flex flex-row items-center justify-between px-[20px] py-[19px] text-[17px] font-extrabold ${!isOpen && 'border-b-[1px] border-border'}`}
+      >
+        <p>텍스트</p>
+        {isOpen ? <UpIcon width={15} className="text-gray1" /> : <DownIcon width={15} className="text-gray1" />}
       </div>
+
+      {isOpen && (
+        <div className="flex flex-col gap-[12px] px-[15px] pb-[20px]">
+          <FontSelectBox list={availableFontFamily} />
+          <div className="flex flex-row">
+            <SizeSelectBox sizeList={availableFontSize} />
+            <FormatBox />
+          </div>
+          <StyleBox />
+          <OutlineBox />
+          <OrderBox />
+        </div>
+      )}
     </div>
   );
 };

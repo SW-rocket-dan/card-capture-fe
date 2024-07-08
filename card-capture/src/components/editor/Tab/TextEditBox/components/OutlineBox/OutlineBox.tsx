@@ -1,7 +1,8 @@
 import { ChangeEvent, useState } from 'react';
-import { Checkbox } from '@/components/ui/checkbox';
 import ColorButton from '@/components/editor/Tab/components/ColorButton';
 import { GraySlider } from '@/components/ui/graySlider';
+import CheckIcon from '@/components/common/Icon/CheckIcon';
+import * as React from 'react';
 
 const OutlineBox = () => {
   const [isChecked, setIsChecked] = useState(false);
@@ -33,23 +34,28 @@ const OutlineBox = () => {
     >
       <div className={`flex flex-row items-center justify-between`}>
         <div className="flex flex-row items-center gap-[10px]">
-          <label htmlFor="outline" className="text-gray4 text-base">
+          <label htmlFor="outline" className="text-base text-gray4">
             외곽선
           </label>
-          <Checkbox id="outline" checked={isChecked} onClick={clickCheckBoxHandler} />
+          <div
+            className={`flex h-4 w-4 cursor-pointer items-center justify-center rounded-sm border border-gray3 ${isChecked ? 'bg-gray2' : 'bg-white'}`}
+            onClick={clickCheckBoxHandler}
+          >
+            {isChecked && <CheckIcon width={18} className="stroke-[1.8px] text-white" />}
+          </div>
         </div>
 
         <div className={`flex flex-row items-center gap-[10px] ${!isChecked && 'invisible'}`}>
-          <ColorButton className="h-[20px] w-[35px]" hover={false} disabled={!isChecked} />
+          <ColorButton className="h-[20px] !w-[35px]" hover={false} disabled={!isChecked} />
           <div className="flex flex-row items-center gap-3">
-            <p className="text-gray5 text-sm">크기</p>
+            <p className="text-sm text-gray5">크기</p>
             <input
               disabled={!isChecked}
               type="number"
               value={outlineSize}
               onChange={changeInputSizeHandler}
               max={10}
-              className="text-defaultBlack h-[24px] w-[30px] rounded-md bg-itembg p-1 text-center text-sm outline-none"
+              className="h-[24px] w-[30px] rounded-md bg-itembg p-1 text-center text-sm text-defaultBlack outline-none"
             />
           </div>
         </div>

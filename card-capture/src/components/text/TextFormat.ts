@@ -1,4 +1,5 @@
 import { Quill } from 'react-quill';
+
 const Parchment = Quill.import('parchment');
 
 // 폰트 종류
@@ -6,13 +7,11 @@ const Parchment = Quill.import('parchment');
 export const availableFontFamily = [
   'Pretendard',
   'NanumGothic',
-  '1',
-  '2',
-  '3',
-  '4',
-  '5',
-  '6',
-  '7',
+  'Jua',
+  'NotoSans',
+  'NotoSerif',
+  'BlackHanSans',
+  'DoHyeon',
 ];
 
 const Font = Quill.import('formats/font');
@@ -21,14 +20,7 @@ Quill.register(Font, true);
 
 // 폰트 사이즈
 
-export const availableFontSize = [
-  '12px',
-  '16px',
-  '18px',
-  '24px',
-  '28px',
-  '32px',
-];
+export const availableFontSize = ['12px', '16px', '18px', '24px', '28px', '32px', '48px', '64px', '96px', '128px'];
 
 let Size = Quill.import('attributors/style/size');
 Size.whitelist = availableFontSize;
@@ -36,44 +28,32 @@ Quill.register(Size, true);
 
 // 자간 (Letter Spacing)
 
-export const availableLetterSpacing = ['0px', '1px', '2px', '3px', '4px'];
+export const availableLetterSpacing = ['0px', '1px', '2px', '3px', '4px', '5px', '6px', '7px', '8px', '9px', '10px'];
 
-const LetterSpacingStyle = new Parchment.Attributor.Style(
-  'letter-spacing',
-  'letter-spacing',
-  {
-    scope: Parchment.Scope.INLINE,
-    whiteList: availableLetterSpacing,
-  },
-);
+const LetterSpacingStyle = new Parchment.Attributor.Style('letter-spacing', 'letter-spacing', {
+  scope: Parchment.Scope.INLINE,
+  whiteList: availableLetterSpacing,
+});
 Quill.register(LetterSpacingStyle, true);
 
 // 행간 (Line Height)
 
-export const availableLineHeight = ['12px', '16px', '20px', '24px', '28px'];
+export const availableLineHeight = ['10px', '15px', '20px', '25px', '30px'];
 
-const LineHeightStyle = new Parchment.Attributor.Style(
-  'line-height',
-  'line-height',
-  {
-    scope: Parchment.Scope.BLOCK,
-    whitelist: availableLineHeight,
-  },
-);
+const LineHeightStyle = new Parchment.Attributor.Style('line-height', 'line-height', {
+  scope: Parchment.Scope.BLOCK,
+  whitelist: availableLineHeight,
+});
 Quill.register(LineHeightStyle, true);
 
 // 장평 (Font Stretch)
 
-export const availableFontStretch = ['50%', '75%', '100%', '125%'];
+export const availableFontStretch = ['50', '75', '100', '125', '150'];
 
-const FontStretchStyle = new Parchment.Attributor.Style(
-  'font-stretch',
-  'font-stretch',
-  {
-    scope: Parchment.Scope.INLINE,
-    whiteList: availableFontStretch,
-  },
-);
+const FontStretchStyle = new Parchment.Attributor.Class('font-stretch', 'ql-fontStretch', {
+  scope: Parchment.Scope.INLINE,
+  whiteList: availableFontStretch,
+});
 Quill.register(FontStretchStyle, true);
 
 // 외곽선 (Outline)

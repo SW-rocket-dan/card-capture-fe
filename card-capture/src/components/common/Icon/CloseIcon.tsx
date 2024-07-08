@@ -6,8 +6,8 @@ const CloseIcon = (props: SVGProps<SVGSVGElement>) => {
       <path
         d="M7.33342 0.666664L0.666748 7.33333M0.666748 0.666664L7.33342 7.33333"
         stroke="currentColor"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
