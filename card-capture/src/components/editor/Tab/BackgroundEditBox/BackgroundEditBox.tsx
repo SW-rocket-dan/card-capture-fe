@@ -3,6 +3,7 @@ import UpIcon from '@/components/common/Icon/UpIcon';
 import DownIcon from '@/components/common/Icon/DownIcon';
 import OpacityButton from '@/components/editor/Tab/components/OpacityButton';
 import ImageButton from '@/components/editor/Tab/components/ImageButton';
+import ColorButton from '@/components/editor/Tab/components/ColorButton';
 
 const BackgroundEditBox = () => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
@@ -18,7 +19,10 @@ const BackgroundEditBox = () => {
         className={`flex flex-row items-center justify-between px-[20px] py-[19px] text-[17px] font-extrabold`}
       >
         <p>배경</p>
-        {isOpen ? <UpIcon width={15} className="text-gray1" /> : <DownIcon width={15} className="text-gray1" />}
+        <div className="flex flex-row gap-3">
+          <ColorButton className="h-5 w-20" direction="right" />
+          {isOpen ? <UpIcon width={15} className="text-gray1" /> : <DownIcon width={15} className="text-gray1" />}
+        </div>
       </div>
       {isOpen && (
         <div className="flex flex-col gap-[12px] px-[15px] pb-[20px]">

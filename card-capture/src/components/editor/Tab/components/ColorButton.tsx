@@ -9,14 +9,16 @@ type ColorButtonProps = {
   className?: string;
   hover?: boolean;
   disabled?: boolean;
+  direction?: string;
 };
 
-const ColorButton = ({ className = '', hover = true, disabled = false }: ColorButtonProps) => {
+const ColorButton = ({ className = '', hover = true, disabled = false, direction = 'down' }: ColorButtonProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [color, setColor] = useColor('#000000');
   const { changeStyleHandler } = useTextFormatting();
 
-  const openHandler = () => {
+  const openHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     setIsOpen(prev => !prev);
   };
 
@@ -42,11 +44,13 @@ const ColorButton = ({ className = '', hover = true, disabled = false }: ColorBu
 
       {isOpen && (
         <div
-          className="absolute z-20 mt-[10px] rounded-lg bg-white"
+          className={`absolute z-20 rounded-lg bg-white ${
+            direction === 'right' ? 'left-full -mt-[50px] ml-[55px]' : 'mt-[10px]'
+          }`}
           style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08' }}
         >
           <div className="flex flex-row justify-between px-[15px] py-[10px] font-extrabold">
-            <p className="text-md">색상</p>
+            <p className="text-sm">색상</p>
             <button onClick={openHandler}>
               <CloseIcon width={10} className="text-gray2" />
             </button>
