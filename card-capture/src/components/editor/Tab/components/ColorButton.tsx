@@ -1,30 +1,32 @@
 import ColorPicker from '@/components/common/ColorPicker/ColorPicker';
-import { useEffect, useState } from 'react';
-import { useColor } from 'react-color-palette';
+import { Dispatch, SetStateAction, useState } from 'react';
+import { IColor } from 'react-color-palette';
 import CloseIcon from '@/components/common/Icon/CloseIcon';
-import useTextFormatting from '@/components/editor/Tab/TextEditBox/hooks/useTextFormatting';
 import useClickOutside from '@/hooks/useClickOutside';
 
 type ColorButtonProps = {
+  color: IColor;
+  setColor: Dispatch<SetStateAction<IColor>>;
   className?: string;
   hover?: boolean;
   disabled?: boolean;
   direction?: string;
 };
 
-const ColorButton = ({ className = '', hover = true, disabled = false, direction = 'down' }: ColorButtonProps) => {
+const ColorButton = ({
+  color,
+  setColor,
+  className = '',
+  hover = true,
+  disabled = false,
+  direction = 'down',
+}: ColorButtonProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [color, setColor] = useColor('#000000');
-  const { changeStyleHandler } = useTextFormatting();
 
   const openHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setIsOpen(prev => !prev);
   };
-
-  useEffect(() => {
-    changeStyleHandler('color', color.hex);
-  }, [color]);
 
   // 컴포넌트 외부 클릭시 모달 닫는 hook
   const ref = useClickOutside(() => setIsOpen(false));
