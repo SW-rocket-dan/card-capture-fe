@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Card, Cards, Position, Text } from './type';
+import { Background, Card, Cards, Position, Text } from './type';
 import { Draft, produce } from 'immer';
 import ReactQuill from 'react-quill';
 
@@ -33,6 +33,10 @@ type useCardsStore = {
 
   setPosition: (layerId: number, position: Position) => void;
 
+  setBackgroundColor: (cardId: number, backgroundColor: string) => void;
+  setBackground: (cardId: number, background: Background) => void;
+  getBackground: (cardId: number) => Background | null;
+
   addTextLayer: (cardId: number) => void;
 };
 
@@ -42,16 +46,28 @@ export const useCardsStore = create<useCardsStore>()((set, get) => ({
   setCard: (cards: Card[]) =>
     set(
       //immer를 활용하여 불변성 유지
-      produce((draft: Draft<{ cards: Card[] }>) => {
-        draft.cards = cards;
-      }),
+      produce(
+        (
+          draft: Draft<{
+            cards: Card[];
+          }>,
+        ) => {
+          draft.cards = cards;
+        },
+      ),
     ),
 
   addCard: () =>
     set(
-      produce((draft: Draft<{ cards: Card[] }>) => {
-        draft.cards.push(INITIAL_CARD);
-      }),
+      produce(
+        (
+          draft: Draft<{
+            cards: Card[];
+          }>,
+        ) => {
+          draft.cards.push(INITIAL_CARD);
+        },
+      ),
     ),
 
   getLayerText: (cardId, layerId) => {
@@ -67,50 +83,94 @@ export const useCardsStore = create<useCardsStore>()((set, get) => ({
     return content;
   },
 
-  setLayerText: (cardId, layerId, text) => {
-    return set(
-      produce((draft: Draft<{ cards: Card[] }>) => {
-        draft.cards[cardId].layers = draft.cards[cardId].layers.map(v =>
-          v.id === layerId
-            ? {
-                ...v,
-                content: {
-                  content: text,
-                },
-              }
-            : v,
-        );
-      }),
-    );
-  },
+  setLayerText: (cardId, layerId, text) =>
+    set(
+      produce(
+        (
+          draft: Draft<{
+            cards: Card[];
+          }>,
+        ) => {
+          draft.cards[cardId].layers = draft.cards[cardId].layers.map(v =>
+            v.id === layerId
+              ? {
+                  ...v,
+                  content: {
+                    content: text,
+                  },
+                }
+              : v,
+          );
+        },
+      ),
+    ),
 
   setPosition: (layerId: number, position: Position) =>
     set(
       //position 변경
-      produce((draft: Draft<{ cards: Card[] }>) => {
-        draft.cards[0].layers = draft.cards[0].layers.map(v => (v.id === layerId ? { ...v, position: position } : v));
+      produce(
+        (
+          draft: Draft<{
+            cards: Card[];
+          }>,
+        ) => {
+          draft.cards[0].layers = draft.cards[0].layers.map(v => (v.id === layerId ? { ...v, position: position } : v));
+        },
+      ),
+    ),
+
+  setBackgroundColor: (cardId: number, backgroundColor: string) =>
+    set(
+      produce(draft => {
+        const card = draft.cards.find((card: Card) => card.id === cardId);
+        if (card) {
+          card.background = { ...card.background, color: backgroundColor };
+        }
       }),
     ),
 
+  setBackground: (cardId: number, background: Background) =>
+    set(
+      produce(draft => {
+        const card = draft.cards.find((card: Card) => card.id === cardId);
+        if (card) {
+          card.background = background;
+        }
+      }),
+    ),
+
+  getBackground: (cardId: number) => {
+    const card = get().cards.find(({ id }) => id === cardId);
+    if (!card) return null;
+
+    return card.background;
+  },
+
   addTextLayer: (cardId: number) =>
     set(
-      produce((draft: Draft<{ cards: Card[] }>) => {
-        draft.cards[cardId].layers.push({
-          id: draft.cards[cardId].layers.length + 1,
-          type: 'text',
-          content: {
-            content: '',
-          },
-          position: {
-            x: 300,
-            y: 300,
-            width: 200,
-            height: 50,
-            rotate: 0,
-            zIndex: 2,
-            opacity: 1,
-          },
-        });
-      }),
+      produce(
+        (
+          draft: Draft<{
+            cards: Card[];
+          }>,
+        ) => {
+          draft.cards[cardId].layers.push({
+            id: draft.cards[cardId].layers.length + 1,
+            type: 'text',
+            content: {
+              content: '',
+            },
+            position: {
+              x: 300,
+              y: 300,
+              width: 200,
+              height: 50,
+              rotate: 0,
+              zIndex: 2,
+              opacity: 1,
+            },
+          });
+        },
+      ),
     ),
 }));

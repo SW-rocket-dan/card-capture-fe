@@ -10,12 +10,16 @@ import { useFocusStore } from '@/store/useFocusStore';
 
 const CardArea = ({ card }: { card: Card }) => {
   const cardId = card.id;
+  const background = card.background;
+
   const focusedLayerId = useFocusStore(state => state.focusedLayerId);
   const setFocusedLayerId = useFocusStore(state => state.setFocusedLayerId);
+  const setFocusedCardId = useFocusStore(state => state.setFocusedCardId);
 
   const makeFocusLayerHandler = (e: React.MouseEvent, id: number) => {
     e.stopPropagation();
     setFocusedLayerId(id);
+    setFocusedCardId(cardId);
   };
 
   const unFocusLayerHandler = () => {
@@ -35,7 +39,7 @@ const CardArea = ({ card }: { card: Card }) => {
       </div>
       <div
         className="relative h-[700px] w-[700px] overflow-hidden border-[1px] border-border bg-white"
-        style={{ userSelect: 'auto' }}
+        style={{ userSelect: 'auto', backgroundColor: background.color, opacity: background.opacity / 100 }}
         onClick={unFocusLayerHandler}
       >
         {/* 현재는 카드가 한장이라고 고정하고 구현 */}
