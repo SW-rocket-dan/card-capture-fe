@@ -3,10 +3,13 @@ import ColorButton from '@/components/editor/Tab/components/ColorButton';
 import { GraySlider } from '@/components/ui/graySlider';
 import CheckIcon from '@/components/common/Icon/CheckIcon';
 import * as React from 'react';
+import { useColor } from 'react-color-palette';
 
 const OutlineBox = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [outlineSize, setOutlineSize] = useState<number>(1);
+
+  const [color, setColor] = useColor('#000000');
 
   const clickCheckBoxHandler = () => {
     setIsChecked(prev => !prev);
@@ -46,7 +49,13 @@ const OutlineBox = () => {
         </div>
 
         <div className={`flex flex-row items-center gap-[10px] ${!isChecked && 'invisible'}`}>
-          <ColorButton className="h-[20px] !w-[35px]" hover={false} disabled={!isChecked} />
+          <ColorButton
+            color={color}
+            setColor={setColor}
+            className="h-[20px] !w-[35px]"
+            hover={false}
+            disabled={!isChecked}
+          />
           <div className="flex flex-row items-center gap-3">
             <p className="text-sm text-gray5">크기</p>
             <input
