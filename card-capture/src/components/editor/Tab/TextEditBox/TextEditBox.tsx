@@ -28,7 +28,7 @@ const TextEditBox = () => {
       </div>
 
       {isOpen && (
-        <div className="flex flex-col gap-[12px] px-[15px] pb-[20px]">
+        <div className="flex flex-col gap-[10px] px-[15px] pb-[20px]">
           <FontSelectBox list={availableFontFamily} />
           <div className="flex flex-row">
             <SizeSelectBox sizeList={availableFontSize} />
