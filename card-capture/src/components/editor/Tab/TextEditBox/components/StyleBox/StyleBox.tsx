@@ -15,7 +15,7 @@ const StyleBox = () => {
   }, [color]);
 
   return (
-    <div className="flex flex-row items-center gap-[20px] px-[15px] py-[10px]">
+    <div className="flex flex-row items-center gap-[20px] px-[15px] py-[8px]">
       <AlignButton />
       <SpacingButton />
       <ListButton />
