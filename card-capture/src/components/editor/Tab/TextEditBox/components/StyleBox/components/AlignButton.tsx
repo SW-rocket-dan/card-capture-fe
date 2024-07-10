@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import AlignLeftIcon from '@/components/common/Icon/AlignLeftIcon';
 import AlignRightIcon from '@/components/common/Icon/AlignRightIcon';
 import AlignCenterIcon from '@/components/common/Icon/AlignCenterIcon';

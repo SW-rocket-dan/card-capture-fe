@@ -39,7 +39,11 @@ const CardArea = ({ card }: { card: Card }) => {
       </div>
       <div
         className="relative h-[700px] w-[700px] overflow-hidden border-[1px] border-border bg-white"
-        style={{ userSelect: 'auto', backgroundColor: background.color, opacity: background.opacity / 100 }}
+        style={{
+          userSelect: 'auto',
+          backgroundColor: background.color,
+          opacity: background.opacity / 100,
+        }}
         onClick={unFocusLayerHandler}
       >
         {/* 현재는 카드가 한장이라고 고정하고 구현 */}
