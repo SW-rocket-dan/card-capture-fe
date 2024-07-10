@@ -5,12 +5,12 @@ const ListButton = () => {
   const { changeTextFormatHandler } = useTextFormatting();
 
   return (
-    <div
+    <button
       onClick={() => changeTextFormatHandler('list')}
-      className="flex h-[37px] w-[37px] items-center justify-center rounded-md hover:bg-itembg"
+      className="flex h-[30px] w-[30px] items-center justify-center rounded-md hover:bg-itembg"
     >
-      <ListIcon height={20} className="text-defaultBlack" />
-    </div>
+      <ListIcon height={17} className="text-defaultBlack" />
+    </button>
   );
 };
 
