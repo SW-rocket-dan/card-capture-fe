@@ -7,16 +7,16 @@ const FormatBox = () => {
   const { changeTextFormatHandler } = useTextFormatting();
 
   return (
-    <div className="flex w-full flex-row items-center justify-between px-[25px]">
+    <div className="flex w-full flex-row items-center justify-between px-[20px]">
       <div className="cursor-pointer" onClick={() => changeTextFormatHandler('bold')}>
-        <BoldIcon width={17} className="hover:text-main" />
+        <BoldIcon width={14} className="hover:text-main" />
       </div>
       <div className="cursor-pointer" onClick={() => changeTextFormatHandler('italic')}>
-        <ItalicIcon width={18} className="hover:text-main" />
+        <ItalicIcon width={15} className="hover:text-main" />
       </div>
 
       <div className="cursor-pointer" onClick={() => changeTextFormatHandler('underline')}>
-        <UnderlineIcon width={23} className="hover:text-main" />
+        <UnderlineIcon width={19} className="hover:text-main" />
       </div>
     </div>
   );

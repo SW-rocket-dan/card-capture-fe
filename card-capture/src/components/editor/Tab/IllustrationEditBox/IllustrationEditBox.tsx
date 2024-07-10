@@ -15,17 +15,16 @@ const IllustrationEditBox = () => {
   };
 
   return (
-    <div className="border-border' flex w-full flex-col border-b-[1px] border-t-[1px] border-border">
+    <div className="border-b-[1px]border-border flex w-full flex-col">
       <div
         onClick={openHandler}
-        className={`flex h-[70px] flex-row items-center justify-between px-[20px] py-[20px] text-[17px] font-bold`}
+        className={`flex h-[50px] flex-row items-center justify-between px-[15px] py-[20px] text-[14px] font-extrabold`}
       >
         <p>일러스트 / 도형</p>
-        {isOpen ? <UpIcon width={15} className="text-gray1" /> : <DownIcon width={15} className="text-gray1" />}
+        {isOpen ? <UpIcon width={13} className="text-gray1" /> : <DownIcon width={13} className="text-gray1" />}
       </div>
       {isOpen && (
-        <div className="flex flex-col gap-[12px] px-[15px] pb-[20px]">
-          <ImageButton />
+        <div className="flex flex-col gap-[10px] px-[15px] pb-[20px]">
           <SizeBox />
           <OpacityButton opacity={opacity} setOpacity={setOpacity} />
           <OrderBox />

@@ -1,6 +1,7 @@
 import { Alpha, Hue, IColor, Saturation } from 'react-color-palette';
 import 'react-color-palette/css';
 import { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import './ColorPicker.styles.css';
 
 type ColorPickerProps = {
   color: IColor;
@@ -81,19 +82,19 @@ const ColorPicker = ({ color, setColor }: ColorPickerProps) => {
 
   return (
     <div className="flex w-full flex-col pb-4">
-      <div className="flex w-[250px] flex-col gap-3">
-        <Saturation height={250} color={color} onChange={setColor} />
-        <div className="flex flex-col gap-3 px-4">
+      <div className="flex w-[230px] flex-col gap-3">
+        <Saturation height={230} color={color} onChange={setColor} />
+        <div className="flex flex-col gap-2.5 px-4">
           <Hue color={color} onChange={setColor} />
           <Alpha color={color} onChange={setColor} />
-          <div className="flex flex-row items-center justify-between rounded-md bg-itembg px-3 py-2 text-sm">
+          <div className="flex flex-row items-center justify-between rounded-md bg-itembg px-3 py-2 text-xs">
             <input
               className="bg-transparent font-bold outline-none"
               value={color.hex.slice(1, 7)}
               maxLength={6}
               onChange={handleChangeColor}
             />
-            <p className="text-xs font-bold text-gray2">HEX</p>
+            <p className="text-[11px] font-bold text-gray2">HEX</p>
           </div>
         </div>
       </div>

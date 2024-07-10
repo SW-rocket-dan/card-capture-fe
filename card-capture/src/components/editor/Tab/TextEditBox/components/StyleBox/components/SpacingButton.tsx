@@ -51,45 +51,45 @@ const SpacingButton = () => {
     <div ref={ref} className="relative">
       <button
         onClick={openHandler}
-        className="flex h-[37px] w-[37px] cursor-pointer items-center justify-center rounded-md hover:bg-itembg"
+        className="flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-md hover:bg-itembg"
       >
-        <SpacingIcon height={22} />
+        <SpacingIcon height={17} />
       </button>
 
       {/* 텍스트 간격 조절 모달 */}
       {isOpen && (
         <div
-          className="absolute z-10 mt-[10px] flex w-[300px] flex-col gap-9 rounded-lg bg-white px-[20px] py-[25px]"
+          className="absolute z-10 mt-[7px] flex w-[250px] flex-col gap-7 rounded-lg bg-white px-[15px] py-[17px]"
           style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08' }}
         >
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3">
             <div className="flex flex-row items-center justify-between">
-              <p className="text-base">자간</p>
+              <p className="text-[12px]">자간</p>
               <input
                 type="number"
-                className="h-[30px] w-[60px] rounded-md bg-itembg p-2 text-sm font-bold outline-none"
+                className="h-[25px] w-[60px] rounded-md bg-itembg p-2 text-xs font-bold outline-none"
                 value={letterSpacing}
               />
             </div>
             <Slider value={[letterSpacing]} onValueChange={handleChangeLetterSpacing} min={0} max={10} step={1} />
           </div>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3">
             <div className="flex flex-row items-center justify-between">
-              <p className="text-base">행간</p>
+              <p className="text-[12px]">행간</p>
               <input
                 type="number"
-                className="h-[30px] w-[60px] rounded-md bg-itembg p-2 text-sm font-bold outline-none"
+                className="h-[25px] w-[60px] rounded-md bg-itembg p-2 text-xs font-bold outline-none"
                 value={lineHeight}
               />
             </div>
             <Slider value={[lineHeight]} onValueChange={handleChangeLineHeight} min={10} max={30} step={5} />
           </div>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3">
             <div className="flex flex-row items-center justify-between">
-              <p className="text-base">장평</p>
+              <p className="text-[12px]">장평</p>
               <input
                 type="number"
-                className="h-[30px] w-[60px] rounded-md bg-itembg p-2 text-sm font-bold outline-none"
+                className="h-[25px] w-[60px] rounded-md bg-itembg p-2 text-xs font-bold outline-none"
                 value={fontStretch}
               />
             </div>

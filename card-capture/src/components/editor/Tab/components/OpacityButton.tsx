@@ -12,10 +12,10 @@ const OpacityButton = ({ opacity, setOpacity }: OpacityButtonProps) => {
   };
 
   return (
-    <div className="flex flex-col gap-3 rounded-[10px] border-[1px] border-border px-[13px] py-[15px]">
+    <div className="flex flex-col gap-2.5 rounded-[10px] border-[1px] border-border px-[10px] py-[10px]">
       <div className="flex flex-row items-center justify-between">
-        <p className="text-base text-gray4">투명도</p>
-        <div className="flex w-[80px] flex-row justify-between rounded-md bg-itembg px-3 py-[7px] text-sm">
+        <p className="text-xs text-gray4">투명도</p>
+        <div className="flex w-[80px] flex-row justify-between rounded-md bg-itembg px-3 py-[5px] text-xs">
           <input type="number" value={opacity} min={0} max={100} className="bg-transparent font-bold outline-none" />
           <span>%</span>
         </div>

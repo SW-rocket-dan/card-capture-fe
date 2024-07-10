@@ -33,15 +33,15 @@ const OutlineBox = () => {
 
   return (
     <div
-      className={`flex flex-col gap-3 rounded-[10px] border-[1px] border-border px-[13px] py-[15px] ${!isChecked && 'bg-light-gray'}`}
+      className={`flex flex-col gap-2 rounded-[10px] border-[1px] border-border px-[10px] py-[10px] ${!isChecked && 'bg-light-gray'}`}
     >
       <div className={`flex flex-row items-center justify-between`}>
         <div className="flex flex-row items-center gap-[10px]">
-          <label htmlFor="outline" className="text-base text-gray4">
+          <label htmlFor="outline" className="text-xs text-gray4">
             외곽선
           </label>
           <div
-            className={`flex h-4 w-4 cursor-pointer items-center justify-center rounded-sm border border-gray3 ${isChecked ? 'bg-gray2' : 'bg-white'}`}
+            className={`flex h-3.5 w-3.5 cursor-pointer items-center justify-center rounded-sm border border-gray3 ${isChecked ? 'bg-gray2' : 'bg-white'}`}
             onClick={clickCheckBoxHandler}
           >
             {isChecked && <CheckIcon width={18} className="stroke-[1.8px] text-white" />}
@@ -52,19 +52,19 @@ const OutlineBox = () => {
           <ColorButton
             color={color}
             setColor={setColor}
-            className="h-[20px] !w-[35px]"
+            className="h-[18px] !w-[30px]"
             hover={false}
             disabled={!isChecked}
           />
           <div className="flex flex-row items-center gap-3">
-            <p className="text-sm text-gray5">크기</p>
+            <p className="text-xs text-gray5">크기</p>
             <input
               disabled={!isChecked}
               type="number"
               value={outlineSize}
               onChange={changeInputSizeHandler}
               max={10}
-              className="h-[24px] w-[30px] rounded-md bg-itembg p-1 text-center text-sm text-defaultBlack outline-none"
+              className="h-[24px] w-[30px] rounded-md bg-itembg p-1 text-center text-xs text-defaultBlack outline-none"
             />
           </div>
         </div>

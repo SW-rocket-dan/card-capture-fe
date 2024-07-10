@@ -11,12 +11,12 @@ const LayerAddBox = ({ cardId }: { cardId: number }) => {
   };
 
   return (
-    <div className="flex cursor-pointer flex-row items-center justify-center gap-[10px] rounded-[10px] bg-white p-[5px]">
-      <div className="flex h-[30px] w-[30px] items-center justify-center hover:text-main" onClick={addTextLayerHandler}>
-        <TextIcon width={18} />
+    <div className="flex cursor-pointer flex-row items-center justify-center gap-[8px] rounded-[8px] bg-white px-[8px] py-[3px]">
+      <div className="flex h-[25px] w-[25px] items-center justify-center hover:text-main" onClick={addTextLayerHandler}>
+        <TextIcon width={15} />
       </div>
-      <div className="flex h-[30px] w-[30px] cursor-pointer flex-row items-center justify-center gap-1 hover:text-main">
-        <SquareIcon width={17} />
+      <div className="flex h-[25px] w-[25px] cursor-pointer flex-row items-center justify-center gap-1 hover:text-main">
+        <SquareIcon width={16} />
         <DownIcon width={8} />
       </div>
     </div>

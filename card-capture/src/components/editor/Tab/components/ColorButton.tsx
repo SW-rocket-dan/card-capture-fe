@@ -34,12 +34,12 @@ const ColorButton = ({
   return (
     <div ref={ref} className="relative">
       <div
-        className={`flex h-[37px] w-[37px] items-center justify-center rounded-md ${hover ? 'hover:bg-itembg' : ''}`}
+        className={`flex h-[30px] w-[30px] items-center justify-center rounded-md ${hover ? 'hover:bg-itembg' : ''}`}
       >
         <button
           disabled={disabled}
           onClick={openHandler}
-          className={`rounded-md border-2 border-border ${className ? `${className}` : '!h-[24px] !w-[24px]'} `}
+          className={`rounded-md border-2 border-border ${className ? `${className}` : '!h-[21px] !w-[21px]'} `}
           style={{ backgroundColor: color.hex }}
         />
       </div>
@@ -47,14 +47,14 @@ const ColorButton = ({
       {isOpen && (
         <div
           className={`absolute z-20 rounded-lg bg-white ${
-            direction === 'right' ? 'left-full -mt-[50px] ml-[55px]' : 'mt-[10px]'
+            direction === 'right' ? 'left-full -mt-[50px] ml-[55px]' : 'mt-[7px]'
           }`}
           style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08' }}
         >
           <div className="flex flex-row justify-between px-[15px] py-[10px] font-extrabold">
-            <p className="text-sm">색상</p>
+            <p className="text-xs">색상</p>
             <button onClick={openHandler}>
-              <CloseIcon width={10} className="text-gray2" />
+              <CloseIcon width={8} className="text-gray2" />
             </button>
           </div>
           <ColorPicker color={color} setColor={setColor} />

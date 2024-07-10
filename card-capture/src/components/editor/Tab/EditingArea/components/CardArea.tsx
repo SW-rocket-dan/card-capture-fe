@@ -27,18 +27,18 @@ const CardArea = ({ card }: { card: Card }) => {
   };
 
   return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-[17px] bg-editorbg">
-      <div className="flex w-[700px] flex-row justify-between">
+    <div className="flex flex-1 flex-col items-center justify-center gap-[15px] bg-editorbg">
+      <div className="flex w-[550px] flex-row justify-between">
         <CardAddBox />
         <div className="flex flex-row gap-[10px]">
           <LayerAddBox cardId={cardId} />
-          <Button type="full" className="h-[43px] w-[170px]">
-            Export
+          <Button type="full" className="h-[38px] w-[160px]">
+            <span className="text-sm">Export</span>
           </Button>
         </div>
       </div>
       <div
-        className="relative h-[700px] w-[700px] overflow-hidden border-[1px] border-border bg-white"
+        className="relative h-[550px] w-[550px] overflow-hidden border-[1px] border-border bg-white"
         style={{
           userSelect: 'auto',
           backgroundColor: background.color,

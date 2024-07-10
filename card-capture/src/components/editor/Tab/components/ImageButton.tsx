@@ -3,9 +3,9 @@ import UploadIcon from '@/components/common/Icon/UploadIcon';
 
 const ImageButton = () => {
   return (
-    <Button type="default" className="gap-2 border-2 py-[11px]">
-      <UploadIcon width={16} />
-      <p className="text-sm font-extrabold">이미지 업로드</p>
+    <Button type="default" className="gap-[6px] border-2 py-[10px]">
+      <UploadIcon width={14} />
+      <p className="text-xs font-extrabold">이미지 업로드</p>
     </Button>
   );
 };
