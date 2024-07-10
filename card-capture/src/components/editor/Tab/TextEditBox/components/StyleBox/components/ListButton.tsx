@@ -9,7 +9,7 @@ const ListButton = () => {
       onClick={() => changeTextFormatHandler('list')}
       className="flex h-[30px] w-[30px] items-center justify-center rounded-md hover:bg-itembg"
     >
-      <ListIcon height={17} className="text-defaultBlack" />
+      <ListIcon height={15} className="text-defaultBlack" />
     </button>
   );
 };

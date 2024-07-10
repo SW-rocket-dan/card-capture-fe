@@ -12,9 +12,9 @@ const AlignButton = () => {
   const { changeStyleHandler } = useTextFormatting();
 
   const currentAlignmentIcon = (align: string) => {
-    if (align === 'left') return <AlignLeftIcon height={15} className="text-defaultBlack" />;
-    if (align === 'right') return <AlignRightIcon height={15} className="text-defaultBlack" />;
-    if (align === 'center') return <AlignCenterIcon height={15} className="text-defaultBlack" />;
+    if (align === 'left') return <AlignLeftIcon height={13} className="text-defaultBlack" />;
+    if (align === 'right') return <AlignRightIcon height={13} className="text-defaultBlack" />;
+    if (align === 'center') return <AlignCenterIcon height={13} className="text-defaultBlack" />;
     return <AlignJustifyIcon height={15} />;
   };
 

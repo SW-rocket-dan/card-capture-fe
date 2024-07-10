@@ -53,7 +53,7 @@ const SpacingButton = () => {
         onClick={openHandler}
         className="flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-md hover:bg-itembg"
       >
-        <SpacingIcon height={19} />
+        <SpacingIcon height={17} />
       </button>
 
       {/* 텍스트 간격 조절 모달 */}

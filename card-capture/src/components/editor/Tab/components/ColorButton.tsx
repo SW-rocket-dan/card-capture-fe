@@ -39,7 +39,7 @@ const ColorButton = ({
         <button
           disabled={disabled}
           onClick={openHandler}
-          className={`rounded-md border-2 border-border ${className ? `${className}` : '!h-[24px] !w-[24px]'} `}
+          className={`rounded-md border-2 border-border ${className ? `${className}` : '!h-[21px] !w-[21px]'} `}
           style={{ backgroundColor: color.hex }}
         />
       </div>
