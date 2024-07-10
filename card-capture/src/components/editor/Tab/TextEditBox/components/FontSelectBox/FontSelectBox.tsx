@@ -52,39 +52,39 @@ const FontSelectBox = ({ list }: SelectBoxProps) => {
   return (
     <div ref={ref} className="relative">
       <button
-        className="!flex !h-full !w-full !flex-row !items-center !justify-between !rounded-md !bg-itembg !p-[11px] hover:bg-defaultBlack"
+        className="flex h-full w-full flex-row items-center justify-between rounded-md bg-itembg p-[10px]"
         onClick={openHandler}
       >
-        <p className="text-[16px]">{list[selectedIndex]}</p>
+        <p className="text-[13px]">{list[selectedIndex]}</p>
 
-        {isOpen ? <UpIcon width={15} className="text-gray1" /> : <DownIcon width={15} className="text-gray1" />}
+        {isOpen ? <UpIcon width={13} className="text-gray1" /> : <DownIcon width={15} className="text-gray1" />}
       </button>
 
       {/* 폰트 셀렉트 박스 */}
       {isOpen && (
         <div
-          className="absolute z-10 mt-[10px] flex w-full flex-col gap-[10px] rounded-xl bg-white p-[12px]"
+          className="absolute z-10 mt-[10px] flex w-full flex-col gap-[10px] rounded-xl bg-white p-[10px]"
           style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08' }}
         >
-          <div className="flex flex-row items-center justify-between gap-3 rounded-[8px] border-[1px] border-border p-[10px]">
-            <input type="text" className="flex-1 text-sm outline-none" />
-            <FindIcon width={16} />
+          <div className="flex flex-row items-center justify-between gap-3 rounded-[8px] border-[1px] border-border px-[10px] py-[9px]">
+            <input type="text" className="flex-1 text-[11px] outline-none" placeholder="글꼴 검색" />
+            <FindIcon width={14} />
           </div>
 
           {/* 최근 사용 글꼴 박스*/}
           <div>
-            <div className="flex flex-row gap-[8px] px-[3px] py-[7px]">
-              <ClockIcon width={16} className="text-gray2" />
-              <p className="text-sm text-gray2">최근사용 글꼴</p>
+            <div className="flex flex-row gap-[6px] px-[3px] py-[6px]">
+              <ClockIcon width={14} className="text-gray2" />
+              <p className="text-[11px] text-gray2">최근사용 글꼴</p>
             </div>
             <ul className="flex flex-col">
               {recentFonts.map(({ index, font }) => (
                 <button
                   key={index + font}
-                  className="flex cursor-pointer justify-start p-2 hover:bg-gray-100"
+                  className="flex cursor-pointer justify-start p-1.5 hover:bg-gray-100"
                   onClick={() => selectFontHandler(index)}
                 >
-                  <div className={`ql-font-${font} `}>{font}</div>
+                  <div className={`ql-font-${font} text-xs font-medium`}>{font}</div>
                 </button>
               ))}
             </ul>
@@ -92,18 +92,18 @@ const FontSelectBox = ({ list }: SelectBoxProps) => {
 
           {/*모든 글꼴 박스*/}
           <div>
-            <div className="flex flex-row gap-[8px] px-[3px] py-[7px]">
-              <FontIcon width={16} className="text-gray2" />
-              <p className="text-sm text-gray2">모든 글꼴</p>
+            <div className="flex flex-row gap-[6px] px-[3px] py-[7px]">
+              <FontIcon width={14} className="text-gray2" />
+              <p className="text-[11px] text-gray2">모든 글꼴</p>
             </div>
-            <ul className="flex max-h-52 flex-col overflow-y-auto">
+            <ul className="flex max-h-32 flex-col overflow-y-auto">
               {list.map((fontFamily, idx) => (
                 <button
                   key={idx}
-                  className="flex cursor-pointer justify-start !p-2 hover:bg-gray-100"
+                  className="flex cursor-pointer justify-start p-1.5 hover:bg-gray-100"
                   onClick={() => selectFontHandler(idx)}
                 >
-                  <div className={`ql-font-${fontFamily}`}>{fontFamily}</div>
+                  <div className={`ql-font-${fontFamily} text-xs font-medium`}>{fontFamily}</div>
                 </button>
               ))}
             </ul>
