@@ -15,7 +15,7 @@ const IllustrationEditBox = () => {
   };
 
   return (
-    <div className="flex w-full flex-col border-b-[1px] border-t-[1px] border-border">
+    <div className="border-b-[1px]border-border flex w-full flex-col">
       <div
         onClick={openHandler}
         className={`flex h-[50px] flex-row items-center justify-between px-[15px] py-[20px] text-[14px] font-extrabold`}
