@@ -33,7 +33,7 @@ const OutlineBox = () => {
 
   return (
     <div
-      className={`flex flex-col gap-3 rounded-[10px] border-[1px] border-border px-[10px] py-[10px] ${!isChecked && 'bg-light-gray'}`}
+      className={`flex flex-col gap-2 rounded-[10px] border-[1px] border-border px-[10px] py-[10px] ${!isChecked && 'bg-light-gray'}`}
     >
       <div className={`flex flex-row items-center justify-between`}>
         <div className="flex flex-row items-center gap-[10px]">

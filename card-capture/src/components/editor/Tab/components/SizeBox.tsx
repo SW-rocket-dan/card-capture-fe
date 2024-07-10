@@ -11,7 +11,7 @@ const SizeBox = () => {
       <div className="flex flex-row items-center">
         <div className="flex flex-col gap-[8px]">
           <div className="flex w-[110px] flex-row items-center rounded-md bg-itembg px-[10px] py-[10px]">
-            <input type="number" className="w-[80px] bg-transparent text-xs font-bold outline-none" />
+            <input type="number" className="w-[79px] bg-transparent text-xs font-bold outline-none" />
             <span className="text-xs text-gray5">W</span>
           </div>
           <div className="flex w-[110px] flex-row items-center rounded-md bg-itembg px-[10px] py-[10px]">
