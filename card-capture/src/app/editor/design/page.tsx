@@ -5,9 +5,9 @@ import EditingArea from '@/components/editor/Tab/EditingArea/EditingArea';
 
 const EditorPage = () => {
   return (
-    <div className="flex h-screen w-screen flex-col font-Pretendard">
+    <div className="h-screen w-screen font-Pretendard">
       <NavigationBar />
-      <div className="flex h-full flex-row">
+      <div className="flex h-full flex-row pt-[80px]">
         <Tab />
         <EditingArea />
       </div>
