@@ -16,7 +16,7 @@ const BackgroundEditBox = () => {
   const [color, setColor] = useColor(background?.color || '#FFFFFF');
   const [opacity, setOpacity] = useState<number>(100);
 
-  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const openHandler = () => {
     setIsOpen(prev => !prev);
@@ -27,10 +27,10 @@ const BackgroundEditBox = () => {
   }, [color, opacity]);
 
   return (
-    <div className="border-border' flex w-full flex-col border-b-[1px] border-t-[1px] border-border">
+    <div className="flex w-full flex-col border-b-[1px] border-t-[1px] border-border">
       <div
         onClick={openHandler}
-        className={`flex flex-row items-center justify-between px-[20px] py-[19px] text-[17px] font-extrabold`}
+        className={`flex h-[70px] flex-row items-center justify-between px-[20px] py-[20px] text-[17px] font-extrabold`}
       >
         <p>배경</p>
         <div className="flex flex-row gap-3">

@@ -11,7 +11,7 @@ import DownIcon from '@/components/common/Icon/DownIcon';
 import { useState } from 'react';
 
 const TextEditBox = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const openHandler = () => {
     setIsOpen(prev => !prev);
@@ -21,7 +21,7 @@ const TextEditBox = () => {
     <div id="toolbar" className="flex w-full flex-col">
       <div
         onClick={openHandler}
-        className={`flex flex-row items-center justify-between px-[20px] py-[19px] text-[17px] font-extrabold ${!isOpen && 'border-b-[1px] border-border'}`}
+        className={`flex h-[70px] flex-row items-center justify-between px-[20px] py-[19px] text-[17px] font-bold ${!isOpen && 'border-b-[1px] border-border'}`}
       >
         <p>텍스트</p>
         {isOpen ? <UpIcon width={15} className="text-gray1" /> : <DownIcon width={15} className="text-gray1" />}
