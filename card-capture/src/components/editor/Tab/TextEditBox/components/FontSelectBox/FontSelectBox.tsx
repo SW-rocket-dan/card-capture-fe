@@ -52,7 +52,7 @@ const FontSelectBox = ({ list }: SelectBoxProps) => {
   return (
     <div ref={ref} className="relative">
       <button
-        className="flex h-full w-full flex-row items-center justify-between rounded-md bg-itembg p-[10px]"
+        className="flex h-full w-full flex-row items-center justify-between rounded-[8px] bg-itembg p-[10px]"
         onClick={openHandler}
       >
         <p className="text-[13px]">{list[selectedIndex]}</p>

@@ -39,23 +39,23 @@ const SizeSelectBox = ({ sizeList }: SizeSelectBoxProps) => {
     <div ref={ref} className="relative">
       <button
         onClick={openHandler}
-        className="flex min-w-36 flex-row items-center justify-between rounded-md bg-itembg p-[10px]"
+        className="flex w-[110px] flex-row items-center justify-between rounded-[8px] bg-itembg p-[10px]"
       >
-        <p>{sizeList[selectedIndex].slice(0, -2)}</p>
-        {isOpen ? <UpIcon width={15} className="text-gray1" /> : <DownIcon width={15} className="text-gray1" />}
+        <p className="text-[13px]">{sizeList[selectedIndex].slice(0, -2)}</p>
+        {isOpen ? <UpIcon width={13} className="text-gray1" /> : <DownIcon width={13} className="text-gray1" />}
       </button>
 
       {isOpen && (
         <div
-          className="absolute z-10 mt-[10px] flex w-full max-w-36 flex-col overflow-hidden rounded-xl bg-white"
+          className="absolute z-10 mt-[10px] flex w-[110px] w-full flex-col overflow-hidden rounded-xl bg-white"
           style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08' }}
         >
-          <ul className="flex max-h-48 flex-col overflow-y-auto">
+          <ul className="flex max-h-48 flex-col overflow-y-auto text-[12px]">
             {sizeList.map((size, index) =>
               selectedIndex === index ? (
                 <button className="flex flex-row items-center justify-between bg-main px-[12px] py-[8px]">
                   <p className="text-white">{size.slice(0, -2)}</p>
-                  <CheckIcon className="text-white" width={12} />
+                  <CheckIcon className="text-white" width={11} />
                 </button>
               ) : (
                 <button
