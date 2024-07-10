@@ -10,32 +10,32 @@ const OrderBox = () => {
   const clickMoveToLastHandler = () => {};
 
   return (
-    <div className="flex flex-row items-center justify-between rounded-[10px] border-[1px] border-border px-[14px] py-[15px]">
-      <p className="text-gray4 text-base">순서</p>
+    <div className="flex flex-row items-center justify-between rounded-[10px] border-[1px] border-border px-[10px] py-[10px]">
+      <p className="text-xs text-gray4">순서</p>
       <div className="flex flex-row items-center gap-3">
         <button
           onClick={clickMoveToFrontHandler}
           className="flex h-[30px] w-[30px] items-center justify-center rounded-md hover:bg-itembg"
         >
-          <MoveToFrontIcon width={20} />
+          <MoveToFrontIcon width={17} />
         </button>
         <button
           onClick={clickMoveToFirstHandler}
           className="flex h-[30px] w-[30px] items-center justify-center rounded-md hover:bg-itembg"
         >
-          <MoveToFirstIcon width={20} />
+          <MoveToFirstIcon width={17} />
         </button>
         <button
           onClick={clickMoveToBackHandler}
           className="flex h-[30px] w-[30px] items-center justify-center rounded-md hover:bg-itembg"
         >
-          <MoveToBackIcon width={20} />
+          <MoveToBackIcon width={17} />
         </button>
         <button
           onClick={clickMoveToLastHandler}
           className="flex h-[30px] w-[30px] items-center justify-center rounded-md hover:bg-itembg"
         >
-          <MoveToLastIcon width={20} />
+          <MoveToLastIcon width={17} />
         </button>
       </div>
     </div>

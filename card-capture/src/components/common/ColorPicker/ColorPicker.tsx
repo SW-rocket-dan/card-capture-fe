@@ -1,6 +1,7 @@
 import { Alpha, Hue, IColor, Saturation } from 'react-color-palette';
 import 'react-color-palette/css';
 import { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import './ColorPicker.styles.css';
 
 type ColorPickerProps = {
   color: IColor;

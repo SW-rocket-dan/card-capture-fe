@@ -21,7 +21,7 @@ const TextEditBox = () => {
     <div id="toolbar" className="flex w-full flex-col">
       <div
         onClick={openHandler}
-        className={`flex h-[50px] flex-row items-center justify-between px-[15px] py-[19px] text-[14px] font-bold ${!isOpen && 'border-b-[1px] border-border'}`}
+        className={`flex h-[50px] flex-row items-center justify-between px-[15px] py-[20px] text-[14px] font-bold ${!isOpen && 'border-b-[1px] border-border'}`}
       >
         <p>텍스트</p>
         {isOpen ? <UpIcon width={13} className="text-gray1" /> : <DownIcon width={13} className="text-gray1" />}

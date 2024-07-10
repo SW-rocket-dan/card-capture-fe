@@ -1,0 +1,15 @@
+/* Saturation, Hue, Alpha 핸들 크기 줄이기 */
+.rcp-saturation-cursor,
+.rcp-hue-cursor,
+.rcp-alpha-cursor {
+    width: 15px !important;  /* 원하는 크기로 수정 */
+    height: 15px !important;  /* 원하는 크기로 수정 */
+    border: 2px solid #fff;   /* 선택사항: 테두리 설정 */
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);  /* 선택사항: 그림자 설정 */
+}
+
+/* Hue, Alpha 바 크기 조절 */
+.rcp-hue,
+.rcp-alpha {
+    height: 9px;
+}

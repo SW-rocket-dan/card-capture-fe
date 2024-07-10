@@ -47,7 +47,7 @@ const ColorButton = ({
       {isOpen && (
         <div
           className={`absolute z-20 rounded-lg bg-white ${
-            direction === 'right' ? 'left-full -mt-[50px] ml-[55px]' : 'mt-[10px]'
+            direction === 'right' ? 'left-full -mt-[50px] ml-[55px]' : 'mt-[7px]'
           }`}
           style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08' }}
         >
