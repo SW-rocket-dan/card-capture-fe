@@ -161,10 +161,10 @@ export const useCardsStore = create<useCardsStore>()((set, get) => ({
               content: '',
             },
             position: {
-              x: 300,
-              y: 300,
+              x: 220,
+              y: 220,
               width: 200,
-              height: 50,
+              height: 45,
               rotate: 0,
               zIndex: 2,
               opacity: 1,

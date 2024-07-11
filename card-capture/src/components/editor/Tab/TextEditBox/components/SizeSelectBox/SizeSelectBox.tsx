@@ -22,7 +22,7 @@ const SizeSelectBox = ({ sizeList }: SizeSelectBoxProps) => {
   /**
    * 선택된 사이즈를 텍스트에 적용하는 로직
    */
-  const [selectedIndex, setSelectedIndex] = useState<number>(2);
+  const [selectedIndex, setSelectedIndex] = useState<number>(1);
   const { changeStyleHandler } = useTextFormatting();
 
   const selectSizeHandler = (idx: number) => {

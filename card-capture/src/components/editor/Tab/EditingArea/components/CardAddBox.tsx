@@ -6,21 +6,21 @@ import TrashIcon from '@/components/common/Icon/TrashIcon';
 
 const CardAddBox = () => {
   return (
-    <div className="flex cursor-pointer flex-row items-center justify-center gap-[7px] rounded-[8px] bg-white px-[7px] py-[3px]">
+    <div className="flex cursor-pointer flex-row items-center justify-center gap-[7px] rounded-[8px] bg-white px-[6px] py-[3px]">
       <div className="flex h-[25px] w-[25px] items-center justify-center rounded-md bg-main text-white">
-        <PlusIcon width={14} className="stroke-2" />
+        <PlusIcon width={13} className="stroke-2" />
       </div>
       <div className="flex h-[25px] w-[25px] items-center justify-center hover:text-main">
-        <CopyIcon width={17} />
+        <CopyIcon width={15} />
       </div>
       <div className="flex h-[25px] w-[25px] items-center justify-center hover:text-main">
-        <UpArrowIcon width={12} />
+        <UpArrowIcon width={11} />
       </div>
       <div className="flex h-[25px] w-[25px] items-center justify-center hover:text-main">
-        <DownArrowIcon width={12} />
+        <DownArrowIcon width={11} />
       </div>
       <div className="flex h-[25px] w-[25px] items-center justify-center hover:text-main">
-        <TrashIcon width={16} />
+        <TrashIcon width={14} />
       </div>
     </div>
   );

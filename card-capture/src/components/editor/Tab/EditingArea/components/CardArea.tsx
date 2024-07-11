@@ -27,13 +27,13 @@ const CardArea = ({ card }: { card: Card }) => {
   };
 
   return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-[15px] bg-editorbg">
+    <div className="flex flex-1 flex-col items-center justify-center gap-[10px] bg-editorbg">
       <div className="flex w-[550px] flex-row justify-between">
         <CardAddBox />
-        <div className="flex flex-row gap-[10px]">
+        <div className="flex flex-row items-center gap-[10px]">
           <LayerAddBox cardId={cardId} />
-          <Button type="full" className="h-[38px] w-[160px]">
-            <span className="text-sm">Export</span>
+          <Button type="full" className="h-[36px] w-[145px] rounded-[5px]">
+            <span className="text-xs">Export</span>
           </Button>
         </div>
       </div>

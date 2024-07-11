@@ -1,4 +1,3 @@
-import ColorButton from '@/components/editor/Tab/components/ColorButton';
 import UpIcon from '@/components/common/Icon/UpIcon';
 import DownIcon from '@/components/common/Icon/DownIcon';
 import ImageButton from '@/components/editor/Tab/components/ImageButton';
