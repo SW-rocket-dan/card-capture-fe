@@ -1,12 +1,13 @@
 import FocusBox from '@/components/editor/FocusBox/FocusBox';
 import TextBox from '@/components/text/TextBox';
-import { Card, Shape } from '@/store/useCardsStore/type';
+import { Card, Image, Shape } from '@/store/useCardsStore/type';
 import ShapeBox from '@/components/Shape/ShapeBox';
 import LayerBox from '@/components/editor/LayerBox';
 import CardAddBox from '@/components/editor/Tab/EditingArea/components/CardAddBox';
 import LayerAddBox from '@/components/editor/Tab/EditingArea/components/LayerAddBox';
 import Button from '@/components/common/Button/Button';
 import { useFocusStore } from '@/store/useFocusStore';
+import ImageBox from '@/components/editor/ImageBox/ImageBox';
 
 const CardArea = ({ card }: { card: Card }) => {
   const cardId = card.id;
@@ -65,6 +66,13 @@ const CardArea = ({ card }: { card: Card }) => {
                   <ShapeBox shapeType={type} color={color} />
                 </FocusBox>
               );
+            } else if (layer.type === 'image') {
+              const { url } = layer.content as Image;
+              return (
+                <FocusBox key={idx} cardId={cardId} layerId={layer.id}>
+                  <ImageBox url={url} />
+                </FocusBox>
+              );
             }
           } else {
             if (layer.type === 'text') {
@@ -80,6 +88,13 @@ const CardArea = ({ card }: { card: Card }) => {
               return (
                 <LayerBox key={idx} position={layer.position} onClick={e => makeFocusLayerHandler(e, layer.id)}>
                   <ShapeBox shapeType={type} color={color} />
+                </LayerBox>
+              );
+            } else if (layer.type === 'image') {
+              const { url } = layer.content as Image;
+              return (
+                <LayerBox key={idx} position={layer.position} onClick={e => makeFocusLayerHandler(e, layer.id)}>
+                  <ImageBox url={url} />
                 </LayerBox>
               );
             }
