@@ -54,7 +54,7 @@ const CardArea = ({ card }: { card: Card }) => {
             if (layer.type === 'text') {
               //텍스트 Focus Box
               return (
-                <FocusBox key={idx} cardId={cardId} layerId={layer.id}>
+                <FocusBox key={idx} cardId={cardId} layerId={layer.id} type="text">
                   <TextBox key={idx} cardId={cardId} layerId={layer.id} />
                 </FocusBox>
               );

@@ -1,7 +1,7 @@
 //FocusBox.tsx
 
 import { useCardsStore } from '@/store/useCardsStore';
-import { Position } from '@/store/useCardsStore/type';
+import { LayerType, Position } from '@/store/useCardsStore/type';
 import React, { useEffect, useRef, useState } from 'react';
 import { Direction, Offset, ResizeOffset } from './FocusBox.type';
 import { FaArrowRotateLeft } from 'react-icons/fa6';
@@ -13,6 +13,7 @@ type Props = {
   }>;
   cardId: number;
   layerId: number;
+  type?: LayerType;
 };
 
 /**
@@ -20,7 +21,7 @@ type Props = {
  * @param component Box안에 띄어줄 컴포넌트
  * @param position 위치정보에 따라서 위치를 렌더링해줌
  * **/
-const FocusBox = ({ children, cardId, layerId }: Props) => {
+const FocusBox = ({ children, cardId, layerId, type }: Props) => {
   const layer = useCardsStore(state => state.cards[cardId].layers.filter(v => v.id === layerId)[0]);
   const setPosition = useCardsStore(state => state.setPosition);
 
@@ -99,7 +100,7 @@ const FocusBox = ({ children, cardId, layerId }: Props) => {
 
     setDragOffset({ ...INITIAL_DRAG_OFFSET });
     setIsDrag(false);
-    setPosition(layerId, { ...curPosition, y: diffY, x: diffX });
+    setPosition(cardId, layerId, { ...curPosition, y: diffY, x: diffX });
   };
 
   /**
@@ -107,7 +108,7 @@ const FocusBox = ({ children, cardId, layerId }: Props) => {
    */
   useEffect(() => {
     if (!isDrag) return;
-    if (clickedCount > 1) return;
+    if (clickedCount > 1 && type === 'text') return;
 
     window.addEventListener('pointermove', pointerMoveDragHandler);
     window.addEventListener('pointerup', pointerUpDragHandler);
@@ -306,7 +307,7 @@ const FocusBox = ({ children, cardId, layerId }: Props) => {
 
     setResizeOffset({ ...INITIAL_RESIZE_OFFSET });
     setResizeState('none');
-    setPosition(layerId, { ...curPosition, width, height, x, y });
+    setPosition(cardId, layerId, { ...curPosition, width, height, x, y });
   };
 
   /* resize PointerUp 이벤트 정의 */
@@ -378,7 +379,7 @@ const FocusBox = ({ children, cardId, layerId }: Props) => {
     //@NOTE: arctan을 활용한 각도 구하기
     const nxAngle = Math.atan2(e.clientX - centerX, centerY - e.clientY);
     let rotationDegrees = nxAngle * (180 / Math.PI); //라디안 변경
-    setPosition(layerId, { ...curPosition, rotate: rotationDegrees });
+    setPosition(cardId, layerId, { ...curPosition, rotate: rotationDegrees });
   };
 
   //rotate 이벤트 등록
@@ -396,7 +397,7 @@ const FocusBox = ({ children, cardId, layerId }: Props) => {
 
   return (
     <div
-      className={`absolute border ${isDrag ? 'cursor-grabbing' : 'cursor-grab'} ${clickedCount > 1 && 'border-[1.5px] border-main'}`}
+      className={`absolute border ${isDrag ? 'cursor-grabbing' : 'cursor-grab'} ${clickedCount > 1 && type === 'text' && 'border-[1.5px] border-main'}`}
       style={{
         left: curPosition.x,
         top: curPosition.y,
