@@ -3,6 +3,7 @@ import CloseIcon from '@/components/common/Icon/CloseIcon';
 import { ShapeType } from '@/store/useCardsStore/type';
 import { useCardsStore } from '@/store/useCardsStore';
 import { useFocusStore } from '@/store/useFocusStore';
+import useClickOutside from '@/hooks/useClickOutside';
 
 const ShapeModalBox = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -18,8 +19,11 @@ const ShapeModalBox = () => {
     addShapeLayer(focusedCardId, type);
   };
 
+  // 컴포넌트 외부 클릭시 모달 닫는 hook
+  const ref = useClickOutside(() => setIsOpen(false));
+
   return (
-    <div className="relative">
+    <div ref={ref} className="relative">
       <div className="flex flex-col gap-2 rounded-[10px] border-[1px] border-border px-[10px] py-[10px]">
         <div className="flex flex-row items-center justify-between">
           <p className="text-xs text-gray4">도형</p>

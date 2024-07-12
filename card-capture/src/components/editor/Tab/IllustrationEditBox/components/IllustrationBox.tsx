@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import CloseIcon from '@/components/common/Icon/CloseIcon';
+import useClickOutside from '@/hooks/useClickOutside';
 
 const IllustrationBox = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -7,6 +8,9 @@ const IllustrationBox = () => {
   const openHandler = () => {
     setIsOpen(prev => !prev);
   };
+
+  // 컴포넌트 외부 클릭시 모달 닫는 hook
+  const ref = useClickOutside(() => setIsOpen(false));
 
   return (
     <div className="relative">
@@ -28,6 +32,7 @@ const IllustrationBox = () => {
 
       {isOpen && (
         <div
+          ref={ref}
           className={`absolute left-full z-20 -mt-[100px] ml-[22px] w-[270px] rounded-[8px] bg-white`}
           style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08' }}
         >
