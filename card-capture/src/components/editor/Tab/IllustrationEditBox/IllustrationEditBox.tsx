@@ -1,10 +1,10 @@
 import UpIcon from '@/components/common/Icon/UpIcon';
 import DownIcon from '@/components/common/Icon/DownIcon';
-import ImageButton from '@/components/editor/Tab/components/ImageButton';
 import SizeBox from '@/components/editor/Tab/components/SizeBox';
 import OpacityButton from '@/components/editor/Tab/components/OpacityButton';
 import OrderBox from '@/components/editor/Tab/components/OrderBox';
 import { useState } from 'react';
+import IllustrationBox from '@/components/editor/Tab/IllustrationEditBox/components/IllustrationBox';
 
 const IllustrationEditBox = () => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
@@ -25,6 +25,7 @@ const IllustrationEditBox = () => {
       </div>
       {isOpen && (
         <div className="flex flex-col gap-[10px] px-[15px] pb-[20px]">
+          <IllustrationBox />
           <SizeBox />
           <OpacityButton opacity={opacity} setOpacity={setOpacity} />
           <OrderBox />
