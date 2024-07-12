@@ -33,8 +33,10 @@ export type Image = {
   cropHeight: number;
 };
 
+export type ShapeType = 'rect' | 'circle' | 'triangle' | 'star';
+
 export type Shape = {
-  type: 'rect' | 'circle' | 'triangle' | 'star'; // svg로 쓸까?
+  type: ShapeType;
   color: string;
 };
 

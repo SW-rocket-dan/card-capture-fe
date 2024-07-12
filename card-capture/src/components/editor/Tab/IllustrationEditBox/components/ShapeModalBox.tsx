@@ -1,11 +1,21 @@
 import { useState } from 'react';
 import CloseIcon from '@/components/common/Icon/CloseIcon';
+import { ShapeType } from '@/store/useCardsStore/type';
+import { useCardsStore } from '@/store/useCardsStore';
+import { useFocusStore } from '@/store/useFocusStore';
 
 const ShapeModalBox = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const openHandler = () => {
     setIsOpen(prev => !prev);
+  };
+
+  const addShapeLayer = useCardsStore(state => state.addShapeLayer);
+  const focusedCardId = useFocusStore(state => state.focusedCardId);
+
+  const addShapeLayerHandler = (type: ShapeType) => {
+    addShapeLayer(focusedCardId, type);
   };
 
   return (
@@ -18,11 +28,48 @@ const ShapeModalBox = () => {
           </button>
         </div>
         <div className="flex flex-row gap-[5px]">
-          <div className="bg-gray8 h-[42px] w-[42px] cursor-pointer overflow-hidden rounded-[5px]" />
-          <div className="bg-gray8 h-[42px] w-[42px] cursor-pointer overflow-hidden rounded-[5px]" />
-          <div className="bg-gray8 h-[42px] w-[42px] cursor-pointer overflow-hidden rounded-[5px]" />
-          <div className="bg-gray8 h-[42px] w-[42px] cursor-pointer overflow-hidden rounded-[5px]" />
-          <div className="bg-gray8 h-[42px] w-[42px] cursor-pointer overflow-hidden rounded-[5px]" />
+          <button
+            onClick={() => addShapeLayerHandler('circle')}
+            className="flex h-[42px] w-[42px] cursor-pointer items-center justify-center overflow-hidden rounded-[5px] bg-itembg"
+          >
+            <div className="h-[35px] w-[35px] rounded-full bg-gray7"></div>
+          </button>
+          <button
+            onClick={() => addShapeLayerHandler('triangle')}
+            className="flex h-[42px] w-[42px] cursor-pointer items-center justify-center overflow-hidden rounded-[5px] bg-itembg"
+          >
+            <div
+              className="h-[32px] w-[32px] bg-gray7"
+              style={{
+                position: 'absolute',
+                clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)',
+              }}
+            ></div>
+          </button>
+          <button
+            onClick={() => addShapeLayerHandler('rect')}
+            className="flex h-[42px] w-[42px] cursor-pointer items-center justify-center overflow-hidden rounded-[5px] bg-itembg"
+          >
+            <div className="h-[32px] w-[32px] bg-gray7"></div>
+          </button>
+          <button
+            onClick={() => addShapeLayerHandler('star')}
+            className="flex h-[42px] w-[42px] cursor-pointer items-center justify-center overflow-hidden rounded-[5px] bg-itembg"
+          >
+            <div
+              className="h-[38px] w-[38px] bg-gray7"
+              style={{
+                clipPath:
+                  'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)',
+              }}
+            ></div>
+          </button>
+          <button
+            onClick={openHandler}
+            className="flex h-[42px] w-[42px] cursor-pointer items-center justify-center overflow-hidden rounded-[5px]"
+          >
+            ...
+          </button>
         </div>
       </div>
 
