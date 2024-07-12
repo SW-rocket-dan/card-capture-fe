@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Background, Card, Cards, Position, Text } from './type';
+import { Background, Card, Cards, Position, ShapeType, Text } from './type';
 import { Draft, produce } from 'immer';
 import ReactQuill from 'react-quill';
 
@@ -39,6 +39,7 @@ type useCardsStore = {
 
   addTextLayer: (cardId: number) => void;
   addImageLayer: (cardId: number, url: string) => void;
+  addShapeLayer: (cardId: number, type: ShapeType) => void;
 };
 
 export const useCardsStore = create<useCardsStore>()((set, get) => ({
@@ -198,6 +199,35 @@ export const useCardsStore = create<useCardsStore>()((set, get) => ({
               y: 200,
               width: 200,
               height: 100,
+              rotate: 0,
+              zIndex: 2,
+              opacity: 1,
+            },
+          });
+        },
+      ),
+    ),
+
+  addShapeLayer: (cardId, type) =>
+    set(
+      produce(
+        (
+          draft: Draft<{
+            cards: Card[];
+          }>,
+        ) => {
+          draft.cards[cardId].layers.push({
+            id: draft.cards[cardId].layers.length + 1,
+            type: 'shape',
+            content: {
+              type: type,
+              color: '#DDDDDD',
+            },
+            position: {
+              x: 200,
+              y: 200,
+              width: 200,
+              height: 200,
               rotate: 0,
               zIndex: 2,
               opacity: 1,
