@@ -25,7 +25,7 @@ const ImageEditBox = () => {
       </div>
       {isOpen && (
         <div className="flex flex-col gap-[10px] px-[15px] pb-[20px]">
-          <ImageButton />
+          <ImageButton onChangeImage={addImageLayerHandler} />
           <SizeBox />
           <OpacityButton opacity={opacity} setOpacity={setOpacity} />
           <OrderBox />
