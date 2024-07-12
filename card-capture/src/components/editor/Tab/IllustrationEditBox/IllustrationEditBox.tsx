@@ -5,6 +5,7 @@ import OpacityButton from '@/components/editor/Tab/components/OpacityButton';
 import OrderBox from '@/components/editor/Tab/components/OrderBox';
 import { useState } from 'react';
 import IllustrationBox from '@/components/editor/Tab/IllustrationEditBox/components/IllustrationBox';
+import ShapeModalBox from '@/components/editor/Tab/IllustrationEditBox/components/ShapeModalBox';
 
 const IllustrationEditBox = () => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
@@ -26,6 +27,7 @@ const IllustrationEditBox = () => {
       {isOpen && (
         <div className="flex flex-col gap-[10px] px-[15px] pb-[20px]">
           <IllustrationBox />
+          <ShapeModalBox />
           <SizeBox />
           <OpacityButton opacity={opacity} setOpacity={setOpacity} />
           <OrderBox />
