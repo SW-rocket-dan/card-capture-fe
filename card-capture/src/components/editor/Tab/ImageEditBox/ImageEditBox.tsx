@@ -23,8 +23,34 @@ const extractFileNameAndExtension = (file: File) => {
   return { fileName, fileExtension };
 };
 
+/**
+ * s3 이미지 링크에서 이미지의 높이, 너비(비율)을 추출해서 가져오는 함수
+ */
+export const getImageDimensions = (url: string) => {
+  return new Promise<{ width: number; height: number }>((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      resolve({ width: img.width, height: img.height });
+    };
+    img.onerror = reject;
+    img.src = url;
+  });
+};
+
+/**
+ * 편집 화면에 맞게 이미지 사이즈를 조절하는 기능
+ * 이미지 비율을 받아서 비율에 맞게 사이즈 축소
+ */
+export const resizeImage = (dimensions: { width: number; height: number }, maxWidth: number) => {
+  const { width, height } = dimensions;
+  const aspectRatio = width / height;
+  const resizedHeight = maxWidth / aspectRatio;
+
+  return { width: maxWidth, height: resizedHeight };
+};
+
 const ImageEditBox = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [opacity, setOpacity] = useState<number>(100);
 
   const openHandler = () => {
@@ -73,8 +99,10 @@ const ImageEditBox = () => {
     const imageFile = event.target.files[0];
     const imageUrl = await uploadImageToS3(imageFile);
 
-    // console.log(imageUrl);
-    addImageLayer(focusedCardId, imageUrl);
+    const dimension = await getImageDimensions(imageUrl);
+    const resizedDimension = resizeImage(dimension, 400);
+
+    addImageLayer(focusedCardId, imageUrl, resizedDimension);
   };
 
   return (

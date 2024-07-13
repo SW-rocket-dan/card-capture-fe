@@ -31,14 +31,15 @@ type useCardsStore = {
   getLayerText: (cardId: number, layerId: number) => ReactQuill.Value | null;
   setLayerText: (cardId: number, layerId: number, text: ReactQuill.Value) => void;
 
-  setPosition: (layerId: number, position: Position) => void;
+  setPosition: (cardId: number, layerId: number, position: Position) => void;
+  getPosition: (cardId: number, layerId: number) => Position | null;
 
   setBackgroundColor: (cardId: number, backgroundColor: string) => void;
   setBackground: (cardId: number, background: Background) => void;
   getBackground: (cardId: number) => Background | null;
 
   addTextLayer: (cardId: number) => void;
-  addImageLayer: (cardId: number, url: string) => void;
+  addImageLayer: (cardId: number, url: string, dimension: { width: number; height: number }) => void;
   addShapeLayer: (cardId: number, type: ShapeType) => void;
 };
 
@@ -107,19 +108,30 @@ export const useCardsStore = create<useCardsStore>()((set, get) => ({
       ),
     ),
 
-  setPosition: (layerId: number, position: Position) =>
+  setPosition: (cardId: number, layerId: number, position: Position) =>
     set(
-      //position 변경
       produce(
         (
           draft: Draft<{
             cards: Card[];
           }>,
         ) => {
-          draft.cards[0].layers = draft.cards[0].layers.map(v => (v.id === layerId ? { ...v, position: position } : v));
+          const card = draft.cards.find((card: Card) => card.id === cardId);
+
+          if (card) card.layers = card.layers.map(v => (v.id === layerId ? { ...v, position: position } : v));
         },
       ),
     ),
+
+  getPosition: (cardId, layerId) => {
+    const card = get().cards.find(({ id }) => id === cardId);
+    if (!card) return null;
+
+    const layer = card.layers.find(({ id }) => id === layerId);
+    if (!layer) return null;
+
+    return layer.position;
+  },
 
   setBackgroundColor: (cardId: number, backgroundColor: string) =>
     set(
@@ -176,7 +188,7 @@ export const useCardsStore = create<useCardsStore>()((set, get) => ({
       ),
     ),
 
-  addImageLayer: (cardId: number, url: string) =>
+  addImageLayer: (cardId, url, dimension) =>
     set(
       produce(
         (
@@ -197,8 +209,8 @@ export const useCardsStore = create<useCardsStore>()((set, get) => ({
             position: {
               x: 200,
               y: 200,
-              width: 200,
-              height: 100,
+              width: dimension.width,
+              height: dimension.height,
               rotate: 0,
               zIndex: 2,
               opacity: 1,
