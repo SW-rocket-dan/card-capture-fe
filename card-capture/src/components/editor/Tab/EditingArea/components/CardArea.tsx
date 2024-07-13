@@ -68,11 +68,10 @@ const CardArea = ({ card }: { card: Card }) => {
               );
             } else if (layer.type === 'image') {
               const { url } = layer.content as Image;
-              const { width, height } = layer.position;
 
               return (
                 <FocusBox key={idx} cardId={cardId} layerId={layer.id}>
-                  <ImageBox url={url} width={width} height={height} />
+                  <ImageBox url={url} position={layer.position} />
                 </FocusBox>
               );
             }
@@ -98,7 +97,7 @@ const CardArea = ({ card }: { card: Card }) => {
 
               return (
                 <LayerBox key={idx} position={layer.position} onClick={e => makeFocusLayerHandler(e, layer.id)}>
-                  <ImageBox url={url} width={width} height={height} />
+                  <ImageBox url={url} position={layer.position} />
                 </LayerBox>
               );
             }

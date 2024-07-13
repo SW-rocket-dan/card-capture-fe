@@ -27,7 +27,10 @@ const extractFileNameAndExtension = (file: File) => {
  * s3 이미지 링크에서 이미지의 높이, 너비(비율)을 추출해서 가져오는 함수
  */
 export const getImageDimensions = (url: string) => {
-  return new Promise<{ width: number; height: number }>((resolve, reject) => {
+  return new Promise<{
+    width: number;
+    height: number;
+  }>((resolve, reject) => {
     const img = new Image();
     img.onload = () => {
       resolve({ width: img.width, height: img.height });
@@ -41,18 +44,22 @@ export const getImageDimensions = (url: string) => {
  * 편집 화면에 맞게 이미지 사이즈를 조절하는 기능
  * 이미지 비율을 받아서 비율에 맞게 사이즈 축소
  */
-export const resizeImage = (dimensions: { width: number; height: number }, maxWidth: number) => {
+export const resizeImage = (
+  dimensions: {
+    width: number;
+    height: number;
+  },
+  maxWidth: number,
+) => {
   const { width, height } = dimensions;
   const aspectRatio = width / height;
-  const resizedHeight = maxWidth / aspectRatio;
+  const resizedHeight = Math.floor(maxWidth / aspectRatio);
 
   return { width: maxWidth, height: resizedHeight };
 };
 
 const ImageEditBox = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [opacity, setOpacity] = useState<number>(100);
-
   const openHandler = () => {
     setIsOpen(prev => !prev);
   };
@@ -118,7 +125,7 @@ const ImageEditBox = () => {
         <div className="flex flex-col gap-[10px] px-[15px] pb-[20px]">
           <ImageButton onChangeImage={addImageLayerHandler} />
           <SizeBox />
-          <OpacityButton opacity={opacity} setOpacity={setOpacity} />
+          <OpacityButton />
           <OrderBox />
         </div>
       )}

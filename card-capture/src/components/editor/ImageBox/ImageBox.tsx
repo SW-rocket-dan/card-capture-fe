@@ -1,15 +1,15 @@
 import Image from 'next/image';
+import { Position } from '@/store/useCardsStore/type';
 
 type ImageBoxProps = {
   url: string;
-  width: number;
-  height: number;
+  position: Position;
 };
 
-const ImageBox = ({ url, width, height }: ImageBoxProps) => {
+const ImageBox = ({ url, position }: ImageBoxProps) => {
   return (
-    <div className="h-full w-full">
-      <Image src={url} alt="image" width={width} height={height} />
+    <div className="h-full w-full" style={{ opacity: position.opacity }}>
+      <Image src={url} alt="image" width={position.width} height={position.height} />
     </div>
   );
 };

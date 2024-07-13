@@ -17,6 +17,16 @@ export const INITIAL_CARDS: Cards = {
   cards: [],
 };
 
+export const INITIAL_POSITION: Position = {
+  x: 0,
+  y: 0,
+  width: 0,
+  height: 0,
+  rotate: 0,
+  zIndex: 0,
+  opacity: 0,
+};
+
 /**
  * Card 1장을 받아 저장하는 스토어
  * 나중에는 여러장을 받을 수 있게 구조 변경해야함!!!!!
