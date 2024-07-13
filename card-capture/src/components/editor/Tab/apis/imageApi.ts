@@ -15,16 +15,13 @@ const getPreSignedUrl = async (queryString: string) => {
 };
 
 const putImage = async (imageFile: File, presignedUrl: string) => {
-  const formData = new FormData();
-  formData.append('file', imageFile);
-
   try {
     const response = await fetch(presignedUrl, {
       method: 'PUT',
-      body: formData,
+      body: imageFile,
     });
 
-    return response.json();
+    return response.url;
   } catch (e) {
     console.log(e);
   }

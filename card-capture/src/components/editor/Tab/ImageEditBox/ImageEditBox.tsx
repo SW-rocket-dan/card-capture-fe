@@ -55,7 +55,7 @@ const ImageEditBox = () => {
     const queryString = getImageQueryString(imageFile);
 
     const { presignedUrl, fileUrl } = await imageApi.getPreSignedUrl(queryString);
-    await imageApi.putImage(imageFile, presignedUrl);
+    const url = await imageApi.putImage(imageFile, presignedUrl);
 
     return fileUrl;
   };
@@ -66,7 +66,7 @@ const ImageEditBox = () => {
    */
   const focusedCardId = useFocusStore(state => state.focusedCardId);
   const addImageLayer = useCardsStore(state => state.addImageLayer);
-  
+
   const addImageLayerHandler = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
 
