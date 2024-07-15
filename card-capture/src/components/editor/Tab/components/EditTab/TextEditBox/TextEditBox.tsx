@@ -39,6 +39,7 @@ const TextEditBox = () => {
           <OrderBox />
         </div>
       )}
+      <div className="w-full !border-b-[1px] border-border" />
     </div>
   );
 };

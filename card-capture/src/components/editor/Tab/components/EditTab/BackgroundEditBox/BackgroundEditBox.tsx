@@ -27,7 +27,7 @@ const BackgroundEditBox = () => {
   }, [color, opacity]);
 
   return (
-    <div className="flex w-full flex-col border-b-[1px] border-t-[1px] border-border">
+    <div className="flex w-full flex-col border-b-[1px] border-border">
       <div
         onClick={openHandler}
         className={`flex h-[50px] flex-row items-center justify-between px-[15px] py-[20px] text-[14px] font-extrabold`}

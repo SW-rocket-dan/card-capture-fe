@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Background, Card, Cards, Position, ShapeType, Text } from './type';
+import { Background, Card, Cards, Layer, Position, ShapeType, Text } from './type';
 import { Draft, produce } from 'immer';
 import ReactQuill from 'react-quill';
 
@@ -38,6 +38,8 @@ type useCardsStore = {
   setCard: (card: Card[]) => void;
   addCard: () => void;
 
+  getLayer: (cardId: number, layerId: number) => Layer | null;
+
   getLayerText: (cardId: number, layerId: number) => ReactQuill.Value | null;
   setLayerText: (cardId: number, layerId: number, text: ReactQuill.Value) => void;
 
@@ -49,7 +51,14 @@ type useCardsStore = {
   getBackground: (cardId: number) => Background | null;
 
   addTextLayer: (cardId: number) => void;
-  addImageLayer: (cardId: number, url: string, dimension: { width: number; height: number }) => void;
+  addImageLayer: (
+    cardId: number,
+    url: string,
+    dimension: {
+      width: number;
+      height: number;
+    },
+  ) => void;
   addShapeLayer: (cardId: number, type: ShapeType) => void;
 };
 
@@ -82,6 +91,16 @@ export const useCardsStore = create<useCardsStore>()((set, get) => ({
         },
       ),
     ),
+
+  getLayer: (cardId, layerId) => {
+    const card = get().cards.find(({ id }) => id === cardId);
+    if (!card) return null;
+
+    const layer = card.layers.find(({ id }) => id === layerId);
+    if (!layer) return null;
+
+    return layer;
+  },
 
   getLayerText: (cardId, layerId) => {
     const card = get().cards.find(({ id }) => id === cardId);
