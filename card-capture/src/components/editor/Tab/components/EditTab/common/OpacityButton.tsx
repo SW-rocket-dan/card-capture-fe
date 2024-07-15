@@ -1,5 +1,6 @@
 import { GraySlider } from '@/components/ui/graySlider';
-import { Dispatch, SetStateAction } from 'react';
+import useLayerStyles from '@/components/editor/Tab/hooks/useLayerStyles';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 
 type OpacityButtonProps = {
   opacity: number;
@@ -7,8 +8,17 @@ type OpacityButtonProps = {
 };
 
 const OpacityButton = ({ opacity, setOpacity }: OpacityButtonProps) => {
+  const { position, changePositionHandler } = useLayerStyles();
+
+  useEffect(() => {
+    if (!position) return;
+
+    setOpacity(position.opacity);
+  }, [position]);
+
   const changeOpacityHandler = (value: number[]) => {
     setOpacity(value[0]);
+    changePositionHandler({ opacity: value[0] });
   };
 
   return (
