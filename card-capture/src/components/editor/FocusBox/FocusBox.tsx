@@ -404,7 +404,6 @@ const FocusBox = ({ children, cardId, layerId, type }: Props) => {
         width: curPosition.width,
         height: curPosition.height,
         zIndex: 10000, //NOTE: focus되면 z-index가 상위로 와야함 (수치는 회의해야함!)
-        opacity: curPosition.opacity,
         transform: `rotate(${curPosition.rotate}deg)`,
         transformOrigin: 'center',
         wordWrap: 'break-word',
@@ -465,9 +464,11 @@ const FocusBox = ({ children, cardId, layerId, type }: Props) => {
       >
         <FaArrowRotateLeft size={8} />
       </div>
-      {layer.type === 'text' && React.isValidElement(children)
-        ? React.cloneElement(children, { clickedCount })
-        : children}
+      <div className="absolute h-full w-full" style={{ opacity: curPosition.opacity / 100 }}>
+        {layer.type === 'text' && React.isValidElement(children)
+          ? React.cloneElement(children, { clickedCount })
+          : children}
+      </div>
     </div>
   );
 };
