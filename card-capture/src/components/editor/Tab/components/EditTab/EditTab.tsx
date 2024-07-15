@@ -5,6 +5,7 @@ import IllustrationEditBox from '@/components/editor/Tab/components/EditTab/Illu
 import { useFocusStore } from '@/store/useFocusStore';
 import { useCardsStore } from '@/store/useCardsStore';
 import { LayerType } from '@/store/useCardsStore/type';
+import React from 'react';
 
 const EditTab = () => {
   const focusedCardId = useFocusStore(state => state.focusedCardId);
@@ -30,7 +31,7 @@ const EditTab = () => {
   return (
     <div className="flex h-full w-[280px] flex-1 flex-col">
       <header className="h-[50px] border-b-[1px] border-b-border p-[15px] text-[14px] font-bold">요소 수정</header>
-      {focusedEditBox?.component}
+      {React.cloneElement(focusedEditBox!.component, { focused: true })}
       {remainingEditBoxes.map((box, index) => (
         <div key={index}>{box.component}</div>
       ))}

@@ -10,8 +10,8 @@ import UpIcon from '@/components/common/Icon/UpIcon';
 import DownIcon from '@/components/common/Icon/DownIcon';
 import { useState } from 'react';
 
-const TextEditBox = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+const TextEditBox = ({ focused = false }: { focused?: boolean }) => {
+  const [isOpen, setIsOpen] = useState<boolean>(focused);
 
   const openHandler = () => {
     setIsOpen(prev => !prev);

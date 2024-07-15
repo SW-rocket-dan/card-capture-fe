@@ -8,8 +8,8 @@ import IllustrationBox from '@/components/editor/Tab/components/EditTab/Illustra
 import ShapeModalBox from '@/components/editor/Tab/components/EditTab/IllustrationEditBox/components/ShapeModalBox';
 import useLayerStyles from '@/components/editor/Tab/hooks/useLayerStyles';
 
-const IllustrationEditBox = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(true);
+const IllustrationEditBox = ({ focused = false }: { focused?: boolean }) => {
+  const [isOpen, setIsOpen] = useState<boolean>(focused);
   const [opacity, setOpacity] = useState<number>(100);
 
   const openHandler = () => {

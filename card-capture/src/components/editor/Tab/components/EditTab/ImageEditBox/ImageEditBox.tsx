@@ -58,8 +58,8 @@ export const resizeImage = (
   return { width: maxWidth, height: resizedHeight };
 };
 
-const ImageEditBox = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+const ImageEditBox = ({ focused = false }: { focused?: boolean }) => {
+  const [isOpen, setIsOpen] = useState<boolean>(focused);
   const openHandler = () => {
     setIsOpen(prev => !prev);
   };

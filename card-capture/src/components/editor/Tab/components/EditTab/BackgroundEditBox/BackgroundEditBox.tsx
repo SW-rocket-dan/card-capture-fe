@@ -8,7 +8,7 @@ import { useColor } from 'react-color-palette';
 import { useCardsStore } from '@/store/useCardsStore';
 import { useFocusStore } from '@/store/useFocusStore';
 
-const BackgroundEditBox = () => {
+const BackgroundEditBox = ({ focused = false }: { focused?: boolean }) => {
   const focusedCardId = useFocusStore(state => state.focusedCardId);
   const background = useCardsStore(state => state.getBackground(focusedCardId));
   const setBackground = useCardsStore(state => state.setBackground);
@@ -16,7 +16,7 @@ const BackgroundEditBox = () => {
   const [color, setColor] = useColor(background?.color || '#FFFFFF');
   const [opacity, setOpacity] = useState<number>(100);
 
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(focused);
 
   const openHandler = () => {
     setIsOpen(prev => !prev);
