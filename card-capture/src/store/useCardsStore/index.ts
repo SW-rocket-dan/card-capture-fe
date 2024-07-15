@@ -191,7 +191,7 @@ export const useCardsStore = create<useCardsStore>()((set, get) => ({
               height: 45,
               rotate: 0,
               zIndex: 2,
-              opacity: 10,
+              opacity: 100,
             },
           });
         },
@@ -223,7 +223,7 @@ export const useCardsStore = create<useCardsStore>()((set, get) => ({
               height: dimension.height,
               rotate: 0,
               zIndex: 2,
-              opacity: 1,
+              opacity: 100,
             },
           });
         },
@@ -252,7 +252,7 @@ export const useCardsStore = create<useCardsStore>()((set, get) => ({
               height: 200,
               rotate: 0,
               zIndex: 2,
-              opacity: 1,
+              opacity: 100,
             },
           });
         },

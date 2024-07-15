@@ -1,13 +1,13 @@
 //page.tsx
 'use client';
 
-import FocusBox from '@/components/editor/FocusBox/FocusBox';
-import LayerBox from '@/components/editor/LayerBox';
+import FocusBox from '@/components/editor/EditingArea/components/FocusBox/FocusBox';
+import LayerBox from '@/components/editor/EditingArea/components/LayerBox/LayerBox';
 import { useCardsStore } from '@/store/useCardsStore';
 import { useEffect, useState } from 'react';
-import TextBox from '@/components/text/TextBox';
-import TextToolbar from '@/components/text/TextToolbar';
-import ShapeBox from '@/components/Shape/ShapeBox';
+import TextBox from '@/components/editor/EditingArea/components/TextBox/TextBox';
+import TextToolbar from '@/components/editor/EditingArea/components/TextBox/TextToolbar';
+import ShapeBox from '@/components/editor/EditingArea/components/ShapeBox/ShapeBox';
 import { Shape } from '@/store/useCardsStore/type';
 
 type Props = {};
@@ -47,68 +47,55 @@ const EditorContent = ({}: Props) => {
 
   return (
     <div>
-      <button className="border-2 p-2 m-3" onClick={addTextLayerHandler}>
+      <button className="m-3 border-2 p-2" onClick={addTextLayerHandler}>
         Text 추가하기
       </button>
       <TextToolbar />
-      <div
-        className="w-96 h-96 bg-slate-400 relative ml-8"
-        onClick={unFocusLayerHandler}
-      >
-        {/* 현재는 카드가 한장이라고 고정하고 구현 */}
-        {/* @HACKS: 컴포넌트로 빼면 좋을 로직*/}
-        {cards[0]?.layers.map((layer, idx) => {
-          if (focusLayerId === layer.id) {
-            if (layer.type === 'text') {
-              //텍스트 Focus Box
-              return (
-                <FocusBox
-                  key={idx}
-                  layerId={layer.id}
-                  component={
-                    <TextBox key={idx} cardId={0} layerId={layer.id} />
-                  }
-                />
-              );
-            } else if (layer.type === 'shape') {
-              // 도형 Focus Box
-              const { type, color } = layer.content as Shape;
-              return (
-                <FocusBox
-                  key={idx}
-                  layerId={layer.id}
-                  component={<ShapeBox shapeType={type} color={color} />}
-                />
-              );
-            }
-          } else {
-            if (layer.type === 'text') {
-              // Text Layer Box
-              return (
-                <LayerBox
-                  key={idx}
-                  component={
-                    <TextBox key={idx} cardId={0} layerId={layer.id} />
-                  }
-                  position={layer.position}
-                  onClick={e => makeFocusLayerHandler(e, layer.id)}
-                />
-              );
-            } else if (layer.type === 'shape') {
-              // 도형 Layer Box
-              const { type, color } = layer.content as Shape;
-              return (
-                <LayerBox
-                  key={idx}
-                  component={<ShapeBox shapeType={type} color={color} />}
-                  position={layer.position}
-                  onClick={e => makeFocusLayerHandler(e, layer.id)}
-                />
-              );
-            }
-          }
-        })}
-      </div>
+      {/*<div className="relative ml-8 h-96 w-96 bg-slate-400" onClick={unFocusLayerHandler}>*/}
+      {/*  /!* 현재는 카드가 한장이라고 고정하고 구현 *!/*/}
+      {/*  /!* @HACKS: 컴포넌트로 빼면 좋을 로직*!/*/}
+      {/*  {cards[0]?.layers.map((layer, idx) => {*/}
+      {/*    if (focusLayerId === layer.id) {*/}
+      {/*      if (layer.type === 'text') {*/}
+      {/*        //텍스트 Focus Box*/}
+      {/*        return (*/}
+      {/*          <FocusBox*/}
+      {/*            key={idx}*/}
+      {/*            layerId={layer.id}*/}
+      {/*            component={<TextBox key={idx} cardId={0} layerId={layer.id} />}*/}
+      {/*          />*/}
+      {/*        );*/}
+      {/*      } else if (layer.type === 'shape') {*/}
+      {/*        // 도형 Focus Box*/}
+      {/*        const { type, color } = layer.content as Shape;*/}
+      {/*        return <FocusBox key={idx} layerId={layer.id} component={<ShapeBox shapeType={type} color={color} />} />;*/}
+      {/*      }*/}
+      {/*    } else {*/}
+      {/*      if (layer.type === 'text') {*/}
+      {/*        // Text Layer Box*/}
+      {/*        return (*/}
+      {/*          <LayerBox*/}
+      {/*            key={idx}*/}
+      {/*            component={<TextBox key={idx} cardId={0} layerId={layer.id} />}*/}
+      {/*            position={layer.position}*/}
+      {/*            onClick={e => makeFocusLayerHandler(e, layer.id)}*/}
+      {/*          />*/}
+      {/*        );*/}
+      {/*      } else if (layer.type === 'shape') {*/}
+      {/*        // 도형 Layer Box*/}
+      {/*        const { type, color } = layer.content as Shape;*/}
+      {/*        return (*/}
+      {/*          <LayerBox*/}
+      {/*            key={idx}*/}
+      {/*            component={<ShapeBox shapeType={type} color={color} />}*/}
+      {/*            position={layer.position}*/}
+      {/*            onClick={e => makeFocusLayerHandler(e, layer.id)}*/}
+      {/*          />*/}
+      {/*        );*/}
+      {/*      }*/}
+      {/*    }*/}
+      {/*  })}*/}
+      {/*</div>*/}
     </div>
   );
 };

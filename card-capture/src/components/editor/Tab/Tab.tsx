@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import MainTab from '@/components/editor/Tab/MainTab';
-import EditTab from '@/components/editor/Tab/EditTab';
+import EditTab from '@/components/editor/Tab/components/EditTab/EditTab';
 
 const Tab = () => {
   const [currenTab, setCurrentTab] = useState('edit');

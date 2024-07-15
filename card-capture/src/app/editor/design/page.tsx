@@ -1,7 +1,7 @@
 'use client';
 import NavigationBar from '@/components/common/NavigationBar/NavigationBar';
 import Tab from '@/components/editor/Tab/Tab';
-import EditingArea from '@/components/editor/Tab/EditingArea/EditingArea';
+import EditingArea from '@/components/editor/EditingArea/EditingArea';
 
 const EditorPage = () => {
   return (
