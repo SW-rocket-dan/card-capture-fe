@@ -6,7 +6,6 @@ import OrderBox from '@/components/editor/Tab/components/EditTab/common/OrderBox
 import { useState } from 'react';
 import IllustrationBox from '@/components/editor/Tab/components/EditTab/IllustrationEditBox/components/IllustrationBox';
 import ShapeModalBox from '@/components/editor/Tab/components/EditTab/IllustrationEditBox/components/ShapeModalBox';
-import useLayerStyles from '@/components/editor/Tab/hooks/useLayerStyles';
 
 const IllustrationEditBox = ({ focused = false }: { focused?: boolean }) => {
   const [isOpen, setIsOpen] = useState<boolean>(focused);
@@ -15,11 +14,6 @@ const IllustrationEditBox = ({ focused = false }: { focused?: boolean }) => {
   const openHandler = () => {
     setIsOpen(prev => !prev);
   };
-
-  /**
-   * 현재 선택된 이미지 데이터를 가져오고, 이미지를 설정하는 로직이 담긴 hook
-   */
-  const { position, changePositionHandler } = useLayerStyles();
 
   return (
     <div className="flex w-full flex-col border-b-[1px] border-border">

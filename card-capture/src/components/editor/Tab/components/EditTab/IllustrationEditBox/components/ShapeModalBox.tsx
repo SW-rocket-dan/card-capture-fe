@@ -8,32 +8,44 @@ import ColorButton from '@/components/editor/Tab/components/EditTab/common/Color
 import { useColor } from 'react-color-palette';
 
 const ShapeModalBox = () => {
+  // 선택된 데이터 가져오기
+  const focusedCardId = useFocusStore(state => state.focusedCardId);
+  const focusedLayerId = useFocusStore(state => state.focusedLayerId);
+  const focusedShape = useCardsStore(state => state.getShapeLayer(focusedCardId, focusedLayerId));
+
+  /**
+   * 색상 변경되면 store에 변경된 Layer 색상 업데이트하는 로직
+   */
+  const [color, setColor] = useColor(focusedShape?.color || '#AAAAAA');
+  const setShapeLayerColor = useCardsStore(state => state.setShapeLayerColor);
+
+  useEffect(() => {
+    setShapeLayerColor(focusedCardId, focusedLayerId, color.hex);
+  }, [color]);
+
+  /**
+   * 새로운 Shape Layer를 추가하는 로직
+   */
+  const addShapeLayer = useCardsStore(state => state.addShapeLayer);
+
+  const addShapeLayerHandler = (type: ShapeType) => {
+    addShapeLayer(focusedCardId, type);
+  };
+
+  /**
+   * 드롭다운 열고 닫는 로직
+   */
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const openHandler = () => {
     setIsOpen(prev => !prev);
   };
 
-  const focusedCardId = useFocusStore(state => state.focusedCardId);
-  const focusedLayerId = useFocusStore(state => state.focusedLayerId);
-  const focusedShape = useCardsStore(state => state.getShapeLayer(focusedCardId, focusedLayerId));
-
-  const setShapeLayerColor = useCardsStore(state => state.setShapeLayerColor);
-
-  const [color, setColor] = useColor(focusedShape?.color || '#AAAAAA');
-
-  useEffect(() => {
-    setShapeLayerColor(focusedCardId, focusedLayerId, color.hex);
-  }, [color]);
-
-  const addShapeLayer = useCardsStore(state => state.addShapeLayer);
-  const addShapeLayerHandler = (type: ShapeType) => {
-    addShapeLayer(focusedCardId, type);
-  };
-
   // 컴포넌트 외부 클릭시 모달 닫는 hook
   const ref = useClickOutside(() => setIsOpen(false));
 
+  // @TODO : 도형 추후에 svg 파일로 변경해야 함
+  
   return (
     <div ref={ref} className="relative">
       <div className="flex flex-col gap-2 rounded-[10px] border-[1px] border-border px-[10px] py-[10px]">

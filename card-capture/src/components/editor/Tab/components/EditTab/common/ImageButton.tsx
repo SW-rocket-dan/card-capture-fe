@@ -9,6 +9,9 @@ type ImageButtonProps = {
 const ImageButton = ({ onChangeImage }: ImageButtonProps) => {
   const imgRef = useRef<HTMLInputElement | null>(null);
 
+  /**
+   * 이미지 버튼을 클릭하면 image input이 열리게 하는 로직
+   */
   const openImageInput = () => {
     if (!imgRef || !imgRef.current) return;
 

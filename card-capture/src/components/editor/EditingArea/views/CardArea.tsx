@@ -20,6 +20,7 @@ const CardArea = ({ card }: { card: Card }) => {
 
   const makeFocusLayerHandler = (e: React.MouseEvent, id: number) => {
     e.stopPropagation();
+
     setFocusedLayerId(id);
     setFocusedCardId(cardId);
   };
@@ -30,6 +31,7 @@ const CardArea = ({ card }: { card: Card }) => {
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-[10px] bg-editorbg">
+      {/* 카드 추가 관리 박스 / 레이어 추가 관리 박스*/}
       <div className="flex w-[550px] flex-row justify-between">
         <CardAddBox />
         <div className="flex flex-row items-center gap-[10px]">
@@ -39,6 +41,8 @@ const CardArea = ({ card }: { card: Card }) => {
           </Button>
         </div>
       </div>
+
+      {/* */}
       <div
         className="relative h-[550px] w-[550px] overflow-hidden border-[1px] border-border bg-white"
         style={{
@@ -52,8 +56,6 @@ const CardArea = ({ card }: { card: Card }) => {
         }}
         onClick={unFocusLayerHandler}
       >
-        {/* 현재는 카드가 한장이라고 고정하고 구현 */}
-        {/* @HACKS: 컴포넌트로 빼면 좋을 로직*/}
         {card.layers.map((layer, idx) => {
           if (focusedLayerId === layer.id) {
             if (layer.type === 'text') {

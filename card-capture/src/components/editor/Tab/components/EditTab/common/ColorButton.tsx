@@ -23,6 +23,9 @@ const ColorButton = ({
   direction = 'down',
   size,
 }: ColorButtonProps) => {
+  /**
+   * 색상 선택 드롭다운 여닫는 click Handler
+   */
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const openHandler = (e: React.MouseEvent<HTMLButtonElement>) => {

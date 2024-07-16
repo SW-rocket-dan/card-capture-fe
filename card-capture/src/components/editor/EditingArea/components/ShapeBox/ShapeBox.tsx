@@ -7,6 +7,8 @@ type Props = {
   color: string;
 };
 const ShapeBox = ({ shapeType, color }: Props) => {
+  //@TODO svg 파일로 변경해야함. 후에는 svg 파일을 렌더링만 하도록 수정
+
   if (shapeType === 'rect') {
     return <div className="h-full w-full" style={{ background: color }}></div>;
   }

@@ -6,11 +6,9 @@ import AngleIcon from '@/components/common/Icon/AngleIcon';
 import { useEffect, useState } from 'react';
 import useLayerStyles from '@/components/editor/Tab/hooks/useLayerStyles';
 
-type SizeBoxProps = {};
-
 const SizeBox = () => {
   /**
-   * 현재 선택된 이미지 데이터를 가져오고, 이미지를 설정하는 로직이 담긴 hook
+   * 현재 선택된 이미지의 데이터를 가져오고, 이미지를 설정하는 로직이 담긴 hook
    */
   const { position, changePositionHandler } = useLayerStyles();
 
@@ -18,6 +16,21 @@ const SizeBox = () => {
   const [height, setHeight] = useState<number>(0);
   const [rotate, setRotate] = useState<number>(0);
 
+  /**
+   * store에 저장된 포지션 값이 바뀔때마다 state 업데이트
+   * position 값은 편집 화면에서도 변경되기 때문에 전역 store가 업데이트될 때마다 가져와야 해당 컴포넌트에서 변경되는 값을 보여줄 수 있음
+   */
+  useEffect(() => {
+    if (!position) return;
+
+    setWidth(Math.floor(position.width));
+    setHeight(Math.floor(position.height));
+    setRotate(Math.floor(position.rotate));
+  }, [position]);
+
+  /**
+   * 값이 입력될 때 상태값을 변경시켜주는 change handler
+   */
   const changeSizeHandler = (type: string, e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Math.floor(parseInt(e.target.value));
 
@@ -26,6 +39,10 @@ const SizeBox = () => {
     if (type === 'rotate') setRotate(value);
   };
 
+  /**
+   * 전역 store에 위치값을 업데이트 하는 함수
+   * 입력될 때마다 저장하게 되면 오류가 발생하기 때문에 blur 되었을 때, keydown 되었을 때 업데이트 하도록 설정함
+   */
   const updateSizeHandler = () => {
     changePositionHandler({ width, height, rotate });
   };
@@ -35,14 +52,6 @@ const SizeBox = () => {
       updateSizeHandler();
     }
   };
-
-  useEffect(() => {
-    if (!position) return;
-
-    setWidth(Math.floor(position.width));
-    setHeight(Math.floor(position.height));
-    setRotate(Math.floor(position.rotate));
-  }, [position]);
 
   return (
     <div className="flex flex-row items-center justify-between">

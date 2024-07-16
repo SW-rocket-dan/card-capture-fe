@@ -10,6 +10,9 @@ type ColorPickerProps = {
 };
 
 const ColorPicker = ({ color, setColor }: ColorPickerProps) => {
+  /**
+   * react-color-palette 라이브러리에서 선택한 색상을 hex,rgb,hsv로 변환해서 상태에 저장하는 핸들러
+   */
   const handleChangeColor = (e: ChangeEvent<HTMLInputElement>) => {
     const newColor = e.target.value.toUpperCase();
 
@@ -39,7 +42,7 @@ const ColorPicker = ({ color, setColor }: ColorPickerProps) => {
           <div className="flex flex-row items-center justify-between rounded-md bg-itembg px-3 py-2 text-xs">
             <input
               className="bg-transparent font-bold outline-none"
-              value={color.hex.slice(1, 7)}
+              value={color.hex.slice(1, 7)} // 앞에 # 삭제하기 위한 슬라이싱
               maxLength={6}
               onChange={handleChangeColor}
             />

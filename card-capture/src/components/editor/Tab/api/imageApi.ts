@@ -14,6 +14,9 @@ const getPreSignedUrl = async (queryString: string) => {
   }
 };
 
+/**
+ * presigned-url에 이미지 퍼일을 전송하는 put api
+ */
 const putImage = async (imageFile: File, presignedUrl: string) => {
   try {
     const response = await fetch(presignedUrl, {

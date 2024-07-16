@@ -6,7 +6,7 @@ import useClickOutside from '@/hooks/useClickOutside';
 
 const SpacingButton = () => {
   /**
-   * 간격 조절하는 버튼 드롭다운을 여닫는 click handler
+   * 드롭다운을 여닫는 click handler
    */
   const [isOpen, setIsOpen] = useState<boolean>(false);
 

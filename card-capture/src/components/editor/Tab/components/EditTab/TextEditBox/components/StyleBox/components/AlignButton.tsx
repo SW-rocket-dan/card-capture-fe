@@ -7,9 +7,12 @@ import useTextFormatting from '@/components/editor/Tab/components/EditTab/TextEd
 import useClickOutside from '@/hooks/useClickOutside';
 
 const AlignButton = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [alignment, setAlignment] = useState('left');
   const { changeStyleHandler } = useTextFormatting();
+
+  /**
+   * 현재 선택된 정렬대로 아이콘 렌더링하는 로직
+   */
+  const [alignment, setAlignment] = useState('left');
 
   const currentAlignmentIcon = (align: string) => {
     if (align === 'left') return <AlignLeftIcon height={13} className="text-defaultBlack" />;
@@ -18,15 +21,24 @@ const AlignButton = () => {
     return <AlignJustifyIcon height={15} />;
   };
 
-  const openHandler = () => {
-    setIsOpen(prev => !prev);
-  };
-
+  /**
+   * 선택된 정렬대로 store에 있는 텍스트에 적용하는 로직
+   */
   const changeAlignmentHandler = (align: string) => {
     setAlignment(align);
     changeStyleHandler('align', align === 'left' ? '' : align);
   };
 
+  /**
+   * 드롭다운 열고 닫는 로직
+   */
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const openHandler = () => {
+    setIsOpen(prev => !prev);
+  };
+
+  // 컴포넌트 외부 클릭시 모달 닫는 hook
   const ref = useClickOutside(() => setIsOpen(false));
 
   return (

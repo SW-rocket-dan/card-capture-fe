@@ -15,6 +15,10 @@ const ImageEditBox = ({ focused = false }: { focused?: boolean }) => {
   };
 
   const [opacity, setOpacity] = useState<number>(100);
+
+  /**
+   * 새로운 Image Layer를 추가하는 로직
+   */
   const { addImageLayerHandler } = useImageUploader();
 
   return (
