@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Background, Card, Cards, Layer, Position, ShapeType, Text } from './type';
+import { Background, Card, Cards, Layer, Position, Shape, ShapeType, Text } from './type';
 import { Draft, produce } from 'immer';
 import ReactQuill from 'react-quill';
 
@@ -49,6 +49,9 @@ type useCardsStore = {
   setBackgroundColor: (cardId: number, backgroundColor: string) => void;
   setBackground: (cardId: number, background: Background) => void;
   getBackground: (cardId: number) => Background | null;
+
+  setShapeLayerColor: (cardId: number, layerId: number, color: string) => void;
+  getShapeLayer: (cardId: number, layerId: number) => Shape | null;
 
   addTextLayer: (cardId: number) => void;
   addImageLayer: (
@@ -187,6 +190,31 @@ export const useCardsStore = create<useCardsStore>()((set, get) => ({
     if (!card) return null;
 
     return card.background;
+  },
+
+  setShapeLayerColor: (cardId, layerId, color) =>
+    set(
+      produce(draft => {
+        const card = draft.cards.find((card: Card) => card.id === cardId);
+
+        if (card) {
+          const layer = card.layers.find((layer: Layer) => layer.id === layerId);
+
+          if (layer && layer.type === 'shape') {
+            (layer.content as Shape).color = color;
+          }
+        }
+      }),
+    ),
+
+  getShapeLayer: (cardId, layerId) => {
+    const card = get().cards.find(({ id }) => id === cardId);
+    if (!card) return null;
+
+    const layer = card.layers.find(({ id }) => id === layerId);
+    if (!layer) return null;
+
+    return layer.content as Shape;
   },
 
   addTextLayer: (cardId: number) =>

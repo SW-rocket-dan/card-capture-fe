@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CloseIcon from '@/components/common/Icon/CloseIcon';
 import { ShapeType } from '@/store/useCardsStore/type';
 import { useCardsStore } from '@/store/useCardsStore';
 import { useFocusStore } from '@/store/useFocusStore';
 import useClickOutside from '@/hooks/useClickOutside';
+import ColorButton from '@/components/editor/Tab/components/EditTab/common/ColorButton';
+import { useColor } from 'react-color-palette';
 
 const ShapeModalBox = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -12,9 +14,19 @@ const ShapeModalBox = () => {
     setIsOpen(prev => !prev);
   };
 
-  const addShapeLayer = useCardsStore(state => state.addShapeLayer);
   const focusedCardId = useFocusStore(state => state.focusedCardId);
+  const focusedLayerId = useFocusStore(state => state.focusedLayerId);
+  const focusedShape = useCardsStore(state => state.getShapeLayer(focusedCardId, focusedLayerId));
 
+  const setShapeLayerColor = useCardsStore(state => state.setShapeLayerColor);
+
+  const [color, setColor] = useColor(focusedShape?.color || '#AAAAAA');
+
+  useEffect(() => {
+    setShapeLayerColor(focusedCardId, focusedLayerId, color.hex);
+  }, [color]);
+
+  const addShapeLayer = useCardsStore(state => state.addShapeLayer);
   const addShapeLayerHandler = (type: ShapeType) => {
     addShapeLayer(focusedCardId, type);
   };
@@ -27,9 +39,7 @@ const ShapeModalBox = () => {
       <div className="flex flex-col gap-2 rounded-[10px] border-[1px] border-border px-[10px] py-[10px]">
         <div className="flex flex-row items-center justify-between">
           <p className="text-xs text-gray4">도형</p>
-          <button onClick={openHandler} className="flex flex-row text-[10px] text-gray4">
-            더보기 &gt;{' '}
-          </button>
+          <ColorButton className="h-4 w-[30px] rounded-[5px]" size="w-[30px] h-4" color={color} setColor={setColor} />
         </div>
         <div className="flex flex-row gap-[5px]">
           <button

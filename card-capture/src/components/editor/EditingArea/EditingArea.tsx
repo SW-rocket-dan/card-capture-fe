@@ -23,7 +23,7 @@ const EditingArea = () => {
   }, []);
 
   return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-[17px] bg-editorbg pl-[350px]">
+    <div className="flex h-full flex-1 flex-col items-center justify-center gap-[17px] overscroll-none bg-editorbg pl-[350px]">
       {cards.map(card => (
         <CardArea key={card.id} card={card} />
       ))}

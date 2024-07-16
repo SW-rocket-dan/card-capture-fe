@@ -11,6 +11,7 @@ type ColorButtonProps = {
   hover?: boolean;
   disabled?: boolean;
   direction?: string;
+  size?: string;
 };
 
 const ColorButton = ({
@@ -20,6 +21,7 @@ const ColorButton = ({
   hover = true,
   disabled = false,
   direction = 'down',
+  size,
 }: ColorButtonProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -34,7 +36,7 @@ const ColorButton = ({
   return (
     <div ref={ref} className="relative">
       <div
-        className={`flex h-[30px] w-[30px] items-center justify-center rounded-md ${hover ? 'hover:bg-itembg' : ''}`}
+        className={`flex items-center justify-center rounded-md ${hover ? 'hover:bg-itembg' : ''} ${size ? `${size}` : 'h-[30px] w-[30px]'}`}
       >
         <button
           disabled={disabled}
