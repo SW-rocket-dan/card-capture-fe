@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { Background, Card, Cards, Layer, Position, Shape, ShapeType, Text } from './type';
 import { Draft, produce } from 'immer';
 import ReactQuill from 'react-quill';
+import { useFocusStore } from '@/store/useFocusStore';
 
 export const INITIAL_CARD: Card = {
   id: 0,
@@ -225,8 +226,10 @@ export const useCardsStore = create<useCardsStore>()((set, get) => ({
             cards: Card[];
           }>,
         ) => {
+          const newLayerId = draft.cards[cardId].layers.length + 1;
+
           draft.cards[cardId].layers.push({
-            id: draft.cards[cardId].layers.length + 1,
+            id: newLayerId,
             type: 'text',
             content: {
               content: '',
@@ -241,6 +244,8 @@ export const useCardsStore = create<useCardsStore>()((set, get) => ({
               opacity: 100,
             },
           });
+
+          useFocusStore.getState().updateFocus(cardId, newLayerId);
         },
       ),
     ),
@@ -253,8 +258,10 @@ export const useCardsStore = create<useCardsStore>()((set, get) => ({
             cards: Card[];
           }>,
         ) => {
+          const newLayerId = draft.cards[cardId].layers.length + 1;
+
           draft.cards[cardId].layers.push({
-            id: draft.cards[cardId].layers.length + 1,
+            id: newLayerId,
             type: 'image',
             content: {
               url: url,
@@ -273,6 +280,8 @@ export const useCardsStore = create<useCardsStore>()((set, get) => ({
               opacity: 100,
             },
           });
+
+          useFocusStore.getState().updateFocus(cardId, newLayerId);
         },
       ),
     ),
@@ -285,8 +294,9 @@ export const useCardsStore = create<useCardsStore>()((set, get) => ({
             cards: Card[];
           }>,
         ) => {
+          const newLayerId = draft.cards[cardId].layers.length + 1;
           draft.cards[cardId].layers.push({
-            id: draft.cards[cardId].layers.length + 1,
+            id: newLayerId,
             type: 'shape',
             content: {
               type: type,
@@ -302,6 +312,8 @@ export const useCardsStore = create<useCardsStore>()((set, get) => ({
               opacity: 100,
             },
           });
+
+          useFocusStore.getState().updateFocus(cardId, newLayerId);
         },
       ),
     ),

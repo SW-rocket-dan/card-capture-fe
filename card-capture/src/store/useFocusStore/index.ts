@@ -10,6 +10,8 @@ type useFocusStore = {
   setFocusedCardId: (focusedId: number) => void;
   setFocusedLayerId: (focusId: number) => void;
   setCurrentRef: (ref: MutableRefObject<ReactQuill | null> | null) => void;
+
+  updateFocus: (cardId: number, layerId: number) => void;
 };
 
 export const useFocusStore = create<useFocusStore>()(set => ({
@@ -20,4 +22,6 @@ export const useFocusStore = create<useFocusStore>()(set => ({
   setFocusedCardId: focusedId => set({ focusedCardId: focusedId }),
   setFocusedLayerId: focusedId => set({ focusedLayerId: focusedId }),
   setCurrentRef: ref => set({ currentRef: ref }),
+
+  updateFocus: (cardId, layerId) => set({ focusedCardId: cardId, focusedLayerId: layerId }),
 }));
