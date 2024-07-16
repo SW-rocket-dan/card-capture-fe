@@ -48,6 +48,7 @@ type useCardsStore = {
   getPosition: (cardId: number, layerId: number) => Position | null;
 
   setBackgroundColor: (cardId: number, backgroundColor: string) => void;
+  setBackgroundUrl: (cardId: number, backgroundUrl: string) => void;
   setBackground: (cardId: number, background: Background) => void;
   getBackground: (cardId: number) => Background | null;
 
@@ -166,7 +167,7 @@ export const useCardsStore = create<useCardsStore>()((set, get) => ({
     return layer.position;
   },
 
-  setBackgroundColor: (cardId: number, backgroundColor: string) =>
+  setBackgroundColor: (cardId: number, backgroundColor: string) => {
     set(
       produce(draft => {
         const card = draft.cards.find((card: Card) => card.id === cardId);
@@ -174,9 +175,23 @@ export const useCardsStore = create<useCardsStore>()((set, get) => ({
           card.background = { ...card.background, color: backgroundColor };
         }
       }),
-    ),
+    );
+  },
 
-  setBackground: (cardId: number, background: Background) =>
+  setBackgroundUrl: (cardId, backgroundUrl) => {
+    console.log('!!!!!');
+    set(
+      produce(draft => {
+        const card = draft.cards.find((card: Card) => card.id === cardId);
+        if (card) {
+          card.background.url = backgroundUrl;
+        }
+      }),
+    );
+  },
+
+  setBackground: (cardId: number, background: Background) => {
+    console.log('????');
     set(
       produce(draft => {
         const card = draft.cards.find((card: Card) => card.id === cardId);
@@ -184,7 +199,8 @@ export const useCardsStore = create<useCardsStore>()((set, get) => ({
           card.background = background;
         }
       }),
-    ),
+    );
+  },
 
   getBackground: (cardId: number) => {
     const card = get().cards.find(({ id }) => id === cardId);

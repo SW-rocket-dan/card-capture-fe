@@ -7,14 +7,19 @@ import ColorButton from '@/components/editor/Tab/components/EditTab/common/Color
 import { useColor } from 'react-color-palette';
 import { useCardsStore } from '@/store/useCardsStore';
 import { useFocusStore } from '@/store/useFocusStore';
+import useImageUploader from '@/hooks/useImageUploader';
 
 const BackgroundEditBox = ({ focused = false }: { focused?: boolean }) => {
   const focusedCardId = useFocusStore(state => state.focusedCardId);
-  const background = useCardsStore(state => state.getBackground(focusedCardId));
+  const background = useCardsStore(state => state.getBackground(focusedCardId))!;
   const setBackground = useCardsStore(state => state.setBackground);
 
   const [color, setColor] = useColor(background?.color || '#FFFFFF');
   const [opacity, setOpacity] = useState<number>(100);
+
+  useEffect(() => {
+    setBackground(focusedCardId, { ...background, color: color.hex, opacity: opacity });
+  }, [color, opacity]);
 
   const [isOpen, setIsOpen] = useState<boolean>(focused);
 
@@ -22,9 +27,7 @@ const BackgroundEditBox = ({ focused = false }: { focused?: boolean }) => {
     setIsOpen(prev => !prev);
   };
 
-  useEffect(() => {
-    setBackground(focusedCardId, { ...background, color: color.hex, opacity: opacity, url: '' });
-  }, [color, opacity]);
+  const { addBackgroundImageHandler } = useImageUploader();
 
   return (
     <div className="flex w-full flex-col border-b-[1px] border-border">
@@ -40,7 +43,7 @@ const BackgroundEditBox = ({ focused = false }: { focused?: boolean }) => {
       </div>
       {isOpen && (
         <div className="flex flex-col gap-[12px] px-[15px] pb-[20px]">
-          <ImageButton />
+          <ImageButton onChangeImage={addBackgroundImageHandler} />
           <OpacityButton opacity={opacity} setOpacity={setOpacity} />
         </div>
       )}

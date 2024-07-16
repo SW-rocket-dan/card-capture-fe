@@ -1,5 +1,5 @@
 import { useFocusStore } from '@/store/useFocusStore';
-import { INITIAL_POSITION, useCardsStore } from '@/store/useCardsStore';
+import { useCardsStore } from '@/store/useCardsStore';
 import { Position } from '@/store/useCardsStore/type';
 
 const useLayerStyles = () => {

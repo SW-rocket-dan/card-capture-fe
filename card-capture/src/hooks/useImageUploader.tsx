@@ -42,8 +42,7 @@ const useImageUploader = () => {
    * 서버에 저장한 이미지를 배경으로 등록하는 로직
    * 카드의 크기인 550px 기준으로 width를 조정해서 저장
    */
-  const focusedBackground = useCardsStore(state => state.getBackground(focusedCardId))!;
-  const setBackground = useCardsStore(state => state.setBackground);
+  const setBackgroundUrl = useCardsStore(state => state.setBackgroundUrl);
 
   const addBackgroundImageHandler = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
@@ -51,7 +50,7 @@ const useImageUploader = () => {
     const imageFile = event.target.files[0];
     const imageUrl = await uploadImageToS3(imageFile);
 
-    setBackground(focusedCardId, { ...focusedBackground, url: imageUrl });
+    setBackgroundUrl(focusedCardId, imageUrl);
   };
 
   return { uploadImageToS3, addImageLayerHandler, addBackgroundImageHandler };
