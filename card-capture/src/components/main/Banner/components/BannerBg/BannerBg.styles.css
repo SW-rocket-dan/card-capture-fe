@@ -1,8 +1,8 @@
 
 .left-top-gradation {
     position: absolute;
-    width: 800px;
-    height: 1000px;
+    width: 700px;
+    height: 800px;
     left: 0px;
     top: 0px;
 
@@ -13,10 +13,10 @@
 
 .left-bottom-gradation {
     position: absolute;
-    width: 730px;
-    height: 677px;
-    left: -80px;
-    top: 203px;
+    width: 630px;
+    height: 577px;
+    left: 10px;
+    top: 150px;
 
     background: radial-gradient(41.2% 42.94% at 52.53% 51.97%, #F3D0FF 0%, rgba(243, 208, 255, 0.845) 31.44%, rgba(255, 255, 255, 0) 100%);
     opacity: 0.4;
@@ -26,8 +26,8 @@
 
 .right-middle-gradation {
     position: absolute;
-    width: 830px;
-    height: 788px;
+    width: 630px;
+    height: 688px;
     /*left: 799px;*/
     right: -80px;
     top: 100px;
@@ -40,13 +40,13 @@
 
 .right-bottom-gradation {
     position: absolute;
-    width: 1099px;
-    height: 1000px;
+    width: 899px;
+    height: 900px;
     /*left: 520px;*/
     right: -300px;
     top: -19px;
 
-    background: linear-gradient(219.57deg, #C6C5FF 1.96%, rgba(255, 255, 255, 0) 46.99%);
+    background: linear-gradient(219.57deg, #C6C5FF 1.96%, rgba(255, 255, 255, 0) 48.99%);
     transform: rotate(90deg);
     z-index: 1;
 
