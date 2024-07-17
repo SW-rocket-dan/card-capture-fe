@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 const BannerText = () => {
   return (
-    <div className="flex flex-col gap-[30px]">
+    <div className="flex flex-col gap-[20px]">
       <div className="flex flex-col">
         <div className="flex flex-row items-center justify-center gap-3">
           <div className="h-[55px] w-[55px]">
@@ -34,7 +34,10 @@ const BannerText = () => {
         </div>
       </div>
 
-      <div className="flex items-center justify-center space-x-1 text-[18px] font-medium text-gray4">
+      <div
+        className="flex items-center justify-center space-x-1 text-[17px] font-medium text-gray4"
+        style={{ letterSpacing: '-0.018em' }}
+      >
         <span>지금 가입하고</span>
         <span className="font-semibold text-defaultBlack">✨카드뉴스 10장✨</span>을<span> 무료로 제작하세요!</span>
       </div>
