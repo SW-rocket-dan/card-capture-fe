@@ -19,6 +19,7 @@ const config = {
         icon: '#8E99A3',
         editorbg: '#F0F0F0',
         itembg: '#F5F5F5',
+        bannerbg: '#F5F5FB',
         gray1: '#666666',
         gray2: '#555555',
         gray3: '#707070',

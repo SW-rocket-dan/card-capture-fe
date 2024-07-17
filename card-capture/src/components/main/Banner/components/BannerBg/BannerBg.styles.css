@@ -1,0 +1,48 @@
+
+.left-top-gradation {
+    position: absolute;
+    width: 800px;
+    height: 1000px;
+    left: 0px;
+    top: 0px;
+
+    background: linear-gradient(126.88deg, #C6C5FF -0.61%, rgba(255, 255, 255, 0) 39.89%);
+    opacity: 0.6;
+
+}
+
+.left-bottom-gradation {
+    position: absolute;
+    width: 730px;
+    height: 677px;
+    left: -80px;
+    top: 203px;
+
+    background: radial-gradient(41.2% 42.94% at 52.53% 51.97%, #F3D0FF 0%, rgba(243, 208, 255, 0.845) 31.44%, rgba(255, 255, 255, 0) 100%);
+    opacity: 0.4;
+
+}
+
+.right-middle-gradation {
+    position: absolute;
+    width: 830px;
+    height: 788px;
+    left: 799px;
+    top: 100px;
+
+    background: radial-gradient(34.31% 36.14% at 50% 35.34%, #D0EBFF 0%, rgba(208, 235, 255, 0.845) 15.5%, rgba(255, 255, 255, 0) 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+    opacity: 0.6;
+
+}
+
+.right-bottom-gradation {
+    position: absolute;
+    width: 1099px;
+    height: 1000px;
+    left: 720px;
+    top: -19px;
+
+    background: linear-gradient(219.57deg, #C6C5FF 1.96%, rgba(255, 255, 255, 0) 46.99%);
+    transform: rotate(90deg);
+
+}
