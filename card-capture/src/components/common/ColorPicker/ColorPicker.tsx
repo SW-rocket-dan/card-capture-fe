@@ -1,6 +1,8 @@
-import { Alpha, Hue, IColor, Saturation, useColor } from 'react-color-palette';
+import { Alpha, Hue, IColor, Saturation } from 'react-color-palette';
 import 'react-color-palette/css';
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import './ColorPicker.styles.css';
+import { hexToRgba, rgbaToHsva } from '@/components/common/ColorPicker/colorUtils';
 
 type ColorPickerProps = {
   color: IColor;
@@ -8,6 +10,9 @@ type ColorPickerProps = {
 };
 
 const ColorPicker = ({ color, setColor }: ColorPickerProps) => {
+  /**
+   * react-color-palette 라이브러리에서 선택한 색상을 hex,rgb,hsv로 변환해서 상태에 저장하는 핸들러
+   */
   const handleChangeColor = (e: ChangeEvent<HTMLInputElement>) => {
     const newColor = e.target.value.toUpperCase();
 
@@ -27,73 +32,21 @@ const ColorPicker = ({ color, setColor }: ColorPickerProps) => {
     }
   };
 
-  /**
-   * HEX 색상을 RGBA로 변환하는 유틸리티 함수
-   */
-  const hexToRgba = (hex: string) => {
-    let r = 0,
-      g = 0,
-      b = 0;
-    if (hex.length === 4) {
-      r = parseInt(hex[1] + hex[1], 16);
-      g = parseInt(hex[2] + hex[2], 16);
-      b = parseInt(hex[3] + hex[3], 16);
-    } else if (hex.length === 7) {
-      r = parseInt(hex[1] + hex[2], 16);
-      g = parseInt(hex[3] + hex[4], 16);
-      b = parseInt(hex[5] + hex[6], 16);
-    }
-    return { r, g, b, a: 1 };
-  };
-
-  /**
-   *  RGBA 색상을 HSVA로 변환하는 유틸리티 함수
-   */
-  const rgbaToHsva = ({ r, g, b, a }: { r: number; g: number; b: number; a: number }) => {
-    r /= 255;
-    g /= 255;
-    b /= 255;
-    const max = Math.max(r, g, b),
-      min = Math.min(r, g, b);
-    let h = 0,
-      s = 0,
-      l = (max + min) / 2;
-
-    if (max !== min) {
-      const d = max - min;
-      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-      switch (max) {
-        case r:
-          h = (g - b) / d + (g < b ? 6 : 0);
-          break;
-        case g:
-          h = (b - r) / d + 2;
-          break;
-        case b:
-          h = (r - g) / d + 4;
-          break;
-      }
-      h /= 6;
-    }
-
-    return { h: h * 360, s: s * 100, v: l * 100, a };
-  };
-
   return (
     <div className="flex w-full flex-col pb-4">
-      <div className="flex w-[250px] flex-col gap-3">
-        <Saturation height={250} color={color} onChange={setColor} />
-        <div className="flex flex-col gap-3 px-4">
+      <div className="flex w-[230px] flex-col gap-3">
+        <Saturation height={230} color={color} onChange={setColor} />
+        <div className="flex flex-col gap-2.5 px-4">
           <Hue color={color} onChange={setColor} />
           <Alpha color={color} onChange={setColor} />
-          <div className="flex flex-row items-center justify-between rounded-md bg-itembg px-3 py-2 text-sm">
+          <div className="flex flex-row items-center justify-between rounded-md bg-itembg px-3 py-2 text-xs">
             <input
               className="bg-transparent font-bold outline-none"
-              value={color.hex.slice(1, 7)}
+              value={color.hex.slice(1, 7)} // 앞에 # 삭제하기 위한 슬라이싱
               maxLength={6}
               onChange={handleChangeColor}
             />
-            <p className="text-xs font-bold text-gray2">HEX</p>
+            <p className="text-[11px] font-bold text-gray2">HEX</p>
           </div>
         </div>
       </div>

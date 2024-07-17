@@ -2,8 +2,8 @@ import BeforeLoginNav from '@/components/common/NavigationBar/BeforeLoginNav';
 
 const NavigationBar = () => {
   return (
-    <div className="flex w-full h-[80px] bg-white border-b-[1px] border-border px-[30px] items-center justify-between">
-      <div className="text-lg">Card Capture</div>
+    <div className="fixed left-0 top-0 flex min-h-[65px] w-full items-center justify-between border-b-[1px] border-border bg-white px-[30px]">
+      <div className="text-md">Card Capture</div>
       <BeforeLoginNav />
     </div>
   );

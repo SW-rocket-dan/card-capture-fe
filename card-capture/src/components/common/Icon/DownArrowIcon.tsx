@@ -6,7 +6,7 @@ const DownArrowIcon = (props: SVGProps<SVGSVGElement>) => {
       <path
         d="M13 9L7 15M7 15L1 9M7 15V1"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1.7"
         strokeLinecap="round"
         strokeLinejoin="round"
       />

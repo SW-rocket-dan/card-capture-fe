@@ -25,6 +25,8 @@ const config = {
         gray4: '#777777',
         gray5: '#999999',
         gray6: '#DDDDDD',
+        gray7: '#AAAAAA',
+        gray8: '#D9D9D9',
         'light-gray': '#F9F9F9',
         defaultBlack: '#111111',
       },
