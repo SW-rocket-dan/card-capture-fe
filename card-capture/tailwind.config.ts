@@ -30,6 +30,7 @@ const config = {
         gray8: '#D9D9D9',
         'light-gray': '#F9F9F9',
         defaultBlack: '#111111',
+        highlightBorder: '#E3746D',
       },
       fontFamily: {
         Pretendard: ['Pretendard'],
