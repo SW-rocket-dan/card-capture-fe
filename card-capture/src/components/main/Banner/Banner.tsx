@@ -5,9 +5,9 @@ import BannerImage from '@/components/main/Banner/components/BannerImage/BannerI
 
 const Banner = () => {
   return (
-    <div className="relative flex h-dvh w-full items-center justify-center overflow-hidden">
+    <div className="relative flex h-fit w-full items-center justify-center overflow-hidden md:h-dvh">
       <BannerBg />
-      <div className="flex w-fit flex-col items-center justify-center gap-[30px]">
+      <div className="flex w-fit flex-col items-center justify-center gap-[30px] py-[100px]">
         <BannerText />
         <BannerButton />
         <BannerImage />

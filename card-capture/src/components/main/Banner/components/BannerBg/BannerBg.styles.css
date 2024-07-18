@@ -41,12 +41,12 @@
 .right-bottom-gradation {
     position: absolute;
     width: 899px;
-    height: 1200px;
+    height: 1500px;
     /*left: 520px;*/
-    right: -300px;
-    top: -19px;
+    right: -200px;
+    top: -30px;
 
-    background: linear-gradient(219.57deg, #C6C5FF 1.96%, rgba(255, 255, 255, 0) 48.99%);
+    background: linear-gradient(219.57deg, #C6C5FF 1.96%, rgba(255, 255, 255, 0) 55.99%);
     transform: rotate(90deg);
     z-index: 1;
 

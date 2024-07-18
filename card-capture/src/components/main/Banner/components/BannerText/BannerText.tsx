@@ -1,5 +1,3 @@
-import Image from 'next/image';
-
 const BannerText = () => {
   return (
     <div className="flex flex-col gap-[15px]">
