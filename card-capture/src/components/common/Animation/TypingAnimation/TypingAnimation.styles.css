@@ -1,0 +1,41 @@
+.wrapper {
+    height: 100%;
+}
+
+.typing-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.typing-demo {
+    width: 0;
+    animation: typing 2s steps(22, end) forwards;
+    white-space: nowrap;
+    overflow: hidden;
+
+}
+
+.typing-demo.typing-done {
+    border-right: transparent;
+}
+
+@keyframes typing {
+    from {
+        width: 0;
+        border-right: 2px solid;
+
+    }
+    96% {
+        width: 96%;
+        border-right: 2px solid;
+    }
+
+    97% {
+        border-right: transparent;
+    }
+
+    to {
+        width: 100%;
+        border-right: transparent;
+    }
+}
