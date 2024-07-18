@@ -15,7 +15,9 @@ const config = {
     extend: {
       colors: {
         main: '#6F6CFF',
+        'light-main': '#DADAFC',
         border: '#DDDDDD',
+        lightBorder: '#EEEEEE',
         icon: '#8E99A3',
         editorbg: '#F0F0F0',
         itembg: '#F5F5F5',
@@ -35,6 +37,12 @@ const config = {
       fontFamily: {
         Pretendard: ['Pretendard'],
       },
+      letterSpacing: {
+        'little-tight': '-0.018em',
+      },
+      boxShadow: {
+        'drop-bold': '0px 4px 7px rgba(0, 0, 0, 0.3)',
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
@@ -53,6 +61,11 @@ const config = {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
+    },
+  },
+  variants: {
+    extend: {
+      boxShadow: ['active'],
     },
   },
   plugins: [require('tailwindcss-animate')],
