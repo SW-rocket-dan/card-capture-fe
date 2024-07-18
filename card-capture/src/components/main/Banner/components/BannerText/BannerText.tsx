@@ -3,7 +3,7 @@ import Image from 'next/image';
 const BannerText = () => {
   return (
     <div className="flex flex-col gap-[15px]">
-      <div className="flex flex-col">
+      <div className="flex flex-col items-center justify-center pr-6">
         <div className="flex flex-row items-center justify-center gap-2 md:gap-3">
           <div className="h-[27px] w-[27px] sm:h-[35px] sm:w-[35px] md:h-[40px] md:w-[40px] lg:h-[55px] lg:w-[55px]">
             <img src="/image/message.png" alt="message" className="h-full w-full" />
@@ -15,10 +15,7 @@ const BannerText = () => {
             문구만 넣으면 AI가
           </p>
         </div>
-        <div
-          className="-mt-2 flex flex-row gap-2 whitespace-nowrap text-[30px] font-extrabold text-main sm:text-[35px] md:gap-3 md:text-[50px] lg:gap-4 lg:text-[60px]"
-          style={{ letterSpacing: '-0.018em' }}
-        >
+        <div className="tracking-little-tight -mt-2 flex flex-row gap-2 whitespace-nowrap text-[30px] font-extrabold text-main sm:text-[35px] md:gap-3 md:text-[50px] lg:gap-4 lg:text-[60px]">
           <p>카드뉴스 3분만에</p>
           <div className="relative inline-block">
             <div className="bg-highlightBorder absolute left-[-1px] top-0 h-[7px] w-[7px] md:left-[-2px] md:h-[8px] md:w-[8px] lg:left-[-3px] lg:h-[9px] lg:w-[9px]" />
@@ -35,10 +32,7 @@ const BannerText = () => {
         </div>
       </div>
 
-      <div
-        className="flex items-center justify-center space-x-1 whitespace-nowrap text-[14px] font-medium text-gray4 md:text-[15px] lg:text-[17px]"
-        style={{ letterSpacing: '-0.018em' }}
-      >
+      <div className="tracking-little-tight flex items-center justify-center space-x-1 whitespace-nowrap text-[14px] font-medium text-gray4 md:text-[15px] lg:text-[17px]">
         <span>지금 가입하고</span>
         <span className="font-semibold text-defaultBlack">✨카드뉴스 5장✨</span>을<span> 무료로 제작하세요!</span>
       </div>
