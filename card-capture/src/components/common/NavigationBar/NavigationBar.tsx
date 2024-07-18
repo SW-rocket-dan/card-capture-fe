@@ -11,11 +11,12 @@ const NavigationBar = ({ isTransparent = false }: NavigationBarProps) => {
    * 메인 화면에서 위치에 따라서 투명 -> 흰 배경으로 바뀌어야 해서 구현
    */
   const [navBg, setNavBg] = useState('bg-transparent');
+  const documentHeight = document.documentElement.clientHeight - 65; // 뷰포트 높이 - 네비게이션바 높이
 
   const scrollNavHandler = () => {
     if (!isTransparent) return;
 
-    if (window.scrollY > 500) {
+    if (window.scrollY > documentHeight) {
       setNavBg('bg-white');
     } else {
       setNavBg('bg-transparent');
