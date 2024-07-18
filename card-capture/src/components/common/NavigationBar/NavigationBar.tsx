@@ -6,6 +6,10 @@ type NavigationBarProps = {
 };
 
 const NavigationBar = ({ isTransparent = false }: NavigationBarProps) => {
+  /**
+   * 스크롤 위치에 따라서 네비게이션 바의 배경 색을 변경하는 로직
+   * 메인 화면에서 위치에 따라서 투명 -> 흰 배경으로 바뀌어야 해서 구현
+   */
   const [navBg, setNavBg] = useState('bg-transparent');
 
   const scrollNavHandler = () => {
@@ -30,6 +34,9 @@ const NavigationBar = ({ isTransparent = false }: NavigationBarProps) => {
     };
   }, [isTransparent]);
 
+  /**
+   * 반응형을 위해 window.innerWidth를 저장하여 모바일 화면에서는 버튼들이 숨겨지도록 처리
+   */
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {

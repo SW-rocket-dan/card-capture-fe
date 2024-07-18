@@ -6,10 +6,10 @@ const BannerImage = () => {
   const textLines = ['모아서 주는 마음이 더 기억에 남는 법!', '다른 사람들과 함께 선물을 준비해보세요'];
 
   return (
-    <div className="flex flex-row items-center justify-center gap-[40px]">
+    <div className="flex flex-row items-center justify-center gap-[40px] pt-[5px]">
       {/* 입력할 문구 div */}
-      <div className="flex h-[320px] w-[320px] flex-col rounded-[20px] bg-white drop-shadow-md">
-        <p className="border-lightBorder border-b-[1px] px-[16px] py-[12px] text-[14px] font-semibold">입력할 문구</p>
+      <div className="flex h-[300px] w-[300px] flex-col rounded-[20px] bg-white drop-shadow-md">
+        <p className="border-lightBorder border-b-[1px] px-[16px] py-[11px] text-[14px] font-semibold">입력할 문구</p>
         <div className="border-lightBorder tracking-little-tight relative m-[16px] flex flex-1 flex-col items-end rounded-[8px] border-[1px] p-[16px] text-[14px] text-defaultBlack">
           <div className="flex w-full flex-1 flex-col justify-start">
             <TypingAnimation lines={textLines} />
@@ -26,7 +26,7 @@ const BannerImage = () => {
       </div>
 
       {/* 완성본 이미지 div */}
-      <div className="h-[320px] w-[320px] overflow-hidden rounded-[20px] drop-shadow-md">
+      <div className="h-[300px] w-[300px] overflow-hidden rounded-[20px] drop-shadow-md">
         <img src="/image/main-completed.png" alt="CompletedImage" className="h-full w-full" />
       </div>
     </div>

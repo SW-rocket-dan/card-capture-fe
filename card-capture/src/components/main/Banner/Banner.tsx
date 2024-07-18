@@ -7,7 +7,7 @@ const Banner = () => {
   return (
     <div className="relative flex h-dvh w-full items-center justify-center overflow-hidden">
       <BannerBg />
-      <div className="z-20 flex w-fit flex-col items-center justify-center gap-[25px]">
+      <div className="z-20 flex w-fit flex-col items-center justify-center gap-[30px]">
         <BannerText />
         <BannerButton />
         <BannerImage />
