@@ -11,7 +11,7 @@ const Button = ({ type, className, onClick, children }: ButtonProps) => {
   return (
     <button
       type="submit"
-      className={`${type === 'default' ? 'border-[1.5px] border-main' : 'bg-main'} flex flex-row items-center justify-center rounded-[8px] shadow-sm ${type === 'default' ? 'text-main' : 'text-white'} font-extrabold ${className}`}
+      className={`${type === 'default' ? 'border-[1px] border-main bg-white' : 'bg-main'} flex flex-row items-center justify-center gap-1.5 rounded-[8px] shadow-sm ${type === 'default' ? 'text-main' : 'text-white'} font-semibold ${className}`}
       onClick={onClick}
     >
       {children}
