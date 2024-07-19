@@ -1,5 +1,6 @@
 import BeforeLoginNav from '@/components/common/NavigationBar/BeforeLoginNav';
 import { useEffect, useState } from 'react';
+import AfterLoginNav from '@/components/common/NavigationBar/AfterLoginNav';
 
 type NavigationBarProps = {
   isTransparent: boolean;
@@ -59,7 +60,8 @@ const NavigationBar = ({ isTransparent = false }: NavigationBarProps) => {
     <div
       className={`fixed left-0 top-0 z-20 flex min-h-[60px] w-full items-center justify-between border-b-[1px] border-border px-[30px] ${isTransparent ? navBg : 'bg-white'}`}
     >
-      {!isMobile && <BeforeLoginNav />}
+      {/*{!isMobile && <BeforeLoginNav />}*/}
+      <AfterLoginNav />
     </div>
   );
 };

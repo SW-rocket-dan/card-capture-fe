@@ -5,7 +5,7 @@ const BeforeLoginNav = () => {
   return (
     <div className="flex w-full flex-row items-center justify-between gap-[30px] lg:gap-[60px]">
       <div className="text-md w-[300px] whitespace-nowrap">Card Capture</div>
-      <ul className="flex flex-row gap-[30px] text-[12px] font-semibold lg:gap-[50px] lg:text-[14px]">
+      <ul className="flex flex-row gap-[30px] whitespace-nowrap text-[12px] font-semibold lg:gap-[50px] lg:text-[14px]">
         <li>요금제</li>
         <li>다른 템플릿 보기</li>
         <li>제작하기</li>
