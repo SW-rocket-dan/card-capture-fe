@@ -1,25 +1,8 @@
-import { useEffect, useState } from 'react';
+import useIsMobile from '@/hooks/useIsMobile';
 
 const Description = () => {
-  /**
-   * 반응형을 위해 window.innerWidth를 저장하여 모바일 화면에서는 텍스트에 줄바꿈을 넣어줌
-   */
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const { isMobile } = useIsMobile();
 
-  useEffect(() => {
-    const resizeHandler = () => {
-      setWindowWidth(window.innerWidth);
-    };
-
-    window.addEventListener('resize', resizeHandler);
-
-    return () => {
-      window.removeEventListener('resize', resizeHandler);
-    };
-  }, []);
-
-  // 너비가 768px 이하일 때 요소들을 숨김
-  const isMobile = windowWidth <= 768;
   return (
     <div className="flex h-fit w-full items-center justify-center bg-white lg:h-dvh">
       <div className="flex flex-col items-center justify-center gap-[40px] py-[100px] lg:flex-row lg:gap-[120px] 2xl:gap-[170px]">

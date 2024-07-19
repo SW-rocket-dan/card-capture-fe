@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
-const useIsMobile = () => {
+const useIsMobile = (width?: number) => {
   /**
-   * 반응형을 위해 window.innerWidth를 저장하여 모바일 화면에서는 버튼들이 숨겨지도록 처리
+   * 반응형을 위해 window.innerWidth를 저장하여 모바일 화면인지 아닌지 구분
    */
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -18,8 +18,8 @@ const useIsMobile = () => {
     };
   }, []);
 
-  // 너비가 640px 이하일 때 요소들을 숨김
-  const isMobile = windowWidth <= 640;
+  // 너비가 640px일 때 요소를
+  const isMobile = windowWidth <= (width ? width : 640);
 
   return { isMobile };
 };
