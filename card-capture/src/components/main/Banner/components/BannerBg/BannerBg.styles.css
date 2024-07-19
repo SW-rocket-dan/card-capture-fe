@@ -40,14 +40,14 @@
 
 .right-bottom-gradation {
     position: absolute;
-    width: 899px;
-    height: 1500px;
+    width: 609px;
+    height: 800px;
     /*left: 520px;*/
     right: -200px;
-    top: -30px;
+    bottom: -200px;
 
-    background: linear-gradient(219.57deg, #C6C5FF 1.96%, rgba(255, 255, 255, 0) 55.99%);
-    transform: rotate(90deg);
+    background: radial-gradient(41.2% 42.94% at 52.53% 51.97%, #C6C5FF 10%, rgba(255, 255, 255, 0) 70%);
+    opacity: 0.4;
     z-index: 1;
 
 

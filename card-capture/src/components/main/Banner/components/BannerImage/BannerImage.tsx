@@ -28,11 +28,11 @@ const BannerImage = () => {
   const isMobile = windowWidth <= 768;
 
   return (
-    <div className="flex flex-col items-center justify-center gap-[40px] pt-[5px] md:flex-row">
+    <div className="flex flex-col items-center justify-center gap-[40px] pt-[5px] md:flex-row 2xl:gap-[55px]">
       {/* 입력할 문구 div */}
-      <div className="flex h-[300px] w-[300px] flex-col rounded-[20px] bg-white drop-shadow-md">
+      <div className="flex h-[300px] w-[300px] flex-col rounded-[20px] bg-white drop-shadow-md 2xl:h-[400px] 2xl:w-[400px]">
         <p className="border-lightBorder border-b-[1px] px-[16px] py-[11px] text-[14px] font-semibold">입력할 문구</p>
-        <div className="border-lightBorder tracking-little-tight relative m-[16px] flex flex-1 flex-col items-end rounded-[8px] border-[1px] p-[16px] text-[14px] text-defaultBlack">
+        <div className="border-lightBorder tracking-little-tight relative m-[16px] flex flex-1 flex-col items-end rounded-[8px] border-[1px] p-[16px] text-[14px] text-defaultBlack 2xl:text-[16px]">
           <div className="flex w-full flex-1 flex-col justify-start">
             <TypingAnimation lines={textLines} />
           </div>
@@ -48,7 +48,7 @@ const BannerImage = () => {
       </div>
 
       {/* 완성본 이미지 div */}
-      <div className="h-[300px] w-[300px] overflow-hidden rounded-[20px] drop-shadow-md">
+      <div className="h-[300px] w-[300px] overflow-hidden rounded-[20px] drop-shadow-md 2xl:h-[400px] 2xl:w-[400px]">
         <img src="/image/main-completed.png" alt="CompletedImage" className="h-full w-full" />
       </div>
     </div>
