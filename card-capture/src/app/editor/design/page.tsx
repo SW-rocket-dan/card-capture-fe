@@ -9,7 +9,7 @@ const EditorPage = () => {
   return (
     <div className="h-screen w-screen bg-editorbg font-Pretendard">
       <NavigationBar isTransparent={false} />
-      <div className="flex h-full flex-row !overscroll-y-none pt-[65px]">
+      <div className="flex h-full flex-row !overscroll-y-none pt-[60px]">
         <Tab />
         <EditingArea />
       </div>

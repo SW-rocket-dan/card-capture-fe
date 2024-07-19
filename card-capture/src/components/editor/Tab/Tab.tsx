@@ -10,7 +10,7 @@ const Tab = () => {
   };
 
   return (
-    <div className="fixed left-0 top-[65px] flex h-[calc(100%-65px)] w-[350px] flex-row justify-start bg-white">
+    <div className="fixed left-0 top-[60px] flex h-[calc(100%-60px)] w-[350px] flex-row justify-start bg-white">
       <MainTab currentTab={currenTab} onChange={changeTabHandler} />
       {currenTab === 'edit' && <EditTab />}
     </div>
