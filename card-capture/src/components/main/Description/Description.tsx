@@ -15,7 +15,7 @@ const Description = () => {
               <p>쉽게 카드뉴스를 제작할 수 있는</p>
             </div>
 
-            <p className="xs:text-sm xs:leading-7 whitespace-normal text-xs font-light leading-5 text-gray2 md:whitespace-nowrap md:text-base 2xl:text-lg">
+            <p className="xs:text-sm xs:leading-7 whitespace-normal text-[13px] font-light leading-6 text-gray2 md:whitespace-nowrap md:text-base 2xl:text-lg">
               SNS 홍보용 카드 뉴스가 필요하신가요? 간단하게 만들고 싶으신가요? {!isMobile && <br />}
               인스타그램 등 다양한 SNS에서 활용할 수 있는 카드 뉴스 제작을 도와드립니다!
             </p>

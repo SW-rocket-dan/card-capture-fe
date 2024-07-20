@@ -5,7 +5,7 @@ type TemplateSelectorProps = {
 
 const TemplateSelector = ({ selected, onChangeSelected }: TemplateSelectorProps) => {
   return (
-    <div className="flex flex-row gap-5 text-[16px] font-semibold">
+    <div className="flex flex-row gap-3 text-[13px] font-semibold md:gap-5 md:text-[16px]">
       <button
         onClick={() => onChangeSelected('instagram')}
         className={`rounded-[30px] px-[20px] py-[10px] ${selected === 'instagram' ? 'bg-main text-white' : 'bg-transparent text-gray5'}`}
