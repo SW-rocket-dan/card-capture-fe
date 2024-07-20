@@ -1,7 +1,7 @@
 const BannerText = () => {
   return (
     <div className="flex flex-col gap-[15px] md:mt-10">
-      <div className="flex flex-col items-center justify-center pr-6">
+      <div className="flex flex-col items-center justify-center pr-2 md:pr-6">
         <div className="flex flex-row items-center justify-center gap-2 md:gap-3 2xl:gap-4">
           <div className="h-[27px] w-[27px] sm:h-[35px] sm:w-[35px] md:h-[40px] md:w-[40px] lg:h-[55px] lg:w-[55px] 2xl:h-[70px] 2xl:w-[70px]">
             <img src="/image/message.png" alt="message" className="h-full w-full" />
