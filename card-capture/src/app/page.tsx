@@ -4,6 +4,7 @@ import NavigationBar from '@/components/common/NavigationBar/NavigationBar';
 import React from 'react';
 import Banner from '@/components/main/Banner/Banner';
 import Description from '@/components/main/Description/Description';
+import TemplateGallery from '@/components/main/TemplateGallery/TemplateGallery';
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
       <NavigationBar isTransparent={true} />
       <Banner />
       <Description />
+      <TemplateGallery />
     </div>
   );
 }
