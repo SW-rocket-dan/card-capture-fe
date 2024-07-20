@@ -1,13 +1,18 @@
 import Button from '@/components/common/Button/Button';
 import LoginIcon from '@/components/common/Icon/LoginIcon';
 import useIsMobile from '@/hooks/useIsMobile';
+import { useRouter } from 'next/navigation';
 
 const BeforeLoginNav = () => {
+  const router = useRouter();
+
   const { isMobile } = useIsMobile();
 
   return (
     <div className="flex w-full flex-row items-center justify-between gap-[30px] lg:gap-[60px]">
-      <div className="text-md w-[300px] whitespace-nowrap">Card Capture</div>
+      <button onClick={() => router.push('/')} className="text-md =whitespace-nowrap flex w-[300px] justify-start">
+        Card Capture
+      </button>
 
       {!isMobile && (
         <ul className="flex flex-row gap-[30px] whitespace-nowrap text-[12px] font-semibold lg:gap-[50px] lg:text-[14px]">

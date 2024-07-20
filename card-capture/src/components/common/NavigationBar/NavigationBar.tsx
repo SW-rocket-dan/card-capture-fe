@@ -38,7 +38,7 @@ const NavigationBar = ({ isTransparent = false }: NavigationBarProps) => {
 
   return (
     <div
-      className={`fixed left-0 top-0 z-20 flex min-h-[60px] w-full items-center justify-between border-b-[1px] border-border px-[30px] ${isTransparent ? navBg : 'bg-white'}`}
+      className={`fixed left-0 top-0 z-20 flex min-h-[60px] w-full items-center justify-between border-b-[1px] border-border px-[30px] backdrop-blur-sm ${isTransparent ? navBg : 'bg-white'}`}
     >
       {/*<BeforeLoginNav />*/}
       <AfterLoginNav />
