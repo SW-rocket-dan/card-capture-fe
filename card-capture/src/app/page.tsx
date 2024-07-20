@@ -5,6 +5,7 @@ import React from 'react';
 import Banner from '@/components/main/Banner/Banner';
 import Description from '@/components/main/Description/Description';
 import TemplateGallery from '@/components/main/TemplateGallery/TemplateGallery';
+import SearchTemplate from '@/components/main/SearchTemplate/SearchTemplate';
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
       <Banner />
       <Description />
       <TemplateGallery />
+      <SearchTemplate />
     </div>
   );
 }

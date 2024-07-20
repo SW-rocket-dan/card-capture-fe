@@ -23,6 +23,7 @@ const config = {
     extend: {
       colors: {
         main: '#6F6CFF',
+        'dark-main': '#5E5BFF',
         'light-main': '#DADAFC',
         border: '#DDDDDD',
         lightBorder: '#EEEEEE',
