@@ -2,7 +2,7 @@ import PromptTextInput from '@/components/prompt/PromptInput/components/PromptTe
 
 const PromptInput = () => {
   return (
-    <div className="w-[700px] border-r border-border">
+    <div className="w-[600px] border-r border-border pr-[70px]">
       <PromptTextInput />
     </div>
   );
