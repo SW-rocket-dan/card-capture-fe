@@ -31,7 +31,7 @@ const PromptTextInput = () => {
             <input
               type="text"
               placeholder="문구를 입력해주세요"
-              className="w-[calc(100%-40px)] rounded-[10px] border border-border px-[15px] py-[11px] text-[14px] outline-none placeholder:text-gray5"
+              className="w-[calc(100%-40px)] rounded-[10px] border border-border px-[15px] py-[11px] text-[13px] outline-none placeholder:text-gray5"
             />
             {index === textCount - 1 && (
               <button
