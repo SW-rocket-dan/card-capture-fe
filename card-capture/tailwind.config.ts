@@ -51,6 +51,7 @@ const config = {
       },
       boxShadow: {
         'drop-bold': '0px 4px 7px rgba(0, 0, 0, 0.3)',
+        default: '0px 2px 10px 0px rgba(0, 0, 0, 0.08)',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

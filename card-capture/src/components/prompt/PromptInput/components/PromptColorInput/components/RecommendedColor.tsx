@@ -11,7 +11,7 @@ const RecommendedColor = () => {
   };
 
   return (
-    <div className="flex flex-col gap-[15px] rounded-[8px] border border-border px-[12px] py-[15px]">
+    <div className="flex flex-col gap-[15px] rounded-[8px] border border-border px-[13px] py-[15px]">
       <div className="flex flex-col gap-2">
         <div className="flex flex-row items-center justify-between">
           <p className="text-[14px] font-semibold">AI 추천 색상</p>
@@ -27,16 +27,16 @@ const RecommendedColor = () => {
             </button>
           </div>
         </div>
-        <p className="text-[11px] text-gray3">
+        <p className="text-[10.5px] text-gray3">
           프롬프트에 입력하신 내용에 따라 추천 색상이 변하니, 다른 색상 추천을 받고 싶다면 문구를 바꾸고 새로 고침
           버튼을 클릭하세요.
         </p>
       </div>
       <div className="flex items-center justify-between">
-        <div className="h-[55px] w-[55px] rounded-[8px] bg-itembg" />
-        <div className="h-[55px] w-[55px] rounded-[8px] bg-itembg" />
-        <div className="h-[55px] w-[55px] rounded-[8px] bg-itembg" />
-        <div className="h-[55px] w-[55px] rounded-[8px] bg-itembg" />
+        <div className="h-[53px] w-[53px] rounded-[8px] border border-border bg-itembg" />
+        <div className="h-[53px] w-[53px] rounded-[8px] border border-border bg-itembg" />
+        <div className="h-[53px] w-[53px] rounded-[8px] border border-border bg-itembg" />
+        <div className="h-[53px] w-[53px] rounded-[8px] border border-border bg-itembg" />
       </div>
     </div>
   );
