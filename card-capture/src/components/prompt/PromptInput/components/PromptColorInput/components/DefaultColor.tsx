@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CustomColor = () => {
+const DefaultColor = () => {
   return (
     <div className="flex flex-col gap-[15px] rounded-[8px] border border-border px-[13px] py-[15px]">
       <div className="flex flex-col gap-2">
@@ -17,4 +17,4 @@ const CustomColor = () => {
   );
 };
 
-export default CustomColor;
+export default DefaultColor;
