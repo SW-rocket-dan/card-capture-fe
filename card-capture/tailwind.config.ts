@@ -6,11 +6,12 @@ const config = {
   prefix: '',
   theme: {
     screens: {
+      xs: '350px',
       sm: '640px',
       md: '768px',
       lg: '1024px',
       xl: '1280px',
-      '2xl': '1600px',
+      '2xl': '1800px',
     },
     container: {
       center: true,
@@ -22,6 +23,7 @@ const config = {
     extend: {
       colors: {
         main: '#6F6CFF',
+        'dark-main': '#5E5BFF',
         'light-main': '#DADAFC',
         border: '#DDDDDD',
         lightBorder: '#EEEEEE',
