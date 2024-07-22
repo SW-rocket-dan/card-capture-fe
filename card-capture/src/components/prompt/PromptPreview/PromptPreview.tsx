@@ -1,5 +1,5 @@
 const PromptPreview = () => {
-  return <div className="w-[500px]"></div>;
+  return <div className="w-[400px]"></div>;
 };
 
 export default PromptPreview;
