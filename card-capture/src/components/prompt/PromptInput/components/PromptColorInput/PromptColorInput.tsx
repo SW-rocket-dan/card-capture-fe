@@ -4,8 +4,11 @@ import DropperIcon from '@/components/common/Icon/DropperIcon';
 import { useState } from 'react';
 import useClickOutside from '@/hooks/useClickOutside';
 import PromptColorPicker from '@/components/prompt/PromptInput/components/PromptColorInput/components/PromptColorPicker';
+import { useColor } from 'react-color-palette';
 
 const PromptColorInput = () => {
+  const [color, setColor] = useColor('#000000');
+
   /**
    * 색상 선택 드롭다운 여닫는 click Handler
    */
@@ -40,7 +43,7 @@ const PromptColorInput = () => {
         <p className="tracking-little-tight text-[13px]">#FF8080</p>
       </div>
 
-      {!isOpen && <PromptColorPicker />}
+      {!isOpen && <PromptColorPicker color={color} setColor={setColor} />}
     </div>
   );
 };
