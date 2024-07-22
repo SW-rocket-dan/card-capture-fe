@@ -8,9 +8,9 @@ import PromptPreview from '@/components/prompt/PromptPreview/PromptPreview';
 
 const PromptPage = () => {
   return (
-    <div className="h-screen w-screen font-Pretendard">
+    <div className="h-screen w-screen overflow-y-scroll font-Pretendard">
       <NavigationBar isTransparent={false} />
-      <div className="flex h-full flex-col !overscroll-y-none pt-[60px]">
+      <div className="flex h-full flex-col pt-[60px]">
         <PromptTitle />
         <div className="flex flex-row items-center justify-center gap-[70px] py-[70px]">
           <PromptInput />
