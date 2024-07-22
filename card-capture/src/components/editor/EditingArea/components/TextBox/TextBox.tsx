@@ -29,7 +29,7 @@ const TextBox = ({ cardId, layerId, clickedCount = 0 }: { cardId: number; layerI
       const editorElement = editorRef.current.getEditor().root;
       const { width, height } = editorElement.getBoundingClientRect();
 
-      setPosition(cardId, layerId, { ...layer.position, width, height });
+      setPosition(cardId, layerId, { ...layer.position, height });
     }
   };
 
