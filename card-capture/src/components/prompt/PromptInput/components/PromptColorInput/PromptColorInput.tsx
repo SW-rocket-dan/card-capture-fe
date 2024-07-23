@@ -40,10 +40,10 @@ const PromptColorInput = () => {
           className="h-[30px] w-[30px] rounded-[8px] border-2 border-border"
           style={{ backgroundColor: '#FF8080' }}
         />
-        <p className="tracking-little-tight text-[13px]">#FF8080</p>
+        <p className="text-[13px] tracking-little-tight">#FF8080</p>
       </div>
 
-      {!isOpen && <PromptColorPicker color={color} setColor={setColor} />}
+      {isOpen && <PromptColorPicker color={color} setColor={setColor} closeHandler={openHandler} />}
     </div>
   );
 };

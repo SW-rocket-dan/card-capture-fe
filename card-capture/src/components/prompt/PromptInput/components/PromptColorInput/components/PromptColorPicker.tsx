@@ -8,9 +8,10 @@ import { IColor } from 'react-color-palette';
 type PromptColorPickerProps = {
   color: IColor;
   setColor: Dispatch<SetStateAction<IColor>>;
+  closeHandler: () => void;
 };
 
-const PromptColorPicker = ({ color, setColor }: PromptColorPickerProps) => {
+const PromptColorPicker = ({ color, setColor, closeHandler }: PromptColorPickerProps) => {
   const [currentTab, setCurrentTab] = useState<'recommend' | 'custom'>('recommend');
 
   return (
@@ -28,7 +29,7 @@ const PromptColorPicker = ({ color, setColor }: PromptColorPickerProps) => {
             직접 선택
           </button>
         </div>
-        <button>
+        <button onClick={closeHandler}>
           <CloseIcon width={11} className="text-gray2" />
         </button>
       </div>
