@@ -14,11 +14,19 @@ const PromptModelInput = () => {
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem value="apple">
+            <SelectItem value="dalle">
               <div className="flex flex-row items-center gap-3">
                 <p className="text-[14px] font-semibold">Dalle 3</p>
                 <p className="text-[12px] text-gray2">
-                  고해상도, 창의적이고 귀여운 카드 포스터 적합 이미지를 생성해줘요!
+                  고해상도, 창의적이고 귀여운 카드 포스터 적합 이미지를 생성합니다!
+                </p>
+              </div>
+            </SelectItem>
+            <SelectItem value="stable">
+              <div className="flex flex-row items-center gap-3">
+                <p className="text-[14px] font-semibold">Stable Diffusion</p>
+                <p className="text-[12px] text-gray2">
+                  고해상도, 사실적이고 사람 일러스트에 특화된 이미지를 생성합니다!
                 </p>
               </div>
             </SelectItem>

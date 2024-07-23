@@ -2,6 +2,7 @@ import PromptTextInput from '@/components/prompt/PromptInput/components/PromptTe
 import PromptPurposeInput from '@/components/prompt/PromptInput/components/PromptPurposeInput/PromptPurposeInput';
 import PromptColorInput from '@/components/prompt/PromptInput/components/PromptColorInput/PromptColorInput';
 import PromptModelInput from '@/components/prompt/PromptInput/components/PromptModelInput/PromptModelInput';
+import PromptOptionInput from '@/components/prompt/PromptInput/components/PromptOptionInput/PromptOptionInput';
 
 const PromptInput = () => {
   return (
@@ -10,6 +11,7 @@ const PromptInput = () => {
       <PromptPurposeInput />
       <PromptColorInput />
       <PromptModelInput />
+      <PromptOptionInput />
     </div>
   );
 };
