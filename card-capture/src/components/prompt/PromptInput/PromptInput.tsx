@@ -6,7 +6,7 @@ import PromptOptionInput from '@/components/prompt/PromptInput/components/Prompt
 
 const PromptInput = () => {
   return (
-    <div className="flex w-[630px] flex-col gap-[30px] border-r border-border pr-[100px]">
+    <div className="flex min-w-[300px] max-w-[630px] flex-col gap-[30px] border-b border-border pb-[60px] lg:border-b-0 lg:border-r lg:pr-[100px]">
       <PromptTextInput />
       <PromptPurposeInput />
       <PromptColorInput />

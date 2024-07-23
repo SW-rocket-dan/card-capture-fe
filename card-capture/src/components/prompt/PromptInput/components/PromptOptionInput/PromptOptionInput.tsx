@@ -31,8 +31,8 @@ const PromptOptionInput = () => {
           </DialogTrigger>
 
           <DialogContent className="w-[800px] px-[40px] py-[40px]">
-            {/*<OptionSelectorModal />*/}
-            <OptionInputModal title="인물" content="ai가 그릴 그림에 포함된 인물의 묘사" />
+            <OptionSelectorModal />
+            {/*<OptionInputModal title="인물" content="ai가 그릴 그림에 포함된 인물의 묘사" />*/}
           </DialogContent>
         </Dialog>
       </div>

@@ -12,7 +12,7 @@ const PromptPage = () => {
       <NavigationBar isTransparent={false} />
       <div className="flex h-full flex-col pt-[60px]">
         <PromptTitle />
-        <div className="flex flex-row items-start justify-center gap-[50px] py-[70px]">
+        <div className="flex flex-col items-center justify-center gap-[50px] px-[20px] py-[50px] xs:px-[50px] md:py-[70px] lg:flex-row lg:items-start">
           <PromptInput />
           <PromptPreview />
         </div>

@@ -2,10 +2,11 @@ import StarsIcon from '@/components/common/Icon/StarsIcon';
 
 const PromptPreview = () => {
   return (
-    <div className="flex w-[400px] flex-col items-center justify-start gap-[30px]">
-      <div className="flex flex-col gap-[20px]">
+    <div className="flex min-w-[300px] flex-col items-center justify-start gap-[30px] lg:w-[400px]">
+      <div className="flex w-full flex-col gap-[20px]">
         <p className="text-[15px] font-semibold">미리보기</p>
-        <div className="h-[400px] w-[400px] rounded-[10px] bg-border"></div>
+        {/* 미리보기 화면 */}
+        <div className="aspect-square w-full rounded-[10px] bg-border"></div>
       </div>
       <button
         className="flex flex-row items-center justify-center gap-1 rounded-[40px] bg-main px-[40px] py-[18px]"

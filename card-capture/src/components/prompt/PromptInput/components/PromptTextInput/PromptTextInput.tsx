@@ -27,7 +27,7 @@ const PromptTextInput = () => {
       {/* 입력 부분 */}
       <div className="flex flex-col gap-[7px]">
         {Array.from({ length: textCount }).map((_, index) => (
-          <div className="flex flex-row items-center gap-[10px]">
+          <div key={index} className="flex flex-row items-center gap-[10px]">
             <input
               type="text"
               placeholder="문구를 입력해주세요"
