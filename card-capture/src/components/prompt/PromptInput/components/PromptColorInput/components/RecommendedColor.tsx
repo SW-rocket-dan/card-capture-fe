@@ -1,11 +1,24 @@
 import RetryIcon from '@/components/common/Icon/RetryIcon';
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
+import { IColor } from 'react-color-palette';
 
-const RecommendedColor = () => {
+type RecommendedColorProps = {
+  color: IColor;
+  setColor: Dispatch<SetStateAction<IColor>>;
+};
+
+const AI_COLORS = ['#FFA6A6', '#FF7E55', '#FFC369', '#FFFFFF'];
+const THEME_COLORS = ['#FFFACD', '#FFD1DC', '#E6E6FA', '#B2F7EF'];
+
+const RecommendedColor = ({ color, setColor }: RecommendedColorProps) => {
+  const [freeCount, setFreeCount] = useState<number>(3);
   const [isRotated, setIsRotated] = useState<boolean>(false);
 
   const clickRotateHandler = () => {
+    if (freeCount <= 0) return;
+
     setIsRotated(true);
+    setFreeCount(prev => prev - 1);
 
     setTimeout(() => setIsRotated(false), 300);
   };
@@ -15,9 +28,9 @@ const RecommendedColor = () => {
       <div className="flex flex-col gap-2">
         <div className="flex flex-row items-center justify-between">
           <p className="text-[14px] font-semibold">AI 추천 색상</p>
-          <div className="flex items-center gap-2 text-[11px]">
-            <p className="text-gray2">
-              남은 횟수 <span className="font-medium">2/3</span>
+          <div className="flex flex-row items-center gap-2.5 text-[11px]">
+            <p className="flex flex-row gap-1 text-gray2">
+              남은 횟수 <div className="w-5 font-medium">{freeCount}/3</div>
             </p>
             <button
               onClick={clickRotateHandler}
