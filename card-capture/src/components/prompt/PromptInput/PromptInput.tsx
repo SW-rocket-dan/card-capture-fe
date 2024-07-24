@@ -29,7 +29,7 @@ const PromptInput = () => {
         emphasisFieldArray={emphasisFieldArray}
         phraseFieldArray={phraseFieldArray}
       />
-      <PromptPurposeInput />
+      <PromptPurposeInput register={register} />
       <PromptColorInput />
       <PromptModelInput />
       <PromptOptionInput />
