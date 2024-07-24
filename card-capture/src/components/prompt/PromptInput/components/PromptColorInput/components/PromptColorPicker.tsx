@@ -15,7 +15,7 @@ const PromptColorPicker = ({ color, setColor, closeHandler }: PromptColorPickerP
   const [currentTab, setCurrentTab] = useState<'recommend' | 'custom'>('recommend');
 
   return (
-    <div className="absolute z-10 ml-[200px] mt-[20px] flex w-[340px] flex-col gap-[15px] rounded-[20px] border border-itembg bg-white px-[20px] pb-[15px] pt-[15px] drop-shadow-md">
+    <div className="absolute z-10 ml-[200px] mt-[20px] flex w-[340px] flex-col gap-[15px] rounded-[20px] border border-itembg bg-white px-[20px] pb-[15px] pt-[15px] drop-shadow-md duration-100 animate-in fade-in-0 zoom-in-95">
       {/* 탭 선택 부분 */}
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row gap-4 text-[14px] font-semibold text-gray4">
@@ -36,14 +36,14 @@ const PromptColorPicker = ({ color, setColor, closeHandler }: PromptColorPickerP
 
       {currentTab === 'recommend' ? (
         <div className="flex flex-col gap-[15px]">
-          <RecommendedColor />
+          <RecommendedColor color={color} setColor={setColor} />
           <DefaultColor />
         </div>
       ) : (
         <CustomColor color={color} setColor={setColor} />
       )}
 
-      {/* 섹상 코드 부분 */}
+      {/* 섹상 코드 입력 부분 */}
       <div className="flex w-full items-center justify-between rounded-[8px] bg-itembg px-[15px] py-[12px]">
         <div className="flex flex-row items-center gap-3">
           <p className="text-[12px] text-gray2">선택한 색상</p>
