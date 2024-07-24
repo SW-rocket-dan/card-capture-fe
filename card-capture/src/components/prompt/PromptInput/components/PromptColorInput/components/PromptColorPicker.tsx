@@ -37,7 +37,7 @@ const PromptColorPicker = ({ color, setColor, closeHandler }: PromptColorPickerP
       {currentTab === 'recommend' ? (
         <div className="flex flex-col gap-[15px]">
           <RecommendedColor color={color} setColor={setColor} />
-          <DefaultColor />
+          <DefaultColor color={color} setColor={setColor} />
         </div>
       ) : (
         <CustomColor color={color} setColor={setColor} />
