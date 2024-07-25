@@ -6,7 +6,7 @@ import useClickOutside from '@/hooks/useClickOutside';
 import PromptColorPicker from '@/components/prompt/PromptInput/components/PromptColorInput/components/PromptColorPicker';
 import { useColor } from 'react-color-palette';
 import { UseFormSetValue } from 'react-hook-form';
-import { PromptInputFormType } from '@/components/prompt/PromptInput/PromptInput';
+import { PromptInputFormType } from '@/app/prompt/page';
 
 type PromptColorInputProps = {
   setValue: UseFormSetValue<PromptInputFormType>;

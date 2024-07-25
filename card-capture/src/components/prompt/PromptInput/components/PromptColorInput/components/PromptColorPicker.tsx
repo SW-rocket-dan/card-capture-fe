@@ -4,10 +4,7 @@ import RecommendedColor from '@/components/prompt/PromptInput/components/PromptC
 import DefaultColor from '@/components/prompt/PromptInput/components/PromptColorInput/components/DefaultColor';
 import CustomColor from '@/components/prompt/PromptInput/components/PromptColorInput/components/CustomColor';
 import { IColor } from 'react-color-palette';
-import { UseFormRegister } from 'react-hook-form';
-import { PromptInputFormType } from '@/components/prompt/PromptInput/PromptInput';
 import { hexToRgba, rgbaToHsva } from '@/components/common/ColorPicker/colorUtils';
-import useIsMobile from '@/hooks/useIsMobile';
 
 type PromptColorPickerProps = {
   color: IColor;
