@@ -3,7 +3,14 @@ import PromptPurposeInput from '@/components/prompt/PromptInput/components/Promp
 import PromptColorInput from '@/components/prompt/PromptInput/components/PromptColorInput/PromptColorInput';
 import PromptModelInput from '@/components/prompt/PromptInput/components/PromptModelInput/PromptModelInput';
 import PromptOptionInput from '@/components/prompt/PromptInput/components/PromptOptionInput/PromptOptionInput';
-import { useFieldArray, useForm } from 'react-hook-form';
+import {
+  Control,
+  UseFieldArrayReturn,
+  UseFormGetValues,
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormWatch,
+} from 'react-hook-form';
 
 export type PromptInputFormType = {
   phrases: { value: string }[];
@@ -13,14 +20,23 @@ export type PromptInputFormType = {
   model: string;
 };
 
-const PromptInput = () => {
-  const { watch, control, register, getValues, setValue } = useForm<PromptInputFormType>({
-    mode: 'onBlur',
-    defaultValues: { phrases: [{ value: '' }] },
-  });
+type PromptInputProps = {
+  formMethods: {
+    watch: UseFormWatch<PromptInputFormType>;
+    control: Control<PromptInputFormType>;
+    register: UseFormRegister<PromptInputFormType>;
+    getValues: UseFormGetValues<PromptInputFormType>;
+    setValue: UseFormSetValue<PromptInputFormType>;
+  };
+  fieldArrays: {
+    phraseFieldArray: UseFieldArrayReturn<PromptInputFormType, 'phrases'>;
+    emphasisFieldArray: UseFieldArrayReturn<PromptInputFormType, 'emphasis'>;
+  };
+};
 
-  const phraseFieldArray = useFieldArray({ control, name: 'phrases' });
-  const emphasisFieldArray = useFieldArray({ control, name: 'emphasis' });
+const PromptInput = ({ formMethods, fieldArrays }: PromptInputProps) => {
+  const { watch, control, register, getValues, setValue } = formMethods;
+  const { phraseFieldArray, emphasisFieldArray } = fieldArrays;
 
   return (
     <div className="flex min-w-[300px] max-w-[630px] flex-col gap-[30px] border-b border-border pb-[60px] lg:border-b-0 lg:border-r lg:pr-[100px]">
