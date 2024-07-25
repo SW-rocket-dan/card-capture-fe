@@ -5,17 +5,15 @@ import { useEffect, useState } from 'react';
 import useClickOutside from '@/hooks/useClickOutside';
 import PromptColorPicker from '@/components/prompt/PromptInput/components/PromptColorInput/components/PromptColorPicker';
 import { useColor } from 'react-color-palette';
-import { UseFormRegister, UseFormSetValue } from 'react-hook-form';
+import { UseFormSetValue } from 'react-hook-form';
 import { PromptInputFormType } from '@/components/prompt/PromptInput/PromptInput';
 
 type PromptColorInputProps = {
-  register: UseFormRegister<PromptInputFormType>;
   setValue: UseFormSetValue<PromptInputFormType>;
-  color: string;
 };
 
-const PromptColorInput = ({ register, setValue, color }: PromptColorInputProps) => {
-  const [currentColor, setCurrentColor] = useColor(color);
+const PromptColorInput = ({ setValue }: PromptColorInputProps) => {
+  const [currentColor, setCurrentColor] = useColor('#FF8080');
 
   /**
    * 색상 선택 드롭다운 여닫는 click Handler

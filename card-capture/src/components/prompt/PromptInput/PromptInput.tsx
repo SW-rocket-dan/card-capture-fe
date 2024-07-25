@@ -16,7 +16,7 @@ export type PromptInputFormType = {
 const PromptInput = () => {
   const { watch, control, register, getValues, setValue } = useForm<PromptInputFormType>({
     mode: 'onBlur',
-    defaultValues: { phrases: [{ value: '' }], color: '#FF8080' },
+    defaultValues: { phrases: [{ value: '' }] },
   });
 
   const phraseFieldArray = useFieldArray({ control, name: 'phrases' });
@@ -30,7 +30,7 @@ const PromptInput = () => {
         phraseFieldArray={phraseFieldArray}
       />
       <PromptPurposeInput register={register} />
-      <PromptColorInput register={register} setValue={setValue} color={watch('color')} />
+      <PromptColorInput setValue={setValue} />
       <PromptModelInput />
       <PromptOptionInput />
     </div>
