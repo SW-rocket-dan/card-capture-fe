@@ -2,16 +2,26 @@ import PromptCategoryText from '@/components/prompt/PromptInput/components/commo
 import PromptTitleText from '@/components/prompt/PromptInput/components/common/PromptTitleText';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import useIsMobile from '@/hooks/useIsMobile';
+import { UseFormRegister, UseFormSetValue } from 'react-hook-form';
+import { PromptInputFormType } from '@/components/prompt/PromptInput/PromptInput';
 
-const PromptModelInput = () => {
+type PromptModelInputProps = {
+  setValue: UseFormSetValue<PromptInputFormType>;
+};
+
+const PromptModelInput = ({ setValue }: PromptModelInputProps) => {
   const { isMobile } = useIsMobile(520);
+
+  const changeModelHandler = (model: string) => {
+    setValue('model', model);
+  };
 
   return (
     <div className="flex w-full flex-col gap-[15px]">
       <PromptCategoryText>4. 모델</PromptCategoryText>
       <PromptTitleText>사용할 이미지 모델을 선택해주세요</PromptTitleText>
 
-      <Select>
+      <Select onValueChange={changeModelHandler}>
         <SelectTrigger>
           <SelectValue className="placeholder:text-gray5" placeholder="어떤 AI로 이미지를 만들지 선택해주세요" />
         </SelectTrigger>
