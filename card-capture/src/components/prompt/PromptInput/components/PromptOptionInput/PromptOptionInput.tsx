@@ -22,17 +22,17 @@ const PromptOptionInput = () => {
         </p>
       </div>
 
-      <div className="flex flex-row flex-wrap gap-[10px]">
+      <div className="flex w-full flex-row flex-wrap gap-[10px]">
         <Dialog>
           <DialogTrigger asChild>
-            <div>
+            <div className="w-full">
               <AddOptionButton>추가하기</AddOptionButton>
             </div>
           </DialogTrigger>
 
-          <DialogContent className="w-[800px] px-[40px] py-[40px]">
-            <OptionSelectorModal />
-            {/*<OptionInputModal title="인물" content="ai가 그릴 그림에 포함된 인물의 묘사" />*/}
+          <DialogContent className="w-[320px] px-[20px] py-[40px] sm:w-[400px] md:w-[750px] md:px-[30px]">
+            {/*<OptionSelectorModal />*/}
+            <OptionInputModal title="인물" content="ai가 그릴 그림에 포함된 인물의 묘사" />
           </DialogContent>
         </Dialog>
       </div>
