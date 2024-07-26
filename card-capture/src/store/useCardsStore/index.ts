@@ -3,6 +3,7 @@ import { Background, Card, Cards, Layer, Position, Shape, ShapeType, Text } from
 import { Draft, produce } from 'immer';
 import ReactQuill from 'react-quill';
 import { useFocusStore } from '@/store/useFocusStore';
+import { persist } from 'zustand/middleware';
 
 export const INITIAL_CARD: Card = {
   id: 0,
@@ -14,24 +15,8 @@ export const INITIAL_CARD: Card = {
   layers: [],
 };
 
-export const INITIAL_CARDS: Cards = {
-  cards: [],
-};
-
-export const INITIAL_POSITION: Position = {
-  x: 0,
-  y: 0,
-  width: 0,
-  height: 0,
-  rotate: 0,
-  zIndex: 0,
-  opacity: 0,
-};
-
 /**
- * Card 1장을 받아 저장하는 스토어
- * 나중에는 여러장을 받을 수 있게 구조 변경해야함!!!!!
- * useProjectStore도 설계되면 스토어를 조각으로 합쳐야 함
+ * Card를 저장하는 스토어
  */
 type useCardsStore = {
   cards: Card[];
@@ -65,246 +50,251 @@ type useCardsStore = {
   addShapeLayer: (cardId: number, type: ShapeType) => void;
 };
 
-export const useCardsStore = create<useCardsStore>()((set, get) => ({
-  cards: [],
+export const useCardsStore = create(
+  persist<useCardsStore>(
+    (set, get) => ({
+      cards: [],
 
-  setCard: (cards: Card[]) =>
-    set(
-      //immer를 활용하여 불변성 유지
-      produce(
-        (
-          draft: Draft<{
-            cards: Card[];
-          }>,
-        ) => {
-          draft.cards = cards;
-        },
-      ),
-    ),
-
-  addCard: () =>
-    set(
-      produce(
-        (
-          draft: Draft<{
-            cards: Card[];
-          }>,
-        ) => {
-          draft.cards.push(INITIAL_CARD);
-        },
-      ),
-    ),
-
-  getLayer: (cardId, layerId) => {
-    const card = get().cards.find(({ id }) => id === cardId);
-    if (!card) return null;
-
-    const layer = card.layers.find(({ id }) => id === layerId);
-    if (!layer) return null;
-
-    return layer;
-  },
-
-  getLayerText: (cardId, layerId) => {
-    const card = get().cards.find(({ id }) => id === cardId);
-    if (!card) return null;
-
-    const layer = card.layers.find(({ id }) => id === layerId);
-    if (!layer) return null;
-
-    if (layer.type !== 'text') return null;
-
-    const { content } = layer.content as Text;
-    return content;
-  },
-
-  setLayerText: (cardId, layerId, text) =>
-    set(
-      produce(
-        (
-          draft: Draft<{
-            cards: Card[];
-          }>,
-        ) => {
-          draft.cards[cardId].layers = draft.cards[cardId].layers.map(v =>
-            v.id === layerId
-              ? {
-                  ...v,
-                  content: {
-                    content: text,
-                  },
-                }
-              : v,
-          );
-        },
-      ),
-    ),
-
-  setPosition: (cardId: number, layerId: number, position: Position) =>
-    set(
-      produce(
-        (
-          draft: Draft<{
-            cards: Card[];
-          }>,
-        ) => {
-          const card = draft.cards.find((card: Card) => card.id === cardId);
-
-          if (card) card.layers = card.layers.map(v => (v.id === layerId ? { ...v, position: position } : v));
-        },
-      ),
-    ),
-
-  getPosition: (cardId, layerId) => {
-    const card = get().cards.find(({ id }) => id === cardId);
-    if (!card) return null;
-
-    const layer = card.layers.find(({ id }) => id === layerId);
-    if (!layer) return null;
-
-    return layer.position;
-  },
-
-  setBackground: (cardId: number, background: Partial<Background>) => {
-    set(
-      produce(draft => {
-        const card = draft.cards.find((card: Card) => card.id === cardId);
-        if (card) {
-          card.background = { ...card.background, ...background };
-        }
-      }),
-    );
-  },
-
-  getBackground: (cardId: number) => {
-    const card = get().cards.find(({ id }) => id === cardId);
-    if (!card) return null;
-
-    return card.background;
-  },
-
-  setShapeLayerColor: (cardId, layerId, color) =>
-    set(
-      produce(draft => {
-        const card = draft.cards.find((card: Card) => card.id === cardId);
-
-        if (card) {
-          const layer = card.layers.find((layer: Layer) => layer.id === layerId);
-
-          if (layer && layer.type === 'shape') {
-            (layer.content as Shape).color = color;
-          }
-        }
-      }),
-    ),
-
-  getShapeLayer: (cardId, layerId) => {
-    const card = get().cards.find(({ id }) => id === cardId);
-    if (!card) return null;
-
-    const layer = card.layers.find(({ id }) => id === layerId);
-    if (!layer) return null;
-
-    return layer.content as Shape;
-  },
-
-  addTextLayer: (cardId: number) =>
-    set(
-      produce(
-        (
-          draft: Draft<{
-            cards: Card[];
-          }>,
-        ) => {
-          const newLayerId = draft.cards[cardId].layers.length + 1;
-
-          draft.cards[cardId].layers.push({
-            id: newLayerId,
-            type: 'text',
-            content: {
-              content: '',
+      setCard: (cards: Card[]) =>
+        set(
+          //immer를 활용하여 불변성 유지
+          produce(
+            (
+              draft: Draft<{
+                cards: Card[];
+              }>,
+            ) => {
+              draft.cards = cards;
             },
-            position: {
-              x: 220,
-              y: 220,
-              width: 200,
-              height: 45,
-              rotate: 0,
-              zIndex: 2,
-              opacity: 100,
+          ),
+        ),
+
+      addCard: () =>
+        set(
+          produce(
+            (
+              draft: Draft<{
+                cards: Card[];
+              }>,
+            ) => {
+              draft.cards.push(INITIAL_CARD);
             },
-          });
+          ),
+        ),
 
-          useFocusStore.getState().updateFocus(cardId, newLayerId);
-        },
-      ),
-    ),
+      getLayer: (cardId, layerId) => {
+        const card = get().cards.find(({ id }) => id === cardId);
+        if (!card) return null;
 
-  addImageLayer: (cardId, url, dimension) =>
-    set(
-      produce(
-        (
-          draft: Draft<{
-            cards: Card[];
-          }>,
-        ) => {
-          const newLayerId = draft.cards[cardId].layers.length + 1;
+        const layer = card.layers.find(({ id }) => id === layerId);
+        if (!layer) return null;
 
-          draft.cards[cardId].layers.push({
-            id: newLayerId,
-            type: 'image',
-            content: {
-              url: url,
-              cropStartX: 0,
-              cropStartY: 0,
-              cropWidth: 0,
-              cropHeight: 0,
+        return layer;
+      },
+
+      getLayerText: (cardId, layerId) => {
+        const card = get().cards.find(({ id }) => id === cardId);
+        if (!card) return null;
+
+        const layer = card.layers.find(({ id }) => id === layerId);
+        if (!layer) return null;
+
+        if (layer.type !== 'text') return null;
+
+        const { content } = layer.content as Text;
+        return content;
+      },
+
+      setLayerText: (cardId, layerId, text) =>
+        set(
+          produce(
+            (
+              draft: Draft<{
+                cards: Card[];
+              }>,
+            ) => {
+              draft.cards[cardId].layers = draft.cards[cardId].layers.map(v =>
+                v.id === layerId
+                  ? {
+                      ...v,
+                      content: {
+                        content: text,
+                      },
+                    }
+                  : v,
+              );
             },
-            position: {
-              x: 200,
-              y: 200,
-              width: dimension.width,
-              height: dimension.height,
-              rotate: 0,
-              zIndex: 2,
-              opacity: 100,
-            },
-          });
+          ),
+        ),
 
-          useFocusStore.getState().updateFocus(cardId, newLayerId);
-        },
-      ),
-    ),
+      setPosition: (cardId: number, layerId: number, position: Position) =>
+        set(
+          produce(
+            (
+              draft: Draft<{
+                cards: Card[];
+              }>,
+            ) => {
+              const card = draft.cards.find((card: Card) => card.id === cardId);
 
-  addShapeLayer: (cardId, type) =>
-    set(
-      produce(
-        (
-          draft: Draft<{
-            cards: Card[];
-          }>,
-        ) => {
-          const newLayerId = draft.cards[cardId].layers.length + 1;
-          draft.cards[cardId].layers.push({
-            id: newLayerId,
-            type: 'shape',
-            content: {
-              type: type,
-              color: '#DDDDDD',
+              if (card) card.layers = card.layers.map(v => (v.id === layerId ? { ...v, position: position } : v));
             },
-            position: {
-              x: 200,
-              y: 200,
-              width: 200,
-              height: 200,
-              rotate: 0,
-              zIndex: 2,
-              opacity: 100,
-            },
-          });
+          ),
+        ),
 
-          useFocusStore.getState().updateFocus(cardId, newLayerId);
-        },
-      ),
-    ),
-}));
+      getPosition: (cardId, layerId) => {
+        const card = get().cards.find(({ id }) => id === cardId);
+        if (!card) return null;
+
+        const layer = card.layers.find(({ id }) => id === layerId);
+        if (!layer) return null;
+
+        return layer.position;
+      },
+
+      setBackground: (cardId: number, background: Partial<Background>) => {
+        set(
+          produce(draft => {
+            const card = draft.cards.find((card: Card) => card.id === cardId);
+            if (card) {
+              card.background = { ...card.background, ...background };
+            }
+          }),
+        );
+      },
+
+      getBackground: (cardId: number) => {
+        const card = get().cards.find(({ id }) => id === cardId);
+        if (!card) return null;
+
+        return card.background;
+      },
+
+      setShapeLayerColor: (cardId, layerId, color) =>
+        set(
+          produce(draft => {
+            const card = draft.cards.find((card: Card) => card.id === cardId);
+
+            if (card) {
+              const layer = card.layers.find((layer: Layer) => layer.id === layerId);
+
+              if (layer && layer.type === 'shape') {
+                (layer.content as Shape).color = color;
+              }
+            }
+          }),
+        ),
+
+      getShapeLayer: (cardId, layerId) => {
+        const card = get().cards.find(({ id }) => id === cardId);
+        if (!card) return null;
+
+        const layer = card.layers.find(({ id }) => id === layerId);
+        if (!layer) return null;
+
+        return layer.content as Shape;
+      },
+
+      addTextLayer: (cardId: number) =>
+        set(
+          produce(
+            (
+              draft: Draft<{
+                cards: Card[];
+              }>,
+            ) => {
+              const newLayerId = draft.cards[cardId].layers.length + 1;
+
+              draft.cards[cardId].layers.push({
+                id: newLayerId,
+                type: 'text',
+                content: {
+                  content: '',
+                },
+                position: {
+                  x: 220,
+                  y: 220,
+                  width: 200,
+                  height: 45,
+                  rotate: 0,
+                  zIndex: 2,
+                  opacity: 100,
+                },
+              });
+
+              useFocusStore.getState().updateFocus(cardId, newLayerId);
+            },
+          ),
+        ),
+
+      addImageLayer: (cardId, url, dimension) =>
+        set(
+          produce(
+            (
+              draft: Draft<{
+                cards: Card[];
+              }>,
+            ) => {
+              const newLayerId = draft.cards[cardId].layers.length + 1;
+
+              draft.cards[cardId].layers.push({
+                id: newLayerId,
+                type: 'image',
+                content: {
+                  url: url,
+                  cropStartX: 0,
+                  cropStartY: 0,
+                  cropWidth: 0,
+                  cropHeight: 0,
+                },
+                position: {
+                  x: 200,
+                  y: 200,
+                  width: dimension.width,
+                  height: dimension.height,
+                  rotate: 0,
+                  zIndex: 2,
+                  opacity: 100,
+                },
+              });
+
+              useFocusStore.getState().updateFocus(cardId, newLayerId);
+            },
+          ),
+        ),
+
+      addShapeLayer: (cardId, type) =>
+        set(
+          produce(
+            (
+              draft: Draft<{
+                cards: Card[];
+              }>,
+            ) => {
+              const newLayerId = draft.cards[cardId].layers.length + 1;
+              draft.cards[cardId].layers.push({
+                id: newLayerId,
+                type: 'shape',
+                content: {
+                  type: type,
+                  color: '#DDDDDD',
+                },
+                position: {
+                  x: 200,
+                  y: 200,
+                  width: 200,
+                  height: 200,
+                  rotate: 0,
+                  zIndex: 2,
+                  opacity: 100,
+                },
+              });
+
+              useFocusStore.getState().updateFocus(cardId, newLayerId);
+            },
+          ),
+        ),
+    }),
+    { name: 'cardStore' },
+  ),
+);
