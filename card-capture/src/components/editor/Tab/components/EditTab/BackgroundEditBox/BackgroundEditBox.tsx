@@ -41,7 +41,7 @@ const BackgroundEditBox = ({ focused = false }: { focused?: boolean }) => {
     <div className="flex w-full flex-col border-b-[1px] border-border">
       <div
         onClick={openHandler}
-        className={`flex h-[50px] flex-row items-center justify-between px-[15px] py-[20px] text-[14px] font-extrabold`}
+        className={`flex h-[50px] flex-row items-center justify-between px-[15px] py-[20px] text-[14px] font-semibold`}
       >
         <p>배경</p>
         <div className="flex flex-row gap-3">
