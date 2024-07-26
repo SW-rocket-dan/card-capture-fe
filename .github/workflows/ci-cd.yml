@@ -88,29 +88,44 @@ jobs:
           chmod 400 deployment_key.pem
           mkdir -p ~/.ssh
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
-
+          
           ssh -o StrictHostKeyChecking=no -i deployment_key.pem ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} <<EOF
-            # 디렉토리 확인 및 생성
-            if [ ! -d "/home/${{ secrets.SERVER_USER }}/card-capture-fe/" ]; then
-              mkdir -p /home/${{ secrets.SERVER_USER }}/card-capture-fe/
-            fi
-            cd /home/${{ secrets.SERVER_USER }}/card-capture-fe/
-
-            # 필수 패키지 설치
-            if ! command -v git &> /dev/null; then
-              sudo yum update && sudo yum install -y git
-            fi
-            if ! command -v npm &> /dev/null; then
-              sudo yum update && sudo yum install -y npm
-            fi
-            if ! command -v pm2 &> /dev/null; then
-              sudo npm install -g pm2
-            fi
-
-            # 배포 작업
-            git pull
-            echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" > .env
-            npm install
-            npm run build
+          # 디렉토리 확인 및 생성
+          if [ ! -d "/home/${{ secrets.SERVER_USER }}/card-capture-fe/" ]; then
+           mkdir -p /home/${{ secrets.SERVER_USER }}/card-capture-fe/
+          fi
+          cd /home/${{ secrets.SERVER_USER }}/card-capture-fe/
+          
+          # 필수 패키지 설치
+          if ! command -v git &> /dev/null; then
+           sudo yum update && sudo yum install -y git
+          fi
+          if ! command -v npm &> /dev/null; then
+           sudo yum update && sudo yum install -y npm
+          fi
+          if ! command -v pm2 &> /dev/null; then
+           sudo npm install -g pm2
+          fi
+          
+          # Git 저장소 클론 또는 풀
+          if [ ! -d ".git" ]; then
+           git clone $REPO_URL .
+          else
+           git pull
+          fi
+          
+          # 환경 변수 설정
+          echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" > .env
+          echo "NEXT_PUBLIC_JWT_TOKEN=${{ secrets.NEXT_PUBLIC_JWT_TOKEN }}" >> .env
+          
+          
+          # 패키지 설치 및 빌드
+          npm install
+          npm run build
+          
+          if pm2 list | grep -q "card-capture-fe"; then
             pm2 restart card-capture-fe
+          else
+            pm2 start npm --name "card-capture-fe" -- start
+          fi
           EOF
