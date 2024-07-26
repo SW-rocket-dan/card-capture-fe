@@ -24,11 +24,9 @@ const PromptPreview = ({ formData }: PromptPreviewProps) => {
           className="flex aspect-square w-full flex-col items-center justify-center gap-5 rounded-[10px] border border-border p-5"
           style={{ backgroundColor: rgba(rgbColor.r, rgbColor.g, rgbColor.b, rgbColor.a), filter: 'blur(5px)' }}
         >
-          <div className="flex flex-col items-center justify-center text-[19px] font-semibold">
+          <div className="flex flex-col items-center justify-center text-[30px] font-semibold">
             {phrasesList.map(phrase => (
-              <p>
-                {phrase.slice(0, 20)} {phrase.length > 20 && '...'}
-              </p>
+              <p>{phrase.slice(0, 20)}</p>
             ))}
           </div>
           <p className={`rounded-md bg-white text-[14px] text-gray4 ${purpose !== '' ? 'p-2' : ''}`}>{purpose}</p>

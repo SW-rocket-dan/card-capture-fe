@@ -31,6 +31,11 @@ const PromptOptionInput = () => {
   };
 
   const changeOptionDataHandler = (option: string, title: string, data: string) => {
+    if (data.trim() === '') {
+      setIsOpen(false);
+      return;
+    }
+
     setOptionData(prev => ({
       ...prev,
       [option]: { title, content: data },
