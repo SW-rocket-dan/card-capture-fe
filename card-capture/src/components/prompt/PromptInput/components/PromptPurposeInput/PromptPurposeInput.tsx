@@ -1,7 +1,7 @@
 import PromptCategoryText from '@/components/prompt/PromptInput/components/common/PromptCategoryText';
 import PromptTitleText from '@/components/prompt/PromptInput/components/common/PromptTitleText';
 import { UseFormRegister } from 'react-hook-form';
-import { PromptInputFormType } from '@/components/prompt/PromptInput/PromptInput';
+import { PromptInputFormType } from '@/app/prompt/page';
 
 type PromptPurposeInputProps = {
   register: UseFormRegister<PromptInputFormType>;
