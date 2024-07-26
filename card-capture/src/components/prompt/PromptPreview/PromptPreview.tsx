@@ -5,9 +5,10 @@ import { hexToRgba } from '@/components/common/ColorPicker/colorUtils';
 
 type PromptPreviewProps = {
   formData: PromptInputFormType;
+  onSubmit: (data: PromptInputFormType) => void;
 };
 
-const PromptPreview = ({ formData }: PromptPreviewProps) => {
+const PromptPreview = ({ formData, onSubmit }: PromptPreviewProps) => {
   const { phrases, model, color, purpose, emphasis } = formData;
 
   const phrasesList = phrases.map(val => val.value);
@@ -26,7 +27,7 @@ const PromptPreview = ({ formData }: PromptPreviewProps) => {
         >
           <div className="flex flex-col items-center justify-center text-[30px] font-semibold">
             {phrasesList.map(phrase => (
-              <p>{phrase.slice(0, 20)}</p>
+              <p key={phrase}>{phrase.slice(0, 20)}</p>
             ))}
           </div>
           <p className={`rounded-md bg-white text-[14px] text-gray4 ${purpose !== '' ? 'p-2' : ''}`}>{purpose}</p>
@@ -34,6 +35,7 @@ const PromptPreview = ({ formData }: PromptPreviewProps) => {
         </div>
       </div>
       <button
+        onClick={() => onSubmit(formData)}
         className="flex flex-row items-center justify-center gap-1 rounded-[40px] bg-main px-[40px] py-[18px]"
         style={{ boxShadow: '0 0 14px rgba(111, 108, 255, 0.5)' }}
       >

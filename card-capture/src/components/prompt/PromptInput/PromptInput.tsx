@@ -28,7 +28,7 @@ type PromptInputProps = {
 };
 
 const PromptInput = ({ formMethods, fieldArrays }: PromptInputProps) => {
-  const { watch, control, register, getValues, setValue } = formMethods;
+  const { register, setValue } = formMethods;
   const { phraseFieldArray, emphasisFieldArray } = fieldArrays;
 
   return (

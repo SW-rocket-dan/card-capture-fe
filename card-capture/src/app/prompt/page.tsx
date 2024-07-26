@@ -6,6 +6,8 @@ import React from 'react';
 import PromptInput from '@/components/prompt/PromptInput/PromptInput';
 import PromptPreview from '@/components/prompt/PromptPreview/PromptPreview';
 import { useFieldArray, useForm } from 'react-hook-form';
+import { promptApi } from '@/app/prompt/api';
+import { PromptFormType } from '@/app/prompt/api/promptApi';
 
 export type PromptInputFormType = {
   phrases: { value: string }[];
@@ -16,15 +18,39 @@ export type PromptInputFormType = {
 };
 
 const PromptPage = () => {
+  /**
+   * react-hook-form 사용하여 프롬프트에 입력되는 값들 관리
+   */
   const formMethods = useForm<PromptInputFormType>({
     mode: 'onBlur',
-    defaultValues: { phrases: [{ value: '' }], color: '#000000' },
+    defaultValues: { phrases: [{ value: '' }], color: '#000000', emphasis: [{ value: '1' }, { value: '2' }] },
   });
 
+  // 값을 배열로 저장해야 하는 값들 useFieldArray 사용해서 관리
   const phraseFieldArray = useFieldArray({ control: formMethods.control, name: 'phrases' });
   const emphasisFieldArray = useFieldArray({ control: formMethods.control, name: 'emphasis' });
-
   const fieldArrays = { phraseFieldArray, emphasisFieldArray };
+
+  /**
+   * form 제출
+   */
+  const submitHandler = async (data: PromptInputFormType) => {
+    const phrasesArray = data.phrases.map(p => p.value);
+    const emphasisArray = data.phrases.map(p => p.value);
+
+    const submitData: PromptFormType = {
+      ...data,
+      phrase: {
+        phrases: phrasesArray,
+        firstEmphasis: emphasisArray[0],
+        secondEmphasis: emphasisArray[1],
+      },
+    };
+
+    const templateData = await promptApi.postPromptTemplateData(submitData);
+
+    console.log(templateData);
+  };
 
   return (
     <div className="h-screen w-screen overflow-y-scroll font-Pretendard">
@@ -33,7 +59,7 @@ const PromptPage = () => {
         <PromptTitle />
         <div className="flex flex-col items-center justify-center gap-[50px] px-[20px] py-[50px] xs:px-[50px] md:py-[70px] lg:flex-row lg:items-start">
           <PromptInput formMethods={formMethods} fieldArrays={fieldArrays} />
-          <PromptPreview formData={formMethods.watch()} />
+          <PromptPreview formData={formMethods.watch()} onSubmit={submitHandler} />
         </div>
       </div>
     </div>
