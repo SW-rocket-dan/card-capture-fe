@@ -32,8 +32,6 @@ jobs:
         working-directory: ./card-capture
         run: npm install
 
-      # Lint step removed
-
       - name: Run tests
         working-directory: ./card-capture
         run: npm test
@@ -93,45 +91,33 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i deployment_key.pem ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} <<EOF
             set -e
 
-            # 디렉토리 확인 및 생성
             BASE_DIR="/home/${{ secrets.SERVER_USER }}/card-capture-fe"
             PROJECT_DIR="$BASE_DIR/card-capture"
-            if [ ! -d "$BASE_DIR" ]; then
-              mkdir -p "$BASE_DIR"
+            if [ -d "$BASE_DIR" ]; then
+              rm -rf "$BASE_DIR"
             fi
+            mkdir -p "$BASE_DIR"
             cd "$BASE_DIR"
 
-            # Git 저장소 클론 또는 풀
-            if [ ! -d ".git" ]; then
-              echo "Cloning repository..."
-              git clone $REPO_URL . || { echo "Git clone failed"; exit 1; }
-            else
-              echo "Pulling latest changes..."
-              git pull || { echo "Git pull failed"; exit 1; }
-            fi
+            echo "Cloning repository..."
+            git clone $REPO_URL . || { echo "Git clone failed"; exit 1; }
 
-            # 프로젝트 디렉토리로 이동
             cd "$PROJECT_DIR"
 
-            # 현재 디렉토리 확인
             echo "Current directory: $(pwd)"
             ls -la
 
-            # package.json 확인
             if [ ! -f "package.json" ]; then
               echo "Error: package.json not found"
               exit 1
             fi
 
-            # 환경 변수 설정
             echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" > .env
             echo "NEXT_PUBLIC_JWT_TOKEN=${{ secrets.NEXT_PUBLIC_JWT_TOKEN }}" >> .env
 
-            # 패키지 설치 및 빌드
             npm install
             npm run build
 
-            # PM2로 애플리케이션 시작 또는 재시작
             if pm2 list | grep -q "card-capture-fe"; then
               pm2 restart card-capture-fe
             else
