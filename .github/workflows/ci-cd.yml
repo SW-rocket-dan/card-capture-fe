@@ -98,10 +98,10 @@ jobs:
 
             # 필수 패키지 설치
             if ! command -v git &> /dev/null; then
-              sudo apt-get update && sudo apt-get install -y git
+              sudo yum update && sudo yum install -y git
             fi
             if ! command -v npm &> /dev/null; then
-              sudo apt-get update && sudo apt-get install -y npm
+              sudo yum update && sudo yum install -y npm
             fi
             if ! command -v pm2 &> /dev/null; then
               sudo npm install -g pm2
