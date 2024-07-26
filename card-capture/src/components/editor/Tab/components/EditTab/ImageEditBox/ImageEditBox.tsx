@@ -35,7 +35,7 @@ const ImageEditBox = ({ focused = false }: { focused?: boolean }) => {
           <ImageButton onChangeImage={addImageLayerHandler} />
           <SizeBox />
           <OpacityButton opacity={opacity} setOpacity={setOpacity} />
-          <OrderBox />
+          {/*<OrderBox />*/}
         </div>
       )}
     </div>

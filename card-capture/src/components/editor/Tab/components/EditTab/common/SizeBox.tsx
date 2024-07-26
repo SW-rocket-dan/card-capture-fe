@@ -94,7 +94,10 @@ const SizeBox = () => {
 
       {/* 자르기, 각도 변환 */}
       <div className="flex flex-col gap-[8px]">
-        <button className="flex w-[90px] flex-row items-center justify-center gap-[7px] rounded-lg bg-gray7 py-[10px] text-xs text-white">
+        <button
+          disabled={true}
+          className="flex w-[90px] flex-row items-center justify-center gap-[7px] rounded-lg bg-gray7 py-[10px] text-xs text-white"
+        >
           <CutIcon width={15} />
           <span>자르기</span>
         </button>
