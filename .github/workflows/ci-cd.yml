@@ -93,9 +93,11 @@ jobs:
 
             BASE_DIR="/home/${{ secrets.SERVER_USER }}/card-capture-fe"
             PROJECT_DIR="$BASE_DIR/card-capture"
+            REPO_URL="${{ github.server_url }}/${{ github.repository }}.git"
 
             echo "BASE_DIR: $BASE_DIR"
             echo "PROJECT_DIR: $PROJECT_DIR"
+            echo "REPO_URL: $REPO_URL"
 
             if [ -d "$BASE_DIR" ]; then
               rm -rf "$BASE_DIR"
@@ -126,6 +128,6 @@ jobs:
             if pm2 list | grep -q "card-capture-fe"; then
               pm2 restart card-capture-fe
             else
-              pm2 start npm --name "card-capture-fe" -- start
+              pm2 start npm —name "card-capture-fe" — start
             fi
           EOF
