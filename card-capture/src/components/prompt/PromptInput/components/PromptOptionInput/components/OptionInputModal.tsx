@@ -17,6 +17,9 @@ const OptionInputModal = ({ type, title, content, changeOptionDataHandler, close
     setOptionText(e.target.value);
   };
 
+  /**
+   * 입력된 옵션 텍스트를 상위 컴포넌트로 전달하는 handler
+   */
   const submitTextHandler = () => {
     changeOptionDataHandler(type, title, optionText);
   };

@@ -25,12 +25,20 @@ const PromptOptionInput = () => {
   const [selectedOption, setSelectedOption] = useState<OptionsType>('person');
   const [optionData, setOptionData] = useState<OptionDataType>({});
 
+  /**
+   * 옵션을 클릭하면 해당 옵션을 작성하는 화면으로 변경시키는 handler
+   * 입력하는 상태로 변경하고, 선택한 옵션을 저장함
+   */
   const selectOptionHandler = (option: OptionsType) => {
     setIsWriting(true);
     setSelectedOption(option);
   };
 
+  /**
+   * 어떤 옵션에 대한 입력을 받아왔는지 확인하고 상위의 useForm에 등록
+   */
   const changeOptionDataHandler = (option: string, title: string, data: string) => {
+    // 빈 값이 입력되면 내용에 추가하지 않음
     if (data.trim() === '') {
       setIsOpen(false);
       return;
@@ -44,6 +52,9 @@ const PromptOptionInput = () => {
     setIsOpen(false);
   };
 
+  /**
+   * 옵션 모달의 열림/닫힘 상태를 관리하는 로직
+   */
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const openModalHandler = () => {
