@@ -8,6 +8,7 @@ import PromptPreview from '@/components/prompt/PromptPreview/PromptPreview';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { promptApi } from '@/app/prompt/api';
 import { PromptFormType } from '@/app/prompt/api/promptApi';
+import { parseEscapedJson } from '@/utils/jsonUtils';
 
 export type PromptInputFormType = {
   phrases: { value: string }[];
@@ -32,7 +33,7 @@ const PromptPage = () => {
   const fieldArrays = { phraseFieldArray, emphasisFieldArray };
 
   /**
-   * form 제출
+   * form 제출하고 템플릿 데이터 받아오는 handler
    */
   const submitHandler = async (data: PromptInputFormType) => {
     const phrasesArray = data.phrases.map(p => p.value);
@@ -47,9 +48,8 @@ const PromptPage = () => {
       },
     };
 
-    const templateData = await promptApi.postPromptTemplateData(submitData);
-
-    console.log(templateData);
+    const { templateId, editor } = await promptApi.postPromptTemplateData(submitData);
+    const templateData = parseEscapedJson(editor);
   };
 
   return (
