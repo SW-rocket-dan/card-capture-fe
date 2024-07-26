@@ -9,6 +9,8 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { promptApi } from '@/app/prompt/api';
 import { PromptFormType } from '@/app/prompt/api/promptApi';
 import { parseEscapedJson } from '@/utils/jsonUtils';
+import { useCardsStore } from '@/store/useCardsStore';
+import { useRouter } from 'next/navigation';
 
 export type PromptInputFormType = {
   phrases: { value: string }[];
@@ -32,6 +34,9 @@ const PromptPage = () => {
   const emphasisFieldArray = useFieldArray({ control: formMethods.control, name: 'emphasis' });
   const fieldArrays = { phraseFieldArray, emphasisFieldArray };
 
+  const setCards = useCardsStore(state => state.setCard);
+  const router = useRouter();
+
   /**
    * form 제출하고 템플릿 데이터 받아오는 handler
    */
@@ -39,6 +44,7 @@ const PromptPage = () => {
     const phrasesArray = data.phrases.map(p => p.value);
     const emphasisArray = data.phrases.map(p => p.value);
 
+    // api request 형식에 맞게 배열 변경
     const submitData: PromptFormType = {
       ...data,
       phrase: {
@@ -48,8 +54,14 @@ const PromptPage = () => {
       },
     };
 
+    // 서버에 제출하고 템플릿 정보 받아와서 Card Type으로 변경
     const { templateId, editor } = await promptApi.postPromptTemplateData(submitData);
     const templateData = parseEscapedJson(editor);
+
+    // store에 템플릿 저장
+    setCards(templateData.cards);
+
+    router.push('/editor/design');
   };
 
   return (
