@@ -2,7 +2,7 @@ import PromptCategoryText from '@/components/prompt/PromptInput/components/commo
 import PromptTitleText from '@/components/prompt/PromptInput/components/common/PromptTitleText';
 import PlusIcon from '@/components/common/Icon/PlusIcon';
 import { UseFieldArrayReturn, UseFormRegister } from 'react-hook-form';
-import { PromptInputFormType } from '@/app/prompt/page';
+import { PromptInputFormType } from '@/app/prompt/PromptContent';
 
 type PromptTextInputProps = {
   register: UseFormRegister<PromptInputFormType>;

@@ -11,7 +11,7 @@ import {
   UseFormSetValue,
   UseFormWatch,
 } from 'react-hook-form';
-import { PromptInputFormType } from '@/app/prompt/page';
+import { PromptInputFormType } from '@/app/prompt/PromptContent';
 
 type PromptInputProps = {
   formMethods: {
