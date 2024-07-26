@@ -55,11 +55,17 @@ const PromptContent = () => {
     };
 
     // 서버에 제출하고 템플릿 정보 받아와서 Card Type으로 변경
-    const { templateId, editor } = await promptApi.postPromptTemplateData(submitData);
-    const templateData = parseEscapedJson(editor);
+    // const { templateId, editor } = await promptApi.postPromptTemplateData(submitData);
+    // const templateData = parseEscapedJson(editor);
 
     // store에 템플릿 저장
-    setCards(templateData.cards);
+    // setCards(templateData.cards);
+
+    const func = async () => {
+      const data = await (await fetch('http://localhost:3000/api/mocks/cards')).json();
+      setCards(data.cards);
+    };
+    func();
 
     router.push('/editor');
   };
