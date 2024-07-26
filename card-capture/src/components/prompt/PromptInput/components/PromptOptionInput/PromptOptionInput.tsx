@@ -1,14 +1,68 @@
 import PromptCategoryText from '@/components/prompt/PromptInput/components/common/PromptCategoryText';
 import PromptTitleText from '@/components/prompt/PromptInput/components/common/PromptTitleText';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import React, { useState } from 'react';
 import AddOptionButton from '@/components/prompt/PromptInput/components/PromptOptionInput/components/AddOptionButton';
-
 import OptionSelectorModal from '@/components/prompt/PromptInput/components/PromptOptionInput/components/OptionSelectorModal';
 import OptionInputModal from '@/components/prompt/PromptInput/components/PromptOptionInput/components/OptionInputModal';
+import OptionItem from '@/components/prompt/PromptInput/components/PromptOptionInput/components/OptionItem';
+
+export type OptionsType = 'person' | 'entity' | 'background' | 'anything';
+
+const OPTIONS = {
+  person: { title: '인물', content: 'ai가 그릴 그림에 포함될 인물의 묘사' },
+  entity: { title: '사물', content: 'ai가 그릴 그림에 포함될 사물의 묘사' },
+  background: { title: '배경', content: 'ai가 그릴 그림에 포함될 배경의 묘사' },
+  anything: { title: '아무거나', content: 'ai가 그릴 그림에 포함될 아무거나의 묘사' },
+};
+
+type OptionDataType = {
+  [key: string]: { title: string; content: string };
+};
 
 const PromptOptionInput = () => {
   const [isWriting, setIsWriting] = useState<boolean>(false);
+  const [selectedOption, setSelectedOption] = useState<OptionsType>('person');
+  const [optionData, setOptionData] = useState<OptionDataType>({});
+
+  /**
+   * 옵션을 클릭하면 해당 옵션을 작성하는 화면으로 변경시키는 handler
+   * 입력하는 상태로 변경하고, 선택한 옵션을 저장함
+   */
+  const selectOptionHandler = (option: OptionsType) => {
+    setIsWriting(true);
+    setSelectedOption(option);
+  };
+
+  /**
+   * 어떤 옵션에 대한 입력을 받아왔는지 확인하고 상위의 useForm에 등록
+   */
+  const changeOptionDataHandler = (option: string, title: string, data: string) => {
+    // 빈 값이 입력되면 내용에 추가하지 않음
+    if (data.trim() === '') {
+      setIsOpen(false);
+      return;
+    }
+
+    setOptionData(prev => ({
+      ...prev,
+      [option]: { title, content: data },
+    }));
+
+    setIsOpen(false);
+  };
+
+  /**
+   * 옵션 모달의 열림/닫힘 상태를 관리하는 로직
+   */
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const openModalHandler = () => {
+    setIsOpen(prev => !prev);
+    setIsWriting(false);
+  };
+
+  //@TODO: 옵션 출력이 두 줄로 나타나는 오류 존재함. 옵션이 필요할 때 수정하기
 
   return (
     <div className="flex w-full flex-col gap-[15px]">
@@ -22,17 +76,32 @@ const PromptOptionInput = () => {
         </p>
       </div>
 
-      <div className="flex flex-row flex-wrap gap-[10px]">
-        <Dialog>
-          <DialogTrigger asChild>
-            <div>
-              <AddOptionButton>추가하기</AddOptionButton>
-            </div>
-          </DialogTrigger>
+      <div className="flex w-full flex-row flex-wrap">
+        <Dialog open={isOpen} onOpenChange={openModalHandler}>
+          <div className="flex w-full flex-row flex-wrap gap-[10px]">
+            {Object.entries(optionData).map(([key, value]) => (
+              <OptionItem title={value.title} content={value.content} />
+            ))}
 
-          <DialogContent className="w-[800px] px-[40px] py-[40px]">
-            <OptionSelectorModal />
-            {/*<OptionInputModal title="인물" content="ai가 그릴 그림에 포함된 인물의 묘사" />*/}
+            <DialogTrigger asChild>
+              <div className="w-full">
+                <AddOptionButton>추가하기</AddOptionButton>
+              </div>
+            </DialogTrigger>
+          </div>
+
+          <DialogContent className="w-[320px] px-[20px] py-[40px] sm:w-[400px] md:w-[750px] md:px-[30px]">
+            {!isWriting ? (
+              <OptionSelectorModal onSelect={selectOptionHandler} />
+            ) : (
+              <OptionInputModal
+                type={selectedOption}
+                title={OPTIONS[selectedOption].title}
+                content={OPTIONS[selectedOption].content}
+                changeOptionDataHandler={changeOptionDataHandler}
+                closeModal={openModalHandler}
+              />
+            )}
           </DialogContent>
         </Dialog>
       </div>

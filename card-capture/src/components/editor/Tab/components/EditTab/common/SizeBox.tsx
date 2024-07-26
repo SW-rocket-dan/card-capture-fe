@@ -65,7 +65,7 @@ const SizeBox = () => {
               onChange={e => changeSizeHandler('width', e)}
               onBlur={updateSizeHandler}
               onKeyDown={updateSizeKeyDownHandler}
-              className="w-[79px] bg-transparent text-xs font-bold outline-none"
+              className="w-[79px] bg-transparent text-xs font-medium outline-none"
             />
             <span className="text-xs text-gray5">W</span>
           </div>
@@ -76,7 +76,7 @@ const SizeBox = () => {
               onChange={e => changeSizeHandler('height', e)}
               onBlur={updateSizeHandler}
               onKeyDown={updateSizeKeyDownHandler}
-              className="w-[80px] bg-transparent text-xs font-bold outline-none"
+              className="w-[80px] bg-transparent text-xs font-medium outline-none"
             />
             <span className="text-xs text-gray5">H</span>
           </div>

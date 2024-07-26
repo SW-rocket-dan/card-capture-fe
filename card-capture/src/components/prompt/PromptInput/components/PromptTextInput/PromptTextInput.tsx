@@ -2,14 +2,28 @@ import PromptCategoryText from '@/components/prompt/PromptInput/components/commo
 import PromptTitleText from '@/components/prompt/PromptInput/components/common/PromptTitleText';
 import { useState } from 'react';
 import PlusIcon from '@/components/common/Icon/PlusIcon';
+import { UseFieldArrayReturn, UseFormRegister } from 'react-hook-form';
+import { PromptInputFormType } from '@/app/prompt/page';
 
-const PromptTextInput = () => {
-  const [textCount, setTextCount] = useState<number>(1);
+type PromptTextInputProps = {
+  register: UseFormRegister<PromptInputFormType>;
+  phraseFieldArray: UseFieldArrayReturn<PromptInputFormType, 'phrases', 'id'>;
+  emphasisFieldArray: UseFieldArrayReturn<PromptInputFormType, 'emphasis', 'id'>;
+};
 
-  const plusTextHandler = () => {
-    if (textCount >= 5) return;
+const MAX_PHRASES_LEN = 5;
 
-    setTextCount(prev => prev + 1);
+const PromptTextInput = ({ register, phraseFieldArray, emphasisFieldArray }: PromptTextInputProps) => {
+  const { fields, append: appendPhrase } = phraseFieldArray;
+  const { append: appendEmphasis, remove, replace } = emphasisFieldArray;
+
+  /**
+   * 문구 입력 창을 추가하는 버튼. 최대 MAX_PHRASES_LEN 까지만 추가 가능
+   */
+  const appendPhraseHandler = () => {
+    if (fields.length >= MAX_PHRASES_LEN) return;
+
+    appendPhrase({ value: '' });
   };
 
   return (
@@ -26,19 +40,25 @@ const PromptTextInput = () => {
 
       {/* 입력 부분 */}
       <div className="flex flex-col gap-[7px]">
-        {Array.from({ length: textCount }).map((_, index) => (
-          <div key={index} className="flex flex-row items-center gap-[10px]">
+        {fields.map((field, index) => (
+          <div key={field.id} className="flex flex-row items-center gap-[10px]">
             <input
               type="text"
+              {...register(`phrases.${index}.value`)}
               placeholder="문구를 입력해주세요"
               className="w-[calc(100%-40px)] rounded-[10px] border border-border px-[15px] py-[11px] text-[13px] outline-none placeholder:text-gray5"
             />
-            {index === textCount - 1 && (
+
+            {index === fields.length - 1 && (
               <button
-                onClick={plusTextHandler}
-                className="flex h-[27px] w-[27px] items-center justify-center rounded-full border-[1.5px] border-main"
+                onClick={appendPhraseHandler}
+                className={`flex h-[27px] w-[27px] items-center justify-center rounded-full border-[1.5px] ${index === MAX_PHRASES_LEN - 1 ? 'cursor-default border-border' : 'border-main'}`}
               >
-                <PlusIcon width={12} className="bg text-main" strokeWidth={2} />
+                <PlusIcon
+                  width={12}
+                  className={`${index === MAX_PHRASES_LEN - 1 ? 'text-border' : 'text-main'}`}
+                  strokeWidth={2}
+                />
               </button>
             )}
           </div>

@@ -1,13 +1,19 @@
 import PromptCategoryText from '@/components/prompt/PromptInput/components/common/PromptCategoryText';
 import PromptTitleText from '@/components/prompt/PromptInput/components/common/PromptTitleText';
 import DropperIcon from '@/components/common/Icon/DropperIcon';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useClickOutside from '@/hooks/useClickOutside';
 import PromptColorPicker from '@/components/prompt/PromptInput/components/PromptColorInput/components/PromptColorPicker';
 import { useColor } from 'react-color-palette';
+import { UseFormSetValue } from 'react-hook-form';
+import { PromptInputFormType } from '@/app/prompt/page';
 
-const PromptColorInput = () => {
-  const [color, setColor] = useColor('#000000');
+type PromptColorInputProps = {
+  setValue: UseFormSetValue<PromptInputFormType>;
+};
+
+const PromptColorInput = ({ setValue }: PromptColorInputProps) => {
+  const [currentColor, setCurrentColor] = useColor('#FF8080');
 
   /**
    * 색상 선택 드롭다운 여닫는 click Handler
@@ -17,6 +23,10 @@ const PromptColorInput = () => {
   const openHandler = () => {
     setIsOpen(prev => !prev);
   };
+
+  useEffect(() => {
+    setValue('color', `${currentColor.hex}`);
+  }, [currentColor]);
 
   // 컴포넌트 외부 클릭시 모달 닫는 hook
   const ref = useClickOutside(() => setIsOpen(false));
@@ -38,12 +48,12 @@ const PromptColorInput = () => {
         <button
           onClick={openHandler}
           className="h-[30px] w-[30px] rounded-[8px] border-2 border-border"
-          style={{ backgroundColor: '#FF8080' }}
+          style={{ backgroundColor: `${currentColor.hex}` }}
         />
-        <p className="text-[13px] tracking-little-tight">#FF8080</p>
+        <p className="text-[13px] tracking-little-tight">{currentColor.hex}</p>
       </div>
 
-      {isOpen && <PromptColorPicker color={color} setColor={setColor} closeHandler={openHandler} />}
+      {isOpen && <PromptColorPicker color={currentColor} setColor={setCurrentColor} closeHandler={openHandler} />}
     </div>
   );
 };

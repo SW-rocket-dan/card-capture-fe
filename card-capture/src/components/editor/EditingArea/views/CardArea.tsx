@@ -8,7 +8,6 @@ import LayerAddBox from '@/components/editor/EditingArea/views/LayerAddBox';
 import Button from '@/components/common/Button/Button';
 import { useFocusStore } from '@/store/useFocusStore';
 import ImageBox from '@/components/editor/EditingArea/components/ImageBox/ImageBox';
-import { useEffect } from 'react';
 
 const CardArea = ({ card }: { card: Card }) => {
   const cardId = card.id;
