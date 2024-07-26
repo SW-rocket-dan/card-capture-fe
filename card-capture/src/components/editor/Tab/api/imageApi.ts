@@ -1,14 +1,21 @@
+// 로그인 구현 전이라 임시 토큰 연결
+const token = process.env.NEXT_PUBLIC_JWT_TOKEN;
+
 /**
  * 이미지를 s3에 바로 저장할 수 있는 presigned-url을 받아오는 post api
  * 이미지 전송용 presigned-url과 이미지 링크를 받아옴
  */
 const getPreSignedUrl = async (queryString: string) => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/s3/generate-presigned-url?${queryString}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/api/v1/s3/generate-presigned-url?${queryString}`, {
       method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
 
-    return await response.json();
+    const jsonData = await response.json();
+    return jsonData.data;
   } catch (e) {
     console.log(e);
   }
