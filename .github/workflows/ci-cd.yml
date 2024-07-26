@@ -88,11 +88,29 @@ jobs:
           chmod 400 deployment_key.pem
           mkdir -p ~/.ssh
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
           ssh -o StrictHostKeyChecking=no -i deployment_key.pem ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} <<EOF
-            cd /home/${{ secrets.SERVER_USER }}/your-project-directory/
+            # 디렉토리 확인 및 생성
+            if [ ! -d "/home/${{ secrets.SERVER_USER }}/card-capture-fe/" ]; then
+              mkdir -p /home/${{ secrets.SERVER_USER }}/card-capture-fe/
+            fi
+            cd /home/${{ secrets.SERVER_USER }}/card-capture-fe/
+
+            # 필수 패키지 설치
+            if ! command -v git &> /dev/null; then
+              sudo apt-get update && sudo apt-get install -y git
+            fi
+            if ! command -v npm &> /dev/null; then
+              sudo apt-get update && sudo apt-get install -y npm
+            fi
+            if ! command -v pm2 &> /dev/null; then
+              sudo npm install -g pm2
+            fi
+
+            # 배포 작업
             git pull
             echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" > .env
             npm install
             npm run build
-            pm2 restart your-project-name
+            pm2 restart card-capture-fe
           EOF
