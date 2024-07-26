@@ -13,35 +13,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: 레포지토리 체크아웃
         uses: actions/checkout@v2
 
-      - name: List repository files
+      - name: 레포지토리 파일 목록 출력
         run: ls -al
 
-      - name: Verify package.json exists
+      - name: package.json 존재 여부 확인
         working-directory: ./card-capture
         run: test -f package.json || { echo "package.json not found"; exit 1; }
 
-      - name: Set up Node.js
+      - name: Node.js 설정
         uses: actions/setup-node@v2
         with:
           node-version: '18'
 
-      - name: Install dependencies
+      - name: 의존성 설치
         working-directory: ./card-capture
         run: npm install
 
-      - name: Run tests
+      - name: 테스트 실행
         working-directory: ./card-capture
         run: npm test
 
-      - name: Build project
+      - name: 프로젝트 빌드
         working-directory: ./card-capture
         env:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
         run: |
-          echo "SKIPPING LINT DURING BUILD"
+          echo "빌드 중 린트 생략"
           CI= npm run build
 
   deploy:
@@ -50,33 +50,33 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
-      - name: Checkout repository
+      - name: 레포지토리 체크아웃
         uses: actions/checkout@v2
 
-      - name: List repository files
+      - name: 레포지토리 파일 목록 출력
         run: ls -al
 
-      - name: Verify package.json exists
+      - name: package.json 존재 여부 확인
         working-directory: ./card-capture
         run: test -f package.json || { echo "package.json not found"; exit 1; }
 
-      - name: Set up Node.js
+      - name: Node.js 설정
         uses: actions/setup-node@v2
         with:
           node-version: '18'
 
-      - name: Install dependencies
+      - name: 의존성 설치
         working-directory: ./card-capture
         run: npm install
 
-      - name: Build project
+      - name: 프로젝트 빌드
         working-directory: ./card-capture
         env:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
           NEXT_PUBLIC_JWT_TOKEN: ${{ secrets.NEXT_PUBLIC_JWT_TOKEN }}
         run: npm run build
 
-      - name: Deploy to Server
+      - name: 서버에 배포
         env:
           SERVER_IP: ${{ secrets.SERVER_IP }}
           SERVER_USER: ${{ secrets.SERVER_USER }}
@@ -91,20 +91,25 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i deployment_key.pem ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} <<EOF
             set -e
 
-            BASE_DIR="/home/ec2-user/card-capture-fe"
-            PROJECT_DIR="ec2-user/card-capture"
+            BASE_DIR="/home/${{ secrets.SERVER_USER }}/card-capture-fe"
+            PROJECT_DIR="$BASE_DIR/card-capture"
+
+            echo "BASE_DIR: $BASE_DIR"
+            echo "PROJECT_DIR: $PROJECT_DIR"
+
             if [ -d "$BASE_DIR" ]; then
               rm -rf "$BASE_DIR"
             fi
+
             mkdir -p "$BASE_DIR"
             cd "$BASE_DIR"
 
-            echo "Cloning repository..."
+            echo "레포지토리 클론 중..."
             git clone $REPO_URL . || { echo "Git clone failed"; exit 1; }
 
             cd "$PROJECT_DIR"
 
-            echo "Current directory: $(pwd)"
+            echo "현재 디렉토리: $(pwd)"
             ls -la
 
             if [ ! -f "package.json" ]; then
