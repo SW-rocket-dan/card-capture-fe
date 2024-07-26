@@ -83,49 +83,58 @@ jobs:
           SERVER_IP: ${{ secrets.SERVER_IP }}
           SERVER_USER: ${{ secrets.SERVER_USER }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          REPO_URL: ${{ github.server_url }}/${{ github.repository }}.git
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | sed 's/\\n/\n/g' > deployment_key.pem
           chmod 400 deployment_key.pem
           mkdir -p ~/.ssh
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
-          
+
           ssh -o StrictHostKeyChecking=no -i deployment_key.pem ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} <<EOF
-          # 디렉토리 확인 및 생성
-          if [ ! -d "/home/${{ secrets.SERVER_USER }}/card-capture-fe/" ]; then
-           mkdir -p /home/${{ secrets.SERVER_USER }}/card-capture-fe/
-          fi
-          cd /home/${{ secrets.SERVER_USER }}/card-capture-fe/
-          
-          # 필수 패키지 설치
-          if ! command -v git &> /dev/null; then
-           sudo yum update && sudo yum install -y git
-          fi
-          if ! command -v npm &> /dev/null; then
-           sudo yum update && sudo yum install -y npm
-          fi
-          if ! command -v pm2 &> /dev/null; then
-           sudo npm install -g pm2
-          fi
-          
-          # Git 저장소 클론 또는 풀
-          if [ ! -d ".git" ]; then
-           git clone $REPO_URL .
-          else
-           git pull
-          fi
-          
-          # 환경 변수 설정
-          echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" > .env
-          echo "NEXT_PUBLIC_JWT_TOKEN=${{ secrets.NEXT_PUBLIC_JWT_TOKEN }}" >> .env
-          
-          
-          # 패키지 설치 및 빌드
-          npm install
-          npm run build
-          
-          if pm2 list | grep -q "card-capture-fe"; then
-            pm2 restart card-capture-fe
-          else
-            pm2 start npm --name "card-capture-fe" -- start
-          fi
+            set -e
+
+            # 디렉토리 확인 및 생성
+            BASE_DIR="/home/${{ secrets.SERVER_USER }}/card-capture-fe"
+            PROJECT_DIR="$BASE_DIR/card-capture"
+            if [ ! -d "$BASE_DIR" ]; then
+              mkdir -p "$BASE_DIR"
+            fi
+            cd "$BASE_DIR"
+
+            # Git 저장소 클론 또는 풀
+            if [ ! -d ".git" ]; then
+              echo "Cloning repository..."
+              git clone $REPO_URL . || { echo "Git clone failed"; exit 1; }
+            else
+              echo "Pulling latest changes..."
+              git pull || { echo "Git pull failed"; exit 1; }
+            fi
+
+            # 프로젝트 디렉토리로 이동
+            cd "$PROJECT_DIR"
+
+            # 현재 디렉토리 확인
+            echo "Current directory: $(pwd)"
+            ls -la
+
+            # package.json 확인
+            if [ ! -f "package.json" ]; then
+              echo "Error: package.json not found"
+              exit 1
+            fi
+
+            # 환경 변수 설정
+            echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" > .env
+            echo "NEXT_PUBLIC_JWT_TOKEN=${{ secrets.NEXT_PUBLIC_JWT_TOKEN }}" >> .env
+
+            # 패키지 설치 및 빌드
+            npm install
+            npm run build
+
+            # PM2로 애플리케이션 시작 또는 재시작
+            if pm2 list | grep -q "card-capture-fe"; then
+              pm2 restart card-capture-fe
+            else
+              pm2 start npm --name "card-capture-fe" -- start
+            fi
           EOF
