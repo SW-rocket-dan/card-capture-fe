@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 const EditingArea = () => {
   const cards = useCardsStore(state => state.cards);
   const setCard = useCardsStore(state => state.setCard);
-
+  //
   // /**
   //  * @NOTE API 나오면 그 때 서버와 연결해볼 계획
   //  */

@@ -1,7 +1,7 @@
 import StarsIcon from '@/components/common/Icon/StarsIcon';
-import { PromptInputFormType } from '@/app/prompt/page';
 import { rgba } from 'polished';
 import { hexToRgba } from '@/components/common/ColorPicker/colorUtils';
+import { PromptInputFormType } from '@/app/prompt/PromptContent';
 
 type PromptPreviewProps = {
   formData: PromptInputFormType;

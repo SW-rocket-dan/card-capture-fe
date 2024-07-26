@@ -2,8 +2,8 @@ import PromptCategoryText from '@/components/prompt/PromptInput/components/commo
 import PromptTitleText from '@/components/prompt/PromptInput/components/common/PromptTitleText';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import useIsMobile from '@/hooks/useIsMobile';
-import { UseFormRegister, UseFormSetValue } from 'react-hook-form';
-import { PromptInputFormType } from '@/components/prompt/PromptInput/PromptInput';
+import { UseFormSetValue } from 'react-hook-form';
+import { PromptInputFormType } from '@/app/prompt/PromptContent';
 
 type PromptModelInputProps = {
   setValue: UseFormSetValue<PromptInputFormType>;

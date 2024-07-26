@@ -8,6 +8,10 @@ import LayerAddBox from '@/components/editor/EditingArea/views/LayerAddBox';
 import Button from '@/components/common/Button/Button';
 import { useFocusStore } from '@/store/useFocusStore';
 import ImageBox from '@/components/editor/EditingArea/components/ImageBox/ImageBox';
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import React, { useState } from 'react';
+import { useCardsStore } from '@/store/useCardsStore';
+import { parseEscapedJson } from '@/utils/jsonUtils';
 
 const CardArea = ({ card }: { card: Card }) => {
   const cardId = card.id;
@@ -28,6 +32,21 @@ const CardArea = ({ card }: { card: Card }) => {
     setFocusedLayerId(-1);
   };
 
+  /**
+   * json 확인하기 위한 임시 로직
+   */
+  const [isOpen, setIsOpen] = useState(false);
+  const [json, setJson] = useState('');
+  const setCard = useCardsStore(state => state.setCard);
+
+  const changeCardHandler = () => {
+    const templateData = parseEscapedJson(json);
+
+    setCard(templateData.cards);
+
+    setIsOpen(false);
+  };
+
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-[10px] bg-editorbg">
       {/* 카드 추가 관리 박스 / 레이어 추가 관리 박스*/}
@@ -35,6 +54,25 @@ const CardArea = ({ card }: { card: Card }) => {
         <CardAddBox />
         <div className="flex flex-row items-center gap-[10px]">
           <LayerAddBox cardId={cardId} />
+
+          {/* json import 버튼 - 임시 / 백엔드 확인용 */}
+          <Dialog open={isOpen} onOpenChange={setIsOpen}>
+            <DialogTrigger asChild>
+              <button className="rounded-md bg-white p-2 text-sm">JSON</button>
+            </DialogTrigger>
+            <DialogContent className="flex w-[320px] flex-col items-center justify-center px-[20px] py-[40px] sm:w-[400px] md:w-[750px] md:px-[30px]">
+              <DialogTitle>Json String 입력하기</DialogTitle>
+              <textarea
+                onChange={e => setJson(e.target.value)}
+                placeholder="앞뒤로 따옴표 빼고 입력해야 합니다"
+                className="min-h-[230px] w-full resize-none rounded-[8px] border border-border p-5 text-[13px] outline-none"
+              />
+              <Button onClick={changeCardHandler} type="full" className="h-[40px] w-full text-[13px] sm:w-[170px]">
+                입력완료
+              </Button>
+            </DialogContent>
+          </Dialog>
+
           <Button type="full" className="h-[36px] w-[145px] rounded-[5px]">
             <span className="text-xs">Export</span>
           </Button>

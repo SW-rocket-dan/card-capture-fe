@@ -35,8 +35,8 @@ const TextEditBox = ({ focused = false }: { focused?: boolean }) => {
             <FormatBox />
           </div>
           <StyleBox />
-          <OutlineBox />
-          <OrderBox />
+          {/*<OutlineBox />*/}
+          {/*<OrderBox />*/}
         </div>
       )}
       <div className="w-full !border-b-[1px] border-border" />
