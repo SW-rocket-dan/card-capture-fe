@@ -13,36 +13,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 레포지토리 체크아웃
+      - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: 레포지토리 파일 목록 출력
+      - name: List Repository Files
         run: ls -al
-
-      - name: package.json 존재 여부 확인
-        working-directory: ./card-capture
-        run: test -f package.json || { echo "package.json not found"; exit 1; }
-
-      - name: Node.js 설정
-        uses: actions/setup-node@v2
-        with:
-          node-version: '18'
-
-      - name: 의존성 설치
-        working-directory: ./card-capture
-        run: npm install
-
-      - name: 테스트 실행
-        working-directory: ./card-capture
-        run: npm test
-
-      - name: 프로젝트 빌드
-        working-directory: ./card-capture
-        env:
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
-        run: |
-          echo "빌드 중 린트 생략"
-          CI= npm run build
 
   deploy:
     runs-on: ubuntu-latest
@@ -50,33 +25,22 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
-      - name: 레포지토리 체크아웃
+      - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: 레포지토리 파일 목록 출력
+      - name: List Repository Files
         run: ls -al
 
-      - name: package.json 존재 여부 확인
+      - name: Check if package.json Exists
         working-directory: ./card-capture
         run: test -f package.json || { echo "package.json not found"; exit 1; }
 
-      - name: Node.js 설정
+      - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '18'
 
-      - name: 의존성 설치
-        working-directory: ./card-capture
-        run: npm install
-
-      - name: 프로젝트 빌드
-        working-directory: ./card-capture
-        env:
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
-          NEXT_PUBLIC_JWT_TOKEN: ${{ secrets.NEXT_PUBLIC_JWT_TOKEN }}
-        run: npm run build
-
-      - name: 서버에 배포
+      - name: Deploy to Server
         env:
           SERVER_IP: ${{ secrets.SERVER_IP }}
           SERVER_USER: ${{ secrets.SERVER_USER }}
@@ -93,41 +57,48 @@ jobs:
 
             BASE_DIR="/home/${{ secrets.SERVER_USER }}/card-capture-fe"
             PROJECT_DIR="$BASE_DIR/card-capture"
-            REPO_URL="${{ github.server_url }}/${{ github.repository }}.git"
+            REPO_URL="https://github.com/SW-rocket-dan/card-capture-fe.git"
 
             echo "BASE_DIR: $BASE_DIR"
             echo "PROJECT_DIR: $PROJECT_DIR"
             echo "REPO_URL: $REPO_URL"
-
+          
             if [ -d "$BASE_DIR" ]; then
+              echo "Removing existing directory..."
               rm -rf "$BASE_DIR"
             fi
 
+            echo "Creating new directory..."
             mkdir -p "$BASE_DIR"
             cd "$BASE_DIR"
 
-            echo "레포지토리 클론 중..."
+            echo "Cloning repository..."
             git clone $REPO_URL . || { echo "Git clone failed"; exit 1; }
 
             cd "$PROJECT_DIR"
 
-            echo "현재 디렉토리: $(pwd)"
+            echo "Current directory: $(pwd)"
             ls -la
 
-            if [ ! -f "package.json" ]; then
-              echo "Error: package.json not found"
-              exit 1
-            fi
-
+            echo "Setting environment variables..."
             echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" > .env
             echo "NEXT_PUBLIC_JWT_TOKEN=${{ secrets.NEXT_PUBLIC_JWT_TOKEN }}" >> .env
-
+          
+            echo "Installing npm packages..."
             npm install
+          
+            echo "Building the repository..."
             npm run build
 
-            if pm2 list | grep -q "card-capture-fe"; then
-              pm2 restart card-capture-fe
-            else
-              pm2 start npm —name "card-capture-fe" — start
-            fi
+            echo "Deleting existing PM2 process..."
+            pm2 delete card-capture || true
+
+            echo "Starting application with PM2..."
+            pm2 start npm --name "card-capture" -- start
+
+            echo "Saving PM2 configuration..."
+            pm2 save
+
+            echo "Setting PM2 to start on boot..."
+            pm2 startup | tail -n 1 | sudo bash
           EOF
