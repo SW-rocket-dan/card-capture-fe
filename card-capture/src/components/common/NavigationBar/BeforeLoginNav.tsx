@@ -1,8 +1,10 @@
-import Button from '@/components/common/Button/Button';
 import useIsMobile from '@/hooks/useIsMobile';
 import { useRouter } from 'next/navigation';
-import LoginButton from '@/components/common/Login/LoginButton';
+import LoginButton from '@/components/common/NavigationBar/components/LoginButton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import DivButton from '@/components/common/Button/DivButton';
+import React from 'react';
+import CreateButton from '@/components/common/NavigationBar/components/CreateButton';
 
 const BeforeLoginNav = () => {
   const router = useRouter();
@@ -30,7 +32,9 @@ const BeforeLoginNav = () => {
                 <p className="font-normal">준비중!</p>
               </TooltipContent>
             </Tooltip>
-            <button onClick={() => router.push('/prompt')}>제작하기</button>
+            <CreateButton>
+              <p>제작하기</p>
+            </CreateButton>
           </TooltipProvider>
         </ul>
       )}
@@ -38,9 +42,11 @@ const BeforeLoginNav = () => {
       {!isMobile && (
         <div className="flex w-[300px] flex-row justify-end gap-2.5">
           <LoginButton />
-          <Button type="full" className="h-[40px] w-[110px] rounded-[10px]">
-            <p className="text-[14px]">제작하기</p>
-          </Button>
+          <CreateButton>
+            <DivButton type="full" className="h-[40px] w-[110px] rounded-[10px]">
+              <p className="text-[14px]">제작하기</p>
+            </DivButton>
+          </CreateButton>
         </div>
       )}
     </div>
