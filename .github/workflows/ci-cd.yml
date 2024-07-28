@@ -46,6 +46,8 @@ jobs:
           SERVER_USER: ${{ secrets.SERVER_USER }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           REPO_URL: ${{ github.server_url }}/${{ github.repository }}.git
+          NEXT_PUBLIC_API_KEY: ${{ secrets.NEXT_PUBLIC_API_KEY }}
+
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | sed 's/\\n/\n/g' > deployment_key.pem
           chmod 400 deployment_key.pem
@@ -81,7 +83,7 @@ jobs:
             ls -la
 
             echo "Setting environment variables..."
-            echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" > .env
+            echo "NEXT_PUBLIC_API_KEY=${{ secrets.NEXT_PUBLIC_API_KEY }}" > .env
           
             echo "Installing npm packages..."
             npm install
