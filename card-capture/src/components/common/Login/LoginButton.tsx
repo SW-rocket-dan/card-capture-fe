@@ -10,9 +10,11 @@ import LoginIcon from '@/components/common/Icon/LoginIcon';
 import { loginApi } from '@/components/common/Login/api';
 import { useEffect, useState } from 'react';
 import DivButton from '@/components/common/Button/DivButton';
+import { useAuthStore } from '@/store/useAuthStore';
 
 const LoginButton = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const isLoggedIn = useAuthStore(state => state.isLoggedIn);
+  const setIsLoggedIn = useAuthStore(state => state.setIsLoggedIn);
 
   useEffect(() => {
     /**

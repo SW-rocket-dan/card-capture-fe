@@ -1,5 +1,4 @@
 import Button from '@/components/common/Button/Button';
-import LoginIcon from '@/components/common/Icon/LoginIcon';
 import useIsMobile from '@/hooks/useIsMobile';
 import { useRouter } from 'next/navigation';
 import LoginButton from '@/components/common/Login/LoginButton';

@@ -6,6 +6,7 @@ import UpIcon from '@/components/common/Icon/UpIcon';
 import useIsMobile from '@/hooks/useIsMobile';
 import { useRouter } from 'next/navigation';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { useAuthStore } from '@/store/useAuthStore';
 
 const AfterLoginNav = () => {
   const router = useRouter();
@@ -17,6 +18,17 @@ const AfterLoginNav = () => {
 
   const openHandler = () => {
     setIsOpen(prev => !prev);
+  };
+
+  /**
+   * 로그아웃 상태 전역 상태에 등록
+   * 네비게이션 바 자동으로 변경되어야 하기 때문에 등록함
+   */
+  const setIsLoggedIn = useAuthStore(state => state.setIsLoggedIn);
+
+  const logoutHandler = () => {
+    localStorage.removeItem('accessToken');
+    setIsLoggedIn(false);
   };
 
   // 반응형 적용을 위해 모바일 화면인지 확인하는 hook
@@ -70,7 +82,10 @@ const AfterLoginNav = () => {
               <button className="flex h-[40px] w-full items-center justify-start px-[20px] hover:bg-bannerbg">
                 마이페이지
               </button>
-              <button className="flex h-[40px] w-full items-center justify-start px-[20px] text-main hover:bg-bannerbg">
+              <button
+                onClick={logoutHandler}
+                className="flex h-[40px] w-full items-center justify-start px-[20px] text-main hover:bg-bannerbg"
+              >
                 로그아웃
               </button>
             </div>
