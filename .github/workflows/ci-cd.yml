@@ -82,7 +82,6 @@ jobs:
 
             echo "Setting environment variables..."
             echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" > .env
-            echo "NEXT_PUBLIC_JWT_TOKEN=${{ secrets.NEXT_PUBLIC_JWT_TOKEN }}" >> .env
           
             echo "Installing npm packages..."
             npm install
