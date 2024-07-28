@@ -2,6 +2,7 @@ import Button from '@/components/common/Button/Button';
 import LoginIcon from '@/components/common/Icon/LoginIcon';
 import useIsMobile from '@/hooks/useIsMobile';
 import { useRouter } from 'next/navigation';
+import LoginButton from '@/components/common/Login/LoginButton';
 
 const BeforeLoginNav = () => {
   const router = useRouter();
@@ -24,10 +25,7 @@ const BeforeLoginNav = () => {
 
       {!isMobile && (
         <div className="flex w-[300px] flex-row justify-end gap-2.5">
-          <Button type="default" className="h-[40px] w-[110px] rounded-[10px]">
-            <LoginIcon width={15} />
-            <p className="text-[14px]">Login</p>
-          </Button>
+          <LoginButton />
           <Button type="full" className="h-[40px] w-[110px] rounded-[10px]">
             <p className="text-[14px]">제작하기</p>
           </Button>
