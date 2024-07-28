@@ -1,7 +1,10 @@
-import Button from '@/components/common/Button/Button';
-import LoginIcon from '@/components/common/Icon/LoginIcon';
 import useIsMobile from '@/hooks/useIsMobile';
 import { useRouter } from 'next/navigation';
+import LoginButton from '@/components/common/NavigationBar/components/LoginButton';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import DivButton from '@/components/common/Button/DivButton';
+import React from 'react';
+import CreateButton from '@/components/common/NavigationBar/components/CreateButton';
 
 const BeforeLoginNav = () => {
   const router = useRouter();
@@ -16,21 +19,34 @@ const BeforeLoginNav = () => {
 
       {!isMobile && (
         <ul className="flex flex-row gap-[30px] whitespace-nowrap text-[12px] font-semibold lg:gap-[50px] lg:text-[14px]">
-          <li>요금제</li>
-          <li>다른 템플릿 보기</li>
-          <li>제작하기</li>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>요금제</TooltipTrigger>
+              <TooltipContent>
+                <p className="font-normal">준비중!</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>다른 템플릿 보기</TooltipTrigger>
+              <TooltipContent>
+                <p className="font-normal">준비중!</p>
+              </TooltipContent>
+            </Tooltip>
+            <CreateButton>
+              <p>제작하기</p>
+            </CreateButton>
+          </TooltipProvider>
         </ul>
       )}
 
       {!isMobile && (
         <div className="flex w-[300px] flex-row justify-end gap-2.5">
-          <Button type="default" className="h-[40px] w-[110px] rounded-[10px]">
-            <LoginIcon width={15} />
-            <p className="text-[14px]">Login</p>
-          </Button>
-          <Button type="full" className="h-[40px] w-[110px] rounded-[10px]">
-            <p className="text-[14px]">제작하기</p>
-          </Button>
+          <LoginButton />
+          <CreateButton>
+            <DivButton type="full" className="h-[40px] w-[110px] rounded-[10px]">
+              <p className="text-[14px]">제작하기</p>
+            </DivButton>
+          </CreateButton>
         </div>
       )}
     </div>

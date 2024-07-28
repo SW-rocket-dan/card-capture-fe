@@ -1,6 +1,6 @@
 // app/api/v1/users/login/route.ts
 
-import { Cards, Shape } from '@/store/useCardsStore/type';
+import { Card, Cards, Shape } from '@/store/useCardsStore/type';
 import ReactQuill from 'react-quill';
 import { DeltaStatic } from 'quill';
 

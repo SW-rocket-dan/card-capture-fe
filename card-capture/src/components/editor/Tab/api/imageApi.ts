@@ -1,5 +1,5 @@
-// 로그인 구현 전이라 임시 토큰 연결
-const token = process.env.NEXT_PUBLIC_JWT_TOKEN;
+// accessToken 가져오기
+const token = localStorage.getItem('accessToken');
 
 /**
  * 이미지를 s3에 바로 저장할 수 있는 presigned-url을 받아오는 post api
