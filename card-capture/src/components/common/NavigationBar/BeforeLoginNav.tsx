@@ -3,6 +3,7 @@ import LoginIcon from '@/components/common/Icon/LoginIcon';
 import useIsMobile from '@/hooks/useIsMobile';
 import { useRouter } from 'next/navigation';
 import LoginButton from '@/components/common/Login/LoginButton';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const BeforeLoginNav = () => {
   const router = useRouter();
@@ -17,9 +18,21 @@ const BeforeLoginNav = () => {
 
       {!isMobile && (
         <ul className="flex flex-row gap-[30px] whitespace-nowrap text-[12px] font-semibold lg:gap-[50px] lg:text-[14px]">
-          <li>요금제</li>
-          <li>다른 템플릿 보기</li>
-          <li>제작하기</li>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>요금제</TooltipTrigger>
+              <TooltipContent>
+                <p className="font-normal">준비중!</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>다른 템플릿 보기</TooltipTrigger>
+              <TooltipContent>
+                <p className="font-normal">준비중!</p>
+              </TooltipContent>
+            </Tooltip>
+            <button onClick={() => router.push('/prompt')}>제작하기</button>
+          </TooltipProvider>
         </ul>
       )}
 

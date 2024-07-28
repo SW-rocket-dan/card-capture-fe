@@ -5,6 +5,7 @@ import useClickOutside from '@/hooks/useClickOutside';
 import UpIcon from '@/components/common/Icon/UpIcon';
 import useIsMobile from '@/hooks/useIsMobile';
 import { useRouter } from 'next/navigation';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const AfterLoginNav = () => {
   const router = useRouter();
@@ -32,9 +33,21 @@ const AfterLoginNav = () => {
 
       {!isMobile && (
         <ul className="flex cursor-pointer flex-row gap-[30px] whitespace-nowrap text-[12px] font-semibold lg:gap-[50px] lg:text-[14px]">
-          <li>요금제</li>
-          <li>다른 템플릿 보기</li>
-          <li>제작하기</li>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>요금제</TooltipTrigger>
+              <TooltipContent>
+                <p className="font-normal">준비중!</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>다른 템플릿 보기</TooltipTrigger>
+              <TooltipContent>
+                <p className="font-normal">준비중!</p>
+              </TooltipContent>
+            </Tooltip>
+            <button onClick={() => router.push('/prompt')}>제작하기</button>
+          </TooltipProvider>
         </ul>
       )}
 
@@ -54,10 +67,10 @@ const AfterLoginNav = () => {
               className={`absolute right-0 z-20 mt-[20px] flex w-[150px] flex-col rounded-lg bg-white py-[5px] text-[14px] font-medium drop-shadow-md`}
               style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08' }}
             >
-              <button className="hover:bg-bannerbg flex h-[40px] w-full items-center justify-start px-[20px]">
+              <button className="flex h-[40px] w-full items-center justify-start px-[20px] hover:bg-bannerbg">
                 마이페이지
               </button>
-              <button className="hover:bg-bannerbg flex h-[40px] w-full items-center justify-start px-[20px] text-main">
+              <button className="flex h-[40px] w-full items-center justify-start px-[20px] text-main hover:bg-bannerbg">
                 로그아웃
               </button>
             </div>
