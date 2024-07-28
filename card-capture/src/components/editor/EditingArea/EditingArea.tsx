@@ -18,8 +18,7 @@ const EditingArea = () => {
     //   setCard(data.cards);
     // };
     // func();
-
-    setCard([INITIAL_CARD]);
+    // setCard([INITIAL_CARD]);
   }, []);
 
   return (

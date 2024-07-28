@@ -6,11 +6,10 @@ import React from 'react';
 import PromptInput from '@/components/prompt/PromptInput/PromptInput';
 import PromptPreview from '@/components/prompt/PromptPreview/PromptPreview';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { promptApi } from '@/app/prompt/api';
 import { PromptFormType } from '@/app/prompt/api/promptApi';
-import { parseEscapedJson } from '@/utils/jsonUtils';
 import { useCardsStore } from '@/store/useCardsStore';
 import { useRouter } from 'next/navigation';
+import { MOCK_CARD_DATA } from '@/app/api/mocks/cards/route';
 
 export type PromptInputFormType = {
   phrases: { value: string }[];
@@ -61,11 +60,14 @@ const PromptContent = () => {
     // store에 템플릿 저장
     // setCards(templateData.cards);
 
-    const func = async () => {
-      const data = await (await fetch('http://localhost:3000/api/mocks/cards')).json();
-      setCards(data.cards);
-    };
-    func();
+    // const func = async () => {
+    //   const data = await (await fetch('http://localhost:3000/api/mocks/cards')).json();
+    //   setCards(data.cards);
+    //   console.log(data.cards);
+    // };
+    // func();
+
+    setCards(MOCK_CARD_DATA);
 
     router.push('/editor');
   };

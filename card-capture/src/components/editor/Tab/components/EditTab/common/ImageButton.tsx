@@ -13,10 +13,9 @@ const ImageButton = ({ onChangeImage }: ImageButtonProps) => {
    * 이미지 버튼을 클릭하면 image input이 열리게 하는 로직
    */
   const openImageInput = () => {
-    //
-    // if (!imgRef || !imgRef.current) return;
-    //
-    // imgRef.current.click();
+    if (!imgRef || !imgRef.current) return;
+
+    imgRef.current.click();
   };
 
   return (
