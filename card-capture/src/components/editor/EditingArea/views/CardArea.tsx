@@ -82,7 +82,7 @@ const CardArea = ({ card }: { card: Card }) => {
       // });
 
       const dataUrl = await toPng(cardArea, {
-        cacheBust: true, // 캐시를 방지하여 최신 이미지를 가져옴
+        includeQueryParams: true,
         quality: 0.8, // 품질 설정
         width: cardArea.offsetWidth,
         height: cardArea.offsetHeight,
