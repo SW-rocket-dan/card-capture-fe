@@ -9,9 +9,12 @@ import Button from '@/components/common/Button/Button';
 import { useFocusStore } from '@/store/useFocusStore';
 import ImageBox from '@/components/editor/EditingArea/components/ImageBox/ImageBox';
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useCardsStore } from '@/store/useCardsStore';
 import { parseEscapedJson } from '@/utils/jsonUtils';
+import html2canvas from 'html2canvas';
+import { saveAs } from 'file-saver';
+import { toBlob, toCanvas, toPng } from 'html-to-image';
 
 const CardArea = ({ card }: { card: Card }) => {
   const cardId = card.id;
@@ -47,6 +50,50 @@ const CardArea = ({ card }: { card: Card }) => {
     setIsOpen(false);
   };
 
+  /**
+   * card에 그려진 dom을 image export 하는 handler
+   * html2canvas와 file-saver 사용
+   */
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const downloadCardHandler = async () => {
+    if (!cardRef || !cardRef.current) return;
+
+    setFocusedLayerId(-1);
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    try {
+      const cardArea = cardRef.current;
+
+      // const canvas = await html2canvas(cardArea, {
+      //   scale: 4,
+      //   scrollX: 0,
+      //   scrollY: 0,
+      //   width: cardArea.offsetWidth,
+      //   height: cardArea.offsetHeight,
+      //   windowWidth: document.documentElement.scrollWidth,
+      //   windowHeight: document.documentElement.scrollHeight,
+      //   allowTaint: true,
+      //   useCORS: true,
+      // });
+
+      // canvas.toBlob(blob => {
+      //   if (blob !== null) saveAs(blob, 'card-capture-image.png');
+      // });
+
+      const dataUrl = await toPng(cardArea, {
+        cacheBust: true, // 캐시를 방지하여 최신 이미지를 가져옴
+        quality: 0.8, // 품질 설정
+        width: cardArea.offsetWidth,
+        height: cardArea.offsetHeight,
+      });
+
+      saveAs(dataUrl, 'card-capture-image.png');
+    } catch (e) {
+      console.error('Error converting card to image', e);
+    }
+  };
+
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-[10px] bg-editorbg">
       {/* 카드 추가 관리 박스 / 레이어 추가 관리 박스*/}
@@ -73,14 +120,15 @@ const CardArea = ({ card }: { card: Card }) => {
             </DialogContent>
           </Dialog>
 
-          <Button type="full" className="h-[36px] w-[145px] rounded-[5px]">
+          <Button onClick={downloadCardHandler} type="full" className="h-[36px] w-[145px] rounded-[5px]">
             <span className="text-xs">Export</span>
           </Button>
         </div>
       </div>
 
-      {/* */}
+      {/* card에 요소 출력 */}
       <div
+        ref={cardRef}
         className="relative h-[550px] w-[550px] overflow-hidden border-[1px] border-border bg-white"
         style={{
           userSelect: 'auto',
