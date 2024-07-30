@@ -6,6 +6,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Direction, Offset, ResizeOffset } from './FocusBox.type';
 import { FaArrowRotateLeft } from 'react-icons/fa6';
 import { INITIAL_DRAG_OFFSET, INITIAL_RESIZE_OFFSET } from './FocusBox.constant';
+import { useFocusStore } from '@/store/useFocusStore';
 
 type Props = {
   children: React.ReactElement<{
@@ -394,6 +395,37 @@ const FocusBox = ({ children, cardId, layerId, type }: Props) => {
       window.removeEventListener('pointerup', pointerUpRotateHandler, true);
     };
   }, [isRotate]);
+
+  // 현재 포커스된 요소가 입력 필드인지 확인하는 함수
+  const isInputFocused = () => {
+    const activeElement = document.activeElement;
+    const isEditable = activeElement && activeElement.getAttribute('contenteditable') === 'true';
+
+    return activeElement instanceof HTMLInputElement || activeElement instanceof HTMLTextAreaElement || isEditable;
+  };
+
+  /**
+   * 선택한 Layer를 delete / backspace로 삭제하는 기능
+   */
+  const focusedCardId = useFocusStore(state => state.focusedCardId);
+  const focusedLayerId = useFocusStore(state => state.focusedLayerId);
+  const deleteLayer = useCardsStore(state => state.deleteLayer);
+
+  const deleteLayerHandler = (e: KeyboardEvent) => {
+    if (focusedCardId !== cardId) return;
+
+    if (isInputFocused()) return;
+
+    if (focusedLayerId !== -1 && (e.key === 'Backspace' || e.key === 'Delete')) {
+      deleteLayer(cardId, focusedLayerId);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', deleteLayerHandler);
+
+    return () => document.removeEventListener('keydown', deleteLayerHandler);
+  }, [focusedLayerId]);
 
   return (
     <div
