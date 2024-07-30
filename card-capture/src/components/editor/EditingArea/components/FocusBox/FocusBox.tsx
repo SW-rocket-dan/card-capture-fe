@@ -7,6 +7,8 @@ import { Direction, Offset, ResizeOffset } from './FocusBox.type';
 import { FaArrowRotateLeft } from 'react-icons/fa6';
 import { INITIAL_DRAG_OFFSET, INITIAL_RESIZE_OFFSET } from './FocusBox.constant';
 import { useFocusStore } from '@/store/useFocusStore';
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from '@/components/ui/context-menu';
+import TrashIcon from '@/components/common/Icon/TrashIcon';
 
 type Props = {
   children: React.ReactElement<{
@@ -411,7 +413,7 @@ const FocusBox = ({ children, cardId, layerId, type }: Props) => {
   const focusedLayerId = useFocusStore(state => state.focusedLayerId);
   const deleteLayer = useCardsStore(state => state.deleteLayer);
 
-  const deleteLayerHandler = (e: KeyboardEvent) => {
+  const deleteLayerOnKeyPressHandler = (e: KeyboardEvent) => {
     if (focusedCardId !== cardId) return;
 
     if (isInputFocused()) return;
@@ -422,10 +424,16 @@ const FocusBox = ({ children, cardId, layerId, type }: Props) => {
   };
 
   useEffect(() => {
-    document.addEventListener('keydown', deleteLayerHandler);
+    document.addEventListener('keydown', deleteLayerOnKeyPressHandler);
 
-    return () => document.removeEventListener('keydown', deleteLayerHandler);
+    return () => document.removeEventListener('keydown', deleteLayerOnKeyPressHandler);
   }, [focusedLayerId]);
+
+  const deleteLayerOnClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (focusedCardId !== cardId) return;
+
+    deleteLayer(cardId, focusedLayerId);
+  };
 
   return (
     <div
@@ -435,7 +443,7 @@ const FocusBox = ({ children, cardId, layerId, type }: Props) => {
         top: curPosition.y,
         width: curPosition.width,
         height: curPosition.height,
-        zIndex: 10000, //NOTE: focus되면 z-index가 상위로 와야함 (수치는 회의해야함!)
+        zIndex: 1000, //NOTE: focus되면 z-index가 상위로 와야함 (수치는 회의해야함!)
         transform: `rotate(${curPosition.rotate}deg)`,
         transformOrigin: 'center',
         wordWrap: 'break-word',
@@ -496,11 +504,23 @@ const FocusBox = ({ children, cardId, layerId, type }: Props) => {
       >
         <FaArrowRotateLeft size={8} />
       </div>
-      <div className="absolute h-full w-full" style={{ opacity: curPosition.opacity / 100 }}>
-        {layer.type === 'text' && React.isValidElement(children)
-          ? React.cloneElement(children, { clickedCount })
-          : children}
-      </div>
+      <ContextMenu>
+        <ContextMenuTrigger>
+          <div className="absolute h-full w-full" style={{ opacity: curPosition.opacity / 100 }}>
+            {layer.type === 'text' && React.isValidElement(children)
+              ? React.cloneElement(children, { clickedCount })
+              : children}
+          </div>
+        </ContextMenuTrigger>
+        <ContextMenuContent className="w-[200px]">
+          <ContextMenuItem onClick={deleteLayerOnClickHandler}>
+            <div className="flex flex-row gap-3">
+              <TrashIcon width={15} />
+              <p> 삭제하기</p>
+            </div>
+          </ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenu>
     </div>
   );
 };
