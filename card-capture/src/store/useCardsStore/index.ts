@@ -9,7 +9,7 @@ export const INITIAL_CARD: Card = {
   id: 0,
   background: {
     url: '',
-    opacity: 1,
+    opacity: 100,
     color: '#FFFFFF',
   },
   layers: [],
@@ -217,7 +217,7 @@ export const useCardsStore = create(
                   width: 200,
                   height: 45,
                   rotate: 0,
-                  zIndex: 2,
+                  zIndex: 3,
                   opacity: 100,
                 },
               });
