@@ -2,10 +2,14 @@ import { create } from 'zustand';
 
 type useAuthStore = {
   isLoggedIn: boolean;
-  setIsLoggedIn: (val: boolean) => void;
+  isModalOpen: boolean;
+  setIsLoggedIn: (isLoggedIn: boolean) => void;
+  setIsModalOpen: (IsModalOpen: boolean) => void;
 };
 
 export const useAuthStore = create<useAuthStore>()(set => ({
   isLoggedIn: false,
-  setIsLoggedIn: val => set({ isLoggedIn: val }),
+  isModalOpen: false,
+  setIsLoggedIn: isLoggedIn => set({ isLoggedIn }),
+  setIsModalOpen: isModalOpen => set({ isModalOpen }),
 }));
