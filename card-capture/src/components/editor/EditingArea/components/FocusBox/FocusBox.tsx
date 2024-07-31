@@ -6,6 +6,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Direction, Offset, ResizeOffset } from './FocusBox.type';
 import { FaArrowRotateLeft } from 'react-icons/fa6';
 import { INITIAL_DRAG_OFFSET, INITIAL_RESIZE_OFFSET } from './FocusBox.constant';
+import { useFocusStore } from '@/store/useFocusStore';
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from '@/components/ui/context-menu';
+import TrashIcon from '@/components/common/Icon/TrashIcon';
 
 type Props = {
   children: React.ReactElement<{
@@ -395,6 +398,44 @@ const FocusBox = ({ children, cardId, layerId, type }: Props) => {
     };
   }, [isRotate]);
 
+  // 현재 포커스된 요소가 입력 필드인지 확인하는 함수
+  const isInputFocused = () => {
+    const activeElement = document.activeElement;
+    const isEditable = activeElement && activeElement.getAttribute('contenteditable') === 'true';
+
+    return activeElement instanceof HTMLInputElement || activeElement instanceof HTMLTextAreaElement || isEditable;
+  };
+
+  /**
+   * 1. 선택한 Layer를 delete / backspace로 삭제하는 기능
+   * 2. 오른쪽 클릭으로 메뉴를 띄워서 선택한 layer를 삭제하는 기능
+   */
+  const focusedCardId = useFocusStore(state => state.focusedCardId);
+  const focusedLayerId = useFocusStore(state => state.focusedLayerId);
+  const deleteLayer = useCardsStore(state => state.deleteLayer);
+
+  const deleteLayerOnKeyPressHandler = (e: KeyboardEvent) => {
+    if (focusedCardId !== cardId) return;
+
+    if (isInputFocused()) return;
+
+    if (focusedLayerId !== -1 && (e.key === 'Backspace' || e.key === 'Delete')) {
+      deleteLayer(cardId, focusedLayerId);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', deleteLayerOnKeyPressHandler);
+
+    return () => document.removeEventListener('keydown', deleteLayerOnKeyPressHandler);
+  }, [focusedLayerId]);
+
+  const deleteLayerOnClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (focusedCardId !== cardId) return;
+
+    deleteLayer(cardId, focusedLayerId);
+  };
+
   return (
     <div
       className={`absolute border ${isDrag ? 'cursor-grabbing' : 'cursor-grab'} ${clickedCount > 1 && type === 'text' && 'border-[1.5px] border-main'}`}
@@ -403,7 +444,7 @@ const FocusBox = ({ children, cardId, layerId, type }: Props) => {
         top: curPosition.y,
         width: curPosition.width,
         height: curPosition.height,
-        zIndex: 10000, //NOTE: focus되면 z-index가 상위로 와야함 (수치는 회의해야함!)
+        zIndex: 1000, //NOTE: focus되면 z-index가 상위로 와야함 (수치는 회의해야함!)
         transform: `rotate(${curPosition.rotate}deg)`,
         transformOrigin: 'center',
         wordWrap: 'break-word',
@@ -464,11 +505,23 @@ const FocusBox = ({ children, cardId, layerId, type }: Props) => {
       >
         <FaArrowRotateLeft size={8} />
       </div>
-      <div className="absolute h-full w-full" style={{ opacity: curPosition.opacity / 100 }}>
-        {layer.type === 'text' && React.isValidElement(children)
-          ? React.cloneElement(children, { clickedCount })
-          : children}
-      </div>
+      <ContextMenu>
+        <ContextMenuTrigger>
+          <div className="absolute h-full w-full" style={{ opacity: curPosition.opacity / 100 }}>
+            {layer.type === 'text' && React.isValidElement(children)
+              ? React.cloneElement(children, { clickedCount })
+              : children}
+          </div>
+        </ContextMenuTrigger>
+        <ContextMenuContent className="w-[200px]">
+          <ContextMenuItem onClick={deleteLayerOnClickHandler}>
+            <div className="flex flex-row gap-3">
+              <TrashIcon width={15} />
+              <p> 삭제하기</p>
+            </div>
+          </ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenu>
     </div>
   );
 };

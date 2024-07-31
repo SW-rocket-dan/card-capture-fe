@@ -9,7 +9,7 @@ export const INITIAL_CARD: Card = {
   id: 0,
   background: {
     url: '',
-    opacity: 1,
+    opacity: 100,
     color: '#FFFFFF',
   },
   layers: [],
@@ -25,6 +25,7 @@ type useCardsStore = {
   addCard: () => void;
 
   getLayer: (cardId: number, layerId: number) => Layer | null;
+  deleteLayer: (cardId: number, layerId: number) => void;
 
   getLayerText: (cardId: number, layerId: number) => ReactQuill.Value | null;
   setLayerText: (cardId: number, layerId: number, text: ReactQuill.Value) => void;
@@ -90,6 +91,22 @@ export const useCardsStore = create(
         if (!layer) return null;
 
         return layer;
+      },
+
+      deleteLayer: (cardId, layerId) => {
+        set(
+          produce(
+            (
+              draft: Draft<{
+                cards: Card[];
+              }>,
+            ) => {
+              const card = draft.cards.find(({ id }) => id === cardId);
+              if (!card) return;
+              card.layers = card.layers.filter(({ id }) => id !== layerId);
+            },
+          ),
+        );
       },
 
       getLayerText: (cardId, layerId) => {
@@ -217,7 +234,7 @@ export const useCardsStore = create(
                   width: 200,
                   height: 45,
                   rotate: 0,
-                  zIndex: 2,
+                  zIndex: 3,
                   opacity: 100,
                 },
               });

@@ -11,6 +11,7 @@ import { useCardsStore } from '@/store/useCardsStore';
 import { useRouter } from 'next/navigation';
 import { Card } from '@/store/useCardsStore/type';
 import ReactQuill from 'react-quill';
+import useAuthRedirect from '@/hooks/useAuthRedirect';
 
 export const MOCK_CARD_DATA: Card[] = [
   {
@@ -191,6 +192,10 @@ const PromptContent = () => {
 
     router.push('/editor');
   };
+
+  const isAuthenticated = useAuthRedirect();
+
+  if (!isAuthenticated) return null;
 
   return (
     <div className="h-screen w-screen overflow-y-scroll font-Pretendard">

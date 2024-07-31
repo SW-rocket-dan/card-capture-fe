@@ -8,15 +8,22 @@ import {
 } from '@/components/ui/dialog';
 import LoginIcon from '@/components/common/Icon/LoginIcon';
 import DivButton from '@/components/common/Button/DivButton';
-
 import useGoogleAuth from '@/hooks/useGoogleAuth';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useAuthStore } from '@/store/useAuthStore';
 
 const LoginButton = () => {
   const { isLoggedIn, loginHandler } = useGoogleAuth();
 
+  const isModalOpen = useAuthStore(state => state.isModalOpen);
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    setIsOpen(isModalOpen);
+  }, [isModalOpen]);
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger>
         <DivButton type="default" className="h-[40px] w-[110px] rounded-[10px]">
           <LoginIcon width={15} />

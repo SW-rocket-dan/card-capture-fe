@@ -31,10 +31,12 @@ const ShapeBox = ({ shapeType, color }: Props) => {
         className="h-full w-full"
         style={{
           position: 'absolute',
-          clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)',
-          backgroundColor: color, // 색상은 원하는 대로 변경 가능
         }}
-      ></div>
+      >
+        <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <polygon points="50,0 0,100 100,100" fill={color} />
+        </svg>
+      </div>
     );
   }
 
@@ -43,10 +45,13 @@ const ShapeBox = ({ shapeType, color }: Props) => {
       <div
         className="h-full w-full"
         style={{
-          clipPath: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)',
-          backgroundColor: color, // 색상은 원하는 대로 변경 가능
+          position: 'absolute',
         }}
-      ></div>
+      >
+        <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <polygon points="50,0 61,35 98,35 68,57 79,91 50,70 21,91 32,57 2,35 39,35" fill={color} />
+        </svg>
+      </div>
     );
   }
 };
