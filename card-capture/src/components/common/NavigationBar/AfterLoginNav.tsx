@@ -25,10 +25,16 @@ const AfterLoginNav = () => {
    * 네비게이션 바 자동으로 변경되어야 하기 때문에 등록함
    */
   const setIsLoggedIn = useAuthStore(state => state.setIsLoggedIn);
+  const setIsModalOpen = useAuthStore(state => state.setIsModalOpen);
 
   const logoutHandler = () => {
-    localStorage.removeItem('accessToken');
-    setIsLoggedIn(false);
+    if (window.confirm('로그아웃 시 메인페이지로 이동됩니다. 정말 로그아웃하시겠습니까?')) {
+      localStorage.removeItem('accessToken');
+      setIsLoggedIn(false);
+      setIsModalOpen(false); // 이전에 redirect하면서 state가 open으로 설정되어 있을 수 있기에 false로 변경
+
+      router.push('/');
+    }
   };
 
   // 반응형 적용을 위해 모바일 화면인지 확인하는 hook
@@ -43,25 +49,25 @@ const AfterLoginNav = () => {
         Card Capture
       </button>
 
-      {!isMobile && (
-        <ul className="flex cursor-pointer flex-row gap-[30px] whitespace-nowrap text-[12px] font-semibold lg:gap-[50px] lg:text-[14px]">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>요금제</TooltipTrigger>
-              <TooltipContent>
-                <p className="font-normal">준비중!</p>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger>다른 템플릿 보기</TooltipTrigger>
-              <TooltipContent>
-                <p className="font-normal">준비중!</p>
-              </TooltipContent>
-            </Tooltip>
-            <button onClick={() => router.push('/prompt')}>제작하기</button>
-          </TooltipProvider>
-        </ul>
-      )}
+      {/*{!isMobile && (*/}
+      {/*  <ul className="flex cursor-pointer flex-row gap-[30px] whitespace-nowrap text-[12px] font-semibold lg:gap-[50px] lg:text-[14px]">*/}
+      {/*    <TooltipProvider>*/}
+      {/*      <Tooltip>*/}
+      {/*        <TooltipTrigger>요금제</TooltipTrigger>*/}
+      {/*        <TooltipContent>*/}
+      {/*          <p className="font-normal">준비중!</p>*/}
+      {/*        </TooltipContent>*/}
+      {/*      </Tooltip>*/}
+      {/*      <Tooltip>*/}
+      {/*        <TooltipTrigger>다른 템플릿 보기</TooltipTrigger>*/}
+      {/*        <TooltipContent>*/}
+      {/*          <p className="font-normal">준비중!</p>*/}
+      {/*        </TooltipContent>*/}
+      {/*      </Tooltip>*/}
+      {/*      <button onClick={() => router.push('/prompt')}>제작하기</button>*/}
+      {/*    </TooltipProvider>*/}
+      {/*  </ul>*/}
+      {/*)}*/}
 
       {!isMobile && (
         <div ref={ref} className="relative">
