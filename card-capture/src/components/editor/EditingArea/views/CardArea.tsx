@@ -11,11 +11,11 @@ import ImageBox from '@/components/editor/EditingArea/components/ImageBox/ImageB
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useCardsStore } from '@/store/useCardsStore';
-import { parseEscapedJson } from '@/utils/jsonUtils';
 import html2canvas from 'html2canvas';
 import { saveAs } from 'file-saver';
 import { toPng } from 'html-to-image';
 import { Progress } from '@/components/ui/progress';
+import { jsonUtils } from '@/utils';
 
 const CardArea = ({ card }: { card: Card }) => {
   const cardId = card.id;
@@ -44,7 +44,7 @@ const CardArea = ({ card }: { card: Card }) => {
   const setCard = useCardsStore(state => state.setCard);
 
   const changeCardHandler = () => {
-    const templateData = parseEscapedJson(json);
+    const templateData = jsonUtils.parseEscapedJson(json);
     setCard(templateData.cards);
 
     setIsOpen(false);
