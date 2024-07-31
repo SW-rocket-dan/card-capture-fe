@@ -407,7 +407,8 @@ const FocusBox = ({ children, cardId, layerId, type }: Props) => {
   };
 
   /**
-   * 선택한 Layer를 delete / backspace로 삭제하는 기능
+   * 1. 선택한 Layer를 delete / backspace로 삭제하는 기능
+   * 2. 오른쪽 클릭으로 메뉴를 띄워서 선택한 layer를 삭제하는 기능
    */
   const focusedCardId = useFocusStore(state => state.focusedCardId);
   const focusedLayerId = useFocusStore(state => state.focusedLayerId);
