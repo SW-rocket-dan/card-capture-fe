@@ -11,7 +11,6 @@ import ImageBox from '@/components/editor/EditingArea/components/ImageBox/ImageB
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useCardsStore } from '@/store/useCardsStore';
-import html2canvas from 'html2canvas';
 import { saveAs } from 'file-saver';
 import { toPng } from 'html-to-image';
 import { Progress } from '@/components/ui/progress';
@@ -50,9 +49,14 @@ const CardArea = ({ card }: { card: Card }) => {
     setIsOpen(false);
   };
 
+  const getJsonDataHandler = () => {
+    const currentJson = JSON.stringify(card);
+    setJson(currentJson);
+  };
+
   /**
    * card에 그려진 dom을 image export 하는 handler
-   * html2canvas와 file-saver 사용
+   * html-to-image와 file-saver 사용
    */
   const [isDownloading, setIsDownloading] = useState(false);
   const [progress, setProgress] = useState(10);
@@ -73,7 +77,7 @@ const CardArea = ({ card }: { card: Card }) => {
 
       // html-to-image 사용하여 이미지로 변경
       const dataUrl = await toPng(cardArea, {
-        includeQueryParams: true,
+        includeQueryParams: true, // 이미지 src 하나로만 나오는 오류 해결
         quality: 0.8, // 품질 설정
         width: cardArea.offsetWidth,
         height: cardArea.offsetHeight,
@@ -111,6 +115,8 @@ const CardArea = ({ card }: { card: Card }) => {
     };
   }, [isDownloading, increaseProgress]);
 
+  console.log(card);
+
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-[10px] bg-editorbg">
       {/* 카드 추가 관리 박스 / 레이어 추가 관리 박스*/}
@@ -122,7 +128,7 @@ const CardArea = ({ card }: { card: Card }) => {
           {/* json import 버튼 - 임시 / 백엔드 확인용 */}
           <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-              <button className="rounded-md bg-white p-2 text-sm">JSON</button>
+              <button className="rounded-md bg-white p-2 text-xs">JtC</button>
             </DialogTrigger>
             <DialogContent className="flex w-[320px] flex-col items-center justify-center px-[20px] py-[40px] sm:w-[400px] md:w-[750px] md:px-[30px]">
               <DialogTitle>Json String 입력하기</DialogTitle>
@@ -134,6 +140,19 @@ const CardArea = ({ card }: { card: Card }) => {
               <Button onClick={changeCardHandler} type="full" className="h-[40px] w-full text-[13px] sm:w-[170px]">
                 입력완료
               </Button>
+            </DialogContent>
+          </Dialog>
+
+          {/* card의 데이터를 json으로 만드는 버튼 - 임시 / 백엔드 확인용 */}
+          <Dialog>
+            <DialogTrigger asChild onClick={getJsonDataHandler}>
+              <button className="rounded-md bg-white p-2 text-xs">CtJ</button>
+            </DialogTrigger>
+            <DialogContent className="flex w-[320px] flex-col items-center justify-center px-[20px] py-[40px] sm:w-[400px] md:w-[750px] md:px-[30px]">
+              <DialogTitle>현재 카드 JSON 데이터</DialogTitle>
+              <div className="min-h-[230px] w-full select-text resize-none rounded-[8px] border border-border p-5 text-[13px] outline-none">
+                {json}
+              </div>
             </DialogContent>
           </Dialog>
 
