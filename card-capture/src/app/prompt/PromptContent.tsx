@@ -19,7 +19,7 @@ export const MOCK_CARD_DATA: Card[] = [
     background: {
       url: '',
       opacity: 100,
-      color: '#e9feff',
+      color: '#ffffff',
     },
     layers: [
       {
@@ -30,8 +30,8 @@ export const MOCK_CARD_DATA: Card[] = [
             ops: [
               {
                 attributes: {
-                  font: 'BlackHanSans',
-                  size: '48px',
+                  font: 'Jua',
+                  size: '64px',
                 },
                 insert: '안녕하세요!',
               },
@@ -42,10 +42,10 @@ export const MOCK_CARD_DATA: Card[] = [
           } as ReactQuill.Value,
         },
         position: {
-          x: 145.376953125,
-          y: 66.443359375,
-          width: 252.08984375,
-          height: 92.15625,
+          x: 106.94140625,
+          y: 43.537109375,
+          width: 324.41796875,
+          height: 114.875,
           rotate: 0,
           zIndex: 2,
           opacity: 100,
@@ -61,9 +61,9 @@ export const MOCK_CARD_DATA: Card[] = [
                 attributes: {
                   size: '18px',
                   font: 'Jua',
-                  color: '#897eff',
+                  color: '#000000',
                 },
-                insert: '지금은 테스트 기간이라 AI 카드뉴스가 아닌 ',
+                insert: '현재 테스트 기간이라 AI 카드뉴스가 아닌 ',
               },
               {
                 attributes: {
@@ -75,9 +75,9 @@ export const MOCK_CARD_DATA: Card[] = [
                 attributes: {
                   size: '18px',
                   font: 'Jua',
-                  color: '#897eff',
+                  color: '#000000',
                 },
-                insert: '임시 데이터가 출력됩니다',
+                insert: '임시 데이터가 출력됩니다. 감사합니다',
               },
               {
                 attributes: {
@@ -89,8 +89,8 @@ export const MOCK_CARD_DATA: Card[] = [
           } as any,
         },
         position: {
-          x: 91.66796875,
-          y: 147.953125,
+          x: 93.5703125,
+          y: 136.625,
           width: 350.44140625,
           height: 75.109375,
           rotate: 0,
@@ -99,37 +99,27 @@ export const MOCK_CARD_DATA: Card[] = [
         },
       },
       {
-        id: 3,
-        type: 'text',
+        id: 4,
+        type: 'image',
         content: {
-          content: {
-            ops: [
-              {
-                attributes: {
-                  font: 'Jua',
-                  size: '24px',
-                  bold: true,
-                },
-                insert: '감사합니다!',
-              },
-              {
-                insert: '\n',
-              },
-            ],
-          } as ReactQuill.Value,
+          url: 'https://cardcaptureposterimage.s3.ap-northeast-2.amazonaws.com/test/65727aec-0e20-4fd6-932a-0d553d07280c_cat.png',
+          cropStartX: 0,
+          cropStartY: 0,
+          cropWidth: 0,
+          cropHeight: 0,
         },
         position: {
-          x: 201.0625,
-          y: 217.3671875,
-          width: 127.7421875,
-          height: 58.078125,
+          x: 52.21484375,
+          y: 132.826171875,
+          width: 435.484375,
+          height: 421.85546875,
           rotate: 0,
           zIndex: 2,
           opacity: 100,
         },
       },
     ],
-  } as Card,
+  },
 ];
 
 export type PromptInputFormType = {
