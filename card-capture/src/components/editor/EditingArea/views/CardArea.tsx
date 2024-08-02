@@ -38,6 +38,10 @@ const CardArea = ({ card }: { card: Card }) => {
     setFocusedLayerId(-1);
   };
 
+  useEffect(() => {
+    setInitialMouseDown(null);
+  }, [focusedLayerId]);
+
   /**
    * json 확인하기 위한 임시 로직
    */
