@@ -220,7 +220,9 @@ export const useCardsStore = create(
                 cards: Card[];
               }>,
             ) => {
-              const newLayerId = draft.cards[cardId].layers.length + 1;
+              // 현재 카드의 레이어 중 가장 큰 ID 값을 찾고 + 1
+              const maxLayerId = draft.cards[cardId].layers.reduce((max, layer) => Math.max(max, layer.id), -1);
+              const newLayerId = maxLayerId + 1;
 
               draft.cards[cardId].layers.push({
                 id: newLayerId,
@@ -252,7 +254,9 @@ export const useCardsStore = create(
                 cards: Card[];
               }>,
             ) => {
-              const newLayerId = draft.cards[cardId].layers.length + 1;
+              // 현재 카드의 레이어 중 가장 큰 ID 값을 찾고 + 1
+              const maxLayerId = draft.cards[cardId].layers.reduce((max, layer) => Math.max(max, layer.id), -1);
+              const newLayerId = maxLayerId + 1;
 
               draft.cards[cardId].layers.push({
                 id: newLayerId,
@@ -288,7 +292,10 @@ export const useCardsStore = create(
                 cards: Card[];
               }>,
             ) => {
-              const newLayerId = draft.cards[cardId].layers.length + 1;
+              // 현재 카드의 레이어 중 가장 큰 ID 값을 찾고 + 1
+              const maxLayerId = draft.cards[cardId].layers.reduce((max, layer) => Math.max(max, layer.id), -1);
+              const newLayerId = maxLayerId + 1;
+
               draft.cards[cardId].layers.push({
                 id: newLayerId,
                 type: 'shape',
