@@ -24,11 +24,14 @@ const CardArea = ({ card }: { card: Card }) => {
   const setFocusedLayerId = useFocusStore(state => state.setFocusedLayerId);
   const setFocusedCardId = useFocusStore(state => state.setFocusedCardId);
 
+  const [initialMouseDown, setInitialMouseDown] = useState<React.MouseEvent | null>(null);
+
   const makeFocusLayerHandler = (e: React.MouseEvent, id: number) => {
     e.stopPropagation();
 
     setFocusedLayerId(id);
     setFocusedCardId(cardId);
+    setInitialMouseDown(e);
   };
 
   const unFocusLayerHandler = () => {
@@ -115,8 +118,6 @@ const CardArea = ({ card }: { card: Card }) => {
     };
   }, [isDownloading, increaseProgress]);
 
-  console.log(card);
-
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-[10px] bg-editorbg">
       {/* 카드 추가 관리 박스 / 레이어 추가 관리 박스*/}
@@ -196,7 +197,7 @@ const CardArea = ({ card }: { card: Card }) => {
             if (layer.type === 'text') {
               //텍스트 Focus Box
               return (
-                <FocusBox key={idx} cardId={cardId} layerId={layer.id} type="text">
+                <FocusBox key={idx} cardId={cardId} layerId={layer.id} type="text" initialMouseDown={initialMouseDown}>
                   <TextBox key={idx} cardId={cardId} layerId={layer.id} />
                 </FocusBox>
               );
@@ -204,7 +205,7 @@ const CardArea = ({ card }: { card: Card }) => {
               // 도형 Focus Box
               const { type, color } = layer.content as Shape;
               return (
-                <FocusBox key={idx} cardId={cardId} layerId={layer.id}>
+                <FocusBox key={idx} cardId={cardId} layerId={layer.id} initialMouseDown={initialMouseDown}>
                   <ShapeBox shapeType={type} color={color} />
                 </FocusBox>
               );
@@ -212,7 +213,7 @@ const CardArea = ({ card }: { card: Card }) => {
               const { url } = layer.content as Image;
 
               return (
-                <FocusBox key={idx} cardId={cardId} layerId={layer.id}>
+                <FocusBox key={idx} cardId={cardId} layerId={layer.id} initialMouseDown={initialMouseDown}>
                   <ImageBox url={url} position={layer.position} />
                 </FocusBox>
               );

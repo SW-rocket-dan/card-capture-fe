@@ -31,7 +31,7 @@ const LayerBox = ({ children, position, onClick }: Props) => {
         transform: `rotate(${position.rotate}deg)`,
         transformOrigin: 'center',
       }}
-      onClick={onClick}
+      onMouseDown={onClick}
     >
       {children}
     </div>

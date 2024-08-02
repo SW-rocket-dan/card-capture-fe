@@ -17,6 +17,7 @@ type Props = {
   cardId: number;
   layerId: number;
   type?: LayerType;
+  initialMouseDown: React.MouseEvent | null;
 };
 
 /**
@@ -24,7 +25,7 @@ type Props = {
  * @param component Box안에 띄어줄 컴포넌트
  * @param position 위치정보에 따라서 위치를 렌더링해줌
  * **/
-const FocusBox = ({ children, cardId, layerId, type }: Props) => {
+const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) => {
   const layer = useCardsStore(state => state.cards[cardId].layers.filter(v => v.id === layerId)[0]);
   const setPosition = useCardsStore(state => state.setPosition);
 
@@ -67,6 +68,26 @@ const FocusBox = ({ children, cardId, layerId, type }: Props) => {
   //              //
   /* 드래그 관련 로직 */
   //              //
+
+  /**
+   * layer -> focus로 변경될 때 mouseDown 이벤트 전달해서 바로 드래그 되도록 하는 로직
+   * @TODO : 추추에는 layerbox를 없애고 focusBox로만 관리하는 방식으로 변경할 예정
+   */
+
+  useEffect(() => {
+    // initialMouseDown이 있으면 즉시 드래그 시작
+    if (initialMouseDown) {
+      const startDrag = (e: React.MouseEvent) => {
+        setIsDrag(true);
+        setDragOffset({
+          x: e.clientX - curPosition.x,
+          y: e.clientY - curPosition.y,
+        });
+      };
+      startDrag(initialMouseDown);
+    }
+  }, [initialMouseDown]);
+
   const pointerDownDragHandler = (e: React.PointerEvent) => {
     e.stopPropagation();
     setIsDrag(true);
