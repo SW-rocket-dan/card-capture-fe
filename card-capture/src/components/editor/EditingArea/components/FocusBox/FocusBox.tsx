@@ -68,6 +68,7 @@ const FocusBox = ({ children, cardId, layerId, type }: Props) => {
   /* 드래그 관련 로직 */
   //              //
   const pointerDownDragHandler = (e: React.PointerEvent) => {
+    e.stopPropagation();
     setIsDrag(true);
 
     setDragOffset(prev => {
@@ -440,8 +441,8 @@ const FocusBox = ({ children, cardId, layerId, type }: Props) => {
     <div
       className={`absolute border ${isDrag ? 'cursor-grabbing' : 'cursor-grab'} ${clickedCount > 1 && type === 'text' && 'border-[1.5px] border-main'}`}
       style={{
-        left: curPosition.x,
-        top: curPosition.y,
+        left: curPosition.x - 1,
+        top: curPosition.y - 1,
         width: curPosition.width,
         height: curPosition.height,
         zIndex: 1000, //NOTE: focus되면 z-index가 상위로 와야함 (수치는 회의해야함!)
