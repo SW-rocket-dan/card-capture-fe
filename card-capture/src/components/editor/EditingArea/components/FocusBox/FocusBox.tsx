@@ -460,7 +460,7 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
 
   return (
     <div
-      className={`absolute border ${isDrag ? 'cursor-grabbing' : 'cursor-grab'} ${clickedCount > 1 && type === 'text' && 'border-[1.5px] border-main'}`}
+      className={`absolute border ${clickedCount > 1 && type === 'text' && 'border-[1.5px] border-main'}`}
       style={{
         left: curPosition.x - 1,
         top: curPosition.y - 1,
@@ -529,7 +529,10 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
       </div>
       <ContextMenu>
         <ContextMenuTrigger>
-          <div className="absolute h-full w-full" style={{ opacity: curPosition.opacity / 100 }}>
+          <div
+            className={`absolute h-full w-full ${isDrag ? 'cursor-grabbing' : 'cursor-grab'} `}
+            style={{ opacity: curPosition.opacity / 100 }}
+          >
             {layer.type === 'text' && React.isValidElement(children)
               ? React.cloneElement(children, { clickedCount })
               : children}
