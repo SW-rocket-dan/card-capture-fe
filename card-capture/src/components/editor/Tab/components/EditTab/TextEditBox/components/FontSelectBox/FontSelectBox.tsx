@@ -57,7 +57,7 @@ const FontSelectBox = ({ list }: SelectBoxProps) => {
       >
         <p className="text-[13px]">{list[selectedIndex]}</p>
 
-        {isOpen ? <UpIcon width={13} className="text-gray1" /> : <DownIcon width={15} className="text-gray1" />}
+        {isOpen ? <UpIcon width={13} className="text-gray1" /> : <DownIcon width={13} className="text-gray1" />}
       </button>
 
       {/* 폰트 셀렉트 박스 */}
