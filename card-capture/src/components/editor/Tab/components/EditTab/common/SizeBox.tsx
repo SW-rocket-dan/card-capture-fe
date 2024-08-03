@@ -71,6 +71,17 @@ const SizeBox = ({ type }: SizeBoxProps) => {
     }
   };
 
+  /**
+   * 크기 조절 잠금 로직
+   * @FIXME: state가 저장이 안되어서 다른 탭 다녀오면 다시 수정 가능 / 수정 영역에서는 그냥 수정됨
+   */
+  const [isDisabled, setIsDisabled] = useState(false);
+  const disableInputHandler = () => {
+    setIsDisabled(prev => !prev);
+  };
+
+  const disable = focusedLayerType !== type || isDisabled;
+
   return (
     <div className="flex flex-row items-center justify-between">
       {/* 높이, 너비 입력 */}
@@ -79,7 +90,7 @@ const SizeBox = ({ type }: SizeBoxProps) => {
           <div className="flex w-[110px] flex-row items-center rounded-md bg-itembg px-[10px] py-[10px]">
             <input
               type="number"
-              disabled={focusedLayerType !== type}
+              disabled={disable}
               value={width}
               onChange={e => changeSizeHandler('width', e)}
               onBlur={updateSizeHandler}
@@ -91,7 +102,7 @@ const SizeBox = ({ type }: SizeBoxProps) => {
           <div className="flex w-[110px] flex-row items-center rounded-md bg-itembg px-[10px] py-[10px]">
             <input
               type="number"
-              disabled={focusedLayerType !== type}
+              disabled={disable}
               value={height}
               onChange={e => changeSizeHandler('height', e)}
               onBlur={updateSizeHandler}
@@ -104,11 +115,11 @@ const SizeBox = ({ type }: SizeBoxProps) => {
 
         {/* 잠금 버튼 */}
         <div className="flex flex-col gap-1">
-          <RightTopBorderIcon height={18} className="text-gray6" />
-          <button>
-            <LockIcon width={15} className="ml-[7px] text-gray5" />
+          <RightTopBorderIcon height={18} className={` ${isDisabled ? 'text-light-main' : 'text-gray6'}`} />
+          <button onClick={disableInputHandler}>
+            <LockIcon width={15} className={`ml-[7px] ${isDisabled ? 'text-main' : 'text-gray5'}`} />
           </button>
-          <RightBottomBorderIcon height={18} className="text-gray6" />
+          <RightBottomBorderIcon height={18} className={` ${isDisabled ? 'text-light-main' : 'text-gray6'}`} />
         </div>
       </div>
 
@@ -123,7 +134,7 @@ const SizeBox = ({ type }: SizeBoxProps) => {
         </button>
         <div className="flex w-[90px] flex-row items-center justify-between rounded-md bg-itembg px-[12px] py-[10px] text-xs">
           <input
-            disabled={focusedLayerType !== type}
+            disabled={disable}
             type="number"
             value={rotate}
             onChange={e => changeSizeHandler('rotate', e)}

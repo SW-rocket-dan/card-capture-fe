@@ -68,7 +68,6 @@ const ShapeModalBox = () => {
             <div
               className="h-[32px] w-[32px] bg-gray7"
               style={{
-                position: 'absolute',
                 clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)',
               }}
             />
