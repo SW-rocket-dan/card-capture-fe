@@ -20,7 +20,7 @@ const LayerBox = ({ children, position, onClick }: Props) => {
   //style로 바로 박을것인지, tailwind로 다 정의해 둘것인지, 혹은 css로할 것인지
   return (
     <div
-      className={`absolute`}
+      className="absolute border border-transparent"
       style={{
         left: position.x,
         top: position.y,
@@ -30,6 +30,7 @@ const LayerBox = ({ children, position, onClick }: Props) => {
         opacity: position.opacity / 100,
         transform: `rotate(${position.rotate}deg)`,
         transformOrigin: 'center',
+        boxSizing: 'border-box',
       }}
       onMouseDown={onClick}
     >
