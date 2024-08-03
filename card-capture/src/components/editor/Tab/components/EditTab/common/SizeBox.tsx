@@ -5,10 +5,27 @@ import CutIcon from '@/components/common/Icon/CutIcon';
 import AngleIcon from '@/components/common/Icon/AngleIcon';
 import { useEffect, useState } from 'react';
 import useLayerStyles from '@/components/editor/Tab/hooks/useLayerStyles';
+import { useFocusStore } from '@/store/useFocusStore';
+import { useCardsStore } from '@/store/useCardsStore';
 
-const SizeBox = () => {
+type SizeBoxProps = {
+  type: 'shape' | 'image';
+};
+
+const SizeBox = ({ type }: SizeBoxProps) => {
   /**
-   * 현재 선택된 이미지의 데이터를 가져오고, 이미지를 설정하는 로직이 담긴 hook
+   * 현재 선택된 레이어의 타입을 가져오는 로직
+   * 선택된 레이어에 대한 sizeBox가 아니면 값을 띄우지 않게 하기 위해 작성
+   * @TODO : hook으로 분리하기
+   */
+  const cardId = useFocusStore(state => state.focusedCardId);
+  const layerId = useFocusStore(state => state.focusedLayerId);
+  const getLayer = useCardsStore(state => state.getLayer);
+
+  const focusedLayerType = getLayer(cardId, layerId)?.type;
+
+  /**
+   * 현재 선택된 요소의 데이터를 가져오고, 이미지를 설정하는 로직이 담긴 hook
    */
   const { position, changePositionHandler } = useLayerStyles();
 
@@ -22,6 +39,7 @@ const SizeBox = () => {
    */
   useEffect(() => {
     if (!position) return;
+    if (focusedLayerType !== type) return;
 
     setWidth(Math.floor(position.width));
     setHeight(Math.floor(position.height));
@@ -61,6 +79,7 @@ const SizeBox = () => {
           <div className="flex w-[110px] flex-row items-center rounded-md bg-itembg px-[10px] py-[10px]">
             <input
               type="number"
+              disabled={focusedLayerType !== type}
               value={width}
               onChange={e => changeSizeHandler('width', e)}
               onBlur={updateSizeHandler}
@@ -72,6 +91,7 @@ const SizeBox = () => {
           <div className="flex w-[110px] flex-row items-center rounded-md bg-itembg px-[10px] py-[10px]">
             <input
               type="number"
+              disabled={focusedLayerType !== type}
               value={height}
               onChange={e => changeSizeHandler('height', e)}
               onBlur={updateSizeHandler}
@@ -103,6 +123,7 @@ const SizeBox = () => {
         </button>
         <div className="flex w-[90px] flex-row items-center justify-between rounded-md bg-itembg px-[12px] py-[10px] text-xs">
           <input
+            disabled={focusedLayerType !== type}
             type="number"
             value={rotate}
             onChange={e => changeSizeHandler('rotate', e)}
