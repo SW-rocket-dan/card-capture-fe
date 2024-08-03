@@ -8,6 +8,7 @@ import { useColor } from 'react-color-palette';
 import { useCardsStore } from '@/store/useCardsStore';
 import { useFocusStore } from '@/store/useFocusStore';
 import useImageUploader from '@/hooks/useImageUploader';
+import BackgroundDeleteBox from '@/components/editor/Tab/components/EditTab/BackgroundEditBox/components/BackgroundDeleteBox';
 
 const BackgroundEditBox = ({ focused = false }: { focused?: boolean }) => {
   const focusedCardId = useFocusStore(state => state.focusedCardId);
@@ -52,7 +53,8 @@ const BackgroundEditBox = ({ focused = false }: { focused?: boolean }) => {
 
       {isOpen && (
         <div className="flex flex-col gap-[12px] px-[15px] pb-[20px]">
-          <ImageButton onChangeImage={addBackgroundImageHandler} />
+          {background?.url === '' ? <ImageButton onChangeImage={addBackgroundImageHandler} /> : <BackgroundDeleteBox />}
+
           <OpacityButton opacity={opacity} setOpacity={setOpacity} />
         </div>
       )}
