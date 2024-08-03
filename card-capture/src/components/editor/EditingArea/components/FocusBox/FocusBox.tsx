@@ -12,7 +12,7 @@ import TrashIcon from '@/components/common/Icon/TrashIcon';
 
 type Props = {
   children: React.ReactElement<{
-    clickedCount: number;
+    isDoubleClicked: boolean;
   }>;
   cardId: number;
   layerId: number;
@@ -51,11 +51,14 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
   const stopPropagation = (e: React.PointerEvent | React.MouseEvent) => {
     e.stopPropagation();
   };
-  const [clickedCount, setClickedCount] = useState(1);
 
-  const clickFocusBoxHandler = (e: React.PointerEvent | React.MouseEvent) => {
-    setClickedCount(prev => prev + 1);
-    e.stopPropagation();
+  /**
+   * 두번 클릭하면 텍스트 입력 활성화 되는 로직
+   */
+  const [isDoubleClicked, setIsDoubleClicked] = useState(false);
+
+  const doubleClickHandler = () => {
+    setIsDoubleClicked(prev => !prev);
   };
 
   /**
@@ -125,7 +128,7 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
 
     setDragOffset({ ...INITIAL_DRAG_OFFSET });
     setIsDrag(false);
-    setPosition(cardId, layerId, { ...curPosition, y: diffY, x: diffX });
+    setPosition(cardId, layerId, { ...curPosition, y: diffY - 0.4, x: diffX - 0.4 });
   };
 
   /**
@@ -133,7 +136,7 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
    */
   useEffect(() => {
     if (!isDrag) return;
-    if (clickedCount > 1 && type === 'text') return;
+    if (isDoubleClicked && type === 'text') return;
 
     window.addEventListener('pointermove', pointerMoveDragHandler);
     window.addEventListener('pointerup', pointerUpDragHandler);
@@ -460,19 +463,21 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
 
   return (
     <div
-      className={`absolute border ${clickedCount > 1 && type === 'text' && 'border-[1.5px] border-main'}`}
+      className={`absolute border ${isDoubleClicked && type === 'text' && 'border-[1.5px] border-main'}`}
       style={{
-        left: curPosition.x - 1,
-        top: curPosition.y - 1,
+        left: curPosition.x,
+        top: curPosition.y,
         width: curPosition.width,
         height: curPosition.height,
         zIndex: 1000, //NOTE: focus되면 z-index가 상위로 와야함 (수치는 회의해야함!)
         transform: `rotate(${curPosition.rotate}deg)`,
         transformOrigin: 'center',
         wordWrap: 'break-word',
+        boxSizing: 'border-box',
       }}
       onPointerDown={pointerDownDragHandler}
-      onClick={clickFocusBoxHandler}
+      onClick={stopPropagation}
+      onDoubleClick={doubleClickHandler}
       ref={boxRef}
     >
       {/* 11시,1시,5시,7시 크기조절 바 */}
@@ -534,7 +539,7 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
             style={{ opacity: curPosition.opacity / 100 }}
           >
             {layer.type === 'text' && React.isValidElement(children)
-              ? React.cloneElement(children, { clickedCount })
+              ? React.cloneElement(children, { isDoubleClicked })
               : children}
           </div>
         </ContextMenuTrigger>
