@@ -41,7 +41,7 @@ const EditTab = () => {
   const remainingEditBoxes = editBoxes.filter(box => box.type !== focusedLayerType);
 
   return (
-    <div className="flex h-full w-[280px] flex-1 flex-col">
+    <div className="flex h-full w-[280px] flex-1 flex-col overscroll-y-auto">
       <header className="h-[50px] border-b-[1px] border-b-border p-[15px] text-[14px] font-semibold">요소 수정</header>
 
       {/* 맨 위의 컴포넌트에는 focused : true를 넘겨서 컴포넌트가 열리도록 함 */}
