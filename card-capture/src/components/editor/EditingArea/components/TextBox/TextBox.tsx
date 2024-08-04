@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
 import { useCardsStore } from '@/store/useCardsStore';
 import { useFocusStore } from '@/store/useFocusStore';
@@ -81,6 +81,15 @@ const TextBox = ({
    *  두번 클릭했을 시에만 입력 가능하도록 하기 위해서 클릭 횟수를 확인해서 입력 활성화 여부 결정
    */
   const isReadOnly = !isDoubleClicked;
+
+  /**
+   * 입력모드 전환시 포커스 이동해서 전체 스타일 적용되도록 변경
+   */
+  useEffect(() => {
+    if (isDoubleClicked && editorRef.current) {
+      setCurrentRef(editorRef);
+    }
+  }, [isDoubleClicked]);
 
   return (
     <div onBlur={blurHandler}>
