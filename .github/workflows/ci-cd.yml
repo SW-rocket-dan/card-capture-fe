@@ -40,6 +40,10 @@ jobs:
         with:
           node-version: '18'
 
+      - name: Set Node.js memory limit
+        run: |
+          echo "NODE_OPTIONS=--max-old-space-size=4096" >> $GITHUB_ENV
+
       - name: Deploy to Server
         env:
           SERVER_IP: ${{ secrets.SERVER_IP }}
