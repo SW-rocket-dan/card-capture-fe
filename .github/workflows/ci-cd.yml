@@ -47,6 +47,8 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           REPO_URL: ${{ github.server_url }}/${{ github.repository }}.git
           NEXT_PUBLIC_API_KEY: ${{ secrets.NEXT_PUBLIC_API_KEY }}
+          NEXT_PUBLIC_SENTRY_DSN: ${{secrets.NEXT_PUBLIC_SENTRY_DSN}}
+          SENTRY_AUTH_TOKEN: ${{secrets.SENTRY_AUTH_TOKEN}}
 
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | sed 's/\\n/\n/g' > deployment_key.pem
