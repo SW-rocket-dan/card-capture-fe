@@ -49,6 +49,7 @@ type useCardsStore = {
     },
   ) => void;
   addShapeLayer: (cardId: number, type: ShapeType) => void;
+  addIllustLayer: (cardId: number, url: string) => void;
 };
 
 export const useCardsStore = create(
@@ -318,7 +319,42 @@ export const useCardsStore = create(
             },
           ),
         ),
+
+      addIllustLayer: (cardId, url) =>
+        set(
+          produce(
+            (
+              draft: Draft<{
+                cards: Card[];
+              }>,
+            ) => {
+              // 현재 카드의 레이어 중 가장 큰 ID 값을 찾고 + 1
+              const maxLayerId = draft.cards[cardId].layers.reduce((max, layer) => Math.max(max, layer.id), -1);
+              const newLayerId = maxLayerId + 1;
+
+              draft.cards[cardId].layers.push({
+                id: newLayerId,
+                type: 'illust',
+                content: {
+                  url,
+                },
+                position: {
+                  x: 200,
+                  y: 200,
+                  width: 200,
+                  height: 200,
+                  rotate: 0,
+                  zIndex: 2,
+                  opacity: 100,
+                },
+              });
+
+              useFocusStore.getState().updateFocus(cardId, newLayerId);
+            },
+          ),
+        ),
     }),
+
     { name: 'cardStore' },
   ),
 );

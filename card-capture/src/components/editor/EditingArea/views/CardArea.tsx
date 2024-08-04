@@ -1,6 +1,6 @@
 import FocusBox from '@/components/editor/EditingArea/components/FocusBox/FocusBox';
 import TextBox from '@/components/editor/EditingArea/components/TextBox/TextBox';
-import { Card, Image, Shape } from '@/store/useCardsStore/type';
+import { Card, Illust, Image, Shape } from '@/store/useCardsStore/type';
 import ShapeBox from '@/components/editor/EditingArea/components/ShapeBox/ShapeBox';
 import LayerBox from '@/components/editor/EditingArea/components/LayerBox/LayerBox';
 import CardAddBox from '@/components/editor/EditingArea/views/CardAddBox';
@@ -15,6 +15,7 @@ import { saveAs } from 'file-saver';
 import { toPng } from 'html-to-image';
 import { Progress } from '@/components/ui/progress';
 import { jsonUtils } from '@/utils';
+import IllustBox from '@/components/editor/EditingArea/components/IllustBox/IllustBox';
 
 const CardArea = ({ card }: { card: Card }) => {
   const cardId = card.id;
@@ -221,6 +222,14 @@ const CardArea = ({ card }: { card: Card }) => {
                   <ImageBox url={url} position={layer.position} />
                 </FocusBox>
               );
+            } else if (layer.type === 'illust') {
+              const { url } = layer.content as Illust;
+
+              return (
+                <FocusBox key={idx} cardId={cardId} layerId={layer.id} initialMouseDown={initialMouseDown}>
+                  <IllustBox url={url} position={layer.position} />
+                </FocusBox>
+              );
             }
           } else {
             if (layer.type === 'text') {
@@ -244,6 +253,14 @@ const CardArea = ({ card }: { card: Card }) => {
               return (
                 <LayerBox key={idx} position={layer.position} onClick={e => makeFocusLayerHandler(e, layer.id)}>
                   <ImageBox url={url} position={layer.position} />
+                </LayerBox>
+              );
+            } else if (layer.type === 'illust') {
+              const { url } = layer.content as Illust;
+
+              return (
+                <LayerBox key={idx} position={layer.position} onClick={e => makeFocusLayerHandler(e, layer.id)}>
+                  <IllustBox url={url} position={layer.position} />
                 </LayerBox>
               );
             }

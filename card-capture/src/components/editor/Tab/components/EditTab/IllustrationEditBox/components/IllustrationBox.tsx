@@ -3,6 +3,8 @@ import CloseIcon from '@/components/common/Icon/CloseIcon';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import illustrationApi, { StickerDataType } from '@/api/illustrationApi';
 import FindIcon from '@/components/common/Icon/FindIcon';
+import { useFocusStore } from '@/store/useFocusStore';
+import { useCardsStore } from '@/store/useCardsStore';
 
 const IllustrationBox = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -49,6 +51,16 @@ const IllustrationBox = () => {
     setSearchedStickers(stickersUrl);
   };
 
+  /**
+   * 선택된 스티커를 새로운 Illust Layer로 추가하는 로직
+   */
+  const focusedCardId = useFocusStore(state => state.focusedCardId);
+  const addIllustLayer = useCardsStore(state => state.addIllustLayer);
+
+  const addIllustLayerHandler = (url: string) => {
+    addIllustLayer(focusedCardId, url);
+  };
+
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <div className="flex flex-col gap-2 rounded-[10px] border-[1px] border-border px-[10px] py-[10px]">
@@ -60,12 +72,13 @@ const IllustrationBox = () => {
         </div>
         <div className="flex flex-row gap-[5px]">
           {initialStickers.map((url, index) => (
-            <div
+            <button
               key={index}
+              onClick={() => addIllustLayerHandler(url)}
               className="h-[42px] w-[42px] cursor-pointer overflow-hidden rounded-[5px] border border-border"
             >
               <img src={url} alt="sticker" className="h-full w-full" />
-            </div>
+            </button>
           ))}
         </div>
       </div>
@@ -112,12 +125,13 @@ const IllustrationBox = () => {
               <p className="py-[5px]">검색 결과</p>
               <div className="flex flex-row flex-wrap justify-between gap-y-2">
                 {searchedStickers.map((url, index) => (
-                  <div
+                  <button
                     key={index}
+                    onClick={() => addIllustLayerHandler(url)}
                     className="h-[75px] w-[75px] cursor-pointer overflow-hidden rounded-[5px] border border-border"
                   >
                     <img src={url} alt="sticker" className="h-full w-full" />
-                  </div>
+                  </button>
                 ))}
               </div>
             </div>
