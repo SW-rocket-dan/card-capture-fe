@@ -53,6 +53,7 @@ jobs:
           NEXT_PUBLIC_API_KEY: ${{ secrets.NEXT_PUBLIC_API_KEY }}
           NEXT_PUBLIC_SENTRY_DSN: ${{secrets.NEXT_PUBLIC_SENTRY_DSN}}
           SENTRY_AUTH_TOKEN: ${{secrets.SENTRY_AUTH_TOKEN}}
+          NODE_OPTIONS: '--max-old-space-size=8192'
 
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | sed 's/\\n/\n/g' > deployment_key.pem
