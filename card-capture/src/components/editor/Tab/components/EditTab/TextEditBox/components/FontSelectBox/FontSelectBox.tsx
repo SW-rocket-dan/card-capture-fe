@@ -66,10 +66,10 @@ const FontSelectBox = ({ list }: SelectBoxProps) => {
           className="absolute z-10 mt-[10px] flex w-full flex-col gap-[10px] rounded-xl bg-white p-[10px]"
           style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08' }}
         >
-          <div className="flex flex-row items-center justify-between gap-3 rounded-[8px] border-[1px] border-border px-[10px] py-[9px]">
-            <input type="text" className="flex-1 text-[11px] outline-none" placeholder="글꼴 검색" />
-            <FindIcon width={14} />
-          </div>
+          {/*<div className="flex flex-row items-center justify-between gap-3 rounded-[8px] border-[1px] border-border px-[10px] py-[9px]">*/}
+          {/*  <input type="text" className="flex-1 text-[11px] outline-none" placeholder="글꼴 검색" />*/}
+          {/*  <FindIcon width={14} />*/}
+          {/*</div>*/}
 
           {/* 최근 사용 글꼴 박스*/}
           <div>

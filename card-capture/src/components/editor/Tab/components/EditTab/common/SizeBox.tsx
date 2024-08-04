@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import useLayerStyles from '@/components/editor/Tab/hooks/useLayerStyles';
 import { useFocusStore } from '@/store/useFocusStore';
 import { useCardsStore } from '@/store/useCardsStore';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 type SizeBoxProps = {
   type: 'shape' | 'image';
@@ -125,13 +126,22 @@ const SizeBox = ({ type }: SizeBoxProps) => {
 
       {/* 자르기, 각도 변환 */}
       <div className="flex flex-col gap-[8px]">
-        <button
-          disabled={true}
-          className="flex w-[90px] flex-row items-center justify-center gap-[7px] rounded-lg bg-gray7 py-[10px] text-xs text-white"
-        >
-          <CutIcon width={15} />
-          <span>자르기</span>
-        </button>
+        <TooltipProvider>
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger>
+              <button
+                disabled={true}
+                className="flex w-[90px] flex-row items-center justify-center gap-[7px] rounded-lg bg-gray7 py-[10px] text-xs text-white"
+              >
+                <CutIcon width={15} />
+                <span>자르기</span>
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p className="text-xs">준비중!</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
         <div className="flex w-[90px] flex-row items-center justify-between rounded-md bg-itembg px-[12px] py-[10px] text-xs">
           <input
             disabled={disable}
