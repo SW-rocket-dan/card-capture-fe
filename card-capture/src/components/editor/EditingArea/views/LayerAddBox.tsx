@@ -32,7 +32,7 @@ const LayerAddBox = ({ cardId }: { cardId: number }) => {
         <TextIcon width={13} />
       </div>
       <Popover>
-        <PopoverTrigger>
+        <PopoverTrigger asChild>
           <button className="flex h-[25px] w-[25px] cursor-pointer flex-row items-center justify-center gap-1 hover:text-main">
             <SquareIcon width={12} />
             <DownIcon width={7} />
