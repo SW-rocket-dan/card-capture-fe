@@ -36,13 +36,13 @@ jobs:
         run: test -f package.json || { echo "package.json not found"; exit 1; }
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '18'
 
       - name: Set Node.js memory limit
         run: |
-          echo "NODE_OPTIONS=--max-old-space-size=4096" >> $GITHUB_ENV
+          echo "NODE_OPTIONS=--max-old-space-size=8192" >> $GITHUB_ENV
 
       - name: Deploy to Server
         env:
@@ -51,8 +51,8 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           REPO_URL: ${{ github.server_url }}/${{ github.repository }}.git
           NEXT_PUBLIC_API_KEY: ${{ secrets.NEXT_PUBLIC_API_KEY }}
-          NEXT_PUBLIC_SENTRY_DSN: ${{secrets.NEXT_PUBLIC_SENTRY_DSN}}
-          SENTRY_AUTH_TOKEN: ${{secrets.SENTRY_AUTH_TOKEN}}
+          NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           NODE_OPTIONS: '--max-old-space-size=8192'
 
         run: |
@@ -96,13 +96,13 @@ jobs:
             npm install
           
             echo "Building the repository..."
-            npm run build
+            NODE_OPTIONS=--max-old-space-size=8192 npm run build # 빌드 시 메모리 한도 적용
 
             echo "Deleting existing PM2 process..."
             pm2 delete card-capture || true
 
             echo "Starting application with PM2..."
-            pm2 start npm --name "card-capture" -- start
+            NODE_OPTIONS=--max-old-space-size=8192 pm2 start npm --name "card-capture" -- start # PM2 시작 시 메모리 한도 적용
 
             echo "Saving PM2 configuration..."
             pm2 save
