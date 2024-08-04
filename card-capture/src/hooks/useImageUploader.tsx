@@ -1,4 +1,4 @@
-import { imageApi } from '@/components/editor/Tab/api';
+import { imageApi } from '@/api';
 import { getImageDimensions, getImageQueryString, resizeImage } from '@/components/editor/Tab/utils/imageData';
 import { useFocusStore } from '@/store/useFocusStore';
 import { useCardsStore } from '@/store/useCardsStore';

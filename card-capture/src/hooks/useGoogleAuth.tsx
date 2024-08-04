@@ -1,7 +1,7 @@
 import { useAuthStore } from '@/store/useAuthStore';
 import { useCallback, useState } from 'react';
-import { loginApi } from '@/components/common/Login/api';
 import { useRouter } from 'next/navigation';
+import { loginApi } from '@/api';
 
 const useGoogleAuth = (type?: string) => {
   const isLoggedIn = useAuthStore(state => state.isLoggedIn);
