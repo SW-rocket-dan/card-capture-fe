@@ -37,16 +37,16 @@ const PromptModelInput = ({ setValue }: PromptModelInputProps) => {
                 </p>
               </div>
             </SelectItem>
-            <SelectItem value="stable">
-              <div className="flex flex-row items-center gap-3">
-                <p className="text-[14px] font-semibold">Stable Diffusion</p>
-                <p className="hidden text-[11px] text-gray2 xs:block sm:text-[12px]">
-                  {isMobile
-                    ? '사실적이고 사람 특화된 이미지'
-                    : '고해상도, 사실적이고 사람 일러스트에 특화된 이미지를 생성합니다!'}
-                </p>
-              </div>
-            </SelectItem>
+            {/*<SelectItem value="stable">*/}
+            {/*  <div className="flex flex-row items-center gap-3">*/}
+            {/*    <p className="text-[14px] font-semibold">Stable Diffusion</p>*/}
+            {/*    <p className="hidden text-[11px] text-gray2 xs:block sm:text-[12px]">*/}
+            {/*      {isMobile*/}
+            {/*        ? '사실적이고 사람 특화된 이미지'*/}
+            {/*        : '고해상도, 사실적이고 사람 일러스트에 특화된 이미지를 생성합니다!'}*/}
+            {/*    </p>*/}
+            {/*  </div>*/}
+            {/*</SelectItem>*/}
           </SelectGroup>
         </SelectContent>
       </Select>
