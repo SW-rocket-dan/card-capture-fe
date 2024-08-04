@@ -26,9 +26,9 @@ const IllustrationEditBox = ({ focused = false }: { focused?: boolean }) => {
       </div>
       {isOpen && (
         <div className="flex flex-col gap-[10px] px-[15px] pb-[20px]">
-          {/*<IllustrationBox />*/}
+          <IllustrationBox />
           <ShapeModalBox />
-          <SizeBox />
+          <SizeBox type="shape" />
           <OpacityButton opacity={opacity} setOpacity={setOpacity} />
           {/*<OrderBox />*/}
         </div>

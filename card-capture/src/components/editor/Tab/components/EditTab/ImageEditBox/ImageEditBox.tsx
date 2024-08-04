@@ -34,7 +34,7 @@ const ImageEditBox = ({ focused = false }: { focused?: boolean }) => {
         <div className="flex flex-col gap-[10px] px-[15px] pb-[20px]">
           <ImageButton onChangeImage={addImageLayerHandler} />
 
-          <SizeBox />
+          <SizeBox type="image" />
           <OpacityButton opacity={opacity} setOpacity={setOpacity} />
           {/*<OrderBox />*/}
         </div>

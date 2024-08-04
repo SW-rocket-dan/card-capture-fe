@@ -6,6 +6,7 @@ import { useFocusStore } from '@/store/useFocusStore';
 import useClickOutside from '@/hooks/useClickOutside';
 import ColorButton from '@/components/editor/Tab/components/EditTab/common/ColorButton';
 import { useColor } from 'react-color-palette';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 const ShapeModalBox = () => {
   // 선택된 데이터 가져오기
@@ -45,9 +46,9 @@ const ShapeModalBox = () => {
   const ref = useClickOutside(() => setIsOpen(false));
 
   // @TODO : 도형 추후에 svg 파일로 변경해야 함
-  
+
   return (
-    <div ref={ref} className="relative">
+    <Popover>
       <div className="flex flex-col gap-2 rounded-[10px] border-[1px] border-border px-[10px] py-[10px]">
         <div className="flex flex-row items-center justify-between">
           <p className="text-xs text-gray4">도형</p>
@@ -67,7 +68,6 @@ const ShapeModalBox = () => {
             <div
               className="h-[32px] w-[32px] bg-gray7"
               style={{
-                position: 'absolute',
                 clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)',
               }}
             />
@@ -90,21 +90,24 @@ const ShapeModalBox = () => {
               }}
             />
           </button>
-          <button
-            onClick={openHandler}
-            className="flex h-[42px] w-[42px] cursor-pointer items-center justify-center overflow-hidden rounded-[5px]"
-          >
-            ...
-          </button>
+          <PopoverTrigger>
+            <button
+              onClick={openHandler}
+              className="flex h-[42px] w-[42px] cursor-pointer items-center justify-center overflow-hidden rounded-[5px]"
+            >
+              ...
+            </button>
+          </PopoverTrigger>
         </div>
       </div>
 
-      {isOpen && (
-        <div
-          className={`absolute left-full z-20 -mt-[100px] ml-[20px] w-[275px] rounded-[8px] bg-white`}
-          style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08' }}
-        >
-          <div className="flex flex-row justify-between border-b-[1px] border-border px-[15px] py-[10px] font-extrabold">
+      <PopoverContent
+        side="right"
+        className={`absolute left-full z-50 -mt-[50px] ml-[27px] w-[275px] rounded-[8px] bg-white p-0`}
+        style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08' }}
+      >
+        <div>
+          <div className="flex flex-row justify-between border-b-[1px] border-border px-[15px] py-[10px] font-bold">
             <p className="text-xs">도형</p>
             <button onClick={openHandler}>
               <CloseIcon width={8} className="text-gray2" />
@@ -154,8 +157,8 @@ const ShapeModalBox = () => {
             </div>
           </div>
         </div>
-      )}
-    </div>
+      </PopoverContent>
+    </Popover>
   );
 };
 

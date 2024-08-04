@@ -1,5 +1,4 @@
 import StarsIcon from '@/components/common/Icon/StarsIcon';
-import { useRouter } from 'next/navigation';
 import CreateButton from '@/components/common/NavigationBar/components/CreateButton';
 
 const BannerButton = () => {

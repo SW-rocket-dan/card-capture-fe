@@ -41,7 +41,7 @@ const ColorPicker = ({ color, setColor }: ColorPickerProps) => {
           <Alpha color={color} onChange={setColor} />
           <div className="flex flex-row items-center justify-between rounded-md bg-itembg px-3 py-2 text-xs">
             <input
-              className="bg-transparent font-bold outline-none"
+              className="bg-transparent font-medium outline-none"
               value={color.hex.slice(1, 7)} // 앞에 # 삭제하기 위한 슬라이싱
               maxLength={6}
               onChange={handleChangeColor}

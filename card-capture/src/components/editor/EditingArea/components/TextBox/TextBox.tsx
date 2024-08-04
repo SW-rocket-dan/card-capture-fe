@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
 import { useCardsStore } from '@/store/useCardsStore';
 import { useFocusStore } from '@/store/useFocusStore';
@@ -15,7 +15,15 @@ const modules = {
   },
 };
 
-const TextBox = ({ cardId, layerId, clickedCount = 0 }: { cardId: number; layerId: number; clickedCount?: number }) => {
+const TextBox = ({
+  cardId,
+  layerId,
+  isDoubleClicked = false,
+}: {
+  cardId: number;
+  layerId: number;
+  isDoubleClicked?: boolean;
+}) => {
   const editorRef = useRef<ReactQuill | null>(null);
 
   /**
@@ -72,7 +80,16 @@ const TextBox = ({ cardId, layerId, clickedCount = 0 }: { cardId: number; layerI
   /**
    *  두번 클릭했을 시에만 입력 가능하도록 하기 위해서 클릭 횟수를 확인해서 입력 활성화 여부 결정
    */
-  const isReadOnly = clickedCount < 1;
+  const isReadOnly = !isDoubleClicked;
+
+  /**
+   * 입력모드 전환시 포커스 이동해서 전체 스타일 적용되도록 변경
+   */
+  useEffect(() => {
+    if (isDoubleClicked && editorRef.current) {
+      setCurrentRef(editorRef);
+    }
+  }, [isDoubleClicked]);
 
   return (
     <div onBlur={blurHandler}>
@@ -83,7 +100,12 @@ const TextBox = ({ cardId, layerId, clickedCount = 0 }: { cardId: number; layerI
         onFocus={focusHandler}
         onBlur={blurHandler}
         modules={modules}
-        style={{ minWidth: '200px', maxWidth: '700px', cursor: clickedCount < 2 ? 'pointer' : 'auto' }}
+        style={{
+          minWidth: '200px',
+          maxWidth: '700px',
+          cursor: isReadOnly ? 'pointer' : 'auto',
+          userSelect: isReadOnly ? 'none' : 'auto',
+        }}
         placeholder="Text"
         readOnly={isReadOnly}
       />

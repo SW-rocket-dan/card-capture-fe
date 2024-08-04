@@ -1,6 +1,6 @@
 import FocusBox from '@/components/editor/EditingArea/components/FocusBox/FocusBox';
 import TextBox from '@/components/editor/EditingArea/components/TextBox/TextBox';
-import { Card, Image, Shape } from '@/store/useCardsStore/type';
+import { Card, Illust, Image, Shape } from '@/store/useCardsStore/type';
 import ShapeBox from '@/components/editor/EditingArea/components/ShapeBox/ShapeBox';
 import LayerBox from '@/components/editor/EditingArea/components/LayerBox/LayerBox';
 import CardAddBox from '@/components/editor/EditingArea/views/CardAddBox';
@@ -15,6 +15,7 @@ import { saveAs } from 'file-saver';
 import { toPng } from 'html-to-image';
 import { Progress } from '@/components/ui/progress';
 import { jsonUtils } from '@/utils';
+import IllustBox from '@/components/editor/EditingArea/components/IllustBox/IllustBox';
 
 const CardArea = ({ card }: { card: Card }) => {
   const cardId = card.id;
@@ -24,16 +25,23 @@ const CardArea = ({ card }: { card: Card }) => {
   const setFocusedLayerId = useFocusStore(state => state.setFocusedLayerId);
   const setFocusedCardId = useFocusStore(state => state.setFocusedCardId);
 
+  const [initialMouseDown, setInitialMouseDown] = useState<React.MouseEvent | null>(null);
+
   const makeFocusLayerHandler = (e: React.MouseEvent, id: number) => {
     e.stopPropagation();
 
     setFocusedLayerId(id);
     setFocusedCardId(cardId);
+    setInitialMouseDown(e);
   };
 
   const unFocusLayerHandler = () => {
     setFocusedLayerId(-1);
   };
+
+  useEffect(() => {
+    setInitialMouseDown(null);
+  }, [focusedLayerId]);
 
   /**
    * json 확인하기 위한 임시 로직
@@ -115,8 +123,6 @@ const CardArea = ({ card }: { card: Card }) => {
     };
   }, [isDownloading, increaseProgress]);
 
-  console.log(card);
-
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-[10px] bg-editorbg">
       {/* 카드 추가 관리 박스 / 레이어 추가 관리 박스*/}
@@ -196,7 +202,7 @@ const CardArea = ({ card }: { card: Card }) => {
             if (layer.type === 'text') {
               //텍스트 Focus Box
               return (
-                <FocusBox key={idx} cardId={cardId} layerId={layer.id} type="text">
+                <FocusBox key={idx} cardId={cardId} layerId={layer.id} type="text" initialMouseDown={initialMouseDown}>
                   <TextBox key={idx} cardId={cardId} layerId={layer.id} />
                 </FocusBox>
               );
@@ -204,7 +210,7 @@ const CardArea = ({ card }: { card: Card }) => {
               // 도형 Focus Box
               const { type, color } = layer.content as Shape;
               return (
-                <FocusBox key={idx} cardId={cardId} layerId={layer.id}>
+                <FocusBox key={idx} cardId={cardId} layerId={layer.id} initialMouseDown={initialMouseDown}>
                   <ShapeBox shapeType={type} color={color} />
                 </FocusBox>
               );
@@ -212,8 +218,16 @@ const CardArea = ({ card }: { card: Card }) => {
               const { url } = layer.content as Image;
 
               return (
-                <FocusBox key={idx} cardId={cardId} layerId={layer.id}>
+                <FocusBox key={idx} cardId={cardId} layerId={layer.id} initialMouseDown={initialMouseDown}>
                   <ImageBox url={url} position={layer.position} />
+                </FocusBox>
+              );
+            } else if (layer.type === 'illust') {
+              const { url } = layer.content as Illust;
+
+              return (
+                <FocusBox key={idx} cardId={cardId} layerId={layer.id} initialMouseDown={initialMouseDown}>
+                  <IllustBox url={url} position={layer.position} />
                 </FocusBox>
               );
             }
@@ -239,6 +253,14 @@ const CardArea = ({ card }: { card: Card }) => {
               return (
                 <LayerBox key={idx} position={layer.position} onClick={e => makeFocusLayerHandler(e, layer.id)}>
                   <ImageBox url={url} position={layer.position} />
+                </LayerBox>
+              );
+            } else if (layer.type === 'illust') {
+              const { url } = layer.content as Illust;
+
+              return (
+                <LayerBox key={idx} position={layer.position} onClick={e => makeFocusLayerHandler(e, layer.id)}>
+                  <IllustBox url={url} position={layer.position} />
                 </LayerBox>
               );
             }

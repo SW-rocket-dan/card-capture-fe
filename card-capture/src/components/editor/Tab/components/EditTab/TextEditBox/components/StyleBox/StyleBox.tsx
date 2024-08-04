@@ -15,11 +15,11 @@ const StyleBox = () => {
   }, [color]);
 
   return (
-    <div className="flex flex-row items-center gap-[20px] px-[15px] py-[8px]">
+    <div className="flex flex-row items-center justify-between px-[25px] py-[8px]">
       <AlignButton />
       <SpacingButton />
       <ListButton />
-      <ColorButton color={color} setColor={setColor} />
+      <ColorButton color={color} setColor={setColor} direction="right" />
     </div>
   );
 };

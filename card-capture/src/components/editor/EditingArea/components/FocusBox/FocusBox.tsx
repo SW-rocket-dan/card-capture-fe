@@ -12,11 +12,12 @@ import TrashIcon from '@/components/common/Icon/TrashIcon';
 
 type Props = {
   children: React.ReactElement<{
-    clickedCount: number;
+    isDoubleClicked: boolean;
   }>;
   cardId: number;
   layerId: number;
   type?: LayerType;
+  initialMouseDown: React.MouseEvent | null;
 };
 
 /**
@@ -24,7 +25,7 @@ type Props = {
  * @param component Box안에 띄어줄 컴포넌트
  * @param position 위치정보에 따라서 위치를 렌더링해줌
  * **/
-const FocusBox = ({ children, cardId, layerId, type }: Props) => {
+const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) => {
   const layer = useCardsStore(state => state.cards[cardId].layers.filter(v => v.id === layerId)[0]);
   const setPosition = useCardsStore(state => state.setPosition);
 
@@ -50,11 +51,14 @@ const FocusBox = ({ children, cardId, layerId, type }: Props) => {
   const stopPropagation = (e: React.PointerEvent | React.MouseEvent) => {
     e.stopPropagation();
   };
-  const [clickedCount, setClickedCount] = useState(1);
 
-  const clickFocusBoxHandler = (e: React.PointerEvent | React.MouseEvent) => {
-    setClickedCount(prev => prev + 1);
-    e.stopPropagation();
+  /**
+   * 두번 클릭하면 텍스트 입력 활성화 되는 로직
+   */
+  const [isDoubleClicked, setIsDoubleClicked] = useState(false);
+
+  const doubleClickHandler = () => {
+    setIsDoubleClicked(prev => !prev);
   };
 
   /**
@@ -67,7 +71,28 @@ const FocusBox = ({ children, cardId, layerId, type }: Props) => {
   //              //
   /* 드래그 관련 로직 */
   //              //
+
+  /**
+   * layer -> focus로 변경될 때 mouseDown 이벤트 전달해서 바로 드래그 되도록 하는 로직
+   * @TODO : 추추에는 layerbox를 없애고 focusBox로만 관리하는 방식으로 변경할 예정
+   */
+
+  useEffect(() => {
+    // initialMouseDown이 있으면 즉시 드래그 시작
+    if (initialMouseDown) {
+      const startDrag = (e: React.MouseEvent) => {
+        setIsDrag(true);
+        setDragOffset({
+          x: e.clientX - curPosition.x,
+          y: e.clientY - curPosition.y,
+        });
+      };
+      startDrag(initialMouseDown);
+    }
+  }, [initialMouseDown]);
+
   const pointerDownDragHandler = (e: React.PointerEvent) => {
+    e.stopPropagation();
     setIsDrag(true);
 
     setDragOffset(prev => {
@@ -103,7 +128,7 @@ const FocusBox = ({ children, cardId, layerId, type }: Props) => {
 
     setDragOffset({ ...INITIAL_DRAG_OFFSET });
     setIsDrag(false);
-    setPosition(cardId, layerId, { ...curPosition, y: diffY, x: diffX });
+    setPosition(cardId, layerId, { ...curPosition, y: diffY - 0.4, x: diffX - 0.4 });
   };
 
   /**
@@ -111,7 +136,7 @@ const FocusBox = ({ children, cardId, layerId, type }: Props) => {
    */
   useEffect(() => {
     if (!isDrag) return;
-    if (clickedCount > 1 && type === 'text') return;
+    if (isDoubleClicked && type === 'text') return;
 
     window.addEventListener('pointermove', pointerMoveDragHandler);
     window.addEventListener('pointerup', pointerUpDragHandler);
@@ -438,7 +463,7 @@ const FocusBox = ({ children, cardId, layerId, type }: Props) => {
 
   return (
     <div
-      className={`absolute border ${isDrag ? 'cursor-grabbing' : 'cursor-grab'} ${clickedCount > 1 && type === 'text' && 'border-[1.5px] border-main'}`}
+      className={`absolute border ${isDoubleClicked && type === 'text' && 'border-[1.5px] border-main'}`}
       style={{
         left: curPosition.x,
         top: curPosition.y,
@@ -448,9 +473,11 @@ const FocusBox = ({ children, cardId, layerId, type }: Props) => {
         transform: `rotate(${curPosition.rotate}deg)`,
         transformOrigin: 'center',
         wordWrap: 'break-word',
+        boxSizing: 'border-box',
       }}
       onPointerDown={pointerDownDragHandler}
-      onClick={clickFocusBoxHandler}
+      onClick={stopPropagation}
+      onDoubleClick={doubleClickHandler}
       ref={boxRef}
     >
       {/* 11시,1시,5시,7시 크기조절 바 */}
@@ -507,9 +534,12 @@ const FocusBox = ({ children, cardId, layerId, type }: Props) => {
       </div>
       <ContextMenu>
         <ContextMenuTrigger>
-          <div className="absolute h-full w-full" style={{ opacity: curPosition.opacity / 100 }}>
+          <div
+            className={`absolute h-full w-full ${isDrag ? 'cursor-grabbing' : 'cursor-grab'} `}
+            style={{ opacity: curPosition.opacity / 100 }}
+          >
             {layer.type === 'text' && React.isValidElement(children)
-              ? React.cloneElement(children, { clickedCount })
+              ? React.cloneElement(children, { isDoubleClicked })
               : children}
           </div>
         </ContextMenuTrigger>

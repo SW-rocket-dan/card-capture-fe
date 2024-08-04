@@ -6,7 +6,7 @@ import React from 'react';
 import PromptInput from '@/components/prompt/PromptInput/PromptInput';
 import PromptPreview from '@/components/prompt/PromptPreview/PromptPreview';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { PromptFormType } from '@/app/prompt/api/promptApi';
+import { PromptFormType } from '@/api/promptApi';
 import { useCardsStore } from '@/store/useCardsStore';
 import { useRouter } from 'next/navigation';
 import { Card } from '@/store/useCardsStore/type';

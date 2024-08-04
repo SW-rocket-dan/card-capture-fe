@@ -5,10 +5,28 @@ import CutIcon from '@/components/common/Icon/CutIcon';
 import AngleIcon from '@/components/common/Icon/AngleIcon';
 import { useEffect, useState } from 'react';
 import useLayerStyles from '@/components/editor/Tab/hooks/useLayerStyles';
+import { useFocusStore } from '@/store/useFocusStore';
+import { useCardsStore } from '@/store/useCardsStore';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
-const SizeBox = () => {
+type SizeBoxProps = {
+  type: 'shape' | 'image';
+};
+
+const SizeBox = ({ type }: SizeBoxProps) => {
   /**
-   * 현재 선택된 이미지의 데이터를 가져오고, 이미지를 설정하는 로직이 담긴 hook
+   * 현재 선택된 레이어의 타입을 가져오는 로직
+   * 선택된 레이어에 대한 sizeBox가 아니면 값을 띄우지 않게 하기 위해 작성
+   * @TODO : hook으로 분리하기
+   */
+  const cardId = useFocusStore(state => state.focusedCardId);
+  const layerId = useFocusStore(state => state.focusedLayerId);
+  const getLayer = useCardsStore(state => state.getLayer);
+
+  const focusedLayerType = getLayer(cardId, layerId)?.type;
+
+  /**
+   * 현재 선택된 요소의 데이터를 가져오고, 이미지를 설정하는 로직이 담긴 hook
    */
   const { position, changePositionHandler } = useLayerStyles();
 
@@ -22,6 +40,7 @@ const SizeBox = () => {
    */
   useEffect(() => {
     if (!position) return;
+    if (focusedLayerType !== type) return;
 
     setWidth(Math.floor(position.width));
     setHeight(Math.floor(position.height));
@@ -53,6 +72,17 @@ const SizeBox = () => {
     }
   };
 
+  /**
+   * 크기 조절 잠금 로직
+   * @FIXME: state가 저장이 안되어서 다른 탭 다녀오면 다시 수정 가능 / 수정 영역에서는 그냥 수정됨
+   */
+  const [isDisabled, setIsDisabled] = useState(false);
+  const disableInputHandler = () => {
+    setIsDisabled(prev => !prev);
+  };
+
+  const disable = focusedLayerType !== type || isDisabled;
+
   return (
     <div className="flex flex-row items-center justify-between">
       {/* 높이, 너비 입력 */}
@@ -61,6 +91,7 @@ const SizeBox = () => {
           <div className="flex w-[110px] flex-row items-center rounded-md bg-itembg px-[10px] py-[10px]">
             <input
               type="number"
+              disabled={disable}
               value={width}
               onChange={e => changeSizeHandler('width', e)}
               onBlur={updateSizeHandler}
@@ -72,6 +103,7 @@ const SizeBox = () => {
           <div className="flex w-[110px] flex-row items-center rounded-md bg-itembg px-[10px] py-[10px]">
             <input
               type="number"
+              disabled={disable}
               value={height}
               onChange={e => changeSizeHandler('height', e)}
               onBlur={updateSizeHandler}
@@ -84,25 +116,35 @@ const SizeBox = () => {
 
         {/* 잠금 버튼 */}
         <div className="flex flex-col gap-1">
-          <RightTopBorderIcon height={18} className="text-gray6" />
-          <button>
-            <LockIcon width={15} className="ml-[7px] text-gray5" />
+          <RightTopBorderIcon height={18} className={` ${isDisabled ? 'text-light-main' : 'text-gray6'}`} />
+          <button onClick={disableInputHandler}>
+            <LockIcon width={15} className={`ml-[7px] ${isDisabled ? 'text-main' : 'text-gray5'}`} />
           </button>
-          <RightBottomBorderIcon height={18} className="text-gray6" />
+          <RightBottomBorderIcon height={18} className={` ${isDisabled ? 'text-light-main' : 'text-gray6'}`} />
         </div>
       </div>
 
       {/* 자르기, 각도 변환 */}
       <div className="flex flex-col gap-[8px]">
-        <button
-          disabled={true}
-          className="flex w-[90px] flex-row items-center justify-center gap-[7px] rounded-lg bg-gray7 py-[10px] text-xs text-white"
-        >
-          <CutIcon width={15} />
-          <span>자르기</span>
-        </button>
+        <TooltipProvider>
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger>
+              <button
+                disabled={true}
+                className="flex w-[90px] flex-row items-center justify-center gap-[7px] rounded-lg bg-gray7 py-[10px] text-xs text-white"
+              >
+                <CutIcon width={15} />
+                <span>자르기</span>
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p className="text-xs">준비중!</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
         <div className="flex w-[90px] flex-row items-center justify-between rounded-md bg-itembg px-[12px] py-[10px] text-xs">
           <input
+            disabled={disable}
             type="number"
             value={rotate}
             onChange={e => changeSizeHandler('rotate', e)}
