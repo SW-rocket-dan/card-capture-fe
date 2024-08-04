@@ -2,7 +2,7 @@ import { useState } from 'react';
 import SpacingIcon from '@/components/common/Icon/SpacingIcon';
 import { Slider } from '@/components/ui/slider';
 import useTextFormatting from '@/components/editor/Tab/components/EditTab/TextEditBox/hooks/useTextFormatting';
-import useClickOutside from '@/hooks/useClickOutside';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 const SpacingButton = () => {
   /**
@@ -44,20 +44,19 @@ const SpacingButton = () => {
     changeStyleHandler('font-stretch', `${value[0]}`);
   };
 
-  // 컴포넌트 외부 클릭시 모달 닫는 hook
-  const ref = useClickOutside(() => setIsOpen(false));
-
   return (
-    <div ref={ref} className="relative">
-      <button
-        onClick={openHandler}
-        className="flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-md hover:bg-itembg"
-      >
-        <SpacingIcon height={17} />
-      </button>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <PopoverTrigger asChild>
+        <button
+          onClick={openHandler}
+          className="flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-md hover:bg-itembg"
+        >
+          <SpacingIcon height={17} />
+        </button>
+      </PopoverTrigger>
 
       {/* 텍스트 간격 조절 모달 */}
-      {isOpen && (
+      <PopoverContent asChild>
         <div
           className="absolute z-10 mt-[7px] flex w-[250px] flex-col gap-7 rounded-lg bg-white px-[15px] py-[17px]"
           style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08' }}
@@ -69,6 +68,7 @@ const SpacingButton = () => {
                 type="number"
                 className="h-[25px] w-[60px] rounded-md bg-itembg p-2 text-xs font-medium outline-none"
                 value={letterSpacing}
+                tabIndex={-1} // trigger 될 때 focus 되는 것 방지
               />
             </div>
             <Slider value={[letterSpacing]} onValueChange={handleChangeLetterSpacing} min={0} max={10} step={1} />
@@ -80,6 +80,7 @@ const SpacingButton = () => {
                 type="number"
                 className="h-[25px] w-[60px] rounded-md bg-itembg p-2 text-xs font-medium outline-none"
                 value={lineHeight}
+                tabIndex={-1} // trigger 될 때 focus 되는 것 방지
               />
             </div>
             <Slider value={[lineHeight]} onValueChange={handleChangeLineHeight} min={10} max={30} step={5} />
@@ -96,8 +97,8 @@ const SpacingButton = () => {
           {/*  <Slider value={[fontStretch]} onValueChange={handleChangeFontStretch} min={50} max={150} step={25} />*/}
           {/*</div>*/}
         </div>
-      )}
-    </div>
+      </PopoverContent>
+    </Popover>
   );
 };
 
