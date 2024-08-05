@@ -27,22 +27,22 @@ jobs:
           node-version: '18'
 
       - name: Install Dependencies
-        working-directory: ./card-capture-fe
+        working-directory: ./card-capture-fe/card-capture
         run: npm install
 
       - name: Build
-        working-directory: ./card-capture-fe
+        working-directory: ./card-capture-fe/card-capture
         run: npm run build
 
       - name: Zip Build Files
-        run: zip -r build.zip . -x "*.git*" -x "card-capture-fe/*"
+        working-directory: ./card-capture-fe
+        run: zip -r build.zip . -x "*.git*"
 
       - name: Upload to S3
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: |
-          aws s3 cp build.zip s3://your-s3-bucket/build.zip
+        run: aws s3 cp build.zip s3://your-s3-bucket/build.zip
 
   deploy:
     runs-on: ubuntu-latest
