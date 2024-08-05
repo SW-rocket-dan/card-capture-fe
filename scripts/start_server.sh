@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /home/ec2-user/card-capture-fe
+cd /home/ec2-user/card-capture-fe/card-capture
 
 # PM2 프로세스 삭제
 pm2 delete card-capture || true
