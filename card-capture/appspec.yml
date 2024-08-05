@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ec2-user/card-capture-fe
+    destination: /home/ec2-user/card-capture-fe
 hooks:
   ApplicationStart:
     - location: scripts/deploy.sh
