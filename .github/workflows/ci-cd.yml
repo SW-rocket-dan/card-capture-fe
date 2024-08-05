@@ -27,11 +27,11 @@ jobs:
           node-version: '18'
 
       - name: Install Dependencies
-        working-directory: ./card-capture-fe/card-capture
+        working-directory: .
         run: npm install
 
       - name: Build
-        working-directory: ./card-capture-fe/card-capture
+        working-directory: .
         run: npm run build
 
       - name: Zip Build Files
