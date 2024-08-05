@@ -1,5 +1,11 @@
 #!/bin/bash
 
+echo "Current directory: $(pwd)"
+echo "Contents of /home/ec2-user:"
+ls -l /home/ec2-user
+echo "Does build.zip exist?"
+[ -f "/home/ec2-user/build.zip" ] && echo "Yes" || echo "No"
+
 # 기존 파일 삭제
 if [ -d "/home/ec2-user/card-capture-fe" ]; then
     sudo rm -rf /home/ec2-user/card-capture-fe/*
