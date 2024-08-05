@@ -2,6 +2,6 @@ version: 0.0
 os: linux
 hooks:
   ApplicationStart:
-    - location: /bin/bash -c "if [ -d '/home/ec2-user/card-capture-fe' ]; then sudo rm -rf /home/ec2-user/card-capture-fe/*; fi && mkdir -p /home/ec2-user/card-capture-fe && cd /home/ec2-user/card-capture-fe && sudo sh -c \"echo 'NEXT_PUBLIC_API_KEY=${NEXT_PUBLIC_API_KEY}' > .env\" && if [ ! -f '/home/ec2-user/build.zip' ]; then echo 'Build file not found!'; exit 1; fi && unzip -o /home/ec2-user/build.zip -d /home/ec2-user/card-capture-fe && npm start"
+    - location: scripts/deploy.sh
       timeout: 300
       runas: ec2-user
