@@ -1,5 +1,4 @@
-// accessToken 가져오기
-const token = localStorage.getItem('accessToken');
+import { customFetch } from '@/api/customFetchApi';
 
 export type PromptFormType = {
   phrase: {
@@ -18,11 +17,10 @@ export type PromptFormType = {
  */
 const postPromptTemplateData = async (data: PromptFormType) => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/api/v1/template/create`, {
+    const response = await customFetch(`${process.env.NEXT_PUBLIC_API_KEY}/api/v1/template/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(data),
     });
