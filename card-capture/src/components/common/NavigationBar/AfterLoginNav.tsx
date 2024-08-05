@@ -88,7 +88,10 @@ const AfterLoginNav = () => {
               className={`absolute right-0 z-20 mt-[20px] flex w-[150px] flex-col rounded-lg bg-white py-[5px] text-[14px] font-medium drop-shadow-md duration-200 animate-in fade-in-0 zoom-in-95`}
               style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08' }}
             >
-              <button className="flex h-[40px] w-full items-center justify-start px-[20px] hover:bg-bannerbg">
+              <button
+                onClick={() => router.push('/mypage')}
+                className="flex h-[40px] w-full items-center justify-start px-[20px] hover:bg-bannerbg"
+              >
                 마이페이지
               </button>
               <button
