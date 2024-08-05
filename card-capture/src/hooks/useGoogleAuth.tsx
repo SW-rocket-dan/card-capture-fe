@@ -2,6 +2,7 @@ import { useAuthStore } from '@/store/useAuthStore';
 import { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { loginApi } from '@/api';
+import { tokenUtils } from '@/utils';
 
 const useGoogleAuth = (type?: string) => {
   const isLoggedIn = useAuthStore(state => state.isLoggedIn);
@@ -19,10 +20,11 @@ const useGoogleAuth = (type?: string) => {
       if (event.data.type === 'GOOGLE_AUTH_CODE') {
         const code = event.data.code;
 
-        const { accessToken } = await loginApi.getJWTToken(code);
+        const { accessToken, refreshToken } = await loginApi.getJWTToken(code);
 
-        if (accessToken) {
-          localStorage.setItem('accessToken', accessToken);
+        // 토큰 쿠키에 설정
+        if (accessToken && refreshToken) {
+          tokenUtils.setTokens(accessToken, refreshToken);
           setIsLoggedIn(true);
         }
 

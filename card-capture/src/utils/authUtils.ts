@@ -1,5 +1,7 @@
+import tokenUtils from '@/utils/tokenUtils';
+
 const getIsLoggedIn = () => {
-  const token = localStorage.getItem('accessToken');
+  const token = tokenUtils.getAccessToken();
 
   return !!token;
 };
