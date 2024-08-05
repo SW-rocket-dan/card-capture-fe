@@ -18,19 +18,25 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
+      - name: List Repository Files
+        run: ls -al
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
       - name: Install Dependencies
+        working-directory: ./card-capture-fe
         run: npm install
 
       - name: Build
+        working-directory: ./card-capture-fe
         run: npm run build
 
       - name: Zip Build Files
-        run: zip -r build.zip . -x "*.git*"
+        working-directory: ./card-capture-fe
+        run: zip -r ../build.zip . -x "*.git*"
 
       - name: Upload to S3
         env:
