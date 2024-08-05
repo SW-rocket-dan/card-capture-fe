@@ -1,3 +1,3 @@
-import GoogleAuthCallback from '@/components/common/Login/GoogleAuthCallback';
+import GoogleAuthCallback from '@/components/common/Auth/GoogleAuthCallback';
 
 export default GoogleAuthCallback;
