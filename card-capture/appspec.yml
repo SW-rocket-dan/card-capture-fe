@@ -1,5 +1,8 @@
 version: 0.0
 os: linux
+files:
+  - source: build.zip
+    destination: /home/ec2-user/
 hooks:
   ApplicationStart:
     - location: scripts/deploy.sh
