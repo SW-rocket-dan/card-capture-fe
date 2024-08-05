@@ -14,8 +14,6 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-      - name: List Repository Files
-        run: ls -al
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -31,37 +29,31 @@ jobs:
           cd card-capture
           zip -r ../build.zip . -x "*.git*" > /dev/null
           echo "Zip file created successfully"
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          name: build
-          path: build.zip
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
       - name: Upload to S3
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
-          S3_BUCKET: ${{ secrets.S3_BUCKET }}
-        run: aws s3 cp build.zip s3://$S3_BUCKET/build.zip
+        run: |
+          echo "Uploading build.zip to S3..."
+          aws s3 cp build.zip s3://${{ secrets.S3_BUCKET }}/build.zip --quiet
+          echo "Upload completed successfully"
   deploy:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Install AWS CLI
-        run: |
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
-          sudo ./aws/install
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
       - name: Deploy to CodeDeploy
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          CODEDEPLOY_APPLICATION_NAME: ${{ secrets.CODEDEPLOY_APPLICATION_NAME }}
-          CODEDEPLOY_DEPLOYMENT_GROUP_NAME: ${{ secrets.CODEDEPLOY_DEPLOYMENT_GROUP_NAME }}
-          S3_BUCKET: ${{ secrets.S3_BUCKET }}
         run: |
           aws deploy create-deployment \
-            --application-name $CODEDEPLOY_APPLICATION_NAME \
-            --deployment-group-name $CODEDEPLOY_DEPLOYMENT_GROUP_NAME \
-            --s3-location bucket=$S3_BUCKET,key=build.zip,bundleType=zip
+            --application-name ${{ secrets.CODEDEPLOY_APPLICATION_NAME }} \
+            --deployment-group-name ${{ secrets.CODEDEPLOY_DEPLOYMENT_GROUP_NAME }} \
+            --s3-location bucket=${{ secrets.S3_BUCKET }},key=build.zip,bundleType=zip \
+            --output json
