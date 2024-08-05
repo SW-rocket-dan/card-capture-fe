@@ -5,10 +5,6 @@ on:
     branches:
       - main
       - test
-  pull_request:
-    branches:
-      - main
-      - test
 
 jobs:
   build:
@@ -18,97 +14,47 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: List Repository Files
-        run: ls -al
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/test'
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: List Repository Files
-        run: ls -al
-
-      - name: Check if package.json Exists
-        working-directory: ./card-capture
-        run: test -f package.json || { echo "package.json not found"; exit 1; }
-
-      - name: Setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      - name: Set Node.js memory limit
-        run: |
-          echo "NODE_OPTIONS=--max-old-space-size=8192" >> $GITHUB_ENV
+      - name: Install Dependencies
+        run: npm install
 
-      - name: Deploy to Server
+      - name: Build
+        run: npm run build
+
+      - name: Zip Build Files
+        run: zip -r build.zip . -x "*.git*"
+
+      - name: Upload to S3
         env:
-          SERVER_IP: ${{ secrets.SERVER_IP }}
-          SERVER_USER: ${{ secrets.SERVER_USER }}
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          REPO_URL: ${{ github.server_url }}/${{ github.repository }}.git
-          NEXT_PUBLIC_API_KEY: ${{ secrets.NEXT_PUBLIC_API_KEY }}
-          NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          NODE_OPTIONS: '--max-old-space-size=8192'
-
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | sed 's/\\n/\n/g' > deployment_key.pem
-          chmod 400 deployment_key.pem
-          mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+          aws s3 cp build.zip s3://your-s3-bucket/build.zip
 
-          ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=600 -o ServerAliveCountMax=1200 -i deployment_key.pem ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} <<'EOF'
-            set -e
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
 
-            BASE_DIR="/home/${{ secrets.SERVER_USER }}/card-capture-fe"
-            PROJECT_DIR="$BASE_DIR/card-capture"
-            REPO_URL="https://github.com/SW-rocket-dan/card-capture-fe.git"
+    steps:
+      - name: Install AWS CLI
+        run: |
+          curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
+          sudo installer -pkg AWSCLIV2.pkg -target /
 
-            echo "BASE_DIR: $BASE_DIR"
-            echo "PROJECT_DIR: $PROJECT_DIR"
-            echo "REPO_URL: $REPO_URL"
-          
-            if [ -d "$BASE_DIR" ]; then
-              echo "Removing existing directory..."
-              rm -rf "$BASE_DIR"
-            fi
-
-            echo "Creating new directory..."
-            mkdir -p "$BASE_DIR"
-            cd "$BASE_DIR"
-
-            echo "Cloning repository..."
-            git clone $REPO_URL . || { echo "Git clone failed"; exit 1; }
-
-            cd "$PROJECT_DIR"
-
-            echo "Current directory: $(pwd)"
-            ls -la
-
-            echo "Setting environment variables..."
-            echo "NEXT_PUBLIC_API_KEY=${{ secrets.NEXT_PUBLIC_API_KEY }}" > .env
-          
-            echo "Installing npm packages..."
-            npm install
-          
-            echo "Building the repository..."
-            NODE_OPTIONS=--max-old-space-size=8192 npm run build # 빌드 시 메모리 한도 적용
-
-            echo "Deleting existing PM2 process..."
-            pm2 delete card-capture || true
-
-            echo "Starting application with PM2..."
-            NODE_OPTIONS=--max-old-space-size=8192 pm2 start npm --name "card-capture" -- start # PM2 시작 시 메모리 한도 적용
-
-            echo "Saving PM2 configuration..."
-            pm2 save
-
-            echo "Setting PM2 to start on boot..."
-            pm2 startup | tail -n 1 | sudo bash
-          EOF
+      - name: Deploy to CodeDeploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          CODEDEPLOY_APPLICATION_NAME: ${{ secrets.CODEDEPLOY_APPLICATION_NAME }}
+          CODEDEPLOY_DEPLOYMENT_GROUP_NAME: ${{ secrets.CODEDEPLOY_DEPLOYMENT_GROUP_NAME }}
+          S3_BUCKET: cardcapture-fe
+        run: |
+          aws deploy create-deployment \
+            --application-name $CODEDEPLOY_APPLICATION_NAME \
+            --deployment-group-name $CODEDEPLOY_DEPLOYMENT_GROUP_NAME \
+            --s3-location bucket=$S3_BUCKET,key=build.zip,bundleType=zip
