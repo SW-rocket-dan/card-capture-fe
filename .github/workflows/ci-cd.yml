@@ -1,5 +1,4 @@
 name: CI/CD Pipeline
-
 on:
   push:
     branches:
@@ -9,52 +8,49 @@ on:
     branches:
       - main
       - test
-
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-
       - name: List Repository Files
         run: ls -al
-
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-
       - name: Install Dependencies
         working-directory: ./card-capture
         run: npm install
-
       - name: Build
         working-directory: ./card-capture
         run: npm run build
-
       - name: Zip Build Files
         run: |
-          cd ~/card-capture-fe/card-capture
+          cd card-capture
           zip -r ../build.zip . -x "*.git*"
-
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: build.zip
       - name: Upload to S3
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: aws s3 cp build.zip s3://your-s3-bucket/build.zip
-
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+          S3_BUCKET: ${{ secrets.S3_BUCKET }}
+        run: aws s3 cp build.zip s3://$S3_BUCKET/build.zip
   deploy:
     runs-on: ubuntu-latest
     needs: build
-
     steps:
       - name: Install AWS CLI
         run: |
-          curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
-          sudo installer -pkg AWSCLIV2.pkg -target /
-
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
       - name: Deploy to CodeDeploy
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -62,7 +58,7 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           CODEDEPLOY_APPLICATION_NAME: ${{ secrets.CODEDEPLOY_APPLICATION_NAME }}
           CODEDEPLOY_DEPLOYMENT_GROUP_NAME: ${{ secrets.CODEDEPLOY_DEPLOYMENT_GROUP_NAME }}
-          S3_BUCKET: your-s3-bucket
+          S3_BUCKET: ${{ secrets.S3_BUCKET }}
         run: |
           aws deploy create-deployment \
             --application-name $CODEDEPLOY_APPLICATION_NAME \
