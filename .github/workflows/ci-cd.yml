@@ -36,7 +36,7 @@ jobs:
 
       - name: Zip Build Files
         run: |
-          cd card-capture-fe
+          cd ~/card-capture-fe/card-capture
           zip -r ../build.zip . -x "*.git*"
 
       - name: Upload to S3
