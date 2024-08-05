@@ -8,7 +8,10 @@ const UserTemplates = () => {
         <p className="text-[13px] text-gray2">내가 만든 템플릿을 모아서 볼 수 있어요!</p>
       </div>
 
-      <div className="w-full px-[100px] py-[50px]">
+      <div className="mx-auto grid grid-cols-1 items-center justify-items-center gap-4 px-6 py-12 sm:grid-cols-2 sm:px-8 md:px-12 lg:grid-cols-3 lg:px-14 xl:grid-cols-4">
+        <UserTemplateDetails />
+        <UserTemplateDetails />
+        <UserTemplateDetails />
         <UserTemplateDetails />
       </div>
     </div>

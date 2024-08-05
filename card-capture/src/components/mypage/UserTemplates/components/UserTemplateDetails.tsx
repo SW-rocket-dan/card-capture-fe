@@ -5,7 +5,7 @@ import CheckIcon from '@/components/common/Icon/CheckIcon';
 const UserTemplateDetails = () => {
   return (
     <div className="flex w-fit flex-col gap-2 rounded-[20px] border border-border p-4">
-      <div className="h-[280px] w-[280px] rounded-[20px] bg-gray8 sm:h-[220px] sm:w-[220px] md:h-[270px] md:w-[270px]"></div>
+      <div className="h-[250px] w-[250px] rounded-[20px] bg-gray8 md:h-[270px] md:w-[270px]"></div>
 
       <div className="flex flex-col gap-1 px-1">
         <div className="flex flex-row justify-between">
