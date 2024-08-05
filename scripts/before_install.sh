@@ -1,11 +1,9 @@
 #!/bin/bash
 
-cd /home/ec2-user/card-capture-fe
-# npm install
-npm install
+# 기존 폴더가 있으면 삭제
+if [ -d "/home/ec2-user/card-capture-fe" ]; then
+    rm -rf /home/ec2-user/card-capture-fe
+fi
 
-# 환경 변수 설정
-echo "NEXT_PUBLIC_API_KEY=${NEXT_PUBLIC_API_KEY}" > .env
-
-# 빌드
-NODE_OPTIONS=--max-old-space-size=8192 npm run build
+# 새로운 폴더 생성
+mkdir -p /home/ec2-user/card-capture-fe
