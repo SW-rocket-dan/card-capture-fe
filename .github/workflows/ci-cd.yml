@@ -35,8 +35,9 @@ jobs:
         run: npm run build
 
       - name: Zip Build Files
-        working-directory: ./card-capture-fe
-        run: zip -r build.zip . -x "*.git*"
+        run: |
+          cd card-capture-fe
+          zip -r ../build.zip . -x "*.git*"
 
       - name: Upload to S3
         env:
