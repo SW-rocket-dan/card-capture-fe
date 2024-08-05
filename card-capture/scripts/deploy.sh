@@ -3,7 +3,7 @@
 
 # 환경 변수 설정 (루트 권한 사용하여 파일 생성)
 echo "Setting environment variables..."
-sudo sh -c "echo 'NEXT_PUBLIC_API_KEY=${NEXT_PUBLIC_API_KEY}' > /home/ec2-user/card-capture-fe/.env"
+sudo sh -c "echo 'NEXT_PUBLIC_API_KEY=${NEXT_PUBLIC_API_KEY}' > /home/ec2-user/card-capture-fe/card-capture/.env"
 
 # 기존 PM2 프로세스 삭제
 echo "Deleting existing PM2 process..."
