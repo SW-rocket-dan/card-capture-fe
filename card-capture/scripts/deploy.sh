@@ -8,9 +8,6 @@ fi
 # 새로운 폴더 생성
 mkdir -p /home/ec2-user/card-capture-fe
 
-
-#!/bin/bash
-
 cd /home/ec2-user/card-capture-fe
 
 # 환경 변수 설정
