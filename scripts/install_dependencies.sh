@@ -1,7 +1,6 @@
 #!/bin/bash
 
-cd /home/ec2-user/card-capture-fe
-# npm install
+cd /home/ec2-user/card-capture-fe/card-capture
 npm install
 
 # 환경 변수 설정
