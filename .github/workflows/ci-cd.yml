@@ -29,7 +29,8 @@ jobs:
       - name: Zip Build Files
         run: |
           cd card-capture
-          zip -r ../build.zip . -x "*.git*"
+          zip -r ../build.zip . -x "*.git*" > /dev/null
+          echo "Zip file created successfully"
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
