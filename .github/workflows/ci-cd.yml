@@ -5,6 +5,10 @@ on:
     branches:
       - main
       - test
+  pull_request:
+    branches:
+      - main
+      - test
 
 jobs:
   build:
@@ -52,7 +56,7 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           CODEDEPLOY_APPLICATION_NAME: ${{ secrets.CODEDEPLOY_APPLICATION_NAME }}
           CODEDEPLOY_DEPLOYMENT_GROUP_NAME: ${{ secrets.CODEDEPLOY_DEPLOYMENT_GROUP_NAME }}
-          S3_BUCKET: cardcapture-fe
+          S3_BUCKET: your-s3-bucket
         run: |
           aws deploy create-deployment \
             --application-name $CODEDEPLOY_APPLICATION_NAME \
