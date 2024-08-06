@@ -1,5 +1,5 @@
 import imageApi from './imageApi';
 import loginApi from '@/api/loginApi';
-import promptApi from '@/api/promptApi';
+import templateApi from '@/api/templateApi';
 
-export { imageApi, loginApi, promptApi };
+export { imageApi, loginApi, templateApi };
