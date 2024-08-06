@@ -15,7 +15,7 @@ const MainTab = ({ currentTab, onChange }: { currentTab: string; onChange: (curr
 
       <TooltipProvider>
         <Tooltip delayDuration={0}>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <button
               disabled={true}
               onClick={() => onChange('prompt')}
@@ -32,7 +32,7 @@ const MainTab = ({ currentTab, onChange }: { currentTab: string; onChange: (curr
 
       <TooltipProvider>
         <Tooltip delayDuration={0}>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <button
               disabled={true}
               onClick={() => onChange('my')}
