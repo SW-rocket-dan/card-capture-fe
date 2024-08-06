@@ -1,5 +1,4 @@
-// accessToken 가져오기
-const token = localStorage.getItem('accessToken');
+import { customFetch } from '@/api/customFetchApi';
 
 export type StickerDataType = {
   id: number;
@@ -11,11 +10,8 @@ const getSearchedStickers = async (searchWord: string) => {
   const queryString = `searchTerm=${searchWord}`;
 
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/api/v1/sticker/search?${queryString}`, {
+    const response = await customFetch(`${process.env.NEXT_PUBLIC_API_KEY}/api/v1/sticker/search?${queryString}`, {
       method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
     });
 
     const jsonData = await response.json();

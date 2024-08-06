@@ -1,5 +1,4 @@
-// accessToken 가져오기
-const token = localStorage.getItem('accessToken');
+import { customFetch } from '@/api/customFetchApi';
 
 /**
  * 이미지를 s3에 바로 저장할 수 있는 presigned-url을 받아오는 post api
@@ -7,12 +6,12 @@ const token = localStorage.getItem('accessToken');
  */
 const getPreSignedUrl = async (queryString: string) => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/api/v1/s3/generate-presigned-url?${queryString}`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const response = await customFetch(
+      `${process.env.NEXT_PUBLIC_API_KEY}/api/v1/s3/generate-presigned-url?${queryString}`,
+      {
+        method: 'POST',
       },
-    });
+    );
 
     const jsonData = await response.json();
     return jsonData.data;

@@ -90,7 +90,7 @@ const ShapeModalBox = () => {
               }}
             />
           </button>
-          <PopoverTrigger>
+          <PopoverTrigger asChild>
             <button
               onClick={openHandler}
               className="flex h-[42px] w-[42px] cursor-pointer items-center justify-center overflow-hidden rounded-[5px]"
@@ -104,7 +104,7 @@ const ShapeModalBox = () => {
       <PopoverContent
         side="right"
         className={`absolute left-full z-50 -mt-[50px] ml-[27px] w-[275px] rounded-[8px] bg-white p-0`}
-        style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08' }}
+        style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08', zIndex: 10000 }}
       >
         <div>
           <div className="flex flex-row justify-between border-b-[1px] border-border px-[15px] py-[10px] font-bold">

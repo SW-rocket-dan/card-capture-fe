@@ -7,6 +7,7 @@ import useIsMobile from '@/hooks/useIsMobile';
 import { useRouter } from 'next/navigation';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useAuthStore } from '@/store/useAuthStore';
+import { tokenUtils } from '@/utils';
 
 const AfterLoginNav = () => {
   const router = useRouter();
@@ -29,7 +30,7 @@ const AfterLoginNav = () => {
 
   const logoutHandler = () => {
     if (window.confirm('로그아웃 시 메인페이지로 이동됩니다. 정말 로그아웃하시겠습니까?')) {
-      localStorage.removeItem('accessToken');
+      tokenUtils.clearTokens();
       setIsLoggedIn(false);
       setIsModalOpen(false); // 이전에 redirect하면서 state가 open으로 설정되어 있을 수 있기에 false로 변경
 
@@ -87,7 +88,10 @@ const AfterLoginNav = () => {
               className={`absolute right-0 z-20 mt-[20px] flex w-[150px] flex-col rounded-lg bg-white py-[5px] text-[14px] font-medium drop-shadow-md duration-200 animate-in fade-in-0 zoom-in-95`}
               style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08' }}
             >
-              <button className="flex h-[40px] w-full items-center justify-start px-[20px] hover:bg-bannerbg">
+              <button
+                onClick={() => router.push('/mypage')}
+                className="flex h-[40px] w-full items-center justify-start px-[20px] hover:bg-bannerbg"
+              >
                 마이페이지
               </button>
               <button

@@ -6,12 +6,14 @@ import React from 'react';
 import PromptInput from '@/components/prompt/PromptInput/PromptInput';
 import PromptPreview from '@/components/prompt/PromptPreview/PromptPreview';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { PromptFormType } from '@/api/promptApi';
+import { PromptFormType } from '@/api/templateApi';
 import { useCardsStore } from '@/store/useCardsStore';
 import { useRouter } from 'next/navigation';
 import { Card } from '@/store/useCardsStore/type';
 import ReactQuill from 'react-quill';
 import useAuthRedirect from '@/hooks/useAuthRedirect';
+import { templateApi } from '@/api';
+import { jsonUtils } from '@/utils';
 
 export const MOCK_CARD_DATA: Card[] = [
   {
@@ -165,8 +167,8 @@ const PromptContent = () => {
     };
 
     // 서버에 제출하고 템플릿 정보 받아와서 Card Type으로 변경
-    // const { templateId, editor } = await promptApi.postPromptTemplateData(submitData);
-    // const templateData = parseEscapedJson(editor);
+    // const { templateId, editor } = await templateApi.postPromptTemplateData(submitData);
+    // const templateData = jsonUtils.parseEscapedJson(editor);
 
     // store에 템플릿 저장
     // setCards(templateData.cards);

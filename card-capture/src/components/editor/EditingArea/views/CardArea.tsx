@@ -52,7 +52,7 @@ const CardArea = ({ card }: { card: Card }) => {
 
   const changeCardHandler = () => {
     const templateData = jsonUtils.parseEscapedJson(json);
-    setCard(templateData.cards);
+    setCard([templateData]);
 
     setIsOpen(false);
   };

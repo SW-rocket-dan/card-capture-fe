@@ -38,7 +38,7 @@ const LayerAddBox = ({ cardId }: { cardId: number }) => {
             <DownIcon width={7} />
           </button>
         </PopoverTrigger>
-        <PopoverContent className="mt-2 flex flex-row p-1.5">
+        <PopoverContent className="mt-2 flex flex-row p-1.5" style={{ zIndex: 10000 }}>
           <div className="flex flex-row gap-[5px]">
             <button
               onClick={() => addShapeLayerHandler('circle')}

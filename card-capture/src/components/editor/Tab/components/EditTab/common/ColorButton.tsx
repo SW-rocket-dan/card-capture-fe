@@ -1,8 +1,10 @@
 import ColorPicker from '@/components/common/ColorPicker/ColorPicker';
-import { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { IColor } from 'react-color-palette';
 import CloseIcon from '@/components/common/Icon/CloseIcon';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import useClickOutside from '@/hooks/useClickOutside';
+import usePreventCloseOnSelection from '@/components/editor/Tab/components/EditTab/TextEditBox/hooks/usePreventCloseOnSelection';
 
 type ColorButtonProps = {
   color: IColor;
@@ -26,43 +28,56 @@ const ColorButton = ({
   /**
    * 색상 선택 드롭다운 여닫는 click Handler
    */
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { isOpen, setIsOpen, changeOpenHandler } = usePreventCloseOnSelection();
 
-  const openHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    setIsOpen(prev => !prev);
-  };
+  /**
+   * 외부 영역 클릭시 popover 닫는 hook
+   */
+  const ref = useClickOutside(() => setIsOpen(false));
 
   return (
-    <Popover open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger asChild>
-        <div
-          className={`flex items-center justify-center rounded-md ${hover ? 'hover:bg-itembg' : ''} ${size ? `${size}` : 'h-[30px] w-[30px]'}`}
-        >
-          <button
-            disabled={disabled}
-            onClick={openHandler}
-            className={`rounded-md border-2 border-border ${className ? `${className}` : '!h-[21px] !w-[21px]'} `}
-            style={{ backgroundColor: color.hex }}
-          />
-        </div>
-      </PopoverTrigger>
-      <PopoverContent
-        side={direction}
-        className={`duration-[30ms] absolute -top-6 left-12 z-20 rounded-lg bg-white p-0`}
-        style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08' }}
-      >
-        <div>
-          <div className="flex flex-row justify-between px-[15px] py-[10px] font-semibold">
-            <p className="text-xs">색상</p>
-            <button onClick={openHandler}>
-              <CloseIcon width={8} className="text-gray2" />
-            </button>
+    <div ref={ref}>
+      <Popover open={isOpen} onOpenChange={changeOpenHandler}>
+        <PopoverTrigger asChild>
+          <div
+            className={`flex items-center justify-center rounded-md ${hover ? 'hover:bg-itembg' : ''} ${size ? `${size}` : 'h-[30px] w-[30px]'}`}
+          >
+            <button
+              disabled={disabled}
+              className={`rounded-md border-2 border-border ${className ? `${className}` : '!h-[21px] !w-[21px]'} `}
+              style={{ backgroundColor: color.hex }}
+            />
           </div>
-          <ColorPicker color={color} setColor={setColor} />
-        </div>
-      </PopoverContent>
-    </Popover>
+        </PopoverTrigger>
+        <PopoverContent
+          onMouseDown={e => {
+            e.stopPropagation();
+            e.preventDefault();
+          }}
+          onMouseUp={e => {
+            e.stopPropagation();
+            e.preventDefault();
+          }}
+          onClick={e => {
+            e.stopPropagation();
+            e.preventDefault();
+          }}
+          side={direction}
+          className={`duration-[30ms] absolute -top-6 left-12 rounded-lg bg-white p-0`}
+          style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08', zIndex: 10000 }}
+        >
+          <div>
+            <div className="flex flex-row justify-between px-[15px] py-[10px] font-semibold">
+              <p className="text-xs">색상</p>
+              <button onClick={() => setIsOpen(false)}>
+                <CloseIcon width={8} className="text-gray2" />
+              </button>
+            </div>
+            <ColorPicker color={color} setColor={setColor} />
+          </div>
+        </PopoverContent>
+      </Popover>
+    </div>
   );
 };
 

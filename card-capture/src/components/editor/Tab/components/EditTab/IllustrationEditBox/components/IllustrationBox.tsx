@@ -86,7 +86,7 @@ const IllustrationBox = () => {
       <PopoverContent
         asChild
         className={`absolute left-full z-50 -mt-[50px] ml-[50px] w-[275px] rounded-[8px] bg-white p-0`}
-        style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08' }}
+        style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08', zIndex: 10000 }}
       >
         <div>
           <div className="flex flex-row justify-between border-b-[1px] border-border px-[15px] py-[10px] font-bold">
@@ -101,6 +101,12 @@ const IllustrationBox = () => {
             <div className="flex flex-row items-center justify-between gap-3 rounded-[8px] border-[1px] border-border px-[10px] py-[9px]">
               <input
                 onChange={changeSearchWordHandler}
+                onKeyDown={e => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    searchStickerHandler();
+                  }
+                }}
                 type="text"
                 className="flex-1 text-[11px] outline-none"
                 placeholder="일러스트 검색 ex) 고양이"
