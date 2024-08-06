@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import AuthCheck from '@/components/common/Auth/AuthCheck';
+import ReactQueryProvider from '@/utils/provider/ReactQueryProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -21,8 +22,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AuthCheck />
-        {children}
+        <ReactQueryProvider>
+          <AuthCheck />
+          {children}
+        </ReactQueryProvider>
       </body>
     </html>
   );
