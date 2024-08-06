@@ -70,6 +70,7 @@ const SpacingButton = () => {
             e.stopPropagation();
             e.preventDefault();
           }}
+          style={{ zIndex: 10000 }}
           asChild
         >
           <div

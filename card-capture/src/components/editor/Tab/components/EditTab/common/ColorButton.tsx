@@ -1,9 +1,8 @@
 import ColorPicker from '@/components/common/ColorPicker/ColorPicker';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { IColor } from 'react-color-palette';
 import CloseIcon from '@/components/common/Icon/CloseIcon';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { useFocusStore } from '@/store/useFocusStore';
 import useClickOutside from '@/hooks/useClickOutside';
 import usePreventCloseOnSelection from '@/components/editor/Tab/components/EditTab/TextEditBox/hooks/usePreventCloseOnSelection';
 
@@ -64,8 +63,8 @@ const ColorButton = ({
             e.preventDefault();
           }}
           side={direction}
-          className={`duration-[30ms] absolute -top-6 left-12 z-20 rounded-lg bg-white p-0`}
-          style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08' }}
+          className={`duration-[30ms] absolute -top-6 left-12 rounded-lg bg-white p-0`}
+          style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08', zIndex: 10000 }}
         >
           <div>
             <div className="flex flex-row justify-between px-[15px] py-[10px] font-semibold">

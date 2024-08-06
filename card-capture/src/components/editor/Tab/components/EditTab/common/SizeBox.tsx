@@ -128,7 +128,7 @@ const SizeBox = ({ type }: SizeBoxProps) => {
       <div className="flex flex-col gap-[8px]">
         <TooltipProvider>
           <Tooltip delayDuration={0}>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <button
                 disabled={true}
                 className="flex w-[90px] flex-row items-center justify-center gap-[7px] rounded-lg bg-gray7 py-[10px] text-xs text-white"
