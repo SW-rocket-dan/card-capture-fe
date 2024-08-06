@@ -1,6 +1,11 @@
 import UserTemplateDetails from '@/components/mypage/UserTemplates/components/UserTemplateDetails';
+import { useQuery } from '@tanstack/react-query';
+import { templateApi } from '@/api';
+import { TemplateList } from '@/types';
 
 const UserTemplates = () => {
+  const { data } = useQuery<TemplateList>({ queryKey: ['all-template'], queryFn: templateApi.getAllTemplateData });
+
   return (
     <div className="flex h-full w-full flex-col">
       <div className="flex min-h-[150px] w-full flex-col items-center justify-center gap-[10px] bg-bannerbg md:min-h-[190px]">
@@ -9,10 +14,7 @@ const UserTemplates = () => {
       </div>
 
       <div className="mx-auto grid grid-cols-1 items-center justify-items-center gap-4 px-6 py-12 sm:grid-cols-2 sm:px-8 md:px-12 lg:grid-cols-3 lg:px-14 xl:grid-cols-4">
-        <UserTemplateDetails />
-        <UserTemplateDetails />
-        <UserTemplateDetails />
-        <UserTemplateDetails />
+        {data?.map(template => <UserTemplateDetails key={template.id} template={template} />)}
       </div>
     </div>
   );
