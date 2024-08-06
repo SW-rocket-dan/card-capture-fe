@@ -10,7 +10,10 @@ const usePreventCloseOnSelection = () => {
    * 드래그 된 부분이 있으면 popover를 close 하지 않고 유지함
    */
   const changeOpenHandler = () => {
-    if (!editorRef || !editorRef.current) return;
+    if (!editorRef || !editorRef.current) {
+      setIsOpen(prev => !prev);
+      return;
+    }
 
     const editor = editorRef.current.getEditor();
     const range = editor.getSelection();
