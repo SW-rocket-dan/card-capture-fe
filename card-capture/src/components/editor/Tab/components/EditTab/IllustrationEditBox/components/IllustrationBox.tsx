@@ -101,6 +101,12 @@ const IllustrationBox = () => {
             <div className="flex flex-row items-center justify-between gap-3 rounded-[8px] border-[1px] border-border px-[10px] py-[9px]">
               <input
                 onChange={changeSearchWordHandler}
+                onKeyDown={e => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    searchStickerHandler();
+                  }
+                }}
                 type="text"
                 className="flex-1 text-[11px] outline-none"
                 placeholder="일러스트 검색 ex) 고양이"
