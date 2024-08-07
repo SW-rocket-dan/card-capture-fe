@@ -3,6 +3,7 @@ import Button from '@/components/common/Button/Button';
 import CheckIcon from '@/components/common/Icon/CheckIcon';
 import PlusIcon from '@/components/common/Icon/PlusIcon';
 import MinusIcon from '@/components/common/Icon/MinusIcon';
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 export type PricingItemProps = {
   title: string;
@@ -39,7 +40,7 @@ const PricingItem = ({ title, price, description, optionList }: PricingItemProps
   };
 
   return (
-    <div className="flex h-[550px] w-[400px] flex-col justify-between rounded-[40px] border border-border p-[35px] shadow-default">
+    <div className="flex h-[550px] w-[300px] flex-col justify-between rounded-[40px] border border-border p-[35px] shadow-default xs:w-[350px] md:w-[400px]">
       <div className="flex flex-col">
         <p className="text-[18px] font-semibold">{title}</p>
 
@@ -94,9 +95,50 @@ const PricingItem = ({ title, price, description, optionList }: PricingItemProps
         <p className="flex justify-end px-[12px] text-[14px] text-gray5">
           총 금액 : {(count * price).toLocaleString('kr-KR')} 원
         </p>
-        <Button type="full" className="rounded-[40px] py-[15px]" shadow={true} disable={count === 0}>
-          결제하기
-        </Button>
+
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button type="full" className="rounded-[40px] py-[15px]" shadow={true} disable={count === 0}>
+              결제하기
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="flex w-[320px] flex-col items-center justify-center gap-7 px-[20px] py-[40px] sm:w-[400px] md:w-[500px] md:px-[30px]">
+            <DialogTitle>결제를 어떤 방식으로 진행하시겠습니까?</DialogTitle>
+
+            <div className="flex w-full flex-col items-center justify-center gap-2">
+              <Button
+                type="default"
+                className="w-[300px] rounded-[10px] py-[12px] text-[14px] hover:bg-main hover:text-white"
+              >
+                신용 / 체크카드로 결제하기
+              </Button>
+              <Button
+                type="default"
+                className="w-[300px] rounded-[10px] py-[12px] text-[14px] hover:bg-main hover:text-white"
+              >
+                문화상품권(컬쳐랜드)으로 결제하기
+              </Button>
+              <Button
+                type="default"
+                className="w-[300px] rounded-[10px] py-[12px] text-[14px] hover:bg-main hover:text-white"
+              >
+                도서문화상품권으로 결제하기
+              </Button>
+              <Button
+                type="default"
+                className="w-[300px] rounded-[10px] py-[12px] text-[14px] hover:bg-main hover:text-white"
+              >
+                스마트 문상(구, 게임문화상품권)으로 결제하기
+              </Button>
+              <Button
+                type="default"
+                className="w-[300px] rounded-[10px] py-[12px] text-[14px] hover:bg-main hover:text-white"
+              >
+                휴대폰 소액결제하기
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
