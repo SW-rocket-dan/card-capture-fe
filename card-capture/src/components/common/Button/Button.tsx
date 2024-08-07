@@ -1,22 +1,31 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 
 type ButtonProps = {
   type: 'default' | 'full';
   className?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   children: React.ReactNode;
+  shadow?: boolean;
+  disable?: boolean;
 };
 
-const Button = ({ type, className, onClick, children }: ButtonProps) => {
-  return (
-    <button
-      type="submit"
-      className={`${type === 'default' ? 'border-[1px] border-main bg-white' : 'bg-main'} flex flex-row items-center justify-center gap-1.5 rounded-[8px] shadow-sm ${type === 'default' ? 'text-main' : 'text-white'} font-semibold ${className}`}
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  );
-};
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ type, className, onClick, children, shadow = false, disable = false }, ref) => {
+    return (
+      <button
+        ref={ref}
+        disabled={disable}
+        type="submit"
+        className={` ${type === 'default' ? 'border-[1px] border-main bg-white' : 'bg-main'} flex flex-row items-center justify-center gap-1.5 shadow-sm ${type === 'default' ? 'text-main' : 'text-white'} font-semibold ${!className?.includes('rounded') ? 'rounded-[8px]' : ''} ${className || ''} `.trim()}
+        onClick={onClick}
+        style={shadow ? { boxShadow: '0 0 14px rgba(111, 108, 255, 0.5)' } : {}}
+      >
+        {children}
+      </button>
+    );
+  },
+);
+
+Button.displayName = 'Button';
 
 export default Button;

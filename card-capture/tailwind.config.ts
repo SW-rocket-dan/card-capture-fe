@@ -52,6 +52,7 @@ const config = {
       },
       boxShadow: {
         'drop-bold': '0px 4px 7px rgba(0, 0, 0, 0.3)',
+        'drop-medium': '0px 4px 4px rgba(0, 0, 0, 0.25)',
         default: '0px 2px 10px 0px rgba(0, 0, 0, 0.08)',
       },
       backgroundImage: {
