@@ -54,6 +54,8 @@ jobs:
           NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           NEXT_PUBLIC_MODE: ${{ secrets.NEXT_PUBLIC_MODE }}
+          NEXT_PUBLIC_CHANNEL_KEY: ${{ secrets.NEXT_PUBLIC_CHANNEL_KEY }}
+          NEXT_PUBLIC_STORE_ID: ${{ secrets.NEXT_PUBLIC_STORE_ID }}
           NODE_OPTIONS: '--max-old-space-size=8192'
 
         run: |
