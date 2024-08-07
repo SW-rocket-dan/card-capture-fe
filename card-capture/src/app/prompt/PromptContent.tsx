@@ -1,6 +1,5 @@
 'use client';
 
-import PromptTitle from '@/components/prompt/PromptTitle/PromptTitle';
 import NavigationBar from '@/components/common/NavigationBar/NavigationBar';
 import React from 'react';
 import PromptInput from '@/components/prompt/PromptInput/PromptInput';
@@ -14,6 +13,7 @@ import ReactQuill from 'react-quill';
 import useAuthRedirect from '@/hooks/useAuthRedirect';
 import { templateApi } from '@/api';
 import { jsonUtils } from '@/utils';
+import Title from '@/components/common/Title/Title';
 
 export const MOCK_CARD_DATA: Card[] = [
   {
@@ -193,7 +193,7 @@ const PromptContent = () => {
     <div className="h-screen w-screen overflow-y-scroll font-Pretendard">
       <NavigationBar isTransparent={false} />
       <div className="flex h-full flex-col pt-[60px]">
-        <PromptTitle />
+        <Title title="카드뉴스 제작하기" content="제작에 필요한 정보들을 입력해주세요!" />
         <div className="flex flex-col items-center justify-center gap-[50px] px-[20px] py-[50px] xs:px-[50px] md:py-[70px] lg:flex-row lg:items-start">
           <PromptInput formMethods={formMethods} fieldArrays={fieldArrays} />
           <PromptPreview formData={formMethods.watch()} onSubmit={submitHandler} />
