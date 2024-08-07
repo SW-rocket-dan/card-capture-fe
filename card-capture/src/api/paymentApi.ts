@@ -1,4 +1,5 @@
 import { customFetch } from '@/api/customFetchApi';
+import { MAX_POLL_ATTEMPTS, POLL_INTERVAL } from '@/constants/payment';
 
 /**
  * 결제 가능한 상황인지 확인하고 결제 가능할 시에 고유한 paymentId를 받아오는 post api
@@ -38,6 +39,47 @@ export const initiatePaymentProcess = async (count: number, amount: number) => {
   return jsonData.data.paymentId;
 };
 
-export const pollPaymentStatus = async () => {};
+/**
+ * 결제가 제대로 완료되었는지 서버에 polling하는 post api
+ * 일정 횟수만큼 polling 시도하고, 해당 횟수 안에 결제가 성공하지 않았으면 에러를 반환함
+ */
+export const pollPaymentStatus = async (
+  paymentId: string,
+  onSuccess: (message: string) => void,
+  onError: (message: string) => void,
+) => {
+  // polling 시도 횟수. 제한 횟수만큼 시도
+  let attempts = 0;
 
-export default { initiatePaymentProcess };
+  const checkStatus = async () => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/api/v1/payment/single/endCheck`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ paymentId }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.data && result.data.status === 'PAID') {
+        onSuccess('구매가 완료되었습니다.');
+      } else {
+        throw new Error('결제 상태 확인 실패');
+      }
+    } catch (error) {
+      attempts++;
+
+      if (attempts < MAX_POLL_ATTEMPTS) {
+        setTimeout(checkStatus, POLL_INTERVAL);
+      } else {
+        onError('결제 상태 확인에 실패했습니다. 이용권이 확인되지 않으면 고객센터에 문의해주세요.');
+      }
+    }
+  };
+
+  checkStatus();
+};
+
+export default { initiatePaymentProcess, pollPaymentStatus };
