@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import * as PortOne from '@portone/browser-sdk/v2';
 import { DISCOUNTED_PRICE, PAYMENT_METHODS } from '@/constants/payment';
 import { paymentApi } from '@/api';
@@ -36,6 +36,17 @@ const usePayment = () => {
 
           // PortOne 측으로 결제 요청
           const response = await PortOne.requestPayment(paymentRequestData);
+
+          if (response?.paymentId) {
+            // 결제가 성공했는지 확인하기 위헤 서버에 polling
+            await paymentApi.pollPaymentStatus(
+              response.paymentId,
+              message => setSuccessMessage(message),
+              message => setErrorMessage(message),
+            );
+          } else {
+            setErrorMessage('결제에 실패했습니다.');
+          }
 
           // 완료 후 1초 뒤에 결제 비활성화 -> 활성화로 다시 변경
           setTimeout(() => {
