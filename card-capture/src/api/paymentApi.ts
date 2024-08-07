@@ -7,7 +7,7 @@ import { MAX_POLL_ATTEMPTS, POLL_INTERVAL } from '@/constants/payment';
  */
 export const initiatePaymentProcess = async (count: number, amount: number) => {
   const paymentData = {
-    products: [{ productId: 'AI_POSTER_PRODUCTION_TICKET', quantity: count, price: amount }],
+    products: [{ productCategory: 'AI_POSTER_PRODUCTION_TICKET', quantity: count, price: amount }],
     totalPrice: amount * count,
     requestTime: new Date().toISOString(),
   };
@@ -53,7 +53,7 @@ export const pollPaymentStatus = async (
 
   const checkStatus = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/api/v1/payment/single/endCheck`, {
+      const response = await customFetch(`${process.env.NEXT_PUBLIC_API_KEY}/api/v1/payment/single/endCheck`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -63,7 +63,9 @@ export const pollPaymentStatus = async (
 
       const result = await response.json();
 
-      if (response.ok && result.data && result.data.status === 'PAID') {
+      console.log(result);
+
+      if (response.ok && result.data && result.data.status === 'FINAL_PAID') {
         onSuccess('구매가 완료되었습니다.');
       } else {
         throw new Error('결제 상태 확인 실패');

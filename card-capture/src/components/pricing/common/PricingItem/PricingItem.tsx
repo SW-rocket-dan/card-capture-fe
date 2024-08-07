@@ -4,6 +4,8 @@ import CheckIcon from '@/components/common/Icon/CheckIcon';
 import PlusIcon from '@/components/common/Icon/PlusIcon';
 import MinusIcon from '@/components/common/Icon/MinusIcon';
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import usePayment from '@/hooks/usePayment';
+import { PAYMENT_METHODS } from '@/constants/payment';
 
 export type PricingItemProps = {
   title: string;
@@ -13,7 +15,7 @@ export type PricingItemProps = {
 };
 
 const PricingItem = ({ title, price, description, optionList }: PricingItemProps) => {
-  const [count, setCount] = useState(1);
+  const { isDisabled, count, setCount, purchaseHandler, errorMessage, successMessage } = usePayment();
 
   const plusCountHandler = () => {
     setCount(prev => prev + 1);
@@ -37,6 +39,13 @@ const PricingItem = ({ title, price, description, optionList }: PricingItemProps
     }
 
     setCount(newCount);
+  };
+
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const purchaseTemplateHandler = async (paymentMethodKey: keyof typeof PAYMENT_METHODS) => {
+    setIsOpen(false);
+    await purchaseHandler(paymentMethodKey);
   };
 
   return (
@@ -82,7 +91,7 @@ const PricingItem = ({ title, price, description, optionList }: PricingItemProps
 
           <div className="flex flex-col gap-1 py-[20px]">
             {optionList?.map(option => (
-              <div className="flex flex-row items-center gap-2">
+              <div key={option} className="flex flex-row items-center gap-2">
                 <CheckIcon width={15} className="text-main" />
                 <p className="text-[13px] font-medium">{option}</p>
               </div>
@@ -96,41 +105,50 @@ const PricingItem = ({ title, price, description, optionList }: PricingItemProps
           총 금액 : {(count * price).toLocaleString('kr-KR')} 원
         </p>
 
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
-            <Button type="full" className="rounded-[40px] py-[15px]" shadow={true} disable={count === 0}>
+            <Button type="full" className="rounded-[40px] py-[15px]" shadow={true} disable={count === 0 || isDisabled}>
               결제하기
             </Button>
           </DialogTrigger>
           <DialogContent className="flex w-[320px] flex-col items-center justify-center gap-7 px-[20px] py-[40px] sm:w-[400px] md:w-[500px] md:px-[30px]">
-            <DialogTitle>결제를 어떤 방식으로 진행하시겠습니까?</DialogTitle>
+            <DialogTitle>어떤 방식으로 결제를 진행하시겠습니까?</DialogTitle>
 
             <div className="flex w-full flex-col items-center justify-center gap-2">
               <Button
+                disable={isDisabled}
+                onClick={() => purchaseTemplateHandler('CARD')}
                 type="default"
                 className="w-[300px] rounded-[10px] py-[12px] text-[14px] hover:bg-main hover:text-white"
               >
                 신용 / 체크카드로 결제하기
               </Button>
               <Button
+                disable={isDisabled}
+                onClick={() => purchaseTemplateHandler('CULTURE')}
                 type="default"
                 className="w-[300px] rounded-[10px] py-[12px] text-[14px] hover:bg-main hover:text-white"
               >
                 문화상품권(컬쳐랜드)으로 결제하기
               </Button>
               <Button
+                disable={isDisabled}
+                onClick={() => purchaseTemplateHandler('BOOK')}
                 type="default"
                 className="w-[300px] rounded-[10px] py-[12px] text-[14px] hover:bg-main hover:text-white"
               >
                 도서문화상품권으로 결제하기
               </Button>
               <Button
+                disable={isDisabled}
+                onClick={() => purchaseTemplateHandler('GAME')}
                 type="default"
                 className="w-[300px] rounded-[10px] py-[12px] text-[14px] hover:bg-main hover:text-white"
               >
                 스마트 문상(구, 게임문화상품권)으로 결제하기
               </Button>
               <Button
+                onClick={() => purchaseTemplateHandler('MOBILE')}
                 type="default"
                 className="w-[300px] rounded-[10px] py-[12px] text-[14px] hover:bg-main hover:text-white"
               >
