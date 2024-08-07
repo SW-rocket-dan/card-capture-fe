@@ -94,8 +94,8 @@ jobs:
 
             echo "Setting environment variables..."
             echo "NEXT_PUBLIC_API_KEY=${{ secrets.NEXT_PUBLIC_API_KEY }}" > .env
-            echo "NEXT_PUBLIC_CHANNEL_KEY=${{ secrets.NEXT_PUBLIC_CHANNEL_KEY }}" > .env
-            echo "NEXT_PUBLIC_STORE_ID=${{ secrets.NEXT_PUBLIC_STORE_ID }}" > .env
+            echo "NEXT_PUBLIC_CHANNEL_KEY=${{ secrets.NEXT_PUBLIC_CHANNEL_KEY }}" >> .env
+            echo "NEXT_PUBLIC_STORE_ID=${{ secrets.NEXT_PUBLIC_STORE_ID }}" >> .env
           
             echo "Installing npm packages..."
             npm install
