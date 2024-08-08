@@ -19,7 +19,10 @@ export const INITIAL_CARD: Card = {
  * Card를 저장하는 스토어
  */
 type useCardsStore = {
+  templateId: number;
   cards: Card[];
+
+  setTemplateId: (templateId: number) => void;
 
   setCard: (card: Card[]) => void;
   addCard: () => void;
@@ -55,7 +58,10 @@ type useCardsStore = {
 export const useCardsStore = create(
   persist<useCardsStore>(
     (set, get) => ({
+      templateId: -1,
       cards: [],
+
+      setTemplateId: templateId => set({ templateId }),
 
       setCard: (cards: Card[]) =>
         set(
