@@ -63,18 +63,15 @@ export const useCardsStore = create(
 
       setTemplateId: templateId => set({ templateId }),
 
-      setCard: (cards: Card[]) =>
+      setCard: (cards: Card[] | Card) =>
         set(
-          //immer를 활용하여 불변성 유지
-          produce(
-            (
-              draft: Draft<{
-                cards: Card[];
-              }>,
-            ) => {
-              draft.cards = cards;
-            },
-          ),
+          produce((draft: Draft<{ cards: Card[] }>) => {
+            if (Array.isArray(cards)) {
+              draft.cards = cards.flat(); // 중첩된 배열을 평탄화
+            } else {
+              draft.cards = [cards]; // 단일 Card 객체를 배열로 변환
+            }
+          }),
         ),
 
       addCard: () =>
