@@ -8,6 +8,7 @@ import TemplateGallery from '@/components/main/TemplateGallery/TemplateGallery';
 import SearchTemplate from '@/components/main/SearchTemplate/SearchTemplate';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
+import Footer from '@/components/common/Footer/Footer';
 
 const MainContent = () => {
   /**
@@ -34,6 +35,7 @@ const MainContent = () => {
       <Description />
       <TemplateGallery />
       <SearchTemplate />
+      <Footer />
     </div>
   );
 };
