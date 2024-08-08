@@ -1,7 +1,8 @@
 import { customFetch } from '@/api/customFetchApi';
+import { Template } from '@/types';
 
 export type PromptFormType = {
-  phrase: {
+  phrases: {
     phrases: string[];
     firstEmphasis: string;
     secondEmphasis: string;
@@ -11,11 +12,15 @@ export type PromptFormType = {
   model: string;
 };
 
+export type PromptSubmitType = {
+  prompt: PromptFormType;
+};
+
 /**
  * 프롬프트 데이터를 받아서 서버에서 전송하는 post api
  * response로 생성된 템플릿의 아이디와 json 데이터를 받아옴
  */
-const postPromptTemplateData = async (data: PromptFormType) => {
+const createTemplate = async (data: PromptSubmitType) => {
   try {
     const response = await customFetch(`${process.env.NEXT_PUBLIC_API_KEY}/api/v1/template/create`, {
       method: 'POST',
@@ -30,6 +35,24 @@ const postPromptTemplateData = async (data: PromptFormType) => {
     return jsonData.data;
   } catch (e) {
     console.error(e);
+  }
+};
+
+const updateTemplate = async (templateData: Partial<Template>) => {
+  try {
+    const response = await customFetch(`${process.env.NEXT_PUBLIC_API_KEY}/api/v1/template/update`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(templateData),
+    });
+
+    const jsonData = await response.json();
+
+    return jsonData.data;
+  } catch (e) {
+    console.error('Failed to update template :', e);
   }
 };
 
@@ -69,4 +92,4 @@ const getAllTemplateData = async () => {
   }
 };
 
-export default { postPromptTemplateData, getTemplateData, getAllTemplateData };
+export default { createTemplate, updateTemplate, getTemplateData, getAllTemplateData };
