@@ -50,29 +50,24 @@ const AfterLoginNav = () => {
         Card Capture
       </button>
 
-      {/*{!isMobile && (*/}
-      {/*  <ul className="flex cursor-pointer flex-row gap-[30px] whitespace-nowrap text-[12px] font-semibold lg:gap-[50px] lg:text-[14px]">*/}
-      {/*    <TooltipProvider>*/}
-      {/*      <Tooltip>*/}
-      {/*        <TooltipTrigger>요금제</TooltipTrigger>*/}
-      {/*        <TooltipContent>*/}
-      {/*          <p className="font-normal">준비중!</p>*/}
-      {/*        </TooltipContent>*/}
-      {/*      </Tooltip>*/}
-      {/*      <Tooltip>*/}
-      {/*        <TooltipTrigger>다른 템플릿 보기</TooltipTrigger>*/}
-      {/*        <TooltipContent>*/}
-      {/*          <p className="font-normal">준비중!</p>*/}
-      {/*        </TooltipContent>*/}
-      {/*      </Tooltip>*/}
-      {/*      <button onClick={() => router.push('/prompt')}>제작하기</button>*/}
-      {/*    </TooltipProvider>*/}
-      {/*  </ul>*/}
-      {/*)}*/}
+      {!isMobile && (
+        <ul className="flex cursor-pointer flex-row gap-[30px] whitespace-nowrap text-[12px] font-semibold lg:gap-[50px] lg:text-[14px]">
+          <TooltipProvider>
+            <button onClick={() => router.push('/pricing')}>요금제</button>
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger>다른 템플릿 보기</TooltipTrigger>
+              <TooltipContent>
+                <p className="font-normal">준비중!</p>
+              </TooltipContent>
+            </Tooltip>
+            <button onClick={() => router.push('/prompt')}>제작하기</button>
+          </TooltipProvider>
+        </ul>
+      )}
 
       {!isMobile && (
         <div ref={ref} className="relative">
-          <div className="w-[200px]">
+          <div className="w-[300px]">
             <div className="flex cursor-pointer flex-row justify-end gap-1.5" onClick={openHandler}>
               <TempProfileIcon width={38} height={38} />
               {isOpen ? (

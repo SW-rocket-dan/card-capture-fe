@@ -29,6 +29,7 @@ const usePayment = () => {
             storeId: process.env.NEXT_PUBLIC_STORE_ID || '',
             channelKey: process.env.NEXT_PUBLIC_CHANNEL_KEY,
             currency: 'CURRENCY_KRW',
+            redirectUrl: 'https://cardcapture.app/pricing',
             ...PAYMENT_METHODS[paymentMethodKey],
             paymentId,
             totalAmount,

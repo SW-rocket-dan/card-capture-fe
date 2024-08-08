@@ -2,12 +2,28 @@ import Button from '@/components/common/Button/Button';
 import HeartIcon from '@/components/common/Icon/HeartIcon';
 import CheckIcon from '@/components/common/Icon/CheckIcon';
 import { Template } from '@/types';
+import { useRouter } from 'next/navigation';
+import { useCardsStore } from '@/store/useCardsStore';
+import { jsonUtils } from '@/utils';
 
 type UserTemplateDetailsProps = {
   template: Template;
 };
 
 const UserTemplateDetails = ({ template }: UserTemplateDetailsProps) => {
+  const setCards = useCardsStore(state => state.setCard);
+  const setTemplateId = useCardsStore(state => state.setTemplateId);
+  const router = useRouter();
+
+  const moveToEditorHandler = () => {
+    const templateData = jsonUtils.parseEscapedJson(template.editor);
+
+    setCards(templateData);
+    setTemplateId(template.id);
+
+    router.push('/editor');
+  };
+
   return (
     <div className="flex w-fit flex-col gap-2 rounded-[20px] border border-border p-4">
       <div className="h-[250px] w-[250px] rounded-[20px] bg-gray8 md:h-[270px] md:w-[270px]"></div>
@@ -35,7 +51,7 @@ const UserTemplateDetails = ({ template }: UserTemplateDetailsProps) => {
           ))}
         </div>
         <div className="mt-2 flex flex-row gap-2">
-          <Button className="w-full rounded-md py-2 text-[13px]" type="full">
+          <Button onClick={moveToEditorHandler} className="w-full rounded-md py-2 text-[13px]" type="full">
             에디터로 이동
           </Button>
         </div>

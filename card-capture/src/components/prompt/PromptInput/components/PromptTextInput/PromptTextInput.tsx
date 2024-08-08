@@ -44,6 +44,7 @@ const PromptTextInput = ({ register, phraseFieldArray, emphasisFieldArray }: Pro
             <input
               type="text"
               {...register(`phrases.${index}.value`)}
+              autoComplete="off"
               placeholder="문구를 입력해주세요"
               className="w-[calc(100%-40px)] rounded-[10px] border border-border px-[15px] py-[11px] text-[13px] outline-none placeholder:text-gray5"
             />

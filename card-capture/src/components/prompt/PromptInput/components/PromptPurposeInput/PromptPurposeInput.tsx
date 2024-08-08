@@ -16,6 +16,7 @@ const PromptPurposeInput = ({ register }: PromptPurposeInputProps) => {
       <input
         type="text"
         {...register('purpose')}
+        autoComplete="off"
         placeholder="예시) 커피 자판기 홍보"
         className="w-full rounded-[10px] border border-border px-[15px] py-[11px] text-[13px] outline-none placeholder:text-gray5"
       />
