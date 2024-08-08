@@ -31,4 +31,8 @@ export type Template = {
   updatedAt: string; // ISO 8601 date string
 };
 
+export type UpdatableAttributes = 'EDITOR' | 'TITLE' | 'DESCRIPTION' | 'FILE_URL';
+
+export type TemplateUpdateRequest = Template & { updatedAttributes: UpdatableAttributes[] };
+
 export type TemplateList = Template[];
