@@ -1,7 +1,7 @@
 'use client';
 
 import NavigationBar from '@/components/common/NavigationBar/NavigationBar';
-import React from 'react';
+import React, { useState } from 'react';
 import PromptInput from '@/components/prompt/PromptInput/PromptInput';
 import PromptPreview from '@/components/prompt/PromptPreview/PromptPreview';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -12,6 +12,7 @@ import useAuthRedirect from '@/hooks/useAuthRedirect';
 import { templateApi } from '@/api';
 import { jsonUtils } from '@/utils';
 import Title from '@/components/common/Title/Title';
+import Loading from '@/components/common/Loading/Loading';
 
 export type PromptInputFormType = {
   phrases: { value: string }[];
@@ -39,6 +40,8 @@ const PromptContent = () => {
   const setTemplateId = useCardsStore(state => state.setTemplateId);
   const router = useRouter();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   /**
    * form 제출하고 템플릿 데이터 받아오는 handler
    */
@@ -58,6 +61,9 @@ const PromptContent = () => {
       },
     };
 
+    // 로딩 시작
+    setIsLoading(true);
+
     // 서버에 제출하고 템플릿 정보 받아와서 Card Type으로 변경
     const { id, editor } = await templateApi.createTemplate(submitData);
     const templateData = jsonUtils.parseEscapedJson(editor);
@@ -66,6 +72,8 @@ const PromptContent = () => {
     setCards([templateData]);
     setTemplateId(id);
 
+    // 로딩 끝, 페이지 이동
+    setIsLoading(false);
     router.push('/editor');
   };
 
@@ -75,6 +83,7 @@ const PromptContent = () => {
 
   return (
     <div className="h-screen w-screen overflow-y-scroll font-Pretendard">
+      {isLoading && <Loading>카드뉴스 제작 중</Loading>}
       <NavigationBar isTransparent={false} />
       <div className="flex h-full flex-col pt-[60px]">
         <Title title="카드뉴스 제작하기" content="제작에 필요한 정보들을 입력해주세요!" />
