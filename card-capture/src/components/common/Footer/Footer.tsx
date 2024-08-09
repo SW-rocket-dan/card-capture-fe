@@ -12,10 +12,12 @@ const Footer = () => {
         <p>이메일: abc@example.com</p>
       </div>
       <div className="mt-3 flex flex-row gap-5 text-gray2">
-        <button onClick={() => router.push('/privacy')} className="hover:font-semibold hover:text-defaultBlack">
+        <button onClick={() => router.push('/policy/privacy')} className="hover:font-semibold hover:text-defaultBlack">
           개인정보 처리방침
         </button>
-        <button className="hover:font-semibold hover:text-defaultBlack">이용약관</button>
+        <button onClick={() => router.push('/policy/terms')} className="hover:font-semibold hover:text-defaultBlack">
+          이용약관
+        </button>
       </div>
     </div>
   );
