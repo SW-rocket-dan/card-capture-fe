@@ -1,13 +1,15 @@
 import TempProfileIcon from '@/components/common/Icon/TempProfileIcon';
 import DownIcon from '@/components/common/Icon/DownIcon';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useClickOutside from '@/hooks/useClickOutside';
 import UpIcon from '@/components/common/Icon/UpIcon';
 import useIsMobile from '@/hooks/useIsMobile';
 import { useRouter } from 'next/navigation';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useAuthStore } from '@/store/useAuthStore';
-import { tokenUtils } from '@/utils';
+import { tokenUtils, userUtils } from '@/utils';
+import userApi from '@/api/userApi';
+import { useQuery } from '@tanstack/react-query';
 
 const AfterLoginNav = () => {
   const router = useRouter();
@@ -37,6 +39,17 @@ const AfterLoginNav = () => {
       router.push('/');
     }
   };
+
+  /**
+   * 보유한 이용권의 개수를 가져오는 로직
+   */
+  const { data } = useQuery({
+    queryKey: ['product-categories'],
+    queryFn: userApi.getProductCategories,
+    enabled: isOpen,
+  });
+
+  const ticketCount = userUtils.getTicketCount(data);
 
   // 반응형 적용을 위해 모바일 화면인지 확인하는 hook
   const { isMobile } = useIsMobile();
@@ -83,6 +96,12 @@ const AfterLoginNav = () => {
               className={`absolute right-0 z-20 mt-[20px] flex w-[150px] flex-col rounded-lg bg-white py-[5px] text-[14px] font-medium drop-shadow-md duration-200 animate-in fade-in-0 zoom-in-95`}
               style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08' }}
             >
+              <div className="m-[10px] flex h-[40px] items-center justify-between rounded-md border border-border px-3">
+                <p className="text-[11px] text-gray2">보유 이용권 수</p>
+                <div className="w-[30px] rounded-sm bg-bannerbg text-center">
+                  <span className="text-xs">{ticketCount}</span>
+                </div>
+              </div>
               <button
                 onClick={() => router.push('/mypage')}
                 className="flex h-[40px] w-full items-center justify-start px-[20px] hover:bg-bannerbg"
