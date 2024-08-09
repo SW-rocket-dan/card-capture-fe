@@ -96,6 +96,8 @@ jobs:
             echo "NEXT_PUBLIC_API_KEY=${{ secrets.NEXT_PUBLIC_API_KEY }}" > .env
             echo "NEXT_PUBLIC_CHANNEL_KEY=${{ secrets.NEXT_PUBLIC_CHANNEL_KEY }}" >> .env
             echo "NEXT_PUBLIC_STORE_ID=${{ secrets.NEXT_PUBLIC_STORE_ID }}" >> .env
+            echo "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}" >> .env
+            echo "NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}" >> .env
           
             echo "Installing npm packages..."
             npm install

@@ -34,7 +34,7 @@ const EditingArea = () => {
 
   /**
    * card가 변경되었을 때 서버에 저장하는 기능
-   * card에 변경이 발생되면 5초 후에 서버에 요청 전송 -> 매 변경마다 보내면 api 요청을 과도하게 보내게 되는 문제 존재
+   * card에 변경이 발생되면 3초 후에 서버에 요청 전송 -> 매 변경마다 보내면 api 요청을 과도하게 보내게 되는 문제 존재
    * 변경없으면 시간 지나도 요청 전송되지 않음
    */
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -48,7 +48,7 @@ const EditingArea = () => {
     // 새로운 타이머 설정
     timeoutRef.current = setTimeout(() => {
       updateCardsMutation.mutate(cards);
-    }, 5000);
+    }, 3000);
 
     // 컴포넌트 언마운트 시 타이머 정리
     return () => {

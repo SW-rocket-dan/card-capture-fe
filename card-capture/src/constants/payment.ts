@@ -1,7 +1,7 @@
 export const ORIGINAL_PRICE = 5000;
 export const DISCOUNTED_PRICE = 500;
-export const MAX_POLL_ATTEMPTS = 3;
-export const POLL_INTERVAL = 300;
+export const MAX_POLL_ATTEMPTS = 4;
+export const POLL_INTERVAL = 500;
 
 export const PAYMENT_METHODS = {
   CARD: {
