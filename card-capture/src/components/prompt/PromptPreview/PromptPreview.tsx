@@ -7,6 +7,7 @@ import { userUtils } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import Button from '@/components/common/Button/Button';
+import { useState } from 'react';
 
 type PromptPreviewProps = {
   formData: PromptInputFormType;
@@ -29,6 +30,11 @@ const PromptPreview = ({ formData, onSubmit }: PromptPreviewProps) => {
   });
 
   const ticketCount = userUtils.getTicketCount(data);
+
+  /**
+   * 결제 버튼 한번만 클릭되도록 수정
+   */
+  const [isClicked, setIsClicked] = useState(false);
 
   return (
     <div className="flex min-w-[300px] flex-col items-center justify-start gap-[30px] lg:w-[400px]">
@@ -69,9 +75,13 @@ const PromptPreview = ({ formData, onSubmit }: PromptPreviewProps) => {
                 입니다.
               </DialogDescription>
               <button
+                disabled={isClicked}
                 className="flex flex-row items-center justify-center gap-1 rounded-[40px] bg-main px-[40px] py-[18px]"
                 style={{ boxShadow: '0 0 14px rgba(111, 108, 255, 0.5)' }}
-                onClick={() => onSubmit(formData)}
+                onClick={() => {
+                  setIsClicked(true);
+                  onSubmit(formData);
+                }}
               >
                 <p className="text-[13px] font-medium text-white">카드뉴스 제작하기</p>
                 <StarsIcon width={18} className="text-white" />
