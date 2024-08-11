@@ -2,6 +2,8 @@ import { useCallback, useState } from 'react';
 import * as PortOne from '@portone/browser-sdk/v2';
 import { DISCOUNTED_PRICE, PAYMENT_METHODS } from '@/constants/payment';
 import { paymentApi } from '@/api';
+import userApi from '@/api/userApi';
+import { User } from '@/types';
 
 const usePayment = () => {
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
@@ -23,6 +25,7 @@ const usePayment = () => {
 
       try {
         const paymentId: string = await paymentApi.initiatePaymentProcess(count, DISCOUNTED_PRICE);
+        const userData: User = await userApi.getUserData();
 
         if (paymentId) {
           const paymentRequestData = {
@@ -30,6 +33,7 @@ const usePayment = () => {
             channelKey: process.env.NEXT_PUBLIC_CHANNEL_KEY,
             currency: 'CURRENCY_KRW',
             redirectUrl: 'https://cardcapture.app/pricing',
+            customer: { customerId: userData.id, fullName: userData.name, email: userData.email },
             ...PAYMENT_METHODS[paymentMethodKey],
             paymentId,
             totalAmount,
