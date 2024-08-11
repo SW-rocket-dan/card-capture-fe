@@ -463,7 +463,7 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
 
   return (
     <div
-      className={`absolute border ${isDoubleClicked && type === 'text' && 'border-[1.5px] border-main'}`}
+      className={`absolute border-2 border-main px-3 py-1.5 ${isDoubleClicked && type === 'text' && 'border-main'}`}
       style={{
         left: curPosition.x,
         top: curPosition.y,
@@ -482,52 +482,42 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
     >
       {/* 11시,1시,5시,7시 크기조절 바 */}
       <div
-        className="absolute -left-4 -top-4 h-2 w-2 cursor-nwse-resize rounded-full border bg-gray6"
+        className="absolute -left-1.5 -top-1.5 h-3 w-3 cursor-nwse-resize rounded-full border-2 border-main bg-white"
         onPointerDown={e => resizePointerDownHandler(e, 'nw')}
       ></div>
       <div
-        className="absolute -right-4 -top-4 h-2 w-2 cursor-nesw-resize rounded-full border bg-gray6"
+        className="absolute -right-1.5 -top-1.5 h-3 w-3 cursor-nesw-resize rounded-full border-2 border-main bg-white"
         onPointerDown={e => resizePointerDownHandler(e, 'ne')}
       ></div>
       <div
-        className="absolute -bottom-4 -left-4 h-2 w-2 cursor-nesw-resize rounded-full border bg-gray6"
+        className="absolute -bottom-1.5 -left-1.5 h-3 w-3 cursor-nesw-resize rounded-full border-2 border-main bg-white"
         onPointerDown={e => resizePointerDownHandler(e, 'se')}
       ></div>
       <div
-        className="absolute -bottom-4 -right-4 h-2 w-2 cursor-nwse-resize rounded-full border bg-gray6"
+        className="absolute -bottom-1.5 -right-1.5 h-3 w-3 cursor-nwse-resize rounded-full border-2 border-main bg-white"
         onPointerDown={e => resizePointerDownHandler(e, 'sw')}
       ></div>
-      {/* 크기조절 바탕선 */}
-      <div
-        className="absolute -left-3 -top-3 -z-10 border"
-        onPointerDown={stopPropagation}
-        onPointerMove={stopPropagation}
-        onPointerUp={stopPropagation}
-        style={{
-          width: curPosition.width + 23,
-          height: curPosition.height + 23,
-        }}
-      ></div>
+
       {/* 12시,3시,6시,9시 크기조절 바 */}
       <div
-        className="absolute -top-4 left-2/4 h-2 w-6 -translate-x-1/2 cursor-row-resize rounded-sm border bg-gray6"
+        className="absolute -top-1.5 left-2/4 h-2.5 w-7 -translate-x-1/2 cursor-row-resize rounded border-[1.5px] border-main bg-white"
         onPointerDown={e => resizePointerDownHandler(e, 'n')}
       ></div>
       <div
-        className="absolute -right-4 top-1/2 h-6 w-2 -translate-y-1/2 cursor-col-resize rounded-sm border bg-gray6"
+        className="absolute -right-1.5 top-1/2 h-7 w-2.5 -translate-y-1/2 cursor-col-resize rounded border-[1.5px] border-main bg-white"
         onPointerDown={e => resizePointerDownHandler(e, 'e')}
       ></div>
       <div
-        className="absolute -bottom-4 left-2/4 h-2 w-6 -translate-x-1/2 cursor-row-resize rounded-sm border bg-gray6"
+        className="absolute -bottom-1.5 left-2/4 h-2.5 w-7 -translate-x-1/2 cursor-row-resize rounded border-[1.5px] border-main bg-white"
         onPointerDown={e => resizePointerDownHandler(e, 's')}
       ></div>
       <div
-        className="absolute -left-4 top-1/2 h-6 w-2 -translate-y-1/2 cursor-col-resize rounded-sm border bg-gray6"
+        className="absolute -left-1.5 top-1/2 h-7 w-2.5 -translate-y-1/2 cursor-col-resize rounded border-[1.5px] border-main bg-white"
         onPointerDown={e => resizePointerDownHandler(e, 'w')}
       ></div>
       {/* rotate button */}
       <div
-        className="absolute -top-10 left-2/4 flex h-3 w-3 -translate-x-1/2 items-center justify-center rounded-full bg-gray6"
+        className="absolute -top-7 left-2/4 flex h-3 w-3 -translate-x-1/2 cursor-grab items-center justify-center rounded-full bg-gray6"
         onPointerDown={pointerDownRotateHandler}
       >
         <FaArrowRotateLeft size={8} />
@@ -535,7 +525,7 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
       <ContextMenu>
         <ContextMenuTrigger>
           <div
-            className={`absolute h-full w-full ${isDrag ? 'cursor-grabbing' : 'cursor-grab'} `}
+            className={`absolute inset-0 m-2 ${isDrag ? 'cursor-grabbing' : 'cursor-grab'} `}
             style={{ opacity: curPosition.opacity / 100 }}
           >
             {layer.type === 'text' && React.isValidElement(children)
