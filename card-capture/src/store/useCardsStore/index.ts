@@ -238,7 +238,7 @@ export const useCardsStore = create(
                   x: 220,
                   y: 220,
                   width: 200,
-                  height: 45,
+                  height: 60,
                   rotate: 0,
                   zIndex: 3,
                   opacity: 100,

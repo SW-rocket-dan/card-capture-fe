@@ -30,7 +30,9 @@ const UserTemplateDetails = ({ template }: UserTemplateDetailsProps) => {
 
       <div className="flex flex-col gap-1 px-1">
         <div className="flex flex-row justify-between">
-          <p className="text-[17px] font-semibold">{template.title}</p>
+          <p className="text-[16px] font-semibold">
+            {template.title.slice(0, 13)} {template.title.length >= 13 && '...'}
+          </p>
 
           <div className="flex flex-row gap-2">
             <div className="flex flex-row items-center justify-end gap-1">

@@ -27,7 +27,7 @@ const PromptModelInput = ({ setValue }: PromptModelInputProps) => {
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem value="dalle">
+            <SelectItem value="DALL_E_3">
               <div className="flex flex-row items-center gap-3">
                 <p className="text-[14px] font-semibold">Dalle 3</p>
                 <p className="hidden text-[11px] text-gray2 xs:block sm:text-[12px]">

@@ -8,10 +8,7 @@ type ImageBoxProps = {
 
 const ImageBox = ({ url, position }: ImageBoxProps) => {
   return (
-    <div
-      className="h-full w-full"
-      style={{ opacity: position.opacity, width: position.width, height: position.height }}
-    >
+    <div className="h-full w-full" style={{ opacity: position.opacity }}>
       <Image src={url} alt="image" className="pointer-events-none" layout="fill" objectFit="contain" quality={100} />
     </div>
   );

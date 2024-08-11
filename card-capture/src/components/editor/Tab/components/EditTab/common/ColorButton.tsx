@@ -63,7 +63,7 @@ const ColorButton = ({
             e.preventDefault();
           }}
           side={direction}
-          className={`duration-[30ms] absolute -top-6 left-12 rounded-lg bg-white p-0`}
+          className={`duration-30 absolute -top-6 left-12 rounded-lg bg-white p-0`}
           style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08', zIndex: 10000 }}
         >
           <div>

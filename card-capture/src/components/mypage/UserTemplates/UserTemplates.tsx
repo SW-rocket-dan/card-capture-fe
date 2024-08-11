@@ -11,7 +11,7 @@ const UserTemplates = () => {
     <div className="flex h-full w-full flex-col">
       <Title title="내 템플릿 보기" content="내가 만든 템플릿을 모아서 볼 수 있어요!" />
 
-      <div className="mx-auto grid grid-cols-1 items-center justify-items-center gap-4 px-6 py-12 sm:grid-cols-2 sm:px-8 md:px-12 lg:grid-cols-3 lg:px-14 xl:grid-cols-4">
+      <div className="mx-auto grid grid-cols-1 items-center justify-items-center gap-x-4 gap-y-7 px-6 py-12 sm:grid-cols-2 sm:px-8 md:px-12 lg:grid-cols-3 lg:px-14 xl:grid-cols-4">
         {data?.map(template => <UserTemplateDetails key={template.id} template={template} />)}
       </div>
     </div>

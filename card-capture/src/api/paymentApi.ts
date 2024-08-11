@@ -43,18 +43,14 @@ export const initiatePaymentProcess = async (count: number, amount: number) => {
  * 결제가 제대로 완료되었는지 서버에 polling하는 post api
  * 일정 횟수만큼 polling 시도하고, 해당 횟수 안에 결제가 성공하지 않았으면 에러를 반환함
  */
-export const pollPaymentStatus = (
-  paymentId: string,
-  onSuccess: (message: string) => void,
-  onError: (message: string) => void,
-): Promise<void> => {
-  return new Promise<void>((resolve, reject) => {
+export const pollPaymentStatus = (paymentId: string, onError: (message: string) => void): Promise<boolean> => {
+  return new Promise<boolean>((resolve, reject) => {
     let attempts = 0;
 
     const checkStatus = async () => {
       if (attempts >= MAX_POLL_ATTEMPTS) {
-        onError('결제 상태 확인에 실패했습니다. 이용권이 확인되지 않으면 고객센터에 문의해주세요.');
-        reject(new Error('최대 시도 횟수 초과'));
+        onError('결제 완료 확인에 실패했습니다. 이용권이 확인되지 않으면 고객센터에 문의해주세요.');
+        resolve(false);
         return;
       }
 
@@ -69,11 +65,8 @@ export const pollPaymentStatus = (
 
         const result = await response.json();
 
-        console.log(result);
-
         if (response.ok && result.data && result.data.paymentStatus === 'FINAL_PAID') {
-          onSuccess('구매가 완료되었습니다.');
-          resolve();
+          resolve(true);
           return;
         } else {
           attempts++;

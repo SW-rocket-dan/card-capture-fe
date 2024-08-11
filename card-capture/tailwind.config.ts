@@ -55,6 +55,10 @@ const config = {
         'drop-medium': '0px 4px 4px rgba(0, 0, 0, 0.25)',
         default: '0px 2px 10px 0px rgba(0, 0, 0, 0.08)',
       },
+      transitionDuration: {
+        '30': '30ms',
+        '50': '50ms',
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
