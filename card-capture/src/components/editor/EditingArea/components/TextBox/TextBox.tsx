@@ -37,7 +37,7 @@ const TextBox = ({
       const editorElement = editorRef.current.getEditor().root;
       const { width, height } = editorElement.getBoundingClientRect();
 
-      setPosition(cardId, layerId, { ...layer.position, height });
+      setPosition(cardId, layerId, { ...layer.position, height: height + 15 });
     }
   };
 
