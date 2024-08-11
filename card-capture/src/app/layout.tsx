@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import AuthCheck from '@/components/common/Auth/AuthCheck';
 import ReactQueryProvider from '@/utils/provider/ReactQueryProvider';
+import { Toaster } from '@/components/ui/toaster';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -25,6 +26,7 @@ export default function RootLayout({
         <ReactQueryProvider>
           <AuthCheck />
           {children}
+          <Toaster />
         </ReactQueryProvider>
       </body>
     </html>

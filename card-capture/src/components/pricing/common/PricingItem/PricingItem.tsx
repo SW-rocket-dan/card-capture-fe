@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/
 import usePayment from '@/hooks/usePayment';
 import { PAYMENT_METHODS } from '@/constants/payment';
 import { authUtils } from '@/utils';
+import { useToast } from '@/components/ui/use-toast';
 
 export type PricingItemProps = {
   title: string;
@@ -16,7 +17,7 @@ export type PricingItemProps = {
 };
 
 const PricingItem = ({ title, price, description, optionList }: PricingItemProps) => {
-  const { isDisabled, count, setCount, purchaseHandler, errorMessage, successMessage } = usePayment();
+  const { isDisabled, count, setCount, purchaseHandler, errorMessage } = usePayment();
 
   const plusCountHandler = () => {
     setCount(prev => prev + 1);
@@ -43,10 +44,34 @@ const PricingItem = ({ title, price, description, optionList }: PricingItemProps
   };
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { toast } = useToast();
 
   const purchaseTemplateHandler = async (paymentMethodKey: keyof typeof PAYMENT_METHODS) => {
     setIsOpen(false);
-    await purchaseHandler(paymentMethodKey);
+
+    // 결제 진행
+    const isPaymentCompleted = await purchaseHandler(paymentMethodKey);
+
+    // 결제 여부에 따른 출력 메세지 세팅
+    const toastVariant = isPaymentCompleted ? 'default' : 'destructive';
+    const toastTitle = isPaymentCompleted ? '결제 완료' : '결제 실패';
+    const toastDescription = isPaymentCompleted ? (
+      <>
+        <p>결제가 완료되었습니다.</p>
+        <p>이용권을 사용해 카드뉴스를 만들어보세요!</p>
+      </>
+    ) : (
+      errorMessage
+    );
+
+    // 결제 결과 출력
+    toast({
+      variant: toastVariant,
+      title: toastTitle,
+      description: toastDescription,
+      className: 'duration-75',
+      duration: 3000,
+    });
   };
 
   const isLoggedIn = authUtils.getIsLoggedIn();
