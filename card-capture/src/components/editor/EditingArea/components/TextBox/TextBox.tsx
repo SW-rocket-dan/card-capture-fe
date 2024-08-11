@@ -43,15 +43,21 @@ const TextBox = ({
 
   /**
    * 변경되는 텍스트 값을 상태에 저장하는 함수.
-   * 변경될 때마다 store에 저장하는 것은 비효율적이기 때문에 임시로 저장
+   * 변경될 때마다 store에 저장 / blur로 저장하니 focusBox 변경될때 적용되지 않는 오류 발생함
    */
   const prevText = useCardsStore(state => state.getLayerText(cardId, layerId));
   const [text, setText] = useState<ReactQuill.Value | null>(prevText);
+
+  const setLayerText = useCardsStore(state => state.setLayerText);
 
   const changeHandler: ReactQuill.ReactQuillProps['onChange'] = (value, delta, source, editor) => {
     setText(editor.getContents());
     updateLayerSize();
   };
+
+  useEffect(() => {
+    if (text) setLayerText(cardId, layerId, text);
+  }, [text]);
 
   /**
    * 현재 포커스된 TextBox의 ref를 store에 저장
@@ -68,8 +74,6 @@ const TextBox = ({
    * 텍스트 박스에서 blur 되면 store에 변경된 값을 저장
    */
   //@FIXME: onBlur 안되는 이유 찾아서 해결하기
-
-  const setLayerText = useCardsStore(state => state.setLayerText);
 
   const blurHandler = () => {
     if (!text) return;
@@ -98,7 +102,6 @@ const TextBox = ({
         value={text || ''}
         onChange={changeHandler}
         onFocus={focusHandler}
-        onBlur={blurHandler}
         modules={modules}
         style={{
           minWidth: '200px',
