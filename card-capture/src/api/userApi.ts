@@ -18,4 +18,18 @@ const getProductCategories = async () => {
   }
 };
 
-export default { getProductCategories };
+const getUserData = async () => {
+  try {
+    const response = await customFetch(`${process.env.NEXT_PUBLIC_API_KEY}/api/v1/user/me`, {
+      method: 'GET',
+    });
+
+    const jsonData = await response.json();
+
+    return jsonData.data;
+  } catch (e) {
+    console.error('Failed to GET user data : ', e);
+  }
+};
+
+export default { getProductCategories, getUserData };
