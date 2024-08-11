@@ -53,7 +53,7 @@ const PromptContent = () => {
     const submitData: PromptSubmitType = {
       prompt: {
         ...data,
-        phrases: {
+        phraseDetails: {
           phrases: phrasesArray,
           firstEmphasis: emphasisArray[0],
           secondEmphasis: emphasisArray[1],

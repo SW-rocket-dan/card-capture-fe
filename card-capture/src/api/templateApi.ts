@@ -2,7 +2,7 @@ import { customFetch } from '@/api/customFetchApi';
 import { Template } from '@/types';
 
 export type PromptFormType = {
-  phrases: {
+  phraseDetails: {
     phrases: string[];
     firstEmphasis: string;
     secondEmphasis: string;
