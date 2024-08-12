@@ -1,7 +1,13 @@
 import React, { createContext, useEffect } from 'react';
 import { init, track } from '@amplitude/analytics-browser';
 
-export const AmplitudeContext = createContext({});
+type AmplitudeContextType = {
+  trackAmplitudeEvent: (eventName: string, eventProperties: Record<string, any>) => void;
+};
+
+export const AmplitudeContext = createContext<AmplitudeContextType>({
+  trackAmplitudeEvent: () => {},
+});
 
 const AmplitudeContextProvider = ({ children }: { children: React.ReactNode }) => {
   /**
@@ -20,7 +26,7 @@ const AmplitudeContextProvider = ({ children }: { children: React.ReactNode }) =
     track(eventName, eventProperties);
   };
 
-  const value = { trackAmplitudeEvent };
+  const value: AmplitudeContextType = { trackAmplitudeEvent };
 
   return <AmplitudeContext.Provider value={value}>{children}</AmplitudeContext.Provider>;
 };
