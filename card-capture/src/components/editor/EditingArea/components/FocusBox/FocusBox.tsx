@@ -210,6 +210,31 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
   };
 
   /**
+   * TextBox일 때 텍스트 보다 더 작게 박스 조절되는 것을 방지하기 위한 로직
+   * 내부 요소의 크기를 구한 후에 해당 크기보다 더 작게 줄이려고 하면 resize가 동작하지 않게 함
+   */
+  const [minSize, setMinSize] = useState({ width: 0, height: 0 });
+  const editorRef = useFocusStore(state => state.currentRef);
+
+  useEffect(() => {
+    // TextBox인지 확인
+    if (editorRef?.current && type === 'text') {
+      const editorElement = editorRef.current?.getEditor().root;
+      const { width, height } = editorElement?.getBoundingClientRect(); // textbox 감싼 div의 크기 추출
+
+      setMinSize({ width: width + 30, height }); // 최소 크기 설정
+    }
+  }, [children]);
+
+  // 사이즈 설정 시 minSize 보다 작아질 수 없게 하는 로직
+  const calculateWithMinSize = (newWidth: number, newHeight: number) => {
+    return {
+      width: Math.max(newWidth, minSize.width),
+      height: Math.max(newHeight, minSize.height),
+    };
+  };
+
+  /**
    *각 방향 별 다음 width,height를 계산
    * @param diffX 상대좌표 x증가량
    * @param diffY 상대좌표 y증가량
@@ -217,46 +242,62 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
    */
   const calculateN = (diffX: number, diffY: number) => {
     const height = resizeOffset.startHeight - diffY;
-    return { ...curPosition, height };
+    const { height: newHeight } = calculateWithMinSize(curPosition.width, height);
+
+    return { ...curPosition, height: newHeight };
   };
 
   const calculateS = (diffX: number, diffY: number) => {
     const height = resizeOffset.startHeight + diffY;
-    return { ...curPosition, height };
+    const { height: newHeight } = calculateWithMinSize(curPosition.width, height);
+
+    return { ...curPosition, height: newHeight };
   };
 
   const calculateE = (diffX: number, diffY: number) => {
     const width = resizeOffset.startWidth + diffX;
-    return { ...curPosition, width };
+    const { width: newWidth } = calculateWithMinSize(width, curPosition.height);
+
+    return { ...curPosition, width: newWidth };
   };
 
   const calculateW = (diffX: number, diffY: number) => {
     const width = resizeOffset.startWidth - diffX;
-    return { ...curPosition, width };
+    const { width: newWidth } = calculateWithMinSize(width, curPosition.height);
+
+    return { ...curPosition, width: newWidth };
   };
 
   const calculateNE = (diffX: number, diffY: number) => {
     const width = resizeOffset.startWidth + diffX;
     const height = resizeOffset.startHeight - diffY;
-    return { ...curPosition, width, height };
+    const { width: newWidth, height: newHeight } = calculateWithMinSize(width, height);
+
+    return { ...curPosition, width: newWidth, height: newHeight };
   };
 
   const calculateNW = (diffX: number, diffY: number) => {
     const width = resizeOffset.startWidth - diffX;
     const height = resizeOffset.startHeight - diffY;
-    return { ...curPosition, width, height };
+    const { width: newWidth, height: newHeight } = calculateWithMinSize(width, height);
+
+    return { ...curPosition, width: newWidth, height: newHeight };
   };
 
   const calculateSE = (diffX: number, diffY: number) => {
     const width = resizeOffset.startWidth - diffX;
     const height = resizeOffset.startHeight + diffY;
-    return { ...curPosition, width, height };
+    const { width: newWidth, height: newHeight } = calculateWithMinSize(width, height);
+
+    return { ...curPosition, width: newWidth, height: newHeight };
   };
 
   const calculateSW = (diffX: number, diffY: number) => {
     const width = resizeOffset.startWidth + diffX;
     const height = resizeOffset.startHeight + diffY;
-    return { ...curPosition, width, height };
+    const { width: newWidth, height: newHeight } = calculateWithMinSize(width, height);
+
+    return { ...curPosition, width: newWidth, height: newHeight };
   };
 
   // resize PointerMove 공통 로직
@@ -525,7 +566,7 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
       <ContextMenu>
         <ContextMenuTrigger>
           <div
-            className={`absolute inset-0 m-2 ${isDrag ? 'cursor-grabbing' : 'cursor-grab'} `}
+            className={`absolute inset-0 flex items-center justify-start p-3 ${isDrag ? 'cursor-grabbing' : 'cursor-grab'} `}
             style={{ opacity: curPosition.opacity / 100 }}
           >
             {layer.type === 'text' && React.isValidElement(children)

@@ -64,11 +64,11 @@ const TextBox = ({
    */
   const setCurrentRef = useFocusStore(state => state.setCurrentRef);
 
-  const focusHandler = () => {
+  useEffect(() => {
     if (!editorRef || !editorRef.current) return;
 
     setCurrentRef(editorRef);
-  };
+  }, [editorRef]);
 
   /**
    * 텍스트 박스에서 blur 되면 store에 변경된 값을 저장
@@ -101,10 +101,9 @@ const TextBox = ({
         ref={editorRef}
         value={text || ''}
         onChange={changeHandler}
-        onFocus={focusHandler}
         modules={modules}
         style={{
-          minWidth: '200px',
+          minWidth: '50px',
           maxWidth: '700px',
           cursor: isReadOnly ? 'pointer' : 'auto',
           userSelect: isReadOnly ? 'none' : 'auto',
