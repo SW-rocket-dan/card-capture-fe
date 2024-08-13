@@ -10,9 +10,15 @@ import { useAuthStore } from '@/store/useAuthStore';
 import { tokenUtils, userUtils } from '@/utils';
 import userApi from '@/api/userApi';
 import { useQuery } from '@tanstack/react-query';
+import useAmplitudeContext from '@/hooks/useAmplitudeContext';
 
 const AfterLoginNav = () => {
   const router = useRouter();
+
+  /**
+   * 로그인 전 네비게이션 바에서 버튼 클릭에 대한 tracking
+   */
+  const { trackAmplitudeEvent } = useAmplitudeContext();
 
   /**
    * 드롭다운 열고 닫는 로직
@@ -59,21 +65,41 @@ const AfterLoginNav = () => {
 
   return (
     <div className="flex w-full flex-row items-center justify-between gap-[30px] lg:gap-[60px]">
-      <button onClick={() => router.push('/')} className="text-md flex w-[300px] justify-start whitespace-nowrap">
+      <button
+        onClick={() => {
+          trackAmplitudeEvent('nav-logo-click');
+          router.push('/');
+        }}
+        className="text-md flex w-[300px] justify-start whitespace-nowrap"
+      >
         Card Capture
       </button>
 
       {!isMobile && (
         <ul className="flex cursor-pointer flex-row gap-[30px] whitespace-nowrap text-[12px] font-semibold lg:gap-[50px] lg:text-[14px]">
           <TooltipProvider>
-            <button onClick={() => router.push('/pricing')}>요금제</button>
+            <button
+              onClick={() => {
+                trackAmplitudeEvent('nav-pricing-click');
+                router.push('/pricing');
+              }}
+            >
+              요금제
+            </button>
             <Tooltip delayDuration={0}>
               <TooltipTrigger>다른 템플릿 보기</TooltipTrigger>
               <TooltipContent>
                 <p className="font-normal">준비중!</p>
               </TooltipContent>
             </Tooltip>
-            <button onClick={() => router.push('/prompt')}>제작하기</button>
+            <button
+              onClick={() => {
+                trackAmplitudeEvent('nav-create-c-click');
+                router.push('/prompt');
+              }}
+            >
+              제작하기
+            </button>
           </TooltipProvider>
         </ul>
       )}
@@ -103,13 +129,19 @@ const AfterLoginNav = () => {
                 </div>
               </div>
               <button
-                onClick={() => router.push('/mypage')}
+                onClick={() => {
+                  trackAmplitudeEvent('nav-mypage-click');
+                  router.push('/mypage');
+                }}
                 className="flex h-[40px] w-full items-center justify-start px-[20px] hover:bg-bannerbg"
               >
                 마이페이지
               </button>
               <button
-                onClick={logoutHandler}
+                onClick={() => {
+                  trackAmplitudeEvent('nav-logout-click');
+                  logoutHandler();
+                }}
                 className="flex h-[40px] w-full items-center justify-start px-[20px] text-main hover:bg-bannerbg"
               >
                 로그아웃
