@@ -16,6 +16,7 @@ import { toPng } from 'html-to-image';
 import { Progress } from '@/components/ui/progress';
 import { jsonUtils } from '@/utils';
 import IllustBox from '@/components/editor/EditingArea/components/IllustBox/IllustBox';
+import useAmplitudeContext from '@/hooks/useAmplitudeContext';
 
 const CardArea = ({ card }: { card: Card }) => {
   const cardId = card.id;
@@ -123,6 +124,11 @@ const CardArea = ({ card }: { card: Card }) => {
     };
   }, [isDownloading, increaseProgress]);
 
+  /**
+   * 에디터 페이지에서 버튼 클릭에 대한 tracking터
+   */
+  const { trackAmplitudeEvent } = useAmplitudeContext();
+
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-[10px] bg-editorbg">
       {/* 카드 추가 관리 박스 / 레이어 추가 관리 박스*/}
@@ -162,7 +168,14 @@ const CardArea = ({ card }: { card: Card }) => {
             </DialogContent>
           </Dialog>
 
-          <Button onClick={downloadCardHandler} type="full" className="h-[36px] w-[145px] rounded-[5px]">
+          <Button
+            onClick={() => {
+              trackAmplitudeEvent('editor-export-click');
+              downloadCardHandler();
+            }}
+            type="full"
+            className="h-[36px] w-[145px] rounded-[5px]"
+          >
             <span className="text-xs">Export</span>
           </Button>
         </div>
