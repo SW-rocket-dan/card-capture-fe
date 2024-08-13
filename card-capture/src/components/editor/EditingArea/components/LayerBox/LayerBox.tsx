@@ -34,7 +34,7 @@ const LayerBox = ({ children, position, onClick }: Props) => {
       }}
       onMouseDown={onClick}
     >
-      <div className="absolute inset-0 m-2">{children}</div>
+      <div className="absolute inset-0 flex items-center justify-start p-3">{children}</div>
     </div>
   );
 };
