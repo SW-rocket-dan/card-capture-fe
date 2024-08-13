@@ -8,7 +8,7 @@ import usePreventCloseOnSelection from '@/components/editor/Tab/components/EditT
 
 type ColorButtonProps = {
   color: IColor;
-  setColor: Dispatch<SetStateAction<IColor>>;
+  setColor: (color: IColor) => void | Dispatch<SetStateAction<IColor>>;
   className?: string;
   hover?: boolean;
   disabled?: boolean;
@@ -63,7 +63,7 @@ const ColorButton = ({
             e.preventDefault();
           }}
           side={direction}
-          className={`duration-30 absolute -top-6 left-12 rounded-lg bg-white p-0`}
+          className={`absolute -top-6 left-12 rounded-lg bg-white p-0 duration-30`}
           style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08', zIndex: 10000 }}
         >
           <div>
