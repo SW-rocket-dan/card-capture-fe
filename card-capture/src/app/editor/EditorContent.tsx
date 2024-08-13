@@ -6,8 +6,11 @@ import NavigationBar from '@/components/common/NavigationBar/NavigationBar';
 import Tab from '@/components/editor/Tab/Tab';
 import EditingArea from '@/components/editor/EditingArea/EditingArea';
 import useAuthRedirect from '@/hooks/useAuthRedirect';
+import useChannelTalk from '@/hooks/useChannelTalk';
 
 const EditorContent = () => {
+  useChannelTalk();
+
   const isAuthenticated = useAuthRedirect();
 
   if (!isAuthenticated) return null;
