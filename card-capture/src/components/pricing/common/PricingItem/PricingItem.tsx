@@ -8,6 +8,7 @@ import usePayment from '@/hooks/usePayment';
 import { PAYMENT_METHODS } from '@/constants/payment';
 import { authUtils } from '@/utils';
 import { useToast } from '@/components/ui/use-toast';
+import useAmplitudeContext from '@/hooks/useAmplitudeContext';
 
 export type PricingItemProps = {
   title: string;
@@ -52,6 +53,8 @@ const PricingItem = ({ title, price, description, optionList }: PricingItemProps
     // 결제 진행
     const isPaymentCompleted = await purchaseHandler(paymentMethodKey);
 
+    isPaymentCompleted ? trackAmplitudeEvent('pricing-pay-success') : trackAmplitudeEvent('pricing-pay-fail');
+
     // 결제 여부에 따른 출력 메세지 세팅
     const toastVariant = isPaymentCompleted ? 'default' : 'destructive';
     const toastTitle = isPaymentCompleted ? '결제 완료' : '결제 실패';
@@ -75,6 +78,11 @@ const PricingItem = ({ title, price, description, optionList }: PricingItemProps
   };
 
   const isLoggedIn = authUtils.getIsLoggedIn();
+
+  /**
+   * 요금제 페이지에서 버튼 클릭에 대한 tracking
+   */
+  const { trackAmplitudeEvent } = useAmplitudeContext();
 
   return (
     <div className="flex h-[550px] w-[300px] flex-col justify-between rounded-[40px] border border-border p-[35px] shadow-default xs:w-[350px] md:w-[400px]">
@@ -135,7 +143,13 @@ const PricingItem = ({ title, price, description, optionList }: PricingItemProps
 
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
-            <Button type="full" className="rounded-[40px] py-[15px]" shadow={true} disable={count === 0 || isDisabled}>
+            <Button
+              onClick={() => trackAmplitudeEvent('pricing-pay-click')}
+              type="full"
+              className="rounded-[40px] py-[15px]"
+              shadow={true}
+              disable={count === 0 || isDisabled}
+            >
               결제하기
             </Button>
           </DialogTrigger>

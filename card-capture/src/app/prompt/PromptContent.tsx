@@ -13,6 +13,7 @@ import { templateApi } from '@/api';
 import { jsonUtils } from '@/utils';
 import Title from '@/components/common/Title/Title';
 import Loading from '@/components/common/Loading/Loading';
+import useChannelTalk from '@/hooks/useChannelTalk';
 
 export type PromptInputFormType = {
   phrases: { value: string }[];
@@ -23,6 +24,8 @@ export type PromptInputFormType = {
 };
 
 const PromptContent = () => {
+  useChannelTalk();
+  
   /**
    * react-hook-form 사용하여 프롬프트에 입력되는 값들 관리
    */

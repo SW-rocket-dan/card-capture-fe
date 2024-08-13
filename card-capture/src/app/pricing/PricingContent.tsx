@@ -4,8 +4,11 @@ import NavigationBar from '@/components/common/NavigationBar/NavigationBar';
 import React from 'react';
 import Title from '@/components/common/Title/Title';
 import SinglePayment from '@/components/pricing/SinglePayment/SinglePayment';
+import useChannelTalk from '@/hooks/useChannelTalk';
 
 const PricingContent = () => {
+  useChannelTalk();
+
   return (
     <div className="h-screen w-screen overflow-y-scroll font-Pretendard">
       <NavigationBar isTransparent={false} />

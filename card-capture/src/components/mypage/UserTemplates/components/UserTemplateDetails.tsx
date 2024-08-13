@@ -5,6 +5,7 @@ import { Template } from '@/types';
 import { useRouter } from 'next/navigation';
 import { useCardsStore } from '@/store/useCardsStore';
 import { jsonUtils } from '@/utils';
+import useAmplitudeContext from '@/hooks/useAmplitudeContext';
 
 type UserTemplateDetailsProps = {
   template: Template;
@@ -23,6 +24,11 @@ const UserTemplateDetails = ({ template }: UserTemplateDetailsProps) => {
 
     router.push('/editor');
   };
+
+  /**
+   * 마이페이지에서 버튼 클릭에 대한 tracking
+   */
+  const { trackAmplitudeEvent } = useAmplitudeContext();
 
   return (
     <div className="flex w-fit flex-col gap-2 rounded-[20px] border border-border p-4">
@@ -53,7 +59,14 @@ const UserTemplateDetails = ({ template }: UserTemplateDetailsProps) => {
           ))}
         </div>
         <div className="mt-2 flex flex-row gap-2">
-          <Button onClick={moveToEditorHandler} className="w-full rounded-md py-2 text-[13px]" type="full">
+          <Button
+            onClick={() => {
+              trackAmplitudeEvent('mypage-goToEditor-click');
+              moveToEditorHandler();
+            }}
+            className="w-full rounded-md py-2 text-[13px]"
+            type="full"
+          >
             에디터로 이동
           </Button>
         </div>

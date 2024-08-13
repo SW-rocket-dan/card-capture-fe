@@ -12,6 +12,8 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@amplitude/analytics-browser": "^2.10.0",
+    "@channel.io/channel-web-sdk-loader": "^2.0.0",
     "@portone/browser-sdk": "^0.0.9",
     "@radix-ui/react-checkbox": "^1.1.1",
     "@radix-ui/react-context-menu": "^2.2.1",
