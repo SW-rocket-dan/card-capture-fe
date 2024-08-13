@@ -125,7 +125,7 @@ const CardArea = ({ card }: { card: Card }) => {
   }, [isDownloading, increaseProgress]);
 
   /**
-   * 에디터 페이지에서 버튼 클릭에 대한 tracking터
+   * 에디터 페이지에서 버튼 클릭에 대한 tracking
    */
   const { trackAmplitudeEvent } = useAmplitudeContext();
 
