@@ -8,6 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import Button from '@/components/common/Button/Button';
 import { useState } from 'react';
+import useAmplitudeContext from '@/hooks/useAmplitudeContext';
 
 type PromptPreviewProps = {
   formData: PromptInputFormType;
@@ -36,6 +37,11 @@ const PromptPreview = ({ formData, onSubmit }: PromptPreviewProps) => {
    */
   const [isClicked, setIsClicked] = useState(false);
 
+  /**
+   * 프롬프트 페이지에서 버튼 클릭에 대한 tracking
+   */
+  const { trackAmplitudeEvent } = useAmplitudeContext();
+
   return (
     <div className="flex min-w-[300px] flex-col items-center justify-start gap-[30px] lg:w-[400px]">
       <div className="flex w-full flex-col gap-[20px]">
@@ -59,6 +65,7 @@ const PromptPreview = ({ formData, onSubmit }: PromptPreviewProps) => {
       <Dialog>
         <DialogTrigger asChild>
           <button
+            onClick={() => trackAmplitudeEvent('prompt-create-click')}
             className="flex flex-row items-center justify-center gap-1 rounded-[40px] bg-main px-[40px] py-[18px]"
             style={{ boxShadow: '0 0 14px rgba(111, 108, 255, 0.5)' }}
           >
@@ -79,6 +86,7 @@ const PromptPreview = ({ formData, onSubmit }: PromptPreviewProps) => {
                 className="flex flex-row items-center justify-center gap-1 rounded-[40px] bg-main px-[40px] py-[18px]"
                 style={{ boxShadow: '0 0 14px rgba(111, 108, 255, 0.5)' }}
                 onClick={() => {
+                  trackAmplitudeEvent('prompt-real-create-click');
                   setIsClicked(true);
                   onSubmit(formData);
                 }}
@@ -94,7 +102,10 @@ const PromptPreview = ({ formData, onSubmit }: PromptPreviewProps) => {
                 이용권 구매 후 카드뉴스 제작이 가능합니다!
               </DialogDescription>
               <Button
-                onClick={() => window.open('https://www.cardcapture.app/pricing', '_blank')}
+                onClick={() => {
+                  trackAmplitudeEvent('prompt-pricing-click');
+                  window.open('https://www.cardcapture.app/pricing', '_blank');
+                }}
                 type="default"
                 className="px-5 py-2.5 text-[13px]"
               >
