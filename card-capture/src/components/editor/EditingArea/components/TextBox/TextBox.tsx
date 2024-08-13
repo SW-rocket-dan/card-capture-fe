@@ -19,10 +19,12 @@ const TextBox = ({
   cardId,
   layerId,
   isDoubleClicked = false,
+  type = 'layer',
 }: {
   cardId: number;
   layerId: number;
   isDoubleClicked?: boolean;
+  type?: string;
 }) => {
   const editorRef = useRef<ReactQuill | null>(null);
 
@@ -56,7 +58,7 @@ const TextBox = ({
   };
 
   useEffect(() => {
-    if (text) setLayerText(cardId, layerId, text);
+    if (text && type === 'focus') setLayerText(cardId, layerId, text);
   }, [text]);
 
   /**
@@ -65,21 +67,10 @@ const TextBox = ({
   const setCurrentRef = useFocusStore(state => state.setCurrentRef);
 
   useEffect(() => {
-    if (!editorRef || !editorRef.current) return;
+    if (!editorRef || !editorRef.current || type !== 'focus') return;
 
     setCurrentRef(editorRef);
   }, [editorRef]);
-
-  /**
-   * 텍스트 박스에서 blur 되면 store에 변경된 값을 저장
-   */
-  //@FIXME: onBlur 안되는 이유 찾아서 해결하기
-
-  const blurHandler = () => {
-    if (!text) return;
-
-    setLayerText(cardId, layerId, text);
-  };
 
   /**
    *  두번 클릭했을 시에만 입력 가능하도록 하기 위해서 클릭 횟수를 확인해서 입력 활성화 여부 결정
@@ -96,7 +87,7 @@ const TextBox = ({
   }, [isDoubleClicked]);
 
   return (
-    <div onBlur={blurHandler}>
+    <div>
       <ReactQuill
         ref={editorRef}
         value={text || ''}
