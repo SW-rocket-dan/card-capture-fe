@@ -32,9 +32,9 @@ const PromptColorInput = ({ setValue }: PromptColorInputProps) => {
   const ref = useClickOutside(() => setIsOpen(false));
 
   return (
-    <div className="relative flex w-full flex-col gap-[15px]">
+    <div ref={ref} className="relative flex w-full flex-col gap-[15px]">
       <PromptCategoryText>3. 색상</PromptCategoryText>
-      <div ref={ref} className="flex flex-row items-center gap-3">
+      <div className="flex flex-row items-center gap-3">
         <PromptTitleText>색상을 선택해주세요</PromptTitleText>
         <button
           onClick={openHandler}
