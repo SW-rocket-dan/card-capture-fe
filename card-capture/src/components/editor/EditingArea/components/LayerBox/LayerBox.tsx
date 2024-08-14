@@ -20,7 +20,7 @@ const LayerBox = ({ children, position, onClick }: Props) => {
   //style로 바로 박을것인지, tailwind로 다 정의해 둘것인지, 혹은 css로할 것인지
   return (
     <div
-      className="absolute border-2 border-transparent px-3 py-1.5"
+      className="absolute border-2 border-transparent px-3 py-1.5 hover:border-main"
       style={{
         left: position.x,
         top: position.y,
