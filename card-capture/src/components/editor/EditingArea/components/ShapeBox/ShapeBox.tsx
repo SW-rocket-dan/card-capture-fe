@@ -27,12 +27,7 @@ const ShapeBox = ({ shapeType, color }: Props) => {
 
   if (shapeType === 'triangle') {
     return (
-      <div
-        className="h-full w-full"
-        style={{
-          position: 'absolute',
-        }}
-      >
+      <div className="h-full w-full">
         <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
           <polygon points="50,0 0,100 100,100" fill={color} />
         </svg>
@@ -42,12 +37,7 @@ const ShapeBox = ({ shapeType, color }: Props) => {
 
   if (shapeType === 'star') {
     return (
-      <div
-        className="h-full w-full"
-        style={{
-          position: 'absolute',
-        }}
-      >
+      <div className="h-full w-full">
         <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
           <polygon points="50,0 61,35 98,35 68,57 79,91 50,70 21,91 32,57 2,35 39,35" fill={color} />
         </svg>
