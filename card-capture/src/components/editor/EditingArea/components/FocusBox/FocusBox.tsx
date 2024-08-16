@@ -437,6 +437,8 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
 
   const pointerUpRotateHandler = (e: PointerEvent) => {
     e.stopPropagation();
+    e.preventDefault();
+
     setIsRotate(false);
     // 요소의 중심점 계산
     if (!boxRef.current) return;
@@ -449,6 +451,8 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
     const nxAngle = Math.atan2(e.clientX - centerX, centerY - e.clientY);
     let rotationDegrees = nxAngle * (180 / Math.PI); //라디안 변경
     setPosition(cardId, layerId, { ...curPosition, rotate: rotationDegrees });
+
+    if (boxRef.current) boxRef.current.focus();
   };
 
   //rotate 이벤트 등록
@@ -517,6 +521,9 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
           transformOrigin: 'center',
           pointerEvents: 'none', // 이벤트가 통과되어서 아래있는 요소(자식요소 아니고 아래 위치 요소)가 이벤트를 받도록 함
         }}
+        tabIndex={0}
+        onMouseDown={e => e.stopPropagation()}
+        onClick={e => e.stopPropagation()}
       >
         {/* 11시,1시,5시,7시 크기조절 바 */}
         <div
@@ -531,12 +538,12 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
         ></div>
         <div
           className="absolute -bottom-1.5 -left-1.5 h-3 w-3 cursor-nesw-resize rounded-full border-2 border-main bg-white"
-          onPointerDown={e => resizePointerDownHandler(e, 'sw')}
+          onPointerDown={e => resizePointerDownHandler(e, 'se')}
           style={{ pointerEvents: 'auto' }}
         ></div>
         <div
           className="absolute -bottom-1.5 -right-1.5 h-3 w-3 cursor-nwse-resize rounded-full border-2 border-main bg-white"
-          onPointerDown={e => resizePointerDownHandler(e, 'se')}
+          onPointerDown={e => resizePointerDownHandler(e, 'sw')}
           style={{ pointerEvents: 'auto' }}
         ></div>
 
