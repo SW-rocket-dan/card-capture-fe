@@ -1,11 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
-@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@100..900&family=Noto+Serif+KR:wght@200..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Jua&family=Noto+Sans+KR:wght@100..900&family=Noto+Serif+KR:wght@200..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap');
-
 .ql-editor {
     font-size: 16px;
 }
@@ -22,34 +14,111 @@
 
 /* 폰트 설정 */
 
-.ql-font-NanumGothic {
-    font-family: "Nanum Gothic", sans-serif;
-}
 
 .ql-font-Pretendard {
     font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;;
 }
 
+
+.ql-font-NanumGothic {
+    font-family: var(--font-nanum-gothic);
+}
+
 .ql-font-Jua {
-    font-family: "Jua", sans-serif;
+    font-family: var(--font-jua);
 }
 
 .ql-font-NotoSans {
-    font-family: "Noto Sans KR", sans-serif;
+    font-family: var(--font-noto-sans-kr);
 }
 
 .ql-font-NotoSerif {
-    font-family: "Noto Serif KR", serif;
+    font-family: var(--font-noto-serif-kr);
 }
 
 .ql-font-BlackHanSans {
-    font-family: "Black Han Sans", sans-serif;
+    font-family: var(--font-black-han-sans);
 }
 
 .ql-font-DoHyeon {
-    font-family: "Do Hyeon", sans-serif;
+    font-family: var(--font-do-hyeon);
 }
 
+.ql-font-NanumPenScript {
+    font-family: var(--font-nanum-pen-script);
+}
+
+.ql-font-GothicA1 {
+    font-family: var(--font-gothic-a1);
+}
+
+.ql-font-Dongle {
+    font-family: var(--font-dongle);
+}
+
+.ql-font-Sunflower {
+    font-family: var(--font-sunflower);
+}
+
+.ql-font-Hahmlet {
+    font-family: var(--font-hahmlet);
+}
+
+.ql-font-Gugi {
+    font-family: var(--font-gugi);
+}
+
+.ql-font-Gaegu {
+    font-family: var(--font-gaegu);
+}
+
+.ql-font-GamjaFlower {
+    font-family: var(--font-gamja-flower);
+}
+
+.ql-font-GowunDodum {
+    font-family: var(--font-gowun-dodum);
+}
+
+.ql-font-GowunBatang {
+    font-family: var(--font-gowun-batang);
+}
+
+.ql-font-SongMyung {
+    font-family: var(--font-song-myung);
+}
+
+.ql-font-CuteFont {
+    font-family: var(--font-cute-font);
+}
+
+.ql-font-EastSeaDokdo {
+    font-family: var(--font-east-sea-dokdo);
+}
+
+.ql-font-Stylish {
+    font-family: var(--font-stylish);
+}
+
+.ql-font-SingleDay {
+    font-family: var(--font-single-day);
+}
+
+.ql-font-YeonSung {
+    font-family: var(--font-yeon-sung);
+}
+
+.ql-font-GasoekOne {
+    font-family: var(--font-gasoek-one);
+}
+
+.ql-font-BagelFatOne {
+    font-family: var(--font-bagel-fat-one);
+}
+
+.ql-font-Orbit {
+    font-family: var(--font-orbit);
+}
 
 /** 외곽선 설정 **/
 
