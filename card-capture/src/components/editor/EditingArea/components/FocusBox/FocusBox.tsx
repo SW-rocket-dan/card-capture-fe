@@ -503,87 +503,118 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
   };
 
   return (
-    <div
-      className={`absolute border-2 border-main px-3 py-1.5 ${isDoubleClicked && type === 'text' && 'border-main'}`}
-      style={{
-        left: curPosition.x,
-        top: curPosition.y,
-        width: curPosition.width,
-        height: curPosition.height,
-        zIndex: 1000, //NOTE: focus되면 z-index가 상위로 와야함 (수치는 회의해야함!)
-        transform: `rotate(${curPosition.rotate}deg)`,
-        transformOrigin: 'center',
-        wordWrap: 'break-word',
-        boxSizing: 'border-box',
-      }}
-      onPointerDown={pointerDownDragHandler}
-      onClick={stopPropagation}
-      onDoubleClick={doubleClickHandler}
-      ref={boxRef}
-    >
-      {/* 11시,1시,5시,7시 크기조절 바 */}
+    <>
+      {/* z-index 상승하는 border와 control 버튼들 */}
       <div
-        className="absolute -left-1.5 -top-1.5 h-3 w-3 cursor-nwse-resize rounded-full border-2 border-main bg-white"
-        onPointerDown={e => resizePointerDownHandler(e, 'nw')}
-      ></div>
-      <div
-        className="absolute -right-1.5 -top-1.5 h-3 w-3 cursor-nesw-resize rounded-full border-2 border-main bg-white"
-        onPointerDown={e => resizePointerDownHandler(e, 'ne')}
-      ></div>
-      <div
-        className="absolute -bottom-1.5 -left-1.5 h-3 w-3 cursor-nesw-resize rounded-full border-2 border-main bg-white"
-        onPointerDown={e => resizePointerDownHandler(e, 'se')}
-      ></div>
-      <div
-        className="absolute -bottom-1.5 -right-1.5 h-3 w-3 cursor-nwse-resize rounded-full border-2 border-main bg-white"
-        onPointerDown={e => resizePointerDownHandler(e, 'sw')}
-      ></div>
-
-      {/* 12시,3시,6시,9시 크기조절 바 */}
-      <div
-        className="absolute -top-1.5 left-2/4 h-2.5 w-7 -translate-x-1/2 cursor-row-resize rounded border-[1.5px] border-main bg-white"
-        onPointerDown={e => resizePointerDownHandler(e, 'n')}
-      ></div>
-      <div
-        className="absolute -right-1.5 top-1/2 h-7 w-2.5 -translate-y-1/2 cursor-col-resize rounded border-[1.5px] border-main bg-white"
-        onPointerDown={e => resizePointerDownHandler(e, 'e')}
-      ></div>
-      <div
-        className="absolute -bottom-1.5 left-2/4 h-2.5 w-7 -translate-x-1/2 cursor-row-resize rounded border-[1.5px] border-main bg-white"
-        onPointerDown={e => resizePointerDownHandler(e, 's')}
-      ></div>
-      <div
-        className="absolute -left-1.5 top-1/2 h-7 w-2.5 -translate-y-1/2 cursor-col-resize rounded border-[1.5px] border-main bg-white"
-        onPointerDown={e => resizePointerDownHandler(e, 'w')}
-      ></div>
-      {/* rotate button */}
-      <div
-        className="absolute -top-7 left-2/4 flex h-3 w-3 -translate-x-1/2 cursor-grab items-center justify-center rounded-full bg-gray6"
-        onPointerDown={pointerDownRotateHandler}
+        className={`absolute border-2 border-main ${isDoubleClicked && type === 'text' && 'border-main'}`}
+        style={{
+          left: curPosition.x,
+          top: curPosition.y,
+          width: curPosition.width,
+          height: curPosition.height,
+          zIndex: 1000,
+          transform: `rotate(${curPosition.rotate}deg)`,
+          transformOrigin: 'center',
+          pointerEvents: 'none', // 이벤트가 통과되어서 아래있는 요소(자식요소 아니고 아래 위치 요소)가 이벤트를 받도록 함
+        }}
       >
-        <FaArrowRotateLeft size={8} />
+        {/* 11시,1시,5시,7시 크기조절 바 */}
+        <div
+          className="absolute -left-1.5 -top-1.5 h-3 w-3 cursor-nwse-resize rounded-full border-2 border-main bg-white"
+          onPointerDown={e => resizePointerDownHandler(e, 'nw')}
+          style={{ pointerEvents: 'auto' }} // control 버튼들은 이벤트 받을 수 있도록 설정
+        ></div>
+        <div
+          className="absolute -right-1.5 -top-1.5 h-3 w-3 cursor-nesw-resize rounded-full border-2 border-main bg-white"
+          onPointerDown={e => resizePointerDownHandler(e, 'ne')}
+          style={{ pointerEvents: 'auto' }}
+        ></div>
+        <div
+          className="absolute -bottom-1.5 -left-1.5 h-3 w-3 cursor-nesw-resize rounded-full border-2 border-main bg-white"
+          onPointerDown={e => resizePointerDownHandler(e, 'sw')}
+          style={{ pointerEvents: 'auto' }}
+        ></div>
+        <div
+          className="absolute -bottom-1.5 -right-1.5 h-3 w-3 cursor-nwse-resize rounded-full border-2 border-main bg-white"
+          onPointerDown={e => resizePointerDownHandler(e, 'se')}
+          style={{ pointerEvents: 'auto' }}
+        ></div>
+
+        {/* 12시,3시,6시,9시 크기조절 바 */}
+        <div
+          className="absolute -top-1.5 left-2/4 h-2.5 w-7 -translate-x-1/2 cursor-row-resize rounded border-[1.5px] border-main bg-white"
+          onPointerDown={e => resizePointerDownHandler(e, 'n')}
+          style={{ pointerEvents: 'auto' }}
+        ></div>
+        <div
+          className="absolute -right-1.5 top-1/2 h-7 w-2.5 -translate-y-1/2 cursor-col-resize rounded border-[1.5px] border-main bg-white"
+          onPointerDown={e => resizePointerDownHandler(e, 'e')}
+          style={{ pointerEvents: 'auto' }}
+        ></div>
+        <div
+          className="absolute -bottom-1.5 left-2/4 h-2.5 w-7 -translate-x-1/2 cursor-row-resize rounded border-[1.5px] border-main bg-white"
+          onPointerDown={e => resizePointerDownHandler(e, 's')}
+          style={{ pointerEvents: 'auto' }}
+        ></div>
+        <div
+          className="absolute -left-1.5 top-1/2 h-7 w-2.5 -translate-y-1/2 cursor-col-resize rounded border-[1.5px] border-main bg-white"
+          onPointerDown={e => resizePointerDownHandler(e, 'w')}
+          style={{ pointerEvents: 'auto' }}
+        ></div>
+
+        {/* rotate button */}
+        <div
+          className="absolute -top-7 left-2/4 flex h-3 w-3 -translate-x-1/2 cursor-grab items-center justify-center rounded-full bg-gray6"
+          onPointerDown={pointerDownRotateHandler}
+          style={{ pointerEvents: 'auto' }}
+        >
+          <FaArrowRotateLeft size={8} />
+        </div>
       </div>
-      <ContextMenu>
-        <ContextMenuTrigger>
-          <div
-            className={`absolute inset-0 flex items-center justify-start p-3 ${isDrag ? 'cursor-grabbing' : 'cursor-grab'} `}
-            style={{ opacity: curPosition.opacity / 100 }}
-          >
-            {layer.type === 'text' && React.isValidElement(children)
-              ? React.cloneElement(children, { isDoubleClicked })
-              : children}
-          </div>
-        </ContextMenuTrigger>
-        <ContextMenuContent className="w-[200px]">
-          <ContextMenuItem onClick={deleteLayerOnClickHandler}>
-            <div className="flex flex-row gap-3">
-              <TrashIcon width={15} />
-              <p> 삭제하기</p>
+
+      {/* 요소에 대한 레이어 */}
+      <div
+        className="absolute"
+        style={{
+          left: curPosition.x,
+          top: curPosition.y,
+          width: curPosition.width,
+          height: curPosition.height,
+          zIndex: curPosition.zIndex,
+          transform: `rotate(${curPosition.rotate}deg)`,
+          transformOrigin: 'center',
+          wordWrap: 'break-word',
+          boxSizing: 'border-box',
+        }}
+        onPointerDown={pointerDownDragHandler}
+        onClick={stopPropagation}
+        onDoubleClick={doubleClickHandler}
+        ref={boxRef}
+      >
+        <ContextMenu>
+          <ContextMenuTrigger>
+            <div
+              className={`absolute inset-0 flex items-center justify-start p-3 ${
+                isDrag ? 'cursor-grabbing' : 'cursor-grab'
+              }`}
+              style={{ opacity: curPosition.opacity / 100 }}
+            >
+              {layer.type === 'text' && React.isValidElement(children)
+                ? React.cloneElement(children, { isDoubleClicked })
+                : children}
             </div>
-          </ContextMenuItem>
-        </ContextMenuContent>
-      </ContextMenu>
-    </div>
+          </ContextMenuTrigger>
+          <ContextMenuContent className="w-[200px]">
+            <ContextMenuItem onClick={deleteLayerOnClickHandler}>
+              <div className="flex flex-row gap-3">
+                <TrashIcon width={15} />
+                <p> 삭제하기</p>
+              </div>
+            </ContextMenuItem>
+          </ContextMenuContent>
+        </ContextMenu>
+      </div>
+    </>
   );
 };
 
