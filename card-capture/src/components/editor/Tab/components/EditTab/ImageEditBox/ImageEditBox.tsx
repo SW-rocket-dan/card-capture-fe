@@ -36,7 +36,7 @@ const ImageEditBox = ({ focused = false }: { focused?: boolean }) => {
 
           <SizeBox type="image" />
           <OpacityButton opacity={opacity} setOpacity={setOpacity} />
-          {/*<OrderBox />*/}
+          <OrderBox />
         </div>
       )}
     </div>
