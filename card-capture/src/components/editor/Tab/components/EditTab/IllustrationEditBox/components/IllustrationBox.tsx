@@ -21,10 +21,24 @@ const IllustrationBox = () => {
 
   useEffect(() => {
     const getInitialStickers = async () => {
-      const stickers = await illustrationApi.getSearchedStickers('사과');
-      const stickersUrl = stickers.map(({ fileUrl }: StickerDataType) => fileUrl);
+      // 로컬 스토리지에서 데이터 확인
+      const storedStickers = localStorage.getItem('appleStickers');
 
-      setInitialStickers(stickersUrl.slice(0, 5));
+      if (storedStickers) {
+        // 저장된 데이터가 있으면 사용
+        setInitialStickers(JSON.parse(storedStickers));
+      } else {
+        // 저장된 데이터가 없으면 API 호출
+        const stickers = await illustrationApi.getSearchedStickers('사과');
+        const stickersUrl = stickers.map(({ fileUrl }: StickerDataType) => fileUrl);
+        const slicedStickers = stickersUrl.slice(0, 5);
+
+        // 데이터를 상태에 설정
+        setInitialStickers(slicedStickers);
+
+        // 로컬 스토리지에 데이터 저장
+        localStorage.setItem('appleStickers', JSON.stringify(slicedStickers));
+      }
     };
 
     getInitialStickers();
