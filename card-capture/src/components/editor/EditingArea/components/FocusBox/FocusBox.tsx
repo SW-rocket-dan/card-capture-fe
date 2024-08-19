@@ -58,6 +58,8 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
   const [isDoubleClicked, setIsDoubleClicked] = useState(false);
 
   const doubleClickHandler = () => {
+    if (isDoubleClicked) return;
+
     setIsDoubleClicked(prev => !prev);
   };
 
@@ -519,13 +521,8 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
           zIndex: 1000,
           transform: `rotate(${curPosition.rotate}deg)`,
           transformOrigin: 'center',
-          pointerEvents: 'auto', // 이벤트가 통과되어서 아래있는 요소(자식요소 아니고 아래 위치 요소)가 이벤트를 받도록 함
+          pointerEvents: 'none', // 이벤트가 통과되어서 아래있는 요소(자식요소 아니고 아래 위치 요소)가 이벤트를 받도록 함
         }}
-        tabIndex={0}
-        onPointerDown={pointerDownDragHandler}
-        onMouseDown={e => e.stopPropagation()}
-        onDoubleClick={doubleClickHandler}
-        onClick={e => e.stopPropagation()}
       >
         {/* 11시,1시,5시,7시 크기조절 바 */}
         <div
@@ -595,6 +592,10 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
           wordWrap: 'break-word',
           boxSizing: 'border-box',
         }}
+        tabIndex={0}
+        onPointerDown={pointerDownDragHandler}
+        onMouseDown={e => e.stopPropagation()}
+        onDoubleClick={doubleClickHandler}
         onClick={stopPropagation}
         ref={boxRef}
       >
