@@ -25,7 +25,7 @@ export type PromptInputFormType = {
 
 const PromptContent = () => {
   useChannelTalk();
-  
+
   /**
    * react-hook-form 사용하여 프롬프트에 입력되는 값들 관리
    */
@@ -69,15 +69,10 @@ const PromptContent = () => {
 
     // 서버에 제출하고 템플릿 정보 받아와서 Card Type으로 변경
     const { id, editor } = await templateApi.createTemplate(submitData);
-    const templateData = jsonUtils.parseEscapedJson(editor);
-
-    // store에 템플릿 저장
-    setCards([templateData]);
-    setTemplateId(id);
 
     // 로딩 끝, 페이지 이동
     setIsLoading(false);
-    router.push('/editor');
+    router.push(`/editor/${id}`);
   };
 
   const isAuthenticated = useAuthRedirect();
