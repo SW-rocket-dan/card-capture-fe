@@ -570,11 +570,11 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
 
         {/* rotate button */}
         <div
-          className="absolute -top-7 left-2/4 flex h-3 w-3 -translate-x-1/2 cursor-grab items-center justify-center rounded-full bg-gray6"
+          className="absolute -top-8 left-2/4 flex h-5 w-5 -translate-x-1/2 cursor-grab items-center justify-center rounded-full bg-gray6"
           onPointerDown={pointerDownRotateHandler}
           style={{ pointerEvents: 'auto' }}
         >
-          <FaArrowRotateLeft size={8} />
+          <FaArrowRotateLeft size={9} />
         </div>
       </div>
 
