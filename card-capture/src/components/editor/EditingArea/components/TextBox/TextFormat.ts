@@ -40,9 +40,10 @@ Quill.register(Font, true);
 // 폰트 사이즈
 
 export const availableFontSize = ['12px', '16px', '18px', '24px', '28px', '32px', '48px', '64px', '96px', '128px'];
+const fontSizeList = Array.from({ length: 128 }, (_, i) => `${i + 1}px`);
 
 let Size = Quill.import('attributors/style/size');
-Size.whitelist = availableFontSize;
+Size.whitelist = fontSizeList;
 Quill.register(Size, true);
 
 // 자간 (Letter Spacing)
