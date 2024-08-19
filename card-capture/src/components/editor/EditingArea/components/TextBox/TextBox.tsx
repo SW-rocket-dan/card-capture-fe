@@ -94,7 +94,7 @@ const TextBox = ({
         onChange={changeHandler}
         modules={modules}
         style={{
-          minWidth: '50px',
+          minWidth: '80px',
           maxWidth: '700px',
           cursor: isReadOnly ? 'pointer' : 'auto',
           userSelect: isReadOnly ? 'none' : 'auto',

@@ -87,7 +87,7 @@ const PromptContent = () => {
         <Title title="카드뉴스 제작하기" content="제작에 필요한 정보들을 입력해주세요!" />
         <div className="flex flex-col items-center justify-center gap-[50px] px-[20px] py-[50px] xs:px-[50px] md:py-[70px] lg:flex-row lg:items-start">
           <PromptInput formMethods={formMethods} fieldArrays={fieldArrays} />
-          <PromptPreview formData={formMethods.watch()} onSubmit={submitHandler} />
+          <PromptPreview formData={formMethods.watch()} onSubmit={submitHandler} isLoading={isLoading} />
         </div>
       </div>
     </div>
