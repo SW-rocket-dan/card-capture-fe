@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Position } from '@/store/useCardsStore/type';
 
 type LayerBoxProps = {
@@ -13,6 +13,8 @@ type LayerBoxProps = {
  * @param onClick 클릭시 focusBox로 변경
  */
 const LayerBox = ({ children, position, onClick }: LayerBoxProps) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   const commonStyles = {
     left: position.x,
     top: position.y,
@@ -26,12 +28,12 @@ const LayerBox = ({ children, position, onClick }: LayerBoxProps) => {
     <>
       {/* Border layer */}
       <div
-        className="absolute border-2 border-transparent hover:border-main"
+        className={`absolute border-2 ${isHovered ? 'border-main' : 'border-transparent'}`}
         style={{
           ...commonStyles,
-          zIndex: 1000,
+          zIndex: isHovered ? 1000 : position.zIndex,
+          pointerEvents: 'none',
         }}
-        onMouseDown={onClick}
       />
 
       {/* Content layer */}
@@ -43,6 +45,9 @@ const LayerBox = ({ children, position, onClick }: LayerBoxProps) => {
           opacity: position.opacity / 100,
           boxSizing: 'border-box',
         }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onMouseDown={onClick}
       >
         <div className="absolute inset-0 flex items-center justify-start p-3">{children}</div>
       </div>
