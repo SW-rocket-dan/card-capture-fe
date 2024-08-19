@@ -48,6 +48,28 @@ const EditorContent = () => {
     setTemplateId(data.id);
   }, [data]);
 
+  /**
+   * 나의 템플릿이 아니면 확인할 수 없게 하는 로직
+   * @TODO : 임시 확인용. 추후 백엔드에서 검사하도록 바뀔 예정
+   */
+
+  const { data: templateList } = useQuery<TemplateList>({
+    queryKey: ['all-template'],
+    queryFn: templateApi.getAllTemplateData,
+  });
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!templateList) return;
+
+    const templateIdList = templateList.map(template => template.id);
+    if (!templateIdList.includes(Number(id))) {
+      alert('접근할 수 없는 템플릿입니다. 마이페이지에서 나의 템플릿 리스트를 확인할 수 있습니다');
+
+      router.push('/');
+    }
+  }, [templateList]);
+
   return (
     <div className="h-screen w-screen bg-editorbg font-Pretendard">
       <NavigationBar isTransparent={false} />
