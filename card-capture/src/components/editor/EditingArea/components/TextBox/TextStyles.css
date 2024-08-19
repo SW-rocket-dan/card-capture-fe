@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Nanum+Pen+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Nanum+Pen+Script&family=Sunflower:wght@300&display=swap');
+
 .ql-editor {
     font-size: 16px;
 }
@@ -45,7 +48,7 @@
 }
 
 .ql-font-NanumPenScript {
-    font-family: var(--font-nanum-pen-script);
+    font-family: "Nanum Pen Script", cursive;
 }
 
 .ql-font-GothicA1 {
@@ -57,7 +60,8 @@
 }
 
 .ql-font-Sunflower {
-    font-family: var(--font-sunflower);
+    font-family: "Sunflower", sans-serif;
+    font-weight: 300;
 }
 
 .ql-font-Hahmlet {
