@@ -11,9 +11,9 @@ const BackgroundDeleteBox = () => {
   };
 
   return (
-    <Button type="default" className="gap-[6px] border-2 py-[10px]" onClick={deleteBackgroundHandler}>
+    <Button type="full" className="gap-[6px] border-2 border-main py-[10px]" onClick={deleteBackgroundHandler}>
       <TrashIcon width={14} />
-      <p className="text-xs font-semibold">배경 삭제하기</p>
+      <p className="text-xs font-medium">배경 삭제하기</p>
     </Button>
   );
 };

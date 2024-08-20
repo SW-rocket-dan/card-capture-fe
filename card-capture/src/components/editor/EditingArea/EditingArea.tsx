@@ -5,11 +5,18 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card } from '@/store/useCardsStore/type';
 import { TemplateUpdateRequest } from '@/types';
 import { templateApi } from '@/api';
+import { useFocusStore } from '@/store/useFocusStore';
 
 const EditingArea = () => {
   const templateId = useCardsStore(state => state.templateId);
   const cards = useCardsStore(state => state.cards);
-  const queryClient = useQueryClient();
+
+  const setFocusedLayerId = useFocusStore(state => state.setFocusedLayerId);
+
+  // 카드 외부 클릭시 focus 꺼지게 하는 로직
+  const unFocusLayerHandler = () => {
+    setFocusedLayerId(-1);
+  };
 
   // 템플릿 저장시 필요한 정보 정제
   const prepareCardsForUpdate = (cards: Card[]): Partial<TemplateUpdateRequest> => {
@@ -19,6 +26,8 @@ const EditingArea = () => {
       editor: JSON.stringify(cards),
     };
   };
+
+  const queryClient = useQueryClient();
 
   // tanstack-query 사용하여 업데이트
   const updateCardsMutation = useMutation({
@@ -59,7 +68,10 @@ const EditingArea = () => {
   }, [cards]);
 
   return (
-    <div className="flex h-full flex-1 flex-col items-center justify-center gap-[17px] overscroll-none bg-editorbg pl-[350px]">
+    <div
+      onClick={unFocusLayerHandler}
+      className="flex h-full flex-1 flex-col items-center justify-center gap-[17px] overscroll-none bg-editorbg pl-[350px]"
+    >
       {cards.map(card => (
         <CardArea key={card.id} card={card} />
       ))}

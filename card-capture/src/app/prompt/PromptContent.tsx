@@ -25,7 +25,7 @@ export type PromptInputFormType = {
 
 const PromptContent = () => {
   useChannelTalk();
-  
+
   /**
    * react-hook-form 사용하여 프롬프트에 입력되는 값들 관리
    */
@@ -69,15 +69,10 @@ const PromptContent = () => {
 
     // 서버에 제출하고 템플릿 정보 받아와서 Card Type으로 변경
     const { id, editor } = await templateApi.createTemplate(submitData);
-    const templateData = jsonUtils.parseEscapedJson(editor);
-
-    // store에 템플릿 저장
-    setCards([templateData]);
-    setTemplateId(id);
 
     // 로딩 끝, 페이지 이동
     setIsLoading(false);
-    router.push('/editor');
+    router.push(`/editor/${id}`);
   };
 
   const isAuthenticated = useAuthRedirect();
@@ -92,7 +87,7 @@ const PromptContent = () => {
         <Title title="카드뉴스 제작하기" content="제작에 필요한 정보들을 입력해주세요!" />
         <div className="flex flex-col items-center justify-center gap-[50px] px-[20px] py-[50px] xs:px-[50px] md:py-[70px] lg:flex-row lg:items-start">
           <PromptInput formMethods={formMethods} fieldArrays={fieldArrays} />
-          <PromptPreview formData={formMethods.watch()} onSubmit={submitHandler} />
+          <PromptPreview formData={formMethods.watch()} onSubmit={submitHandler} isLoading={isLoading} />
         </div>
       </div>
     </div>

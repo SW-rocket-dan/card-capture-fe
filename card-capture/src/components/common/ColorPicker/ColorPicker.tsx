@@ -6,7 +6,7 @@ import { hexToRgba, rgbaToHsva } from '@/components/common/ColorPicker/colorUtil
 
 type ColorPickerProps = {
   color: IColor;
-  setColor: Dispatch<SetStateAction<IColor>>;
+  setColor: (color: IColor) => void | Dispatch<SetStateAction<IColor>>;
 };
 
 const ColorPicker = ({ color, setColor }: ColorPickerProps) => {

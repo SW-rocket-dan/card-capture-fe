@@ -57,3 +57,9 @@ export type Position = {
   zIndex: number;
   opacity: number;
 };
+
+export type ZIndexMap = {
+  [cardId: number]: {
+    [layerId: number]: number;
+  };
+};

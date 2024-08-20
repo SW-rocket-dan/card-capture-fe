@@ -17,12 +17,7 @@ const UserTemplateDetails = ({ template }: UserTemplateDetailsProps) => {
   const router = useRouter();
 
   const moveToEditorHandler = () => {
-    const templateData = jsonUtils.parseEscapedJson(template.editor);
-
-    setCards(templateData);
-    setTemplateId(template.id);
-
-    router.push('/editor');
+    router.push(`/editor/${template.id}`);
   };
 
   /**

@@ -4,7 +4,7 @@ import { ChangeEvent, Dispatch, SetStateAction, useEffect } from 'react';
 
 type OpacityButtonProps = {
   opacity: number;
-  setOpacity: Dispatch<SetStateAction<number>>;
+  setOpacity: (opacity: number) => void | Dispatch<SetStateAction<number>>;
 };
 
 const OpacityButton = ({ opacity, setOpacity }: OpacityButtonProps) => {

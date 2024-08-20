@@ -60,10 +60,8 @@ const updateTemplate = async (templateData: Partial<Template>) => {
  * id값 기반으로 하나의 템플릿 데이터를 가져오는 get api
  */
 const getTemplateData = async (id: number) => {
-  const queryString = `id=${id}`;
-
   try {
-    const response = await customFetch(`${process.env.NEXT_PUBLIC_API_KEY}/api/v1/template/{id}?${queryString}`, {
+    const response = await customFetch(`${process.env.NEXT_PUBLIC_API_KEY}/api/v1/template/${id}`, {
       method: 'GET',
     });
 

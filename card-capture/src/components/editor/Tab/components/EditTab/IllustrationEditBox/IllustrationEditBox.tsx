@@ -30,7 +30,7 @@ const IllustrationEditBox = ({ focused = false }: { focused?: boolean }) => {
           <ShapeModalBox />
           <SizeBox type="shape" />
           <OpacityButton opacity={opacity} setOpacity={setOpacity} />
-          {/*<OrderBox />*/}
+          <OrderBox />
         </div>
       )}
     </div>

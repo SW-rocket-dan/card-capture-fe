@@ -7,15 +7,16 @@ import { userUtils } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import Button from '@/components/common/Button/Button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useAmplitudeContext from '@/hooks/useAmplitudeContext';
 
 type PromptPreviewProps = {
   formData: PromptInputFormType;
   onSubmit: (data: PromptInputFormType) => void;
+  isLoading: boolean;
 };
 
-const PromptPreview = ({ formData, onSubmit }: PromptPreviewProps) => {
+const PromptPreview = ({ formData, onSubmit, isLoading }: PromptPreviewProps) => {
   const { phrases, model, color, purpose, emphasis } = formData;
 
   const phrasesList = phrases.map(val => val.value);
@@ -36,6 +37,15 @@ const PromptPreview = ({ formData, onSubmit }: PromptPreviewProps) => {
    * 결제 버튼 한번만 클릭되도록 수정
    */
   const [isClicked, setIsClicked] = useState(false);
+
+  /**
+   * 이용권 확인 모달 열고 닫히는거에 대한 상태
+   */
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isLoading) setIsOpen(false);
+  }, [isLoading]);
 
   /**
    * 프롬프트 페이지에서 버튼 클릭에 대한 tracking
@@ -62,7 +72,7 @@ const PromptPreview = ({ formData, onSubmit }: PromptPreviewProps) => {
         </div>
       </div>
 
-      <Dialog>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
           <button
             onClick={() => trackAmplitudeEvent('prompt-create-click')}
