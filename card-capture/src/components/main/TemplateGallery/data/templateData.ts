@@ -5,45 +5,45 @@ export type DummyTemplateType = {
 
 export const INSTAGRAM_DUMMY_DATA: DummyTemplateType[] = [
   {
-    img: '',
-    tags: ['인스타그램'],
+    img: '/image/template-1.png',
+    tags: ['뷰티', '성형'],
   },
   {
-    img: '',
-    tags: ['반갑', '습니', '당'],
+    img: '/image/template-2.png',
+    tags: ['피부', '화장품'],
   },
   {
-    img: '',
-    tags: ['안녕', '하세', '요'],
+    img: '/image/template-3.png',
+    tags: ['홍보', '장학금', '학습'],
   },
 ];
 
 export const BLOG_DUMMY_DATA: DummyTemplateType[] = [
   {
-    img: '',
-    tags: ['블로그'],
+    img: '/image/template-1.png',
+    tags: ['뷰티', '성형'],
   },
   {
-    img: '',
-    tags: ['반갑', '습니', '당'],
+    img: '/image/template-2.png',
+    tags: ['피부', '화장품'],
   },
   {
-    img: '',
-    tags: ['안녕', '하세', '요'],
+    img: '/image/template-3.png',
+    tags: ['홍보', '장학금', '학습'],
   },
 ];
 
 export const ANYTHING_DUMMY_DATA: DummyTemplateType[] = [
   {
-    img: '',
-    tags: ['아무거나'],
+    img: '/image/template-1.png',
+    tags: ['뷰티', '성형'],
   },
   {
-    img: '',
-    tags: ['반갑', '습니', '당'],
+    img: '/image/template-2.png',
+    tags: ['피부', '화장품'],
   },
   {
-    img: '',
-    tags: ['안녕', '하세', '요'],
+    img: '/image/template-3.png',
+    tags: ['홍보', '장학금', '학습'],
   },
 ];
