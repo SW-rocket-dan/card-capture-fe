@@ -1,11 +1,12 @@
 import useIsMobile from '@/hooks/useIsMobile';
 import { useRouter } from 'next/navigation';
-import LoginButton from '@/components/common/NavigationBar/components/LoginButton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import DivButton from '@/components/common/Button/DivButton';
 import React from 'react';
 import CreateButton from '@/components/common/NavigationBar/components/CreateButton';
 import useAmplitudeContext from '@/hooks/useAmplitudeContext';
+import LoginIcon from '@/components/common/Icon/LoginIcon';
+import Link from 'next/link';
 
 const BeforeLoginNav = () => {
   const router = useRouter();
@@ -55,10 +56,15 @@ const BeforeLoginNav = () => {
       {!isMobile && (
         <div className="flex w-[300px] flex-row justify-end gap-2.5">
           <div onClick={() => trackAmplitudeEvent('nav-login-click')}>
-            <LoginButton />
+            <Link href="/login">
+              <DivButton type="default" className="h-[40px] w-[110px] rounded-[10px]">
+                <LoginIcon width={15} />
+                <p className="text-[14px]">Login</p>
+              </DivButton>
+            </Link>
           </div>
 
-          <CreateButton>
+          <Link href="/login?create=true">
             <DivButton
               onClick={() => trackAmplitudeEvent('nav-create-b-click')}
               type="full"
@@ -66,7 +72,7 @@ const BeforeLoginNav = () => {
             >
               <p className="text-[14px]">제작하기</p>
             </DivButton>
-          </CreateButton>
+          </Link>
         </div>
       )}
     </div>
