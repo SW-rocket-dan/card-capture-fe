@@ -1,7 +1,6 @@
 import BeforeLoginNav from '@/components/common/NavigationBar/BeforeLoginNav';
 import { useEffect, useState } from 'react';
 import AfterLoginNav from '@/components/common/NavigationBar/AfterLoginNav';
-import { useAuthStore } from '@/store/useAuthStore';
 import { authUtils } from '@/utils';
 
 type NavigationBarProps = {
@@ -38,19 +37,10 @@ const NavigationBar = ({ isTransparent = false }: NavigationBarProps) => {
     };
   }, [isTransparent]);
 
-  const isLoggedIn = useAuthStore(state => state.isLoggedIn);
-  const setIsLoggedIn = useAuthStore(state => state.setIsLoggedIn);
-
   /**
    * 토큰으로 로그인 상태 확인하고 렌더링할 컴포넌트 결정
-   * 추후 다른 상황에 로그인 상태 바뀌면 바로 적용되게 하기 위해서 전역 상태로 관리
    */
-  useEffect(() => {
-    const isLoggedIn = authUtils.getIsLoggedIn();
-    setIsLoggedIn(isLoggedIn);
-  }, []);
-
-  let currentNav = isLoggedIn ? <AfterLoginNav /> : <BeforeLoginNav />;
+  let currentNav = authUtils.getIsLoggedIn() ? <AfterLoginNav /> : <BeforeLoginNav />;
 
   return (
     <div

@@ -1,12 +1,9 @@
-import { useAuthStore } from '@/store/useAuthStore';
 import { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { loginApi } from '@/api';
 import { tokenUtils } from '@/utils';
 
 const useGoogleAuth = (type?: string) => {
-  const isLoggedIn = useAuthStore(state => state.isLoggedIn);
-  const setIsLoggedIn = useAuthStore(state => state.setIsLoggedIn);
   const [isListening, setIsListening] = useState(false);
 
   const router = useRouter();
@@ -15,32 +12,29 @@ const useGoogleAuth = (type?: string) => {
    * redirect된 창에서 현재 컴포넌트로 메세지를 보내면 수신해서 처리하는 함수
    * 메세지에는 google에서 전달한 authcode가 담겨져있음
    */
-  const handleMessage = useCallback(
-    async (event: MessageEvent) => {
-      if (event.data.type === 'GOOGLE_AUTH_CODE') {
-        const code = event.data.code;
+  const messageHandler = useCallback(async (event: MessageEvent) => {
+    if (event.data.type === 'GOOGLE_AUTH_CODE') {
+      const code = event.data.code;
 
-        const { accessToken, refreshToken } = await loginApi.getJWTToken(code);
+      const { accessToken, refreshToken } = await loginApi.getJWTToken(code);
 
-        // 토큰 쿠키에 설정
-        if (accessToken && refreshToken) {
-          tokenUtils.setTokens(accessToken, refreshToken);
-          setIsLoggedIn(true);
-        }
-
-        // 인증이 완료되면 리스너 제거
-        window.removeEventListener('message', handleMessage);
-        setIsListening(false);
-
-        if (type === 'prompt') router.push('/prompt');
+      // 토큰 쿠키에 설정
+      if (accessToken && refreshToken) {
+        tokenUtils.setTokens(accessToken, refreshToken);
       }
-    },
-    [setIsLoggedIn],
-  );
+
+      // 인증이 완료되면 리스너 제거
+      window.removeEventListener('message', messageHandler);
+      setIsListening(false);
+
+      if (type === 'prompt') router.push('/prompt');
+      else router.refresh();
+    }
+  }, []);
 
   const loginHandler = async () => {
     if (!isListening) {
-      window.addEventListener('message', handleMessage);
+      window.addEventListener('message', messageHandler);
       setIsListening(true);
     }
 
@@ -61,9 +55,12 @@ const useGoogleAuth = (type?: string) => {
       '_blank',
       `width=${windowWidth},height=${windowHeight},left=${windowLeft},top=${windowTop}`,
     );
+
+    // 로그인 창 닫기 위해서 라우팅 변경하기
+    router.push('/');
   };
 
-  return { isLoggedIn, loginHandler };
+  return { loginHandler };
 };
 
 export default useGoogleAuth;
