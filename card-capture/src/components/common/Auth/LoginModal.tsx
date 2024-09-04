@@ -50,10 +50,6 @@ const LoginModal = () => {
    */
   const { loginHandler } = isCreateButton ? useGoogleAuth('prompt') : useGoogleAuth();
 
-  const initiateLoginHandler = () => {
-    loginHandler();
-  };
-
   const { isMobile } = useIsMobile();
 
   /**
@@ -73,7 +69,7 @@ const LoginModal = () => {
           </DialogDescription>
 
           <div className="flex flex-col py-5">
-            <button onClick={initiateLoginHandler}>
+            <button onClick={loginHandler}>
               <img alt="google-login" src="/image/web_light_sq_SI.svg" className="w-[200px]" />
             </button>
           </div>
