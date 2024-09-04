@@ -19,8 +19,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   const fontVariables = Object.values(fonts)
     .map(font => font.variable)
@@ -33,6 +35,7 @@ export default function RootLayout({
           <ReactQueryProvider>
             <AuthCheck />
             {children}
+            {modal}
             <Toaster />
           </ReactQueryProvider>
         </AmplitudeContextProvider>
