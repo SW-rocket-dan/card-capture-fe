@@ -3,7 +3,6 @@ import { useRouter } from 'next/navigation';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import DivButton from '@/components/common/Button/DivButton';
 import React from 'react';
-import CreateButton from '@/components/common/NavigationBar/components/CreateButton';
 import useAmplitudeContext from '@/hooks/useAmplitudeContext';
 import LoginIcon from '@/components/common/Icon/LoginIcon';
 import Link from 'next/link';
@@ -24,7 +23,7 @@ const BeforeLoginNav = () => {
           trackAmplitudeEvent('nav-logo-click');
           router.push('/');
         }}
-        className="text-md =whitespace-nowrap flex w-[300px] justify-start"
+        className="text-md flex w-[300px] justify-start whitespace-nowrap"
       >
         Card Capture
       </button>
@@ -46,9 +45,9 @@ const BeforeLoginNav = () => {
                 <p className="font-normal">준비중!</p>
               </TooltipContent>
             </Tooltip>
-            <CreateButton>
+            <Link href="/login?create=true">
               <p onClick={() => trackAmplitudeEvent('nav-create-a-click')}>제작하기</p>
-            </CreateButton>
+            </Link>
           </TooltipProvider>
         </ul>
       )}
