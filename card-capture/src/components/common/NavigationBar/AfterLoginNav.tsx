@@ -1,12 +1,11 @@
 import TempProfileIcon from '@/components/common/Icon/TempProfileIcon';
 import DownIcon from '@/components/common/Icon/DownIcon';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import useClickOutside from '@/hooks/useClickOutside';
 import UpIcon from '@/components/common/Icon/UpIcon';
 import useIsMobile from '@/hooks/useIsMobile';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { useAuthStore } from '@/store/useAuthStore';
 import { tokenUtils, userUtils } from '@/utils';
 import userApi from '@/api/userApi';
 import { useQuery } from '@tanstack/react-query';
@@ -30,19 +29,17 @@ const AfterLoginNav = () => {
   };
 
   /**
-   * 로그아웃 상태 전역 상태에 등록
-   * 네비게이션 바 자동으로 변경되어야 하기 때문에 등록함
+   * 경로에 따라 로그아웃 후 이동되는 페이지 다르게 설정
+   * 메인 화면에 있는데 '/'로 이동하면 페이지 재렌더링 되지 않음
    */
-  const setIsLoggedIn = useAuthStore(state => state.setIsLoggedIn);
-  const setIsModalOpen = useAuthStore(state => state.setIsModalOpen);
+  const pathname = usePathname();
 
   const logoutHandler = () => {
     if (window.confirm('로그아웃 시 메인페이지로 이동됩니다. 정말 로그아웃하시겠습니까?')) {
       tokenUtils.clearTokens();
-      setIsLoggedIn(false);
-      setIsModalOpen(false); // 이전에 redirect하면서 state가 open으로 설정되어 있을 수 있기에 false로 변경
 
-      router.push('/');
+      if (pathname === '/') router.refresh();
+      else router.push('/');
     }
   };
 

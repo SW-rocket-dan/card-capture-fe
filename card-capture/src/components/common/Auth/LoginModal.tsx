@@ -1,11 +1,11 @@
 'use client';
 
 import useGoogleAuth from '@/hooks/useGoogleAuth';
-import React, { useState } from 'react';
+import React, { useCallback } from 'react';
 import useIsMobile from '@/hooks/useIsMobile';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 const LoginModal = () => {
   /**
@@ -14,6 +14,7 @@ const LoginModal = () => {
    */
   const searchParams = useSearchParams();
   const isCreateButton = !!searchParams.get('create');
+  const isRedirect = !!searchParams.get('redirect');
 
   const title = isCreateButton ? (
     <>
@@ -30,13 +31,18 @@ const LoginModal = () => {
    * modal 관리 로직
    */
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState(true);
 
-  // 모달을 닫으려고 하면 router.back()해서 페이지 이동
-  const changeOpenHandler = () => {
-    setIsOpen(prev => !prev);
-    if (isOpen) router.back();
-  };
+  /**
+   * 모달을 닫으려고 할 때 리다이렉트 되어서 왔으면 뒤로 돌아가면 안되기 떄문에 main으로 이동
+   * 메인 화면에서 들어가는 경우 히스토리를 남기지 않기 위해서 back으로 뒤로 이동시킴
+   */
+  const changeOpenHandler = useCallback(() => {
+    if (isRedirect) {
+      router.push('/');
+    } else {
+      router.back();
+    }
+  }, [isRedirect, router]);
 
   /**
    * 구글 로그인 진행하는 버튼
@@ -46,13 +52,19 @@ const LoginModal = () => {
 
   const initiateLoginHandler = () => {
     loginHandler();
-    setIsOpen(false);
   };
 
   const { isMobile } = useIsMobile();
 
+  /**
+   * 경로를 확인하고 login 창이 아니면 렌더링 하지 않음
+   * OAuth 로그인 창이 뜨면서 경로가 이동되는데 이 때 모달(/login)창이 꺼지게 하기 위함 (없으면 경로는 이동되는데 모달이 계속 렌더링됨)
+   */
+  const pathname = usePathname();
+  if (pathname !== '/login') return null;
+
   return (
-    <Dialog open={isOpen} onOpenChange={changeOpenHandler}>
+    <Dialog open={true} onOpenChange={changeOpenHandler}>
       <DialogContent className="h-[260px] w-[300px] px-7 py-10 sm:w-[400px]">
         <DialogHeader>
           <DialogTitle className="text-center">{title}</DialogTitle>
