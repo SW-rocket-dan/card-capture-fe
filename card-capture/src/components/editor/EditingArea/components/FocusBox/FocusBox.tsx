@@ -1,17 +1,15 @@
 //FocusBox.tsx
 
 import { useCardsStore } from '@/store/useCardsStore';
-import { LayerType, Position } from '@/store/useCardsStore/type';
+import { LayerType } from '@/store/useCardsStore/type';
 import React, { useEffect, useRef, useState } from 'react';
-import { Direction, ResizeOffset } from './FocusBox.type';
 import { FaArrowRotateLeft } from 'react-icons/fa6';
-import { INITIAL_RESIZE_OFFSET } from './FocusBox.constant';
-import { useFocusStore } from '@/store/useFocusStore';
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from '@/components/ui/context-menu';
 import TrashIcon from '@/components/common/Icon/TrashIcon';
 import useDrag from '@/components/editor/EditingArea/components/FocusBox/hooks/useDrag';
 import useResize from '@/components/editor/EditingArea/components/FocusBox/hooks/useResize';
 import useRotate from '@/components/editor/EditingArea/components/FocusBox/hooks/useRotate';
+import useDeleteLayer from '@/components/editor/EditingArea/components/FocusBox/hooks/useDeleteLayer';
 
 type Props = {
   children: React.ReactElement<{
@@ -33,7 +31,7 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
 
   const [curPosition, setCurPosition] = useState(layer.position); // 현재 위치를 스토어에 업로드 하지 않고 관리하기위한 state
 
-  //클릭해도 Focus 상태가 풀리지 않게하기위한 이벤트 전파 방지
+  // 클릭해도 Focus 상태가 풀리지 않게 하기 위한 이벤트 전파 방지
   const stopPropagation = (e: React.PointerEvent | React.MouseEvent) => {
     e.stopPropagation();
   };
@@ -95,43 +93,10 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
     setCurPosition,
   });
 
-  // 현재 포커스된 요소가 입력 필드인지 확인하는 함수
-  const isInputFocused = () => {
-    const activeElement = document.activeElement;
-    const isEditable = activeElement && activeElement.getAttribute('contenteditable') === 'true';
-
-    return activeElement instanceof HTMLInputElement || activeElement instanceof HTMLTextAreaElement || isEditable;
-  };
-
-  /**
-   * 1. 선택한 Layer를 delete / backspace로 삭제하는 기능
-   * 2. 오른쪽 클릭으로 메뉴를 띄워서 선택한 layer를 삭제하는 기능
-   */
-  const focusedCardId = useFocusStore(state => state.focusedCardId);
-  const focusedLayerId = useFocusStore(state => state.focusedLayerId);
-  const deleteLayer = useCardsStore(state => state.deleteLayer);
-
-  const deleteLayerOnKeyPressHandler = (e: KeyboardEvent) => {
-    if (focusedCardId !== cardId) return;
-
-    if (isInputFocused()) return;
-
-    if (focusedLayerId !== -1 && (e.key === 'Backspace' || e.key === 'Delete')) {
-      deleteLayer(cardId, focusedLayerId);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('keydown', deleteLayerOnKeyPressHandler);
-
-    return () => document.removeEventListener('keydown', deleteLayerOnKeyPressHandler);
-  }, [focusedLayerId]);
-
-  const deleteLayerOnClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (focusedCardId !== cardId) return;
-
-    deleteLayer(cardId, focusedLayerId);
-  };
+  //               //
+  /* Layer 삭제 로직 */
+  //               //
+  const { deleteLayerOnClickHandler } = useDeleteLayer({ cardId });
 
   return (
     <>
@@ -219,7 +184,6 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
         }}
         tabIndex={0}
         onPointerDown={pointerDownDragHandler}
-        onMouseDown={e => e.stopPropagation()}
         onDoubleClick={doubleClickHandler}
         onClick={stopPropagation}
         ref={boxRef}
