@@ -11,6 +11,7 @@ import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } 
 import TrashIcon from '@/components/common/Icon/TrashIcon';
 import useDrag from '@/components/editor/EditingArea/components/FocusBox/hooks/useDrag';
 import useResize from '@/components/editor/EditingArea/components/FocusBox/hooks/useResize';
+import useRotate from '@/components/editor/EditingArea/components/FocusBox/hooks/useRotate';
 
 type Props = {
   children: React.ReactElement<{
@@ -29,13 +30,8 @@ type Props = {
  * **/
 const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) => {
   const layer = useCardsStore(state => state.cards[cardId].layers.filter(v => v.id === layerId)[0]);
-  const setPosition = useCardsStore(state => state.setPosition);
 
   const [curPosition, setCurPosition] = useState(layer.position); // 현재 위치를 스토어에 업로드 하지 않고 관리하기위한 state
-
-  //rotate State
-  const [isRotate, setIsRotate] = useState(false);
-  const boxRef = useRef<HTMLDivElement>(null);
 
   //클릭해도 Focus 상태가 풀리지 않게하기위한 이벤트 전파 방지
   const stopPropagation = (e: React.PointerEvent | React.MouseEvent) => {
@@ -77,7 +73,6 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
   //                //
   /* 크기 resize 로직 */
   //                //
-
   const { resizePointerDownHandler } = useResize({
     cardId,
     layerId,
@@ -90,64 +85,15 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
   //            //
   /* rotate 로직 */
   //            //
-  const pointerDownRotateHandler = (e: React.PointerEvent) => {
-    e.stopPropagation();
-    setIsRotate(true);
-  };
+  const boxRef = useRef<HTMLDivElement>(null);
 
-  const pointerMoveRotateHandler = (e: PointerEvent) => {
-    e.stopPropagation();
-    if (!isRotate) return;
-
-    // 요소의 중심점 계산
-    if (!boxRef.current) return;
-    const rect = boxRef.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-
-    // 다음 각도 계산
-    //@NOTE: arctan을 활용한 각도 구하기
-    const nxAngle = Math.atan2(e.clientX - centerX, centerY - e.clientY);
-    let rotationDegrees = nxAngle * (180 / Math.PI); //라디안 변경
-
-    setCurPosition(prev => ({
-      ...prev,
-      rotate: rotationDegrees,
-    }));
-  };
-
-  const pointerUpRotateHandler = (e: PointerEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-
-    setIsRotate(false);
-    // 요소의 중심점 계산
-    if (!boxRef.current) return;
-    const rect = boxRef.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-
-    // 다음 각도 계산
-    //@NOTE: arctan을 활용한 각도 구하기
-    const nxAngle = Math.atan2(e.clientX - centerX, centerY - e.clientY);
-    let rotationDegrees = nxAngle * (180 / Math.PI); //라디안 변경
-    setPosition(cardId, layerId, { ...curPosition, rotate: rotationDegrees });
-
-    if (boxRef.current) boxRef.current.focus();
-  };
-
-  //rotate 이벤트 등록
-  //@NOTE : 캡처링 단계에서 실행되는 이벤트
-  useEffect(() => {
-    if (!isRotate) return;
-    window.addEventListener('pointermove', pointerMoveRotateHandler, true);
-    window.addEventListener('pointerup', pointerUpRotateHandler, true);
-
-    return () => {
-      window.removeEventListener('pointermove', pointerMoveRotateHandler, true);
-      window.removeEventListener('pointerup', pointerUpRotateHandler, true);
-    };
-  }, [isRotate]);
+  const { pointerDownRotateHandler } = useRotate({
+    cardId,
+    layerId,
+    boxRef,
+    curPosition,
+    setCurPosition,
+  });
 
   // 현재 포커스된 요소가 입력 필드인지 확인하는 함수
   const isInputFocused = () => {
