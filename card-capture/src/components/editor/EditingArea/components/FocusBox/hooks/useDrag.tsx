@@ -26,72 +26,79 @@ const useDrag = ({
   const layer = useCardsStore(state => state.cards[cardId].layers.filter(v => v.id === layerId)[0]);
   const setPosition = useCardsStore(state => state.setPosition);
 
-  //drag State
   const [isDrag, setIsDrag] = useState(false);
   const [dragOffset, setDragOffset] = useState<Offset>({
     ...INITIAL_DRAG_OFFSET,
   });
 
   /**
-   * layer -> focus로 변경될 때 mouseDown 이벤트 전달해서 바로 드래그 되도록 하는 로직
+   * 요소를 잡았을 때 초기 위치에서(layer.position) 마우스 위치(clientX, clientY)까지 어느정도의 offset이 있는지 계산하는 로직
+   * 좌표는 왼쪽 위 기준으로 되어있는데 마우스는 해당 위치에서 떨어진 곳을 잡기 때문에 그 이동 위치만큼 뺴줘야지 정확한 새 좌표 계산 가능
    */
-
-  useEffect(() => {
-    // initialMouseDown이 있으면 즉시 드래그 시작
-    if (initialMouseDown) {
-      const startDrag = (e: React.MouseEvent) => {
-        setIsDrag(true);
-        setDragOffset({
-          x: e.clientX - curPosition.x,
-          y: e.clientY - curPosition.y,
-        });
-      };
-      startDrag(initialMouseDown);
-    }
-  }, [initialMouseDown]);
-
-  const pointerDownDragHandler = (e: React.PointerEvent) => {
-    e.stopPropagation();
-    setIsDrag(true);
-
-    setDragOffset(prev => {
-      return {
-        ...prev,
-        y: e.clientY - layer.position.y,
-        x: e.clientX - layer.position.x,
-      };
-    });
-  };
-
-  const pointerMoveDragHandler = (e: PointerEvent) => {
-    if (!isDrag) return;
-
-    const diffX = e.clientX - dragOffset.x;
-    const diffY = e.clientY - dragOffset.y;
-
-    setCurPosition(prev => {
-      return {
-        ...prev,
-        x: diffX,
-        y: diffY,
-      };
-    });
+  const calculateDragOffset = (e: React.PointerEvent | React.MouseEvent): Offset => {
+    return {
+      x: e.clientX - layer.position.x,
+      y: e.clientY - layer.position.y,
+    };
   };
 
   /**
-   * @NOTE: 이동이 끝날 때 cardStore에 저장
+   * 현재 마우스 위치에서 offset을 빼서 요소 렌더링 기준이 되는 왼쪽 위 좌표 계산
    */
-  const pointerUpDragHandler = (e: PointerEvent) => {
-    const diffX = e.clientX - dragOffset.x;
-    const diffY = e.clientY - dragOffset.y;
+  const calculateCurPosition = (e: PointerEvent | MouseEvent) => {
+    return {
+      x: e.clientX - dragOffset.x,
+      y: e.clientY - dragOffset.y,
+    };
+  };
 
+  /**
+   * Layer pointerDown시 실행되는 로직
+   * 이벤트 등록을 위해 상태 true로 변경.
+   */
+  const pointerDownDragHandler = (e: React.PointerEvent | React.MouseEvent) => {
+    e.stopPropagation();
+
+    setIsDrag(true);
+    setDragOffset(calculateDragOffset(e));
+  };
+
+  /**
+   * LayerBox -> FocusBox로 변경될 때 mouseDown 이벤트 전달해서 바로 드래그 되도록 하는 로직
+   * initialMouseDown : LayerBox mouseDown시 발생하는 이벤트
+   */
+  useEffect(() => {
+    if (initialMouseDown) {
+      pointerDownDragHandler(initialMouseDown);
+    }
+  }, [initialMouseDown]);
+
+  /**
+   * 드래그 중 pointerMove 시 실행되는 로직
+   * 이동한 거리를 계산해서 curPosition에 업데이트 해서 변경된 위치로 렌더링 될 수 있도록 함
+   */
+  const pointerMoveDragHandler = (e: PointerEvent | MouseEvent) => {
+    if (!isDrag) return;
+
+    setCurPosition(prev => ({
+      ...prev,
+      ...calculateCurPosition(e),
+    }));
+  };
+
+  /**
+   * 드래그가 끝났을 때 실행되는 로직
+   * 마지막 위치를 전역 상태에 저장하고, 기록된 상태를 초기화
+   */
+  const pointerUpDragHandler = (e: PointerEvent | MouseEvent) => {
     setDragOffset({ ...INITIAL_DRAG_OFFSET });
     setIsDrag(false);
-    setPosition(cardId, layerId, { ...curPosition, y: diffY - 0.4, x: diffX - 0.4 });
+    setPosition(cardId, layerId, { ...curPosition, ...calculateCurPosition(e) });
   };
 
   /**
    * 드래그 이벤트 등록
+   * 텍스트 편집 중 드래그가 발생할 수 있기 때문에 편집 모드일 때는 드래그 이벤트 적용 X
    */
   useEffect(() => {
     if (!isDrag) return;
