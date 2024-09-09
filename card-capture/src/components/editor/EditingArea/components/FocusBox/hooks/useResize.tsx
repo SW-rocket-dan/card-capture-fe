@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   ActiveDirection,
   Direction,
+  Point,
   ResizeOffset,
 } from '@/components/editor/EditingArea/components/FocusBox/FocusBox.type';
 import { INITIAL_RESIZE_OFFSET } from '@/components/editor/EditingArea/components/FocusBox/FocusBox.constant';
@@ -97,8 +98,8 @@ const useResize = ({ cardId, layerId, type, children, curPosition, setCurPositio
     w: { width: -1, height: 0 },
     ne: { width: 1, height: -1 },
     nw: { width: -1, height: -1 },
-    se: { width: -1, height: 1 },
-    sw: { width: 1, height: 1 },
+    se: { width: 1, height: 1 },
+    sw: { width: -1, height: 1 },
   };
 
   /**
@@ -122,6 +123,72 @@ const useResize = ({ cardId, layerId, type, children, curPosition, setCurPositio
   };
 
   /**
+   * (절대좌표계 기준) 리사이징 방향 기준으로 고정되어야 하는 점을 구하는 로직
+   * 움직이는 방향 반대편에 있는 점을 고정시킴
+   */
+  const getFixedPoint = (direction: ActiveDirection) => {
+    const { x, y, width, height } = curPosition;
+
+    switch (direction) {
+      case 'n':
+        return { x: x + width / 2, y: y + height };
+      case 's':
+        return { x: x + width / 2, y: y };
+      case 'e':
+        return { x: x, y: y + height / 2 };
+      case 'w':
+        return { x: x + width, y: y + height / 2 };
+      case 'ne':
+        return { x: x, y: y + height };
+      case 'nw':
+        return { x: x + width, y: y + height };
+      case 'se':
+        return { x: x, y: y };
+      case 'sw':
+        return { x: x + width, y: y };
+    }
+  };
+
+  /**
+   * 요소의 고정점 기준으로 새로운 중심점을 계산하는 함수
+   * 절대 좌표계 기준으로 변화량을 계산하여서 새로운 중심점 계산
+   */
+  const calculateNewCenter = (fixedPoint: Point, width: number, height: number) => {
+    const angle = (curPosition.rotate * Math.PI) / 180;
+    const cos = Math.cos(angle);
+    const sin = Math.sin(angle);
+
+    // 절대좌표계 기준 요소 크기 변화량 계산
+    const dx = (width / 2) * (resizeDirection.includes('w') ? 1 : -1);
+    const dy = (height / 2) * (resizeDirection.includes('n') ? 1 : -1);
+
+    const newX = fixedPoint.x - (dx * cos - dy * sin);
+    const newY = fixedPoint.y - (dx * sin + dy * cos);
+
+    // 상하로 움직이면 x좌표는 고정, y좌표만 이동
+    if (['n', 's'].includes(resizeDirection)) {
+      return {
+        x: fixedPoint.x,
+        y: newY,
+      };
+    }
+
+    // 좌우로 움직이면 y좌표는 고정, x좌표만 이동
+    if (['e', 'w'].includes(resizeDirection)) {
+      return {
+        x: newX,
+        y: fixedPoint.y,
+      };
+    }
+
+    // 대각선으로 움직이면 x,y 둘 다 이동
+    return {
+      x: newX,
+      y: newY,
+    };
+  };
+
+  /**
    * 리사이징 후 새로운 위치 정보(Position)를 계산하는 로직
    *
    * 1. 상대좌표계 기준 x,y 변화량 계산 (회전된 방향 기준으로 어느정도 이동했는지 확인해야 하기 때문)
@@ -139,19 +206,18 @@ const useResize = ({ cardId, layerId, type, children, curPosition, setCurPositio
     // 변경 후 크기
     const { width, height } = calculateDimensionsAfterResize(resizeDirection, diffX, diffY);
 
-    // 절대좌표계에서의 diff를 계산
-    const absoluteDiffX = e.clientX - startClientX;
-    const absoluteDiffY = e.clientY - startClientY;
+    // 고정점 계산
+    const fixedPoint = getFixedPoint(resizeDirection);
 
-    // 새로운 중심점은 두 모서리(고정된 모서리와 잡고 이동시킨 모서리)의 중간에 위치하기 때문에 변화량의 절반 만큼 이동하게 됨
-    const curCenterX = startCenterX + absoluteDiffX / 2;
-    const curCenterY = startCenterY + absoluteDiffY / 2;
+    // 절대좌표계에서 새로운 중심점 계산
+    const newCenter = calculateNewCenter(fixedPoint, width, height);
 
-    // 최종 x,y 계산
-    const x = curCenterX - width / 2;
-    const y = curCenterY - height / 2;
-
-    return { width, height, x, y };
+    return {
+      width,
+      height,
+      x: newCenter.x - width / 2, // 중심점 기반으로 기준점 계산
+      y: newCenter.y - height / 2,
+    };
   };
 
   // resize 이벤트 핸들러

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Offset } from '@/components/editor/EditingArea/components/FocusBox/FocusBox.type';
+import { Point } from '@/components/editor/EditingArea/components/FocusBox/FocusBox.type';
 import { INITIAL_DRAG_OFFSET } from '@/components/editor/EditingArea/components/FocusBox/FocusBox.constant';
 import { LayerType, Position } from '@/store/useCardsStore/type';
 import { useCardsStore } from '@/store/useCardsStore';
@@ -27,7 +27,7 @@ const useDrag = ({
   const setPosition = useCardsStore(state => state.setPosition);
 
   const [isDrag, setIsDrag] = useState(false);
-  const [dragOffset, setDragOffset] = useState<Offset>({
+  const [dragOffset, setDragOffset] = useState<Point>({
     ...INITIAL_DRAG_OFFSET,
   });
 
@@ -35,7 +35,7 @@ const useDrag = ({
    * 요소를 잡았을 때 초기 위치에서(layer.position) 마우스 위치(clientX, clientY)까지 어느정도의 offset이 있는지 계산하는 로직
    * 좌표는 왼쪽 위 기준으로 되어있는데 마우스는 해당 위치에서 떨어진 곳을 잡기 때문에 그 이동 위치만큼 뺴줘야지 정확한 새 좌표 계산 가능
    */
-  const calculateDragOffset = (e: React.PointerEvent | React.MouseEvent): Offset => {
+  const calculateDragOffset = (e: React.PointerEvent | React.MouseEvent): Point => {
     return {
       x: e.clientX - layer.position.x,
       y: e.clientY - layer.position.y,

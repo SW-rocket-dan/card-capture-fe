@@ -127,12 +127,12 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
         ></div>
         <div
           className="absolute -bottom-1.5 -left-1.5 h-3 w-3 cursor-nesw-resize rounded-full border-2 border-main bg-white"
-          onPointerDown={e => resizePointerDownHandler(e, 'se')}
+          onPointerDown={e => resizePointerDownHandler(e, 'sw')}
           style={{ pointerEvents: 'auto' }}
         ></div>
         <div
           className="absolute -bottom-1.5 -right-1.5 h-3 w-3 cursor-nwse-resize rounded-full border-2 border-main bg-white"
-          onPointerDown={e => resizePointerDownHandler(e, 'sw')}
+          onPointerDown={e => resizePointerDownHandler(e, 'se')}
           style={{ pointerEvents: 'auto' }}
         ></div>
 
