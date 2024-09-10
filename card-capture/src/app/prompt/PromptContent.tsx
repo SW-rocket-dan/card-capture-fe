@@ -39,8 +39,6 @@ const PromptContent = () => {
   const emphasisFieldArray = useFieldArray({ control: formMethods.control, name: 'emphasis' });
   const fieldArrays = { phraseFieldArray, emphasisFieldArray };
 
-  const setCards = useCardsStore(state => state.setCard);
-  const setTemplateId = useCardsStore(state => state.setTemplateId);
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
