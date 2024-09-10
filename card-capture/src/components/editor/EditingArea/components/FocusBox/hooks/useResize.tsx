@@ -537,7 +537,13 @@ const useResize = ({ cardId, layerId, type, children, curPosition, setCurPositio
         newCenterY = fixedPoint.y;
     }
 
-    const rotatedCenter = rotatePoint(newCenterX, newCenterY, fixedPoint.x, fixedPoint.y, rotate);
+    const rotatedCenter = rotatePoint(
+      newCenterX,
+      newCenterY,
+      resizeOffset.startCenterX,
+      resizeOffset.startCenterY,
+      rotate,
+    );
     return rotatedCenter;
   };
 
