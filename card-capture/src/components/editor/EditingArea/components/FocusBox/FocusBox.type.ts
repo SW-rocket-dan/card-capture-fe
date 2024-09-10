@@ -1,4 +1,4 @@
-export type Offset = {
+export type Point = {
   y: number;
   x: number;
 };
@@ -12,16 +12,9 @@ export type ResizeOffset = {
   startCenterY: number;
 };
 
-export type Direction =
-  | 'none'
-  | 's'
-  | 'w'
-  | 'e'
-  | 'n'
-  | 'ne'
-  | 'nw'
-  | 'se'
-  | 'sw';
+export type Direction = 'none' | 's' | 'w' | 'e' | 'n' | 'ne' | 'nw' | 'se' | 'sw';
+
+export type ActiveDirection = Exclude<Direction, 'none'>;
 
 export type calculateCoord = {
   e: PointerEvent;
