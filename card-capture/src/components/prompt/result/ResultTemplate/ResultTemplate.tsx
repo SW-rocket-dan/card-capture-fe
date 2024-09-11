@@ -35,9 +35,16 @@ const ResultTemplate = () => {
 
   return (
     <div className="flex w-full flex-col items-center justify-center">
-      <CheckBox isChecked={isAllSelected} setIsChecked={setIsAllSelected} />
-      <div className="h-[1px] w-[900px] bg-border" />
-      <Poster size={400} card={templateData} />
+      <div className="flex w-[900px] flex-row items-center gap-2 border-b-[1px] border-border pb-3">
+        <CheckBox isChecked={isAllSelected} setIsChecked={setIsAllSelected} />
+        <p className="text-[15px] font-medium tracking-little-tight" onClick={() => setIsAllSelected(prev => !prev)}>
+          전체 선택
+        </p>
+      </div>
+      <div className="flex flex-row gap-5 pt-7">
+        <Poster size={400} card={templateData} />
+        <Poster size={400} card={templateData} />
+      </div>
     </div>
   );
 };
