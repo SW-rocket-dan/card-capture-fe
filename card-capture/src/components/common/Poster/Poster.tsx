@@ -9,9 +9,10 @@ import ReadOnlyTextBox from '@/components/common/Poster/components/ReadOnlyTextB
 type TemplateProps = {
   size: number;
   card: Card | undefined;
+  isSelected?: boolean;
 };
 
-const Poster = ({ size, card }: TemplateProps) => {
+const Poster = ({ size, card, isSelected }: TemplateProps) => {
   if (!card) return <div></div>;
 
   const cardId = card.id;
@@ -21,7 +22,7 @@ const Poster = ({ size, card }: TemplateProps) => {
 
   return (
     <div
-      className={`relative overflow-hidden border-[1px] border-border bg-white`}
+      className={`relative overflow-hidden border-[2.5px] bg-white ${isSelected ? 'border-main' : 'border-transparent'}`}
       style={{
         height: `${size}px`,
         width: `${size}px`,
@@ -32,6 +33,7 @@ const Poster = ({ size, card }: TemplateProps) => {
         backgroundRepeat: 'no-repeat',
         backgroundColor: background.color,
         opacity: background.opacity / 100,
+        boxSizing: 'border-box',
       }}
     >
       {card.layers.map((layer, idx) => {

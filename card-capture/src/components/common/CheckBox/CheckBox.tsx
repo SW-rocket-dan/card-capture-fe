@@ -3,7 +3,7 @@ import * as React from 'react';
 
 type CheckBoxProps = {
   isChecked: boolean;
-  setIsChecked: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsChecked: (value: boolean | ((prevState: boolean) => boolean)) => void;
 };
 
 const CheckBox = ({ isChecked, setIsChecked }: CheckBoxProps) => {
