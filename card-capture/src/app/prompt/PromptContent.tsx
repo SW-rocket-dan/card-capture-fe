@@ -70,7 +70,7 @@ const PromptContent = () => {
 
     // 로딩 끝, 페이지 이동
     setIsLoading(false);
-    router.push(`/editor/${id}`);
+    router.push(`/prompt/result/${id}`);
   };
 
   const isAuthenticated = useAuthRedirect();
