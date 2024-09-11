@@ -1,6 +1,7 @@
 import NavigationBar from '@/components/common/NavigationBar/NavigationBar';
 import React from 'react';
 import ResultTitle from '@/components/prompt/result/ResultTitle/ResultTitle';
+import ResultTemplate from '@/components/prompt/result/ResultTemplate/ResultTemplate';
 
 const ResultContent = () => {
   return (
@@ -8,6 +9,7 @@ const ResultContent = () => {
       <NavigationBar isTransparent={false} />
       <div className="flex h-full flex-col pt-[60px]">
         <ResultTitle />
+        <ResultTemplate />
       </div>
     </div>
   );
