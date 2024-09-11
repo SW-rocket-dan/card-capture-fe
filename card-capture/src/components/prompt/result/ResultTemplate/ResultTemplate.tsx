@@ -70,11 +70,13 @@ const ResultTemplate = () => {
 
   const router = useRouter();
 
+  const [hasChecked, setHasChecked] = useState<boolean>(false);
+
+  useEffect(() => {
+    setHasChecked(selectedList.some(Boolean));
+  }, [selectedList]);
+
   const moveToEditor = () => {
-    const hasChecked = selectedList.some(Boolean);
-
-    if (!hasChecked) return;
-
     router.push(`/editor/${id}`);
   };
 
@@ -106,12 +108,18 @@ const ResultTemplate = () => {
         <Button
           className="box-border w-[280px] rounded-[20px] py-2.5 text-[12.5px]"
           type="default"
+          disable={!hasChecked}
           onClick={downloadCardHandler}
         >
           <p>이미지 바로 다운받기</p>
           <DownloadIcon width={14} />
         </Button>
-        <Button className="w-[283px] rounded-[20px] py-[11px] text-[12.5px]" type="full" onClick={moveToEditor}>
+        <Button
+          className="w-[283px] rounded-[20px] py-[11px] text-[12.5px]"
+          type="full"
+          disable={!hasChecked}
+          onClick={moveToEditor}
+        >
           <p>무료로 편집하러 가기</p>
           <StarsIcon width={14} />
         </Button>
