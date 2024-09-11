@@ -16,6 +16,8 @@ import usePosterDownloader from '@/hooks/usePosterDownloader';
 import DownloadProgressModal from '@/components/common/Progress/DownloadProgressModal';
 
 const ResultTemplate = () => {
+  const router = useRouter();
+
   /**
    * 라우팅된 아이디 기반으로 템플릿 데이터 가져오기
    */
@@ -27,19 +29,27 @@ const ResultTemplate = () => {
     queryFn: () => templateApi.getTemplateData(Number(id)),
   });
 
+  /**
+   * 받아온 템플릿 데이터를 기반으로 선택되었는지 여부를 기록하는 selectedList 상태 선언
+   */
   const [templateData, setTemplateData] = useState<Card[]>([]);
   const [selectedList, setSelectedList] = useState<boolean[]>([]);
 
   useEffect(() => {
     if (!data) return;
 
-    const templateData = jsonUtils.parseEscapedJson(data.editor);
-    setTemplateData(templateData);
+    const parsedData = jsonUtils.parseEscapedJson(data.editor);
+    const processedTemplateData = Array.isArray(parsedData) ? parsedData : [parsedData];
+
+    setTemplateData(processedTemplateData);
 
     const selectedData = templateData.map(() => false);
     setSelectedList(selectedData);
   }, [data]);
 
+  /**
+   * 특정 인덱스(템플릿)의 선택 여부를 변경하는 핸들러
+   */
   const toggleSelectionAtIndexHandler = (index: number) => {
     setSelectedList(prev => {
       const newArray = [...prev];
@@ -49,13 +59,20 @@ const ResultTemplate = () => {
     });
   };
 
+  /**
+   * 모든 템플릿이 선택되었는지 확인하는 상태 선언
+   */
+  const [isAllSelected, setIsAllSelected] = useState<boolean>(false);
+
   useEffect(() => {
     const allSelected = selectedList.every(Boolean);
     setIsAllSelected(allSelected);
   }, [selectedList]);
 
-  const [isAllSelected, setIsAllSelected] = useState<boolean>(false);
-
+  /**
+   * 템플릿 전체를 선택하거나 해제하는 핸들러
+   * 선택되지 않은게 한 개라도 있다면 클릭시 전체 선택되도록 설정
+   */
   const selectAllCheckBoxHandler = () => {
     const isAllChecked = selectedList.every(Boolean);
 
@@ -68,18 +85,27 @@ const ResultTemplate = () => {
     }
   };
 
-  const router = useRouter();
-
+  /**
+   * 선택된 템플릿이 있는지 (개수 상관 없음) 여부를 확인하는 로직
+   * 버튼의 활성화를 위해서 선언 관리
+   */
   const [hasChecked, setHasChecked] = useState<boolean>(false);
 
   useEffect(() => {
     setHasChecked(selectedList.some(Boolean));
   }, [selectedList]);
 
+  /**
+   * 에디터 페이지로 이동하는 핸들러
+   */
   const moveToEditor = () => {
     router.push(`/editor/${id}`);
   };
 
+  /**
+   * card에 그려진 dom을 image export 하는 hook
+   * Ref에 그려진 요소들을 이미지로 변환, 다운로드 함
+   */
   const { cardRef, isDownloading, setIsDownloading, downloadCardHandler } = usePosterDownloader();
 
   return (
