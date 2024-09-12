@@ -1,3 +1,5 @@
+'use client';
+
 import BeforeLoginNav from '@/components/common/NavigationBar/BeforeLoginNav';
 import { useEffect, useState } from 'react';
 import AfterLoginNav from '@/components/common/NavigationBar/AfterLoginNav';
