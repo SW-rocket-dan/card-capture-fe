@@ -14,6 +14,7 @@ import DownloadIcon from '@/components/common/Icon/DownloadIcon';
 import StarsIcon from '@/components/common/Icon/StarsIcon';
 import usePosterDownloader from '@/hooks/usePosterDownloader';
 import DownloadProgressModal from '@/components/common/Progress/DownloadProgressModal';
+import useIsMobile from '@/hooks/useIsMobile';
 
 const ResultTemplate = () => {
   const router = useRouter();
@@ -108,9 +109,11 @@ const ResultTemplate = () => {
    */
   const { cardRef, isDownloading, setIsDownloading, downloadCardHandler } = usePosterDownloader();
 
+  const { isMobile } = useIsMobile();
+
   return (
-    <div className="flex w-full flex-col items-center justify-center">
-      <div className="flex w-[900px] flex-row items-center gap-2 border-b-[1px] border-border pb-3">
+    <div className="flex w-full max-w-[340px] flex-col items-center justify-center sm:max-w-[500px] md:max-w-[700px] lg:max-w-[900px]">
+      <div className="flex w-full flex-row items-center gap-2 border-b-[1px] border-border pb-3">
         <CheckBox isChecked={isAllSelected} setIsChecked={selectAllCheckBoxHandler} />
         <p className="text-[15px] font-medium tracking-little-tight" onClick={selectAllCheckBoxHandler}>
           전체 선택
@@ -122,7 +125,7 @@ const ResultTemplate = () => {
           <SelectedPoster
             key={card.id}
             ref={cardRef}
-            size={390}
+            size={isMobile ? 340 : 390}
             card={card}
             isChecked={selectedList[index]}
             setIsChecked={() => toggleSelectionAtIndexHandler(index)}
@@ -130,7 +133,7 @@ const ResultTemplate = () => {
         ))}
       </div>
 
-      <div className="flex w-[900px] flex-row items-center justify-center gap-5 border-b-[1px] border-border pb-8">
+      <div className="flex w-full flex-col items-center justify-center gap-5 border-b-[1px] border-border pb-8 md:flex-row">
         <Button
           className="box-border w-[280px] rounded-[20px] py-2.5 text-[12.5px]"
           type="default"

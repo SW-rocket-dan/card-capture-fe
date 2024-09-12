@@ -1,3 +1,5 @@
+'use client';
+
 import NavigationBar from '@/components/common/NavigationBar/NavigationBar';
 import React from 'react';
 import ResultTitle from '@/components/prompt/result/ResultTitle/ResultTitle';
