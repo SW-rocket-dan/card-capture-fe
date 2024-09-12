@@ -109,6 +109,7 @@
     .app {
         font-family: "Pretendard", 'sans-serif';
         user-select: none;
+        overscroll-behavior: none;
     }
 }
 
