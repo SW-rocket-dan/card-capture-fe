@@ -42,9 +42,7 @@ const ResultTemplate = () => {
     const processedTemplateData = Array.isArray(parsedData) ? parsedData : [parsedData];
 
     setTemplateData(processedTemplateData);
-
-    const selectedData = templateData.map(() => false);
-    setSelectedList(selectedData);
+    setSelectedList(new Array(processedTemplateData.length).fill(false));
   }, [data]);
 
   /**
@@ -65,6 +63,8 @@ const ResultTemplate = () => {
   const [isAllSelected, setIsAllSelected] = useState<boolean>(false);
 
   useEffect(() => {
+    if (selectedList.length <= 0) return;
+
     const allSelected = selectedList.every(Boolean);
     setIsAllSelected(allSelected);
   }, [selectedList]);
