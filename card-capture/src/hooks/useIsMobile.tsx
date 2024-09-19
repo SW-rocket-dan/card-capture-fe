@@ -21,7 +21,7 @@ const useIsMobile = (width?: number) => {
   // 너비가 640px일 때 요소를
   const isMobile = windowWidth <= (width ? width : 640);
 
-  return { isMobile };
+  return { isMobile, windowWidth };
 };
 
 export default useIsMobile;

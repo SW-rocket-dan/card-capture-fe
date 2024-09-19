@@ -10,16 +10,19 @@ type PosterProps = {
   size: number;
   card: Card | undefined;
   isSelected?: boolean;
+  hasBorder?: boolean;
 };
 
-const Poster = forwardRef<HTMLDivElement, PosterProps>(({ size, card, isSelected }, ref) => {
+const Poster = forwardRef<HTMLDivElement, PosterProps>(({ size, card, isSelected, hasBorder = true }, ref) => {
   if (!card) return <div></div>;
 
   const background = card.background;
   const scaleRatio = size / 550;
 
   return (
-    <div className={`border-[2.5px] ${isSelected ? 'border-main' : 'border-transparent'}`}>
+    <div
+      className={`border-[2.5px] ${isSelected ? 'border-main' : 'border-transparent'} ${hasBorder ? '' : 'border-none'}`}
+    >
       <div
         ref={ref}
         className={`relative overflow-hidden bg-white`}

@@ -10,7 +10,7 @@ export type Phrase = {
 };
 
 export type Prompt = {
-  phraseDto: Phrase;
+  phraseDetails: Phrase;
   purpose: string;
   color: string;
   model: string;
