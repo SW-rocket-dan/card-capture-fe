@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Template } from '@/types';
 import { templateApi } from '@/api';
 import TemplateImage from '@/components/templates/TemplateImage/TemplateImage';
+import TemplatePrompt from '@/components/templates/TemplatePrompt/TemplatePrompt';
 
 const TemplatesContent = () => {
   /**
@@ -21,10 +22,11 @@ const TemplatesContent = () => {
   });
 
   return (
-    <div className="h-screen w-screen overflow-y-scroll font-Pretendard">
+    <div className="w-screen overflow-y-scroll font-Pretendard">
       <NavigationBar isTransparent={false} />
-      <div className="flex h-full flex-col items-center justify-center pt-[60px]">
+      <div className="flex h-full flex-col items-center justify-center gap-10 pt-[60px]">
         <TemplateImage data={data} />
+        <TemplatePrompt prompt={data?.prompt} />
       </div>
     </div>
   );

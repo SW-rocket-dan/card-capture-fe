@@ -49,13 +49,16 @@ const TemplateImage = ({ data }: TemplateImageProps) => {
   }, [templateTags]);
 
   return (
-    <div className="flex w-[950px] flex-row justify-between">
+    <div className="flex w-[950px] flex-row justify-between py-10">
       {/*{isValidImage ? (*/}
       {/*  <Image src={data.fileUrl} alt="templateImage" width={500} height={500} />*/}
       {/*) : (*/}
       {/*  <Poster size={500} card={templateData[0]} />*/}
       {/*)}*/}
-      <Poster size={450} card={templateData[0]} />
+      <div className="overflow-hidden rounded-[30px]">
+        <Poster size={450} card={templateData[0]} />
+      </div>
+
       <div className="flex w-[450px] flex-col justify-start gap-7 p-5">
         <div className="flex flex-col border-b border-border pb-7">
           <div className="flex flex-row items-center justify-end gap-1">
