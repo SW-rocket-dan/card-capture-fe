@@ -1,5 +1,4 @@
 import { DummyTemplateType } from '@/components/main/TemplateGallery/data/templateData';
-import Image from 'next/image';
 
 type TemplateListType = {
   templateData: DummyTemplateType[];
