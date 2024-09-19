@@ -1,10 +1,9 @@
 import { Template } from '@/types';
 import { useEffect, useState } from 'react';
 import Poster from '@/components/common/Poster/Poster';
-import { jsonUtils } from '@/utils';
-import { Card } from '@/store/useCardsStore/type';
 import Button from '@/components/common/Button/Button';
 import HeartIcon from '@/components/common/Icon/HeartIcon';
+import useParseTemplateData from '@/hooks/useParseTemplateData';
 
 type TemplateImageProps = {
   data?: Template;
@@ -44,7 +43,7 @@ const TemplateImage = ({ data }: TemplateImageProps) => {
   }, [templateTags]);
 
   return (
-    <div className="flex w-[950px] flex-row justify-between py-10">
+    <div className="flex flex-row justify-between py-10 sm:w-[700px] md:w-[950px]">
       {/*{isValidImage ? (*/}
       {/*  <Image src={data.fileUrl} alt="templateImage" width={500} height={500} />*/}
       {/*) : (*/}
