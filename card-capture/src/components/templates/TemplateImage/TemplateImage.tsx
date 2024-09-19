@@ -60,7 +60,7 @@ const TemplateImage = ({ data }: TemplateImageProps) => {
       {/*) : (*/}
       {/*  <Poster size={500} card={templateData[0]} />*/}
       {/*)}*/}
-      <div className="overflow-hidden rounded-[25px]">
+      <div className="overflow-hidden rounded-[25px] border border-border">
         <Poster size={templateSize} card={templateData[0]} hasBorder={false} />
       </div>
 
