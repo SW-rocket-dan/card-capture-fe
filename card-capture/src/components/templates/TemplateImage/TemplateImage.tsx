@@ -28,12 +28,7 @@ const TemplateImage = ({ data }: TemplateImageProps) => {
     img.src = fileUrl;
   }, [fileUrl]);
 
-  const [templateData, setTemplateData] = useState<Card[]>([]);
-
-  useEffect(() => {
-    const parsedData = jsonUtils.parseEscapedJson(editor);
-    setTemplateData(parsedData);
-  }, [editor]);
+  const templateData = useParseTemplateData(editor);
 
   const [tags, setTags] = useState<string[]>([]);
 
