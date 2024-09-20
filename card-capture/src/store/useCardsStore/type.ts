@@ -11,7 +11,7 @@ export type Card = {
 };
 
 export type Background = {
-  imageId?: string;
+  imageId?: number;
   url: string;
   opacity: number;
   color: string;
@@ -27,7 +27,7 @@ export type Layer = {
 };
 
 export type Image = {
-  imageId?: string;
+  imageId?: number;
   url: string;
   cropStartX: number;
   cropStartY: number;
