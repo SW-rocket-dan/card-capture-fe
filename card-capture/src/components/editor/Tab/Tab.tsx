@@ -1,11 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MainTab from '@/components/editor/Tab/MainTab';
 import EditTab from '@/components/editor/Tab/components/EditTab/EditTab';
 import PromptTab from '@/components/editor/Tab/components/PromptTab/PromptTab';
 import { isTabType, TabType } from '@/types';
+import { useFocusStore } from '@/store/useFocusStore';
 
 const Tab = () => {
+  const tab = useFocusStore(state => state.currentTab);
   const [currentTab, setCurrentTab] = useState<TabType>('edit');
+
+  useEffect(() => {
+    setCurrentTab(tab);
+  }, [tab]);
 
   const changeTabHandler = (tab: string) => {
     if (!isTabType(tab)) return;
