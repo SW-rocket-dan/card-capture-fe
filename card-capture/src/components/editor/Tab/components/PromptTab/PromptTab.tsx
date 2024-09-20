@@ -1,5 +1,6 @@
 import React from 'react';
 import PromptHistoryBox from '@/components/editor/Tab/components/PromptTab/PromptHistoryBox/PromptHistoryBox';
+import ResubmitBox from '@/components/editor/Tab/components/PromptTab/ResubmitBox/ResubmitBox';
 
 const PromptTab = () => {
   return (
@@ -8,6 +9,7 @@ const PromptTab = () => {
         프롬프트 재요청
       </header>
       <PromptHistoryBox />
+      <ResubmitBox />
     </div>
   );
 };

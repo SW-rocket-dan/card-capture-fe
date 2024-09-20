@@ -43,6 +43,7 @@ const config = {
         defaultBlack: '#111111',
         highlightBorder: '#E3746D',
         heart: '#FF6969',
+        gray9: '#333333',
       },
       fontFamily: {
         Pretendard: ['Pretendard'],

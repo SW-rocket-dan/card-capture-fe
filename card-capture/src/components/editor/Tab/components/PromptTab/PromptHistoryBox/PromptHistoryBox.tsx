@@ -8,7 +8,8 @@ const PromptHistoryBox = () => {
       >
         이전에 입력한 프롬프트
       </p>
-      <div className="flex flex-col gap-4">
+
+      <div className="flex flex-col gap-4 pb-[15px]">
         <div className="flex flex-col gap-2 px-[15px]">
           <label className="text-[12px] text-gray4">입력한 문구</label>
           <p className="h-[90px] rounded-[10px] border border-border p-1"></p>
