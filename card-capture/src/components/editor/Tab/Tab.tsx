@@ -2,11 +2,14 @@ import { useState } from 'react';
 import MainTab from '@/components/editor/Tab/MainTab';
 import EditTab from '@/components/editor/Tab/components/EditTab/EditTab';
 import PromptTab from '@/components/editor/Tab/components/PromptTab/PromptTab';
+import { isTabType, TabType } from '@/types';
 
 const Tab = () => {
-  const [currentTab, setCurrentTab] = useState('edit');
+  const [currentTab, setCurrentTab] = useState<TabType>('edit');
 
   const changeTabHandler = (tab: string) => {
+    if (!isTabType(tab)) return;
+
     setCurrentTab(tab);
   };
 
