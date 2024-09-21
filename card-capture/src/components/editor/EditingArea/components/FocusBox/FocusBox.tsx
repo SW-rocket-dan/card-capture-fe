@@ -10,6 +10,8 @@ import useDrag from '@/components/editor/EditingArea/components/FocusBox/hooks/u
 import useResize from '@/components/editor/EditingArea/components/FocusBox/hooks/useResize';
 import useRotate from '@/components/editor/EditingArea/components/FocusBox/hooks/useRotate';
 import useDeleteLayer from '@/components/editor/EditingArea/components/FocusBox/hooks/useDeleteLayer';
+import AIIcon from '@/components/common/Icon/AIIcon';
+import { useFocusStore } from '@/store/useFocusStore';
 
 type Props = {
   children: React.ReactElement<{
@@ -97,6 +99,15 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
   /* Layer 삭제 로직 */
   //               //
   const { deleteLayerOnClickHandler } = useDeleteLayer({ cardId });
+
+  /**
+   * 이미지 재생성을 위해 현재 탭을 prompt 탭으로 변경하는 로직
+   */
+  const setCurrentTab = useFocusStore(state => state.setCurrentTab);
+  
+  const switchToPromptTab = () => {
+    setCurrentTab('prompt');
+  };
 
   return (
     <>
@@ -209,6 +220,14 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
                 <p> 삭제하기</p>
               </div>
             </ContextMenuItem>
+            {type === 'image' && (
+              <ContextMenuItem onClick={switchToPromptTab}>
+                <div className="flex flex-row gap-3">
+                  <AIIcon width={15} />
+                  <p>이미지 재생성하기</p>
+                </div>
+              </ContextMenuItem>
+            )}
           </ContextMenuContent>
         </ContextMenu>
       </div>

@@ -164,7 +164,7 @@ const CardArea = ({ card }: { card: Card }) => {
               const { url } = layer.content as Image;
 
               return (
-                <FocusBox key={idx} cardId={cardId} layerId={layer.id} initialMouseDown={initialMouseDown}>
+                <FocusBox key={idx} cardId={cardId} layerId={layer.id} type="image" initialMouseDown={initialMouseDown}>
                   <ImageBox url={url} position={layer.position} />
                 </FocusBox>
               );

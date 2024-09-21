@@ -13,22 +13,12 @@ const MainTab = ({ currentTab, onChange }: { currentTab: string; onChange: (curr
         <EditIcon className={currentTab === 'edit' ? 'text-white' : 'text-icon'} width={17} />
       </button>
 
-      <TooltipProvider>
-        <Tooltip delayDuration={0}>
-          <TooltipTrigger asChild>
-            <button
-              disabled={true}
-              onClick={() => onChange('prompt')}
-              className={`flex h-[42px] w-[42px] items-center justify-center rounded-full ${currentTab === 'prompt' ? 'bg-main' : 'bg-white'} `}
-            >
-              <PromptIcon className={currentTab === 'prompt' ? 'text-white' : 'text-icon'} width={19} />
-            </button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p className="text-xs">준비중!</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <button
+        onClick={() => onChange('prompt')}
+        className={`flex h-[42px] w-[42px] items-center justify-center rounded-full ${currentTab === 'prompt' ? 'bg-main' : 'bg-white'} `}
+      >
+        <PromptIcon className={currentTab === 'prompt' ? 'text-white' : 'text-icon'} width={19} />
+      </button>
 
       <TooltipProvider>
         <Tooltip delayDuration={0}>

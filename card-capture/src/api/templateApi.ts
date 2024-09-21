@@ -90,4 +90,27 @@ const getAllTemplateData = async () => {
   }
 };
 
-export default { createTemplate, updateTemplate, getTemplateData, getAllTemplateData };
+/**
+ * ai가 생성한 이미지에 추가 프롬프트를 작성하여 변경된 새로운 이미지를 받아오는 post api
+ */
+const changeImage = async (imageId: number, message: string) => {
+  const submitData = { aiImageId: imageId, message };
+
+  try {
+    const response = await customFetch(`${process.env.NEXT_PUBLIC_API_KEY}/api/v1/template/change-image`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(submitData),
+    });
+
+    const jsonData = await response.json();
+
+    return jsonData.data;
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export default { createTemplate, updateTemplate, getTemplateData, getAllTemplateData, changeImage };

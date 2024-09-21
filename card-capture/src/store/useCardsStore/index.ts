@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Background, Card, Layer, Position, Shape, ShapeType, Text, ZIndexMap } from './type';
+import { Background, Card, Image, Layer, Position, Shape, ShapeType, Text, ZIndexMap } from './type';
 import { Draft, produce } from 'immer';
 import ReactQuill from 'react-quill';
 import { useFocusStore } from '@/store/useFocusStore';
@@ -38,6 +38,9 @@ type useCardsStore = {
 
   setBackground: (cardId: number, background: Partial<Background>) => void;
   getBackground: (cardId: number) => Background | null;
+
+  setImageLayer: (cardId: number, layerId: number, image: Image) => void;
+  getImageLayer: (cardId: number, layerId: number) => Image | null;
 
   setShapeLayerColor: (cardId: number, layerId: number, color: string) => void;
   getShapeLayer: (cardId: number, layerId: number) => Shape | null;
@@ -213,6 +216,37 @@ export const useCardsStore = create(
 
           return card.background;
         },
+
+        getImageLayer: (cardId, layerId) => {
+          const card = get().cards.find(({ id }) => id === cardId);
+          if (!card) return null;
+
+          const layer = card.layers.find(({ id }) => id === layerId);
+          if (!layer) return null;
+
+          if (layer.type !== 'image') return null;
+
+          return layer.content as Image;
+        },
+
+        setImageLayer: (cardId, layerId, image) =>
+          set(
+            produce(
+              (
+                draft: Draft<{
+                  cards: Card[];
+                }>,
+              ) => {
+                const card = draft.cards[cardId];
+                if (card) {
+                  const layer = card.layers.find(l => l.id === layerId);
+                  if (layer) {
+                    layer.content = image;
+                  }
+                }
+              },
+            ),
+          ),
 
         setShapeLayerColor: (cardId, layerId, color) =>
           set(
