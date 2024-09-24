@@ -21,6 +21,26 @@ const ExportButton = ({ onDownload }: ExportButtonProps) => {
 
   const [isChecked, setIsChecked] = useState<boolean>(false);
 
+  const [tagInput, setTagInput] = useState<string>('');
+  const [tagList, setTagList] = useState<string[]>([]);
+
+  const changeTagInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTagInput(e.target.value);
+  };
+
+  const enterKeyUpHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      addTagHandler();
+    }
+  };
+
+  const addTagHandler = () => {
+    if (tagInput.trim() === '' || tagList.includes(tagInput)) return;
+
+    setTagList(prevTags => [...prevTags, tagInput.trim()]);
+    setTagInput('');
+  };
+
   /**
    * 에디터 페이지에서 버튼 클릭에 대한 tracking
    */
@@ -41,7 +61,7 @@ const ExportButton = ({ onDownload }: ExportButtonProps) => {
       </PopoverTrigger>
       <PopoverContent
         side="bottom"
-        className={`absolute left-full z-50 -ml-[70px] mt-[5px] w-[280px] rounded-[8px] bg-white p-0`}
+        className={`absolute left-full z-50 -ml-[50px] mt-[15px] w-[280px] rounded-[8px] bg-white p-0`}
         style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08', zIndex: 10000 }}
       >
         <div className="flex flex-row justify-between border-b-[1px] border-border px-[15px] py-[10px] font-semibold">
@@ -60,10 +80,30 @@ const ExportButton = ({ onDownload }: ExportButtonProps) => {
               </p>
             </div>
           </div>
-          <textarea className="h-[100px] w-full resize-none rounded-md border border-border" />
+          <div className="flex h-[100px] w-full flex-row flex-wrap justify-start gap-1 overflow-y-scroll rounded-md border border-border p-3 text-xs">
+            {tagList.map(str => (
+              <p key={str} className="h-fit w-fit rounded-[4px] bg-lightBorder px-[7px] py-[4px] text-[11px]">
+                #{str}
+              </p>
+            ))}
+
+            <div className="flex h-fit w-fit flex-row items-center text-gray4">
+              #
+              <input
+                placeholder="태그 입력"
+                type="text"
+                className="w-[60px] py-[4px] text-[11px] outline-none placeholder:text-gray4"
+                value={tagInput}
+                onChange={changeTagInputHandler}
+                onKeyUp={enterKeyUpHandler}
+              />
+            </div>
+          </div>
           <div className="flex flex-row items-center gap-2">
             <CheckBox isChecked={isChecked} setIsChecked={setIsChecked} />
-            <p className="text-[11px]">내가 제작한 카드뉴스 사람들과 공유하기</p>
+            <label className="text-[11px]" onClick={() => setIsChecked(prev => !prev)}>
+              내가 제작한 카드뉴스 사람들과 공유하기
+            </label>
           </div>
           <Button type="full" className="my-[5px] h-[37px] w-full rounded-[8px] text-xs">
             이미지로 저장하기
