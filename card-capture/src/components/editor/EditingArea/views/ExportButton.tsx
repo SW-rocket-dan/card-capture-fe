@@ -105,7 +105,7 @@ const ExportButton = ({ onDownload }: ExportButtonProps) => {
               내가 제작한 카드뉴스 사람들과 공유하기
             </label>
           </div>
-          <Button type="full" className="my-[5px] h-[37px] w-full rounded-[8px] text-xs">
+          <Button onClick={onDownload} type="full" className="my-[5px] h-[37px] w-full rounded-[8px] text-xs">
             이미지로 저장하기
           </Button>
         </div>
