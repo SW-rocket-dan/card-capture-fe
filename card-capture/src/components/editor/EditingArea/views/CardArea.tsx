@@ -16,6 +16,7 @@ import IllustBox from '@/components/editor/EditingArea/components/IllustBox/Illu
 import useAmplitudeContext from '@/hooks/useAmplitudeContext';
 import usePosterDownloader from '@/hooks/usePosterDownloader';
 import DownloadProgressModal from '@/components/common/Progress/DownloadProgressModal';
+import ExportButton from '@/components/editor/EditingArea/views/ExportButton';
 
 const CardArea = ({ card }: { card: Card }) => {
   const cardId = card.id;
@@ -112,16 +113,7 @@ const CardArea = ({ card }: { card: Card }) => {
             </DialogContent>
           </Dialog>
 
-          <Button
-            onClick={() => {
-              trackAmplitudeEvent('editor-export-click');
-              downloadCardHandler();
-            }}
-            type="full"
-            className="h-[36px] w-[145px] rounded-[5px]"
-          >
-            <span className="text-xs">Export</span>
-          </Button>
+          <ExportButton onDownload={downloadCardHandler} />
         </div>
       </div>
 
