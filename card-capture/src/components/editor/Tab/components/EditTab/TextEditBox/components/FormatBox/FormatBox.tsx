@@ -3,11 +3,18 @@ import ItalicIcon from '@/components/common/Icon/ItalicIcon';
 import UnderlineIcon from '@/components/common/Icon/UnderlineIcon';
 import useTextFormatting from '@/components/editor/Tab/components/EditTab/TextEditBox/hooks/useTextFormatting';
 
-const FormatBox = () => {
+type FormatBoxProps = {
+  ratio?: number;
+};
+
+const FormatBox = ({ ratio = 1 }: FormatBoxProps) => {
   const { changeTextFormatHandler } = useTextFormatting();
 
   return (
-    <div className="flex w-full flex-row items-center justify-between px-[20px]">
+    <div
+      className="flex w-full flex-row items-center justify-between px-[20px]"
+      style={{ transform: `scale(${ratio})` }}
+    >
       <div className="cursor-pointer" onClick={() => changeTextFormatHandler('bold')}>
         <BoldIcon width={14} className="hover:text-main" />
       </div>

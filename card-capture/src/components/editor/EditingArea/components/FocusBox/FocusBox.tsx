@@ -118,11 +118,11 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
       <div
         className="absolute"
         style={{
-          left: curPosition.x + (curPosition.width - 200) / 2,
-          top: editorPositionY - 70,
-          zIndex: 1000,
-          pointerEvents: 'none', // 이벤트가 통과되어서 아래있는 요소(자식요소 아니고 아래 위치 요소)가 이벤트를 받도록 함
+          left: curPosition.x + (curPosition.width - 300) / 2,
+          top: editorPositionY - 90,
+          zIndex: 1020,
         }}
+        onClick={stopPropagation}
       >
         <InlineTextEditBox />
       </div>

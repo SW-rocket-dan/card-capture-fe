@@ -40,7 +40,6 @@ const useCalculatePosition = ({ curPosition }: UseCalculatePositionProps) => {
   useEffect(() => {
     const newPosition = calculateHighestY();
     setPositionY(newPosition);
-    console.log(newPosition);
   }, [curPosition]);
 
   return { positionY };

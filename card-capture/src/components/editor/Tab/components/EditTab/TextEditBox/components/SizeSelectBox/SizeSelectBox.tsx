@@ -7,9 +7,10 @@ import useClickOutside from '@/hooks/useClickOutside';
 
 type SizeSelectBoxProps = {
   sizeList: string[];
+  ratio?: number;
 };
 
-const SizeSelectBox = ({ sizeList }: SizeSelectBoxProps) => {
+const SizeSelectBox = ({ sizeList, ratio = 1 }: SizeSelectBoxProps) => {
   /**
    * 사이즈 드롭다운을 여닫는 click handler
    */
@@ -36,7 +37,7 @@ const SizeSelectBox = ({ sizeList }: SizeSelectBoxProps) => {
   const ref = useClickOutside(() => setIsOpen(false));
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className="relative" style={{ transform: `scale(${ratio})` }}>
       <button
         onClick={openHandler}
         className="flex w-[110px] flex-row items-center justify-between rounded-[8px] bg-itembg p-[10px]"
@@ -47,8 +48,8 @@ const SizeSelectBox = ({ sizeList }: SizeSelectBoxProps) => {
 
       {isOpen && (
         <div
-          className="absolute z-10 mt-[10px] flex w-[110px] w-full flex-col overflow-hidden rounded-xl bg-white"
-          style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08' }}
+          className="absolute mt-[10px] flex w-[110px] w-full flex-col overflow-hidden rounded-xl bg-white"
+          style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08', zIndex: 10 }}
         >
           <ul className="flex max-h-48 flex-col overflow-y-auto text-[12px]">
             {sizeList.map((size, index) =>
