@@ -50,7 +50,7 @@ const EditorContent = () => {
       setCards(templateData);
     } else {
       const initCard: Card = {
-        id: Number(id),
+        id: 0,
         background: {
           url: '',
           opacity: 100,

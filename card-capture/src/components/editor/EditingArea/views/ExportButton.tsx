@@ -47,7 +47,7 @@ const ExportButton = ({ onDownload }: ExportButtonProps) => {
   const { trackAmplitudeEvent } = useAmplitudeContext();
 
   return (
-    <Popover>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button
           onClick={() => {
