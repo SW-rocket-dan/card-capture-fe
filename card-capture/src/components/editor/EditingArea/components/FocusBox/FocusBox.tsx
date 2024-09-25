@@ -12,6 +12,8 @@ import useRotate from '@/components/editor/EditingArea/components/FocusBox/hooks
 import useDeleteLayer from '@/components/editor/EditingArea/components/FocusBox/hooks/useDeleteLayer';
 import AIIcon from '@/components/common/Icon/AIIcon';
 import { useFocusStore } from '@/store/useFocusStore';
+import InlineTextEditBox from '@/components/editor/EditingArea/components/FocusBox/components/InlineTextEditBox/InlineTextEditBox';
+import useCalculatePosition from '@/components/editor/EditingArea/components/FocusBox/hooks/useCalculatePosition';
 
 type Props = {
   children: React.ReactElement<{
@@ -95,6 +97,8 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
     setCurPosition,
   });
 
+  const { positionY: editorPositionY } = useCalculatePosition({ curPosition });
+
   //               //
   /* Layer 삭제 로직 */
   //               //
@@ -104,13 +108,25 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
    * 이미지 재생성을 위해 현재 탭을 prompt 탭으로 변경하는 로직
    */
   const setCurrentTab = useFocusStore(state => state.setCurrentTab);
-  
+
   const switchToPromptTab = () => {
     setCurrentTab('prompt');
   };
 
   return (
     <>
+      <div
+        className="absolute"
+        style={{
+          left: curPosition.x + (curPosition.width - 200) / 2,
+          top: editorPositionY - 70,
+          zIndex: 1000,
+          pointerEvents: 'none', // 이벤트가 통과되어서 아래있는 요소(자식요소 아니고 아래 위치 요소)가 이벤트를 받도록 함
+        }}
+      >
+        <InlineTextEditBox />
+      </div>
+
       {/* z-index 상승하는 border와 control 버튼들 */}
       <div
         className={`absolute border-2 border-main ${isDoubleClicked && type === 'text' && 'border-main'}`}
