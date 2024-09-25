@@ -11,7 +11,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Template, TemplateList } from '@/types';
 import { templateApi } from '@/api';
 import { useParams, useRouter } from 'next/navigation';
-import { useCardsStore } from '@/store/useCardsStore';
+import { INITIAL_CARD, useCardsStore } from '@/store/useCardsStore';
 import { jsonUtils } from '@/utils';
 
 const EditorContent = () => {
@@ -44,7 +44,16 @@ const EditorContent = () => {
     if (!data) return;
 
     const templateData = jsonUtils.parseEscapedJson(data.editor);
-    setCards(templateData);
+
+    if (templateData) {
+      setCards(templateData);
+    } else {
+      const initCard = INITIAL_CARD;
+      initCard.id = Number(id);
+
+      setCards([initCard]);
+    }
+
     setTemplateId(data.id);
   }, [data]);
 
