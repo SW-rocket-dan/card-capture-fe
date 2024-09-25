@@ -1,7 +1,7 @@
-import React from 'react';
-import { QueryClient, useQueryClient } from '@tanstack/react-query';
+import React, { useEffect, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
-import { Template } from '@/types';
+import { INIT_PROMPT, Prompt, Template } from '@/types';
 
 const PromptHistoryBox = () => {
   /**
@@ -12,6 +12,11 @@ const PromptHistoryBox = () => {
 
   const queryClient = useQueryClient();
   const templateData = queryClient.getQueryData<Template>([`template-${id}`]);
+  const [templatePrompt, setTemplatePrompt] = useState<Prompt>(INIT_PROMPT);
+
+  useEffect(() => {
+    if (templateData?.prompt) setTemplatePrompt(templateData.prompt);
+  }, [templateData]);
 
   return (
     <div className="flex w-full flex-col">
@@ -25,20 +30,20 @@ const PromptHistoryBox = () => {
         <div className="flex flex-col gap-2 px-[15px]">
           <label className="text-[12px] text-gray4">입력한 문구</label>
           <p className="text-gray9 h-[90px] overflow-y-scroll rounded-[10px] border border-border p-2.5 text-[12px]">
-            {templateData?.prompt.phraseDetails.phrases.map(str => <p>{str}</p>)}
+            {templatePrompt.phraseDetails.phrases.map(str => (
+              <p>{str}</p>
+            ))}
           </p>
         </div>
         <div className="flex flex-col gap-2 px-[15px]">
           <label className="text-[12px] text-gray4">목적</label>
-          <p className="text-gray9 rounded-[10px] border border-border p-2.5 text-[12px]">
-            {templateData?.prompt.purpose}
-          </p>
+          <p className="text-gray9 rounded-[10px] border border-border p-2.5 text-[12px]">{templatePrompt.purpose}</p>
         </div>
         <div className="flex flex-row justify-between px-[15px]">
           <label className="text-[12px] text-gray4">색상</label>
           <div
             className="!h-[19px] !w-[35px] rounded-md border-2 border-border"
-            style={{ backgroundColor: `${templateData?.prompt.color}` }}
+            style={{ backgroundColor: `${templatePrompt.color}` }}
           />
         </div>
       </div>

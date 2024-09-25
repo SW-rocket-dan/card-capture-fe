@@ -36,3 +36,14 @@ export type UpdatableAttributes = 'EDITOR' | 'TITLE' | 'DESCRIPTION' | 'FILE_URL
 export type TemplateUpdateRequest = Template & { updatedAttributes: UpdatableAttributes[] };
 
 export type TemplateList = Template[];
+
+export const INIT_PROMPT: Prompt = {
+  phraseDetails: {
+    phrases: [''],
+    firstEmphasis: '',
+    secondEmphasis: '',
+  },
+  purpose: '',
+  color: '',
+  model: '',
+};
