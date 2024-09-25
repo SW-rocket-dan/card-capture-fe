@@ -11,8 +11,9 @@ import { useQuery } from '@tanstack/react-query';
 import { Template, TemplateList } from '@/types';
 import { templateApi } from '@/api';
 import { useParams, useRouter } from 'next/navigation';
-import { INITIAL_CARD, useCardsStore } from '@/store/useCardsStore';
+import { useCardsStore } from '@/store/useCardsStore';
 import { jsonUtils } from '@/utils';
+import { Card } from '@/store/useCardsStore/type';
 
 const EditorContent = () => {
   useChannelTalk();
@@ -48,8 +49,15 @@ const EditorContent = () => {
     if (templateData) {
       setCards(templateData);
     } else {
-      const initCard = INITIAL_CARD;
-      initCard.id = Number(id);
+      const initCard: Card = {
+        id: Number(id),
+        background: {
+          url: '',
+          opacity: 100,
+          color: '#FFFFFF',
+        },
+        layers: [],
+      };
 
       setCards([initCard]);
     }
