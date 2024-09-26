@@ -4,8 +4,13 @@ import React, { useEffect, useState } from 'react';
 import DownIcon from '@/components/common/Icon/DownIcon';
 import { useCardsStore } from '@/store/useCardsStore';
 import { editorUtils } from '@/utils';
+import useTextFormatting from '@/components/editor/Tab/components/EditTab/TextEditBox/hooks/useTextFormatting';
 
-const RecentColorsBox = () => {
+type RecentColorsBoxProps = {
+  type: 'text' | 'shape';
+};
+
+const RecentColorsBox = ({ type }: RecentColorsBoxProps) => {
   const cards = useCardsStore(state => state.cards);
   const usedColors = useCardsStore(state => state.usedColors);
   const setUsedColors = useCardsStore(state => state.setUsedColor);
@@ -34,6 +39,14 @@ const RecentColorsBox = () => {
     setUsedColorList(sliceAndPadArray(usedColors));
   }, [usedColors]);
 
+  const { changeStyleHandler } = useTextFormatting();
+
+  const changeColorHandler = (color: string | undefined) => {
+    if (!color) return;
+
+    if (type === 'text') changeStyleHandler('color', color);
+  };
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -55,6 +68,7 @@ const RecentColorsBox = () => {
           {usedColorList.map(color => (
             <button
               disabled={!color}
+              onClick={() => changeColorHandler(color)}
               className={`h-[20px] w-[20px] rounded-sm`}
               style={{ backgroundColor: color || '#D9D9D9' }}
             />

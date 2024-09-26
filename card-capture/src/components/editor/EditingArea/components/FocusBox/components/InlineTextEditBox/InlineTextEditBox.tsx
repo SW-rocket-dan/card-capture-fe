@@ -12,7 +12,7 @@ const InlineTextEditBox = () => {
 
   return (
     <div className="shadow-base flex h-[50px] w-[300px] flex-row items-center gap-[10px] rounded-[8px] bg-white px-2">
-      <RecentColorsBox />
+      <RecentColorsBox type="text" />
       <SizeSelectBox sizeList={availableFontSize} ratio={0.85} />
       <FormatBox ratio={0.9} />
     </div>
