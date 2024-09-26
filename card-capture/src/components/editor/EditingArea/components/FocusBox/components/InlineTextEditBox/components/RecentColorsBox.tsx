@@ -13,7 +13,7 @@ type RecentColorsBoxProps = {
 const RecentColorsBox = ({ type }: RecentColorsBoxProps) => {
   const cards = useCardsStore(state => state.cards);
   const usedColors = useCardsStore(state => state.usedColors);
-  const setUsedColors = useCardsStore(state => state.setUsedColor);
+  const setUsedColors = useCardsStore(state => state.setUsedColors);
 
   /**
    * 카드가 가지고 있는 색상데이터 추출해서 전역에 저장

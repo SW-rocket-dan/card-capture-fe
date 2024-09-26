@@ -12,7 +12,7 @@ const FormatBox = ({ ratio = 1 }: FormatBoxProps) => {
 
   return (
     <div
-      className="flex w-full flex-row items-center justify-between px-[20px]"
+      className={`flex w-full flex-row items-center justify-between ${ratio == 1 ? 'px-[20px]' : ''}`}
       style={{ transform: `scale(${ratio})` }}
     >
       <div className="cursor-pointer" onClick={() => changeTextFormatHandler('bold')}>

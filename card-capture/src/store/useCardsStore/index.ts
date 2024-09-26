@@ -22,7 +22,9 @@ type useCardsStore = {
   templateId: number;
   cards: Card[];
   zIndexMap: ZIndexMap;
+
   usedColors: string[];
+  usedFonts: string[];
 
   setTemplateId: (templateId: number) => void;
   setCard: (card: Card[]) => void;
@@ -64,7 +66,8 @@ type useCardsStore = {
   moveLayerToFront: (cardId: number, layerId: number) => void;
   moveLayerToBack: (cardId: number, layerId: number) => void;
 
-  setUsedColor: (colorList: string[]) => void;
+  setUsedColors: (colorList: string[]) => void;
+  setUsedFonts: (fontList: string[]) => void;
 };
 
 export const useCardsStore = create(
@@ -74,7 +77,9 @@ export const useCardsStore = create(
         templateId: -1,
         cards: [],
         zIndexMap: {},
+
         usedColors: [],
+        usedFonts: [],
 
         setTemplateId: templateId => set({ templateId }),
 
@@ -523,11 +528,18 @@ export const useCardsStore = create(
             }),
           ),
 
-        setUsedColor: colorList =>
+        setUsedColors: colorList =>
           set(
             produce((draft: Draft<{ usedColors: string[] }>) => {
               // draft.usedColors = Array.from(new Set([...draft.usedColors, ...colorList]));
               draft.usedColors = colorList;
+            }),
+          ),
+
+        setUsedFonts: fontList =>
+          set(
+            produce((draft: Draft<{ usedFonts: string[] }>) => {
+              draft.usedFonts = Array.from(new Set([...draft.usedFonts, ...fontList]));
             }),
           ),
       }),
