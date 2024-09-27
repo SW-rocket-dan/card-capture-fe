@@ -15,8 +15,8 @@ const RecentFontsBox = () => {
    * 카드가 가지고 있는 폰트 데이터 추출해서 전역에 저장
    */
   useEffect(() => {
-    const colorList = editorUtils.extractFonts(cards);
-    setUsedFonts(colorList);
+    const fontList = editorUtils.extractFonts(cards);
+    setUsedFonts(fontList);
   }, [cards]);
 
   // 텍스트 스타일 적용 hook
@@ -32,7 +32,7 @@ const RecentFontsBox = () => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <button className="flex h-[25px] items-center justify-center gap-1">
+        <button className="flex h-[25px] items-center justify-center gap-1 pr-2">
           <FontAIcon width={15} />
           <DownIcon width={10} />
         </button>
@@ -40,7 +40,7 @@ const RecentFontsBox = () => {
       <PopoverContent
         asChild
         align="start"
-        className={`absolute left-full z-50 -ml-[10px] -mt-[148px] h-[100px] w-[140px] rounded-[8px] bg-white p-1.5`}
+        className={`absolute left-full z-50 -ml-[10px] -mt-[143px] h-[94px] w-[140px] rounded-[8px] bg-white p-1.5`}
         style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08', zIndex: 10000 }}
       >
         <ul className="flex flex-col overflow-y-auto text-[12px]">

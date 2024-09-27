@@ -119,7 +119,7 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
         className="absolute"
         style={{
           left: curPosition.x + (curPosition.width - 300) / 2,
-          top: editorPositionY - 90,
+          top: editorPositionY - 87,
           zIndex: 1020,
         }}
         onClick={stopPropagation}

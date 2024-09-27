@@ -50,7 +50,7 @@ const RecentColorsBox = ({ type }: RecentColorsBoxProps) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <div className="flex h-[25px] items-center justify-center gap-1">
+        <div className="flex h-[25px] items-center justify-center gap-1 pr-3">
           <button
             className={`!h-[20px] !w-[20px] rounded-md border-2 border-border`}
             style={{ backgroundColor: '#FFFFFF' }}
