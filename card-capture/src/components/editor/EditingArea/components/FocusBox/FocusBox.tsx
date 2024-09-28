@@ -14,6 +14,7 @@ import AIIcon from '@/components/common/Icon/AIIcon';
 import { useFocusStore } from '@/store/useFocusStore';
 import InlineTextEditBox from '@/components/editor/EditingArea/components/FocusBox/components/InlineTextEditBox/InlineTextEditBox';
 import useCalculatePosition from '@/components/editor/EditingArea/components/FocusBox/hooks/useCalculatePosition';
+import InlineLayerEditBox from '@/components/editor/EditingArea/components/FocusBox/components/InlineLayerEditBox/InlineLayerEditBox';
 
 type Props = {
   children: React.ReactElement<{
@@ -118,13 +119,13 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
       <div
         className="absolute"
         style={{
-          left: curPosition.x + (curPosition.width - 300) / 2,
+          left: curPosition.x + (curPosition.width - (type === 'text' ? 300 : 120)) / 2,
           top: editorPositionY - 87,
           zIndex: 1020,
         }}
         onClick={stopPropagation}
       >
-        <InlineTextEditBox />
+        {type === 'text' ? <InlineTextEditBox /> : <InlineLayerEditBox />}
       </div>
 
       {/* z-index 상승하는 border와 control 버튼들 */}
