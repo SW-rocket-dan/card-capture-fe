@@ -47,6 +47,7 @@ const EditorContent = () => {
     const templateData = jsonUtils.parseEscapedJson(data.editor);
 
     if (templateData) {
+      templateData[0].id = 0;
       setCards(templateData);
     } else {
       const initCard: Card = {
