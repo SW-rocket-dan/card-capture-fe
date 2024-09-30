@@ -5,6 +5,7 @@ import DownIcon from '@/components/common/Icon/DownIcon';
 import { useCardsStore } from '@/store/useCardsStore';
 import { editorUtils } from '@/utils';
 import useTextFormatting from '@/components/editor/Tab/components/EditTab/TextEditBox/hooks/useTextFormatting';
+import useTextStyle from '@/components/editor/Tab/components/EditTab/TextEditBox/hooks/useTextStyle';
 
 type RecentColorsBoxProps = {
   type: 'text' | 'shape';
@@ -39,6 +40,9 @@ const RecentColorsBox = ({ type }: RecentColorsBoxProps) => {
     setUsedColorList(sliceAndPadArray(usedColors));
   }, [usedColors]);
 
+  /**
+   * 스타일 변경시 전역에 반영
+   */
   const { changeStyleHandler } = useTextFormatting();
 
   const changeColorHandler = (color: string | undefined) => {
@@ -47,13 +51,18 @@ const RecentColorsBox = ({ type }: RecentColorsBoxProps) => {
     if (type === 'text') changeStyleHandler('color', color);
   };
 
+  /**
+   * 현재 적용된 스타일 가져오기
+   */
+  const { getStyles } = useTextStyle();
+
   return (
     <Popover>
       <PopoverTrigger asChild>
         <div className="flex h-[25px] items-center justify-center gap-1 pr-3">
           <button
             className={`!h-[20px] !w-[20px] rounded-md border-2 border-border`}
-            style={{ backgroundColor: '#FFFFFF' }}
+            style={{ backgroundColor: (getStyles('color') as string) || '' }}
           />
           <DownIcon width={10} />
         </div>
@@ -67,7 +76,7 @@ const RecentColorsBox = ({ type }: RecentColorsBoxProps) => {
         <div className="flex flex-row flex-wrap gap-1">
           {usedColorList.map(color => (
             <button
-              disabled={!color}
+              disabled={!getStyles('color')}
               onClick={() => changeColorHandler(color)}
               className={`h-[20px] w-[20px] rounded-sm`}
               style={{ backgroundColor: color || '#D9D9D9' }}

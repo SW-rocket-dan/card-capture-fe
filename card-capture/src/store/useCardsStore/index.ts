@@ -167,11 +167,11 @@ export const useCardsStore = create(
                 draft.cards[cardId].layers = draft.cards[cardId].layers.map(v =>
                   v.id === layerId
                     ? {
-                        ...v,
-                        content: {
-                          content: text,
-                        },
-                      }
+                      ...v,
+                      content: {
+                        content: text,
+                      },
+                    }
                     : v,
                 );
               },

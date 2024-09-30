@@ -1,5 +1,5 @@
 import { useFocusStore } from '@/store/useFocusStore';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export type TextStyle = { [key: string]: string | boolean };
 

@@ -5,6 +5,7 @@ import CloseIcon from '@/components/common/Icon/CloseIcon';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import useClickOutside from '@/hooks/useClickOutside';
 import usePreventCloseOnSelection from '@/components/editor/Tab/components/EditTab/TextEditBox/hooks/usePreventCloseOnSelection';
+import useTextStyle from '@/components/editor/Tab/components/EditTab/TextEditBox/hooks/useTextStyle';
 
 type ColorButtonProps = {
   color: IColor;
@@ -14,6 +15,7 @@ type ColorButtonProps = {
   disabled?: boolean;
   direction?: 'bottom' | 'left' | 'right' | 'top';
   size?: string;
+  type?: 'text' | 'shape' | 'bg';
 };
 
 const ColorButton = ({
@@ -24,6 +26,7 @@ const ColorButton = ({
   disabled = false,
   direction = 'bottom',
   size,
+  type,
 }: ColorButtonProps) => {
   /**
    * 색상 선택 드롭다운 여닫는 click Handler
@@ -35,6 +38,14 @@ const ColorButton = ({
    */
   const ref = useClickOutside(() => setIsOpen(false));
 
+  /**
+   * 텍스트에 적용된 색상 가져오는 hook
+   */
+  /**
+   * 현재 적용된 스타일 가져오기
+   */
+  const { getStyles } = useTextStyle();
+
   return (
     <div ref={ref}>
       <Popover open={isOpen} onOpenChange={changeOpenHandler}>
@@ -45,7 +56,12 @@ const ColorButton = ({
             <button
               disabled={disabled}
               className={`rounded-md border-2 border-border ${className ? `${className}` : '!h-[21px] !w-[21px]'} `}
-              style={{ backgroundColor: color.hex }}
+              style={{
+                backgroundColor:
+                  type === 'text' && typeof getStyles('color') === 'string'
+                    ? (getStyles('color') as string) || color.hex
+                    : color.hex,
+              }}
             />
           </div>
         </PopoverTrigger>
