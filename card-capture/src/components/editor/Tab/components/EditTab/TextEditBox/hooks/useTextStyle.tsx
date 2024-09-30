@@ -47,7 +47,28 @@ const useTextStyle = () => {
     };
   }, [currentRef, getTextStyle]);
 
-  return { textStyle };
+  /**
+   * 특정 스타일이 적용되어 있는지 확인하는 함수
+   */
+  const isFormatActive = useCallback(
+    (format: string) => {
+      if (!textStyle) return false;
+
+      return textStyle[format] === true;
+    },
+    [textStyle],
+  );
+
+  const getStyles = useCallback(
+    (format: string) => {
+      if (!textStyle) return '';
+
+      return textStyle[format];
+    },
+    [textStyle],
+  );
+
+  return { textStyle, isFormatActive, getStyles };
 };
 
 export default useTextStyle;
