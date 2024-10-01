@@ -1,7 +1,7 @@
 import { useFocusStore } from '@/store/useFocusStore';
 import { useCallback, useEffect, useState } from 'react';
 
-export type TextStyle = { [key: string]: string | boolean };
+export type TextStyle = { [key: string]: string | boolean | string[] };
 
 const useTextStyle = () => {
   const currentRef = useFocusStore(state => state.currentRef);
