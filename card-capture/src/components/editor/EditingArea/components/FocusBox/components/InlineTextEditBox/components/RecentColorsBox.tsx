@@ -76,6 +76,7 @@ const RecentColorsBox = ({ type }: RecentColorsBoxProps) => {
         <div className="flex flex-row flex-wrap gap-1">
           {usedColorList.map(color => (
             <button
+              key={color}
               disabled={!getStyles('color')}
               onClick={() => changeColorHandler(color)}
               className={`h-[20px] w-[20px] rounded-sm`}

@@ -53,6 +53,7 @@ const RecentFontsBox = () => {
               //   </button>
               // ) : (
               <button
+                key={font}
                 onClick={() => selectFontHandler(font)}
                 className={`flex justify-start px-[7px] py-[5px] text-[11px] hover:bg-itembg ql-font-${font}`}
               >

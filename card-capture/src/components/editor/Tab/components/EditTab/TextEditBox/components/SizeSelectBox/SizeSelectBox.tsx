@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import DownIcon from '@/components/common/Icon/DownIcon';
 import UpIcon from '@/components/common/Icon/UpIcon';
 import CheckIcon from '@/components/common/Icon/CheckIcon';
 import useTextFormatting from '@/components/editor/Tab/components/EditTab/TextEditBox/hooks/useTextFormatting';
 import useClickOutside from '@/hooks/useClickOutside';
+import useTextStyle from '@/components/editor/Tab/components/EditTab/TextEditBox/hooks/useTextStyle';
 
 type SizeSelectBoxProps = {
   sizeList: string[];
@@ -36,6 +37,31 @@ const SizeSelectBox = ({ sizeList, ratio = 1 }: SizeSelectBoxProps) => {
   // 컴포넌트 외부 클릭시 모달 닫는 hook
   const ref = useClickOutside(() => setIsOpen(false));
 
+  /**
+   * 현재 적용된 스타일 가져오기
+   */
+  const { getStyles } = useTextStyle();
+  const prevSizeRef = useRef<string | null>(null);
+
+  const findSizeIndex = useCallback(
+    (size: string) => {
+      return sizeList.findIndex(s => s === size);
+    },
+    [sizeList],
+  );
+
+  useEffect(() => {
+    const currentSize = getStyles('size');
+
+    if (typeof currentSize === 'string' && currentSize !== prevSizeRef.current) {
+      const index = findSizeIndex(currentSize);
+      if (index !== -1 && index !== selectedIndex) {
+        setSelectedIndex(index);
+      }
+      prevSizeRef.current = currentSize;
+    }
+  }, [getStyles, findSizeIndex, sizeList, selectedIndex]);
+
   return (
     <div ref={ref} className="relative" style={{ transform: `scale(${ratio})` }}>
       <button
@@ -48,10 +74,10 @@ const SizeSelectBox = ({ sizeList, ratio = 1 }: SizeSelectBoxProps) => {
 
       {isOpen && (
         <div
-          className="absolute mt-[10px] flex w-[110px] w-full flex-col overflow-hidden rounded-xl bg-white"
-          style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08', zIndex: 10 }}
+          className="absolute mt-[10px] flex w-[110px] flex-col overflow-hidden rounded-xl bg-white"
+          style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08' }}
         >
-          <ul className="flex max-h-48 flex-col overflow-y-auto text-[12px]">
+          <ul className="flex max-h-48 flex-col overflow-y-auto text-[12px]" style={{ zIndex: 20 }}>
             {sizeList.map((size, index) =>
               selectedIndex === index ? (
                 <button className="flex flex-row items-center justify-between bg-main px-[12px] py-[8px]">
