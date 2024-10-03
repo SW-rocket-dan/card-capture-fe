@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SpacingIcon from '@/components/common/Icon/SpacingIcon';
 import { Slider } from '@/components/ui/slider';
 import useTextFormatting from '@/components/editor/Tab/components/EditTab/TextEditBox/hooks/useTextFormatting';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import useClickOutside from '@/hooks/useClickOutside';
+import useTextStyle from '@/components/editor/Tab/components/EditTab/TextEditBox/hooks/useTextStyle';
 
 const SpacingButton = () => {
   /**
@@ -46,6 +47,20 @@ const SpacingButton = () => {
    * 외부 영역 클릭시 popover 닫는 hook
    */
   const ref = useClickOutside(() => setIsOpen(false));
+
+  const { textStyle, getStyles } = useTextStyle();
+
+  useEffect(() => {
+    const lineHeightStyle = getStyles('line-height');
+    if (lineHeightStyle && typeof lineHeightStyle === 'string') {
+      setLineHeight(Number(lineHeightStyle));
+    }
+
+    const letterSpacingStyle = getStyles('letter-spacing');
+    if (letterSpacingStyle && typeof letterSpacingStyle === 'string') {
+      setLetterSpacing(Number(letterSpacingStyle.slice(0, -2)));
+    }
+  }, [textStyle, getStyles]);
 
   return (
     <div ref={ref}>
