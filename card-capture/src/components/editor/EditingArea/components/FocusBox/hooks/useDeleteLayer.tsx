@@ -47,7 +47,7 @@ const useDeleteLayer = ({ cardId }: UseDeleteLayerProps) => {
   /**
    * 2. 오른쪽 클릭으로 메뉴를 띄워서 선택한 layer를 삭제하는 기능
    */
-  const deleteLayerOnClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+  const deleteLayerOnClickHandler = (e: React.MouseEvent<HTMLDivElement> | React.MouseEvent<HTMLButtonElement>) => {
     if (focusedCardId !== cardId) return;
 
     deleteLayer(cardId, focusedLayerId);

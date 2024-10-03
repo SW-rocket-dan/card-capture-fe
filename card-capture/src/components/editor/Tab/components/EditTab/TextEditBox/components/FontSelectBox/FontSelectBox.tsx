@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import UpIcon from '@/components/common/Icon/UpIcon';
 import DownIcon from '@/components/common/Icon/DownIcon';
 import FindIcon from '@/components/common/Icon/FindIcon';
@@ -6,6 +6,7 @@ import ClockIcon from '@/components/common/Icon/ClockIcon';
 import FontIcon from '@/components/common/Icon/FontIcon';
 import useTextFormatting from '@/components/editor/Tab/components/EditTab/TextEditBox/hooks/useTextFormatting';
 import useClickOutside from '@/hooks/useClickOutside';
+import useTextStyle from '@/components/editor/Tab/components/EditTab/TextEditBox/hooks/useTextStyle';
 
 type SelectBoxProps = {
   list: string[];
@@ -48,6 +49,35 @@ const FontSelectBox = ({ list }: SelectBoxProps) => {
 
   // 컴포넌트 외부 클릭시 모달 닫는 hook
   const ref = useClickOutside(() => setIsOpen(false));
+
+  /**
+   * 현재 적용된 스타일 가져오기
+   */
+  const { getStyles } = useTextStyle();
+  const prevFontRef = useRef<string | null>(null);
+
+  const findFontIndex = useCallback(
+    (font: string) => {
+      return list.findIndex(f => f.toLowerCase() === font.toLowerCase());
+    },
+    [list],
+  );
+
+  useEffect(() => {
+    const currentFont = getStyles('font');
+
+    if (typeof currentFont === 'string' && currentFont !== prevFontRef.current) {
+      const index = findFontIndex(currentFont);
+      if (index !== -1 && index !== selectedIndex) {
+        setSelectedIndex(index);
+        // 최근 사용 폰트 업데이트
+        if (!recentFontIndex.includes(index)) {
+          setRecentFontIndex(prev => [index, prev[0]]);
+        }
+      }
+      prevFontRef.current = currentFont;
+    }
+  }, [getStyles, findFontIndex, list, selectedIndex, recentFontIndex]);
 
   return (
     <div ref={ref} className="relative">

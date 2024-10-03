@@ -1,8 +1,9 @@
 import { Alpha, Hue, IColor, Saturation } from 'react-color-palette';
 import 'react-color-palette/css';
-import { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 import './ColorPicker.styles.css';
 import { hexToRgba, rgbaToHsva } from '@/components/common/ColorPicker/colorUtils';
+import { useCardsStore } from '@/store/useCardsStore';
 
 type ColorPickerProps = {
   color: IColor;
@@ -14,17 +15,17 @@ const ColorPicker = ({ color, setColor }: ColorPickerProps) => {
    * react-color-palette 라이브러리에서 선택한 색상을 hex,rgb,hsv로 변환해서 상태에 저장하는 핸들러
    */
   const handleChangeColor = (e: ChangeEvent<HTMLInputElement>) => {
-    const newColor = e.target.value.toUpperCase();
+    const changedColor = e.target.value.toUpperCase();
 
-    const hexColor = `#${newColor.padEnd(6, '0')}`;
+    const hexColor = `#${changedColor.padEnd(6, '0')}`;
     const rgba = hexToRgba(hexColor);
     const hsva = rgbaToHsva(rgba);
 
-    if (/^[0-9A-F]*$/.test(newColor)) {
-      if (newColor.length <= 6) {
+    if (/^[0-9A-F]*$/.test(changedColor)) {
+      if (changedColor.length <= 6) {
         setColor({
           ...color,
-          hex: `#${newColor}`,
+          hex: `#${changedColor}`,
           rgb: rgba,
           hsv: hsva,
         });
@@ -32,13 +33,22 @@ const ColorPicker = ({ color, setColor }: ColorPickerProps) => {
     }
   };
 
+  /**
+   * 마지막에 선택된 색상만 전역 상태에 저장되도록 함
+   */
+  const setUsedColors = useCardsStore(state => state.setUsedColors);
+
+  const changeCompleteColorHandler = (color: IColor) => {
+    setUsedColors(color.hex);
+  };
+
   return (
     <div className="flex w-full flex-col pb-4">
       <div className="flex w-[230px] flex-col gap-3">
-        <Saturation height={230} color={color} onChange={setColor} />
+        <Saturation height={230} color={color} onChange={setColor} onChangeComplete={changeCompleteColorHandler} />
         <div className="flex flex-col gap-2.5 px-4">
-          <Hue color={color} onChange={setColor} />
-          <Alpha color={color} onChange={setColor} />
+          <Hue color={color} onChange={setColor} onChangeComplete={changeCompleteColorHandler} />
+          <Alpha color={color} onChange={setColor} onChangeComplete={changeCompleteColorHandler} />
           <div className="flex flex-row items-center justify-between rounded-md bg-itembg px-3 py-2 text-xs">
             <input
               className="bg-transparent font-medium outline-none"

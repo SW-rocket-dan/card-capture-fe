@@ -10,6 +10,8 @@ import { tokenUtils, userUtils } from '@/utils';
 import userApi from '@/api/userApi';
 import { useQuery } from '@tanstack/react-query';
 import useAmplitudeContext from '@/hooks/useAmplitudeContext';
+import Button from '@/components/common/Button/Button';
+import { templateApi } from '@/api';
 
 const AfterLoginNav = () => {
   const router = useRouter();
@@ -41,6 +43,12 @@ const AfterLoginNav = () => {
       if (pathname === '/') router.refresh();
       else router.push('/');
     }
+  };
+
+  const createEmptyTemplateHandler = async () => {
+    const { templateId, editor } = await templateApi.createEmptyTemplate();
+
+    router.push(`/editor/${templateId}`);
   };
 
   /**
@@ -103,7 +111,10 @@ const AfterLoginNav = () => {
 
       {!isMobile && (
         <div ref={ref} className="relative">
-          <div className="w-[300px]">
+          <div className="flex w-[300px] flex-row justify-end gap-4">
+            <Button onClick={createEmptyTemplateHandler} type="full" className="h-[38px] w-[130px] rounded-[7px]">
+              <p className="text-[12.5px] font-medium">에디터 사용해보기</p>
+            </Button>
             <div className="flex cursor-pointer flex-row justify-end gap-1.5" onClick={openHandler}>
               <TempProfileIcon width={38} height={38} />
               {isOpen ? (

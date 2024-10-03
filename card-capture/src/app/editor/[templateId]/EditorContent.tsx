@@ -13,6 +13,7 @@ import { templateApi } from '@/api';
 import { useParams, useRouter } from 'next/navigation';
 import { useCardsStore } from '@/store/useCardsStore';
 import { jsonUtils } from '@/utils';
+import { Card } from '@/store/useCardsStore/type';
 
 const EditorContent = () => {
   useChannelTalk();
@@ -44,7 +45,24 @@ const EditorContent = () => {
     if (!data) return;
 
     const templateData = jsonUtils.parseEscapedJson(data.editor);
-    setCards(templateData);
+
+    if (templateData) {
+      templateData[0].id = 0;
+      setCards(templateData);
+    } else {
+      const initCard: Card = {
+        id: 0,
+        background: {
+          url: '',
+          opacity: 100,
+          color: '#FFFFFF',
+        },
+        layers: [],
+      };
+
+      setCards([initCard]);
+    }
+
     setTemplateId(data.id);
   }, [data]);
 

@@ -38,6 +38,20 @@ const createTemplate = async (data: PromptSubmitType) => {
   }
 };
 
+const createEmptyTemplate = async () => {
+  try {
+    const response = await customFetch(`${process.env.NEXT_PUBLIC_API_KEY}/api/v1/template/create-empty`, {
+      method: 'GET',
+    });
+
+    const jsonData = await response.json();
+
+    return jsonData.data;
+  } catch (e) {
+    console.error(e);
+  }
+};
+
 const updateTemplate = async (templateData: Partial<Template>) => {
   try {
     const response = await customFetch(`${process.env.NEXT_PUBLIC_API_KEY}/api/v1/template/update`, {
@@ -113,4 +127,11 @@ const changeImage = async (imageId: number, message: string) => {
   }
 };
 
-export default { createTemplate, updateTemplate, getTemplateData, getAllTemplateData, changeImage };
+export default {
+  createTemplate,
+  createEmptyTemplate,
+  updateTemplate,
+  getTemplateData,
+  getAllTemplateData,
+  changeImage,
+};

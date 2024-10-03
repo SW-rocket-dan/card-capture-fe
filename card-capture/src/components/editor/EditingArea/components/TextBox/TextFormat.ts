@@ -58,13 +58,14 @@ Quill.register(LetterSpacingStyle, true);
 
 // 행간 (Line Height)
 
-export const availableLineHeight = ['10px', '15px', '20px', '25px', '30px'];
+export const availableLineHeight = ['10', '15', '20', '25', '30'];
 
-const LineHeightStyle = new Parchment.Attributor.Style('line-height', 'line-height', {
+const LineHeightClass = new Parchment.Attributor.Class('line-height', 'ql-line-height', {
   scope: Parchment.Scope.BLOCK,
   whitelist: availableLineHeight,
 });
-Quill.register(LineHeightStyle, true);
+
+Quill.register(LineHeightClass, true);
 
 // 장평 (Font Stretch)
 

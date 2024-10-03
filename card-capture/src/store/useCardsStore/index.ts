@@ -23,6 +23,9 @@ type useCardsStore = {
   cards: Card[];
   zIndexMap: ZIndexMap;
 
+  usedColors: string[];
+  usedFonts: string[];
+
   setTemplateId: (templateId: number) => void;
   setCard: (card: Card[]) => void;
   addCard: () => void;
@@ -57,16 +60,14 @@ type useCardsStore = {
   addShapeLayer: (cardId: number, type: ShapeType) => void;
   addIllustLayer: (cardId: number, url: string) => void;
 
-  // z-index 설정
-  // setZIndex: (cardId: number, layerId: number, zIndex: number) => void;
-  // getZIndex: (cardId: number, layerId: number) => number;
-  // updateZIndexMap: () => void;
-
   // z-index 변경 로직
   moveLayerForward: (cardId: number, layerId: number) => void;
   moveLayerBackward: (cardId: number, layerId: number) => void;
   moveLayerToFront: (cardId: number, layerId: number) => void;
   moveLayerToBack: (cardId: number, layerId: number) => void;
+
+  setUsedColors: (color: string) => void;
+  setUsedFonts: (fontList: string[]) => void;
 };
 
 export const useCardsStore = create(
@@ -76,6 +77,9 @@ export const useCardsStore = create(
         templateId: -1,
         cards: [],
         zIndexMap: {},
+
+        usedColors: [],
+        usedFonts: [],
 
         setTemplateId: templateId => set({ templateId }),
 
@@ -521,6 +525,20 @@ export const useCardsStore = create(
 
               // 가장 작은 값을 현재 z-index로 설정
               cardZIndexMap[layerId] = lowestZIndex;
+            }),
+          ),
+
+        setUsedColors: color =>
+          set(
+            produce((draft: Draft<{ usedColors: string[] }>) => {
+              draft.usedColors = Array.from(new Set([...draft.usedColors, color]));
+            }),
+          ),
+
+        setUsedFonts: fontList =>
+          set(
+            produce((draft: Draft<{ usedFonts: string[] }>) => {
+              draft.usedFonts = Array.from(new Set([...draft.usedFonts, ...fontList]));
             }),
           ),
       }),

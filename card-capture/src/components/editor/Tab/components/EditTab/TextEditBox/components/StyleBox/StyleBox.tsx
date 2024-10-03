@@ -27,7 +27,7 @@ const StyleBox = () => {
       <AlignButton />
       <SpacingButton />
       <ListButton />
-      <ColorButton color={color} setColor={handleColorChange} direction="right" />
+      <ColorButton color={color} setColor={handleColorChange} direction="right" type="text" />
     </div>
   );
 };

@@ -83,6 +83,13 @@ const TextBox = ({
   useEffect(() => {
     if (isDoubleClicked && editorRef.current) {
       setCurrentRef(editorRef);
+
+      // 입력 모드 전환시 전체 텍스트 선택
+      const editor = editorRef.current?.getEditor();
+      if (!editor) return;
+
+      editor.focus();
+      editor.setSelection(0, editor.getLength() - 1);
     }
   }, [isDoubleClicked]);
 
