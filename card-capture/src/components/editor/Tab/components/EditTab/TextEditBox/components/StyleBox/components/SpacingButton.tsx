@@ -3,14 +3,13 @@ import SpacingIcon from '@/components/common/Icon/SpacingIcon';
 import { Slider } from '@/components/ui/slider';
 import useTextFormatting from '@/components/editor/Tab/components/EditTab/TextEditBox/hooks/useTextFormatting';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import usePreventCloseOnSelection from '@/components/editor/Tab/components/EditTab/TextEditBox/hooks/usePreventCloseOnSelection';
 import useClickOutside from '@/hooks/useClickOutside';
 
 const SpacingButton = () => {
   /**
    * 드롭다운을 여닫는 click handler
    */
-  const { isOpen, setIsOpen, changeOpenHandler } = usePreventCloseOnSelection();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   // 텍스트 스타일 적용 hook
   const { changeStyleHandler } = useTextFormatting();
@@ -49,9 +48,12 @@ const SpacingButton = () => {
 
   return (
     <div ref={ref}>
-      <Popover open={isOpen} onOpenChange={changeOpenHandler}>
+      <Popover open={isOpen}>
         <PopoverTrigger asChild>
-          <button className="flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-md hover:bg-itembg">
+          <button
+            onClick={() => setIsOpen(prev => !prev)}
+            className="flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-md hover:bg-itembg"
+          >
             <SpacingIcon height={17} />
           </button>
         </PopoverTrigger>
