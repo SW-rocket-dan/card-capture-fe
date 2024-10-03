@@ -161,3 +161,11 @@
 .ql-fontStretch-150 {
     font-stretch: 150%;
 }
+
+/** 행간 설정 **/
+
+.ql-line-height-10 { line-height: 1; }
+.ql-line-height-15 { line-height: 1.5; }
+.ql-line-height-20 { line-height: 2; }
+.ql-line-height-25 { line-height: 2.5; }
+.ql-line-height-30 { line-height: 3; }

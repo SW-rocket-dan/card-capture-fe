@@ -28,7 +28,8 @@ const SpacingButton = () => {
 
   const handleChangeLineHeight = (value: number[]) => {
     setLineHeight(value[0]);
-    changeStyleHandler('line-height', `${value[0]}px`);
+
+    changeStyleHandler('line-height', `${value[0]}`);
   };
 
   /**
