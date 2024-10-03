@@ -11,8 +11,6 @@ type ColorPickerProps = {
 };
 
 const ColorPicker = ({ color, setColor }: ColorPickerProps) => {
-  const [newColor, setNewColor] = useState<IColor>(color);
-
   /**
    * react-color-palette 라이브러리에서 선택한 색상을 hex,rgb,hsv로 변환해서 상태에 저장하는 핸들러
    */

@@ -44,7 +44,7 @@ const RecentFontsBox = () => {
         style={{ boxShadow: '0px 2px 10px 0px rgba(0, 0, 0, 0.08', zIndex: 10000 }}
       >
         <ul className="flex flex-col overflow-y-auto text-[12px]">
-          {usedFonts.map(
+          {[...usedFonts].reverse().map(
             (font, index) => (
               // selectedIndex === index ? (
               //   <button className="flex flex-row items-center justify-between bg-main px-[12px] py-[8px]">
