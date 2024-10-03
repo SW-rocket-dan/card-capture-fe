@@ -66,7 +66,7 @@ type useCardsStore = {
   moveLayerToFront: (cardId: number, layerId: number) => void;
   moveLayerToBack: (cardId: number, layerId: number) => void;
 
-  setUsedColors: (colorList: string[]) => void;
+  setUsedColors: (color: string) => void;
   setUsedFonts: (fontList: string[]) => void;
 };
 
@@ -167,11 +167,11 @@ export const useCardsStore = create(
                 draft.cards[cardId].layers = draft.cards[cardId].layers.map(v =>
                   v.id === layerId
                     ? {
-                      ...v,
-                      content: {
-                        content: text,
-                      },
-                    }
+                        ...v,
+                        content: {
+                          content: text,
+                        },
+                      }
                     : v,
                 );
               },
@@ -528,11 +528,10 @@ export const useCardsStore = create(
             }),
           ),
 
-        setUsedColors: colorList =>
+        setUsedColors: color =>
           set(
             produce((draft: Draft<{ usedColors: string[] }>) => {
-              // draft.usedColors = Array.from(new Set([...draft.usedColors, ...colorList]));
-              draft.usedColors = colorList;
+              draft.usedColors = Array.from(new Set([...draft.usedColors, color]));
             }),
           ),
 

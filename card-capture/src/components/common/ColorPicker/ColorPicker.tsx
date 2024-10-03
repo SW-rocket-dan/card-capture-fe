@@ -3,6 +3,7 @@ import 'react-color-palette/css';
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 import './ColorPicker.styles.css';
 import { hexToRgba, rgbaToHsva } from '@/components/common/ColorPicker/colorUtils';
+import { useCardsStore } from '@/store/useCardsStore';
 
 type ColorPickerProps = {
   color: IColor;
@@ -24,7 +25,7 @@ const ColorPicker = ({ color, setColor }: ColorPickerProps) => {
 
     if (/^[0-9A-F]*$/.test(changedColor)) {
       if (changedColor.length <= 6) {
-        setNewColor({
+        setColor({
           ...color,
           hex: `#${changedColor}`,
           rgb: rgba,
@@ -34,13 +35,22 @@ const ColorPicker = ({ color, setColor }: ColorPickerProps) => {
     }
   };
 
+  /**
+   * 마지막에 선택된 색상만 전역 상태에 저장되도록 함
+   */
+  const setUsedColors = useCardsStore(state => state.setUsedColors);
+
+  const changeCompleteColorHandler = (color: IColor) => {
+    setUsedColors(color.hex);
+  };
+
   return (
     <div className="flex w-full flex-col pb-4">
       <div className="flex w-[230px] flex-col gap-3">
-        <Saturation height={230} color={newColor} onChange={setNewColor} onChangeComplete={setColor} />
+        <Saturation height={230} color={color} onChange={setColor} onChangeComplete={changeCompleteColorHandler} />
         <div className="flex flex-col gap-2.5 px-4">
-          <Hue color={newColor} onChange={setNewColor} onChangeComplete={setColor} />
-          <Alpha color={newColor} onChange={setNewColor} onChangeComplete={setColor} />
+          <Hue color={color} onChange={setColor} onChangeComplete={changeCompleteColorHandler} />
+          <Alpha color={color} onChange={setColor} onChangeComplete={changeCompleteColorHandler} />
           <div className="flex flex-row items-center justify-between rounded-md bg-itembg px-3 py-2 text-xs">
             <input
               className="bg-transparent font-medium outline-none"

@@ -19,10 +19,10 @@ const RecentColorsBox = ({ type }: RecentColorsBoxProps) => {
   /**
    * 카드가 가지고 있는 색상데이터 추출해서 전역에 저장
    */
-  useEffect(() => {
-    const colorList = editorUtils.extractColors(cards);
-    setUsedColors(colorList);
-  }, [cards]);
+  // useEffect(() => {
+  //   const colorList = editorUtils.extractColors(cards);
+  //   setUsedColors(colorList);
+  // }, [cards]);
 
   /**
    * 최근에 사용된 16개의 색상만 뽑아내서 배열로 반환
