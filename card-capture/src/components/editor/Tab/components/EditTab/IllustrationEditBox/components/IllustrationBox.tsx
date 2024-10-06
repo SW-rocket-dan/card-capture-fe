@@ -23,21 +23,27 @@ const IllustrationBox = () => {
     const getInitialStickers = async () => {
       // 로컬 스토리지에서 데이터 확인
       const storedStickers = localStorage.getItem('appleStickers');
+      const storeAllStickers = localStorage.getItem('stickers');
 
-      if (storedStickers) {
+      if (storedStickers && storeAllStickers) {
         // 저장된 데이터가 있으면 사용
         setInitialStickers(JSON.parse(storedStickers));
+        setSearchedStickers(JSON.parse(storeAllStickers));
       } else {
         // 저장된 데이터가 없으면 API 호출
-        const stickers = await illustrationApi.getSearchedStickers('사과');
-        const stickersUrl = stickers.map(({ fileUrl }: StickerDataType) => fileUrl);
-        const slicedStickers = stickersUrl.slice(0, 5);
+        const appleStickers = await illustrationApi.getSearchedStickers('사과');
+        const appleStickersUrl = appleStickers.map(({ fileUrl }: StickerDataType) => fileUrl);
+
+        const allStickers = await illustrationApi.getSearchedStickers('');
+        const stickersUrl = allStickers.map(({ fileUrl }: StickerDataType) => fileUrl);
 
         // 데이터를 상태에 설정
-        setInitialStickers(slicedStickers);
+        setInitialStickers(appleStickersUrl.slice(0, 5));
+        setSearchedStickers(stickersUrl);
 
         // 로컬 스토리지에 데이터 저장
-        localStorage.setItem('appleStickers', JSON.stringify(slicedStickers));
+        localStorage.setItem('appleStickers', JSON.stringify(appleStickersUrl.slice(0, 5)));
+        localStorage.setItem('stickers', JSON.stringify(stickersUrl));
       }
     };
 
