@@ -9,12 +9,12 @@ const InlineLayerEditBox = () => {
   const { deleteLayerOnClickHandler } = useDeleteLayer({ cardId: focusedCardId });
 
   return (
-    <div className="shadow-base flex h-[47px] w-[120px] flex-row items-center justify-between rounded-[8px] bg-white px-4">
-      <button>
-        <CopyIcon width={17} strokeWidth={1.5} />
+    <div className="flex h-[47px] w-[120px] flex-row items-center justify-between rounded-[8px] bg-white px-4 shadow-base">
+      <button disabled={true}>
+        <CopyIcon width={17} strokeWidth={1.5} className="text-gray3" />
       </button>
-      <button>
-        <PasteIcon width={27} />
+      <button disabled={true}>
+        <PasteIcon width={27} className="text-gray3" />
       </button>
       <button onClick={deleteLayerOnClickHandler}>
         <TrashIcon width={17} strokeWidth={1.5} />

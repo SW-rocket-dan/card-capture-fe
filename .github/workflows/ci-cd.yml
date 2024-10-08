@@ -58,6 +58,7 @@ jobs:
           NEXT_PUBLIC_STORE_ID: ${{ secrets.NEXT_PUBLIC_STORE_ID }}
           NEXT_PUBLIC_AMPLITUDE_API_KEY: ${{ secrets.NEXT_PUBLIC_AMPLITUDE_API_KEY }}
           NEXT_PUBLIC_CHANNEL_TALK_PLUGIN_KEY: ${{ secrets.NEXT_PUBLIC_CHANNEL_TALK_PLUGIN_KEY }}
+          S3_BUCKET_URL: ${{ secrets.S3_BUCKET_URL }}
           NODE_OPTIONS: '--max-old-space-size=8192'
 
         run: |
@@ -102,6 +103,7 @@ jobs:
             echo "NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}" >> .env
             echo "NEXT_PUBLIC_AMPLITUDE_API_KEY=${{ secrets.NEXT_PUBLIC_AMPLITUDE_API_KEY }}" >> .env
             echo "NEXT_PUBLIC_CHANNEL_TALK_PLUGIN_KEY=${{ secrets.NEXT_PUBLIC_CHANNEL_TALK_PLUGIN_KEY }}" >> .env
+            echo "S3_BUCKET_URL=${{ secrets.S3_BUCKET_URL }}" >> .env
           
             echo "Installing npm packages..."
             npm install

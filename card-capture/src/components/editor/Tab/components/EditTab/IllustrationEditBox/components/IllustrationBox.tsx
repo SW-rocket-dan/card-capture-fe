@@ -5,6 +5,7 @@ import illustrationApi, { StickerDataType } from '@/api/illustrationApi';
 import FindIcon from '@/components/common/Icon/FindIcon';
 import { useFocusStore } from '@/store/useFocusStore';
 import { useCardsStore } from '@/store/useCardsStore';
+import { authUtils } from '@/utils';
 
 const IllustrationBox = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -23,21 +24,39 @@ const IllustrationBox = () => {
     const getInitialStickers = async () => {
       // 로컬 스토리지에서 데이터 확인
       const storedStickers = localStorage.getItem('appleStickers');
+      const storeAllStickers = localStorage.getItem('stickers');
 
-      if (storedStickers) {
+      // 로그인 여부 확인
+      const isLoggedIn = authUtils.getIsLoggedIn();
+
+      if (storedStickers && storeAllStickers) {
         // 저장된 데이터가 있으면 사용
         setInitialStickers(JSON.parse(storedStickers));
+        setSearchedStickers(JSON.parse(storeAllStickers));
+      } else if (!isLoggedIn) {
+        // 로그인 안되었을 경우 Nexr 서버에서 가져오기
+        const response = await fetch('/api/editor/stickers');
+        const stickers = await response.json();
+
+        const stickerUrls = stickers.stickerUrls;
+
+        setInitialStickers(stickerUrls.slice(0, 5));
+        setSearchedStickers(stickerUrls);
       } else {
-        // 저장된 데이터가 없으면 API 호출
-        const stickers = await illustrationApi.getSearchedStickers('사과');
-        const stickersUrl = stickers.map(({ fileUrl }: StickerDataType) => fileUrl);
-        const slicedStickers = stickersUrl.slice(0, 5);
+        // 호그인이 되어 있고, 저장된 데이터가 없으면 API 호출
+        const appleStickers = await illustrationApi.getSearchedStickers('사과');
+        const appleStickersUrl = appleStickers.map(({ fileUrl }: StickerDataType) => fileUrl);
+
+        const allStickers = await illustrationApi.getSearchedStickers('');
+        const stickersUrl = allStickers.map(({ fileUrl }: StickerDataType) => fileUrl);
 
         // 데이터를 상태에 설정
-        setInitialStickers(slicedStickers);
+        setInitialStickers(appleStickersUrl.slice(0, 5));
+        setSearchedStickers(stickersUrl);
 
         // 로컬 스토리지에 데이터 저장
-        localStorage.setItem('appleStickers', JSON.stringify(slicedStickers));
+        localStorage.setItem('appleStickers', JSON.stringify(appleStickersUrl.slice(0, 5)));
+        localStorage.setItem('stickers', JSON.stringify(stickersUrl));
       }
     };
 
@@ -74,6 +93,9 @@ const IllustrationBox = () => {
   const addIllustLayerHandler = (url: string) => {
     addIllustLayer(focusedCardId, url);
   };
+
+  // 로그인 여부 확인
+  const isLoggedIn = authUtils.getIsLoggedIn();
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -112,23 +134,25 @@ const IllustrationBox = () => {
 
           <div className="flex flex-col gap-[10px] px-[15px] pb-[15px] pt-[10px] text-[11px] text-gray2">
             {/* 검색창 */}
-            <div className="flex flex-row items-center justify-between gap-3 rounded-[8px] border-[1px] border-border px-[10px] py-[9px]">
-              <input
-                onChange={changeSearchWordHandler}
-                onKeyDown={e => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    searchStickerHandler();
-                  }
-                }}
-                type="text"
-                className="flex-1 text-[11px] outline-none"
-                placeholder="일러스트 검색 ex) 고양이"
-              />
-              <button onClick={searchStickerHandler}>
-                <FindIcon width={14} />
-              </button>
-            </div>
+            {isLoggedIn && (
+              <div className="flex flex-row items-center justify-between gap-3 rounded-[8px] border-[1px] border-border px-[10px] py-[9px]">
+                <input
+                  onChange={changeSearchWordHandler}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      searchStickerHandler();
+                    }
+                  }}
+                  type="text"
+                  className="flex-1 text-[11px] outline-none"
+                  placeholder="일러스트 검색 ex) 고양이"
+                />
+                <button onClick={searchStickerHandler}>
+                  <FindIcon width={14} />
+                </button>
+              </div>
+            )}
 
             {/*/!* 최근 사용 *!/*/}
             {/*<div className="gap flex flex-col">*/}

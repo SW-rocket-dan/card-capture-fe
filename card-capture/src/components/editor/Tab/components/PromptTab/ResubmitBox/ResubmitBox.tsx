@@ -6,6 +6,7 @@ import { useFocusStore } from '@/store/useFocusStore';
 import { useCardsStore } from '@/store/useCardsStore';
 import { Image } from '@/store/useCardsStore/type';
 import { templateApi } from '@/api';
+import { authUtils } from '@/utils';
 
 const ResubmitBox = () => {
   /**
@@ -63,6 +64,9 @@ const ResubmitBox = () => {
     });
   };
 
+  // 로그인 여부 확인
+  const isLoggedIn = authUtils.getIsLoggedIn();
+
   return (
     <div className={`flex w-full flex-col border-t border-border pb-[15px]`}>
       <p
@@ -71,7 +75,7 @@ const ResubmitBox = () => {
         AI에게 재요청하기
       </p>
 
-      {isLoading ? (
+      {isLoading && (
         <div className="flex w-full flex-col items-center justify-center gap-3 py-7">
           <svg
             className="h-14 w-14 animate-spin text-main"
@@ -88,11 +92,12 @@ const ResubmitBox = () => {
           </svg>
           <p className="text-[12px] text-gray2">이미지 재생성 중</p>
         </div>
-      ) : (
+      )}
+      {!isLoading && isLoggedIn && (
         <div className="flex flex-col">
           <div className="flex flex-col gap-4 pb-[15px]">
             <div className="flex flex-col gap-2 px-[15px]">
-              <label className="text-gray9 text-[12px] font-medium">
+              <label className="text-[12px] font-medium text-gray9">
                 재요청 받고 싶은 요소를 선택해주세요! (요소 클릭)
               </label>
               <div className="flex flex-row items-center gap-2">
@@ -120,7 +125,7 @@ const ResubmitBox = () => {
             </div>
 
             <div className="flex flex-col gap-2 px-[15px]">
-              <p className="text-gray9 text-[12px] font-medium">재요청 받고 싶은 부분에 대한 설명을 작성해주세요!</p>
+              <p className="text-[12px] font-medium text-gray9">재요청 받고 싶은 부분에 대한 설명을 작성해주세요!</p>
               <textarea
                 onChange={changeMessageHandler}
                 className="h-[90px] resize-none rounded-[10px] border border-border p-2 text-xs outline-none placeholder:text-gray5"
@@ -137,6 +142,15 @@ const ResubmitBox = () => {
             <AIIcon width={15} className="text-main" />
             <p>AI에게 재요청하기</p>
           </Button>
+        </div>
+      )}
+      {!isLoggedIn && (
+        <div className="mx-[15px] flex flex-col items-center justify-center gap-2 rounded-md border border-border py-5">
+          <p className="text-center text-[13px] font-semibold">
+            로그인 후에 <br />
+            <span className="text-main">AI 재요청 기능</span>을 사용해보세요!
+          </p>
+          <p className="text-[10.5px] text-gray2">더 많은 스티커 사용, 카드 자동 저장 ai 이미지 생성</p>
         </div>
       )}
     </div>

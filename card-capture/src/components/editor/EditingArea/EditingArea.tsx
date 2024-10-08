@@ -6,6 +6,7 @@ import { Card } from '@/store/useCardsStore/type';
 import { TemplateUpdateRequest } from '@/types';
 import { templateApi } from '@/api';
 import { useFocusStore } from '@/store/useFocusStore';
+import { authUtils } from '@/utils';
 
 const EditingArea = () => {
   const templateId = useCardsStore(state => state.templateId);
@@ -49,6 +50,9 @@ const EditingArea = () => {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
+    const isLoggedIn = authUtils.getIsLoggedIn();
+    if (!isLoggedIn) return;
+
     // 이전 타이머가 있다면 취소
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
