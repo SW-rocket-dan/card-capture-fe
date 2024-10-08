@@ -94,6 +94,9 @@ const IllustrationBox = () => {
     addIllustLayer(focusedCardId, url);
   };
 
+  // 로그인 여부 확인
+  const isLoggedIn = authUtils.getIsLoggedIn();
+
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <div className="flex flex-col gap-2 rounded-[10px] border-[1px] border-border px-[10px] py-[10px]">
@@ -131,23 +134,25 @@ const IllustrationBox = () => {
 
           <div className="flex flex-col gap-[10px] px-[15px] pb-[15px] pt-[10px] text-[11px] text-gray2">
             {/* 검색창 */}
-            <div className="flex flex-row items-center justify-between gap-3 rounded-[8px] border-[1px] border-border px-[10px] py-[9px]">
-              <input
-                onChange={changeSearchWordHandler}
-                onKeyDown={e => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    searchStickerHandler();
-                  }
-                }}
-                type="text"
-                className="flex-1 text-[11px] outline-none"
-                placeholder="일러스트 검색 ex) 고양이"
-              />
-              <button onClick={searchStickerHandler}>
-                <FindIcon width={14} />
-              </button>
-            </div>
+            {isLoggedIn && (
+              <div className="flex flex-row items-center justify-between gap-3 rounded-[8px] border-[1px] border-border px-[10px] py-[9px]">
+                <input
+                  onChange={changeSearchWordHandler}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      searchStickerHandler();
+                    }
+                  }}
+                  type="text"
+                  className="flex-1 text-[11px] outline-none"
+                  placeholder="일러스트 검색 ex) 고양이"
+                />
+                <button onClick={searchStickerHandler}>
+                  <FindIcon width={14} />
+                </button>
+              </div>
+            )}
 
             {/*/!* 최근 사용 *!/*/}
             {/*<div className="gap flex flex-col">*/}

@@ -7,7 +7,6 @@ export const GET = async () => {
     'a2f06528-2ca6-430d-9b30-bce934806e73_removed-Banana-344b0d52-413f-11ef-b9fd-0242ac1c000c.png.png',
     '26081d77-bffc-4537-9ee9-cfccdc3cb2bd_removed-Cherry-4173b0d8-413f-11ef-b9fd-0242ac1c000c.png.png',
     'cfda616c-4b3f-4ae5-8a98-0d8e28336fdd_removed-Date-4e475d64-413f-11ef-b9fd-0242ac1c000c.png.png',
-    'a45a91ef-bafa-44db-bc9f-ed97074aaa44_removed-Elderberry-5b7d9aca-413f-11ef-b9fd-0242ac1c000c.png.png',
     'e1b578a7-f00e-436d-ad97-684aa6149c8f_removed-Fig-69777af6-413f-11ef-b9fd-0242ac1c000c.png.png',
     '2fb65a21-3369-4c12-b30e-88ff119c89e1_removed-Grape-788f8916-413f-11ef-b9fd-0242ac1c000c.png.png',
     '274f540c-343d-46be-9e52-d1971c82472a_removed-Honeydew-8624c078-413f-11ef-b9fd-0242ac1c000c.png.png',
