@@ -113,7 +113,7 @@ const AfterLoginNav = () => {
         <div ref={ref} className="relative">
           <div className="flex w-[300px] flex-row justify-end gap-4">
             <Button onClick={createEmptyTemplateHandler} type="full" className="h-[38px] w-[130px] rounded-[7px]">
-              <p className="text-[12.5px] font-medium">에디터 사용해보기</p>
+              <p className="text-[12.5px] font-medium">에디터 사용하기</p>
             </Button>
             <div className="flex cursor-pointer flex-row justify-end gap-1.5" onClick={openHandler}>
               <TempProfileIcon width={38} height={38} />
