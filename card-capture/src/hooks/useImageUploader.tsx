@@ -2,6 +2,7 @@ import { imageApi } from '@/api';
 import { getImageDimensions, getImageQueryString, resizeImage } from '@/components/editor/Tab/utils/imageData';
 import { useFocusStore } from '@/store/useFocusStore';
 import { useCardsStore } from '@/store/useCardsStore';
+import { authUtils } from '@/utils';
 
 const useImageUploader = () => {
   /**
@@ -30,7 +31,15 @@ const useImageUploader = () => {
     if (!event.target.files) return;
 
     const imageFile = event.target.files[0];
-    const imageUrl = await uploadImageToS3(imageFile);
+
+    const isLoggedIn = authUtils.getIsLoggedIn();
+    let imageUrl;
+
+    if (isLoggedIn) {
+      imageUrl = await uploadImageToS3(imageFile);
+    } else {
+      imageUrl = await getPreviewUrl(imageFile);
+    }
 
     const dimension = await getImageDimensions(imageUrl);
     const resizedDimension = resizeImage(dimension, 400);
@@ -48,9 +57,41 @@ const useImageUploader = () => {
     if (!event.target.files) return;
 
     const imageFile = event.target.files[0];
-    const imageUrl = await uploadImageToS3(imageFile);
+
+    const isLoggedIn = authUtils.getIsLoggedIn();
+    let imageUrl;
+
+    if (isLoggedIn) {
+      imageUrl = await uploadImageToS3(imageFile);
+    } else {
+      imageUrl = await getPreviewUrl(imageFile);
+    }
 
     setBackground(focusedCardId, { url: imageUrl });
+  };
+
+  /**
+   * 이미지 파일의 링크를 추출해서 반환하는 함수
+   * 미로그인 상황에 서버와 통신하지 않고 이미지를 import 하기 위해서 사용
+   */
+  const getPreviewUrl = async (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+
+      fileReader.onload = e => {
+        if (typeof e.target?.result === 'string') {
+          resolve(e.target.result);
+        } else {
+          reject(new Error('Failed to read file as data URL'));
+        }
+      };
+
+      fileReader.onerror = error => {
+        reject(error);
+      };
+
+      fileReader.readAsDataURL(file);
+    });
   };
 
   return { uploadImageToS3, addImageLayerHandler, addBackgroundImageHandler };
