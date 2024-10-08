@@ -5,6 +5,7 @@ import illustrationApi, { StickerDataType } from '@/api/illustrationApi';
 import FindIcon from '@/components/common/Icon/FindIcon';
 import { useFocusStore } from '@/store/useFocusStore';
 import { useCardsStore } from '@/store/useCardsStore';
+import { authUtils } from '@/utils';
 
 const IllustrationBox = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -25,12 +26,24 @@ const IllustrationBox = () => {
       const storedStickers = localStorage.getItem('appleStickers');
       const storeAllStickers = localStorage.getItem('stickers');
 
+      // 로그인 여부 확인
+      const isLoggedIn = authUtils.getIsLoggedIn();
+
       if (storedStickers && storeAllStickers) {
         // 저장된 데이터가 있으면 사용
         setInitialStickers(JSON.parse(storedStickers));
         setSearchedStickers(JSON.parse(storeAllStickers));
+      } else if (!isLoggedIn) {
+        // 로그인 안되었을 경우 Nexr 서버에서 가져오기
+        const response = await fetch('/api/editor/stickers');
+        const stickers = await response.json();
+
+        const stickerUrls = stickers.stickerUrls;
+
+        setInitialStickers(stickerUrls.slice(0, 5));
+        setSearchedStickers(stickerUrls);
       } else {
-        // 저장된 데이터가 없으면 API 호출
+        // 호그인이 되어 있고, 저장된 데이터가 없으면 API 호출
         const appleStickers = await illustrationApi.getSearchedStickers('사과');
         const appleStickersUrl = appleStickers.map(({ fileUrl }: StickerDataType) => fileUrl);
 
