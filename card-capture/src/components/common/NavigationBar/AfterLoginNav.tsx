@@ -12,6 +12,7 @@ import { useQuery } from '@tanstack/react-query';
 import useAmplitudeContext from '@/hooks/useAmplitudeContext';
 import Button from '@/components/common/Button/Button';
 import { templateApi } from '@/api';
+import { User } from '@/types';
 
 const AfterLoginNav = () => {
   const router = useRouter();
@@ -54,13 +55,21 @@ const AfterLoginNav = () => {
   /**
    * 보유한 이용권의 개수를 가져오는 로직
    */
-  const { data } = useQuery({
+  const { data: ticketData } = useQuery({
     queryKey: ['product-categories'],
     queryFn: userApi.getProductCategories,
     enabled: isOpen,
   });
 
-  const ticketCount = userUtils.getTicketCount(data);
+  const ticketCount = userUtils.getTicketCount(ticketData);
+
+  /**
+   * 사용자의 정보를 가져오는 로직
+   */
+  const { data: userInfo } = useQuery<User>({
+    queryKey: ['user-info'],
+    queryFn: userApi.getUserData,
+  });
 
   // 반응형 적용을 위해 모바일 화면인지 확인하는 hook
   const { isMobile } = useIsMobile();
@@ -116,7 +125,11 @@ const AfterLoginNav = () => {
               <p className="text-[12.5px] font-medium">에디터 사용하기</p>
             </Button>
             <div className="flex cursor-pointer flex-row justify-end gap-1.5" onClick={openHandler}>
-              <TempProfileIcon width={38} height={38} />
+              {userInfo ? (
+                <img src={userInfo?.picture} alt="user-image" width={38} height={38} className="rounded-full" />
+              ) : (
+                <TempProfileIcon width={38} height={38} />
+              )}
               {isOpen ? (
                 <UpIcon width={15} className="text-defaultBlack" />
               ) : (
