@@ -36,7 +36,10 @@ const UserTemplateDetails = ({ template }: UserTemplateDetailsProps) => {
 
   return (
     <div className="flex w-fit flex-col gap-2 rounded-[20px] border border-border p-4">
-      <div className="h-fit w-fit overflow-hidden rounded-[20px] border border-border bg-border">
+      <div
+        className="overflow-hidden rounded-[20px] border border-border bg-border"
+        style={{ width: templateSize, height: templateSize }}
+      >
         {templateData ? (
           <Poster size={templateSize} card={templateData[0]} hasBorder={false} />
         ) : (
