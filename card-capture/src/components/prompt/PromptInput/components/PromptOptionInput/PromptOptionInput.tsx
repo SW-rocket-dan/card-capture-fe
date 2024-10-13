@@ -84,7 +84,7 @@ const PromptOptionInput = () => {
             ))}
 
             <DialogTrigger asChild>
-              <div className="w-full">
+              <div>
                 <AddOptionButton>추가하기</AddOptionButton>
               </div>
             </DialogTrigger>

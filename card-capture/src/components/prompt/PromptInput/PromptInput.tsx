@@ -41,7 +41,7 @@ const PromptInput = ({ formMethods, fieldArrays }: PromptInputProps) => {
       <PromptPurposeInput register={register} />
       <PromptColorInput setValue={setValue} />
       <PromptModelInput setValue={setValue} />
-      {/*<PromptOptionInput />*/}
+      <PromptOptionInput />
     </div>
   );
 };
