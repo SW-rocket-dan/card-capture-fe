@@ -4,6 +4,7 @@ import { Draft, produce } from 'immer';
 import ReactQuill from 'react-quill';
 import { useFocusStore } from '@/store/useFocusStore';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
+import { useCommandStore } from '@/store/useCommandStore';
 
 export const INITIAL_CARD: Card = {
   id: 0,
@@ -30,6 +31,7 @@ type useCardsStore = {
   setCard: (card: Card[]) => void;
   addCard: () => void;
 
+  setLayer: (cardId: number, layerId: number, newLayer: Layer) => void;
   getLayer: (cardId: number, layerId: number) => Layer | null;
   deleteLayer: (cardId: number, layerId: number) => void;
 
@@ -117,6 +119,25 @@ export const useCardsStore = create(
             ),
           ),
 
+        setLayer: (cardId, layerId, newLayer) =>
+          set(
+            produce(
+              (
+                draft: Draft<{
+                  cards: Card[];
+                }>,
+              ) => {
+                const card = draft.cards.find(({ id }) => id === cardId);
+                if (!card) return;
+
+                const layerIndex = card.layers.findIndex(layer => layer.id === layerId);
+                if (layerIndex !== -1) {
+                  card.layers[layerIndex] = { ...card.layers[layerIndex], ...newLayer };
+                }
+              },
+            ),
+          ),
+
         getLayer: (cardId, layerId) => {
           const card = get().cards.find(({ id }) => id === cardId);
           if (!card) return null;
@@ -137,7 +158,18 @@ export const useCardsStore = create(
               ) => {
                 const card = draft.cards.find(({ id }) => id === cardId);
                 if (!card) return;
+
+                const layerToDelete = get().getLayer(cardId, layerId);
+                if (!layerToDelete) return;
+
                 card.layers = card.layers.filter(({ id }) => id !== layerId);
+
+                useCommandStore.getState().addCommand({
+                  type: 'DELETE_LAYER',
+                  cardId,
+                  layerId,
+                  layerData: layerToDelete,
+                });
               },
             ),
           );
@@ -187,8 +219,17 @@ export const useCardsStore = create(
                 }>,
               ) => {
                 const card = draft.cards.find((card: Card) => card.id === cardId);
-
                 if (card) card.layers = card.layers.map(v => (v.id === layerId ? { ...v, position: position } : v));
+
+                const layerToModify = get().getLayer(cardId, layerId);
+                if (!layerToModify) return null;
+
+                useCommandStore.getState().addCommand({
+                  type: 'MODIFY_LAYER',
+                  cardId,
+                  layerId,
+                  layerData: layerToModify,
+                });
               },
             ),
           ),
