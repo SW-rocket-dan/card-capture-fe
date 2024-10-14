@@ -85,7 +85,7 @@ const PricingItem = ({ title, price, description, optionList }: PricingItemProps
   const { trackAmplitudeEvent } = useAmplitudeContext();
 
   return (
-    <div className="flex h-[550px] w-[300px] flex-col justify-between rounded-[40px] border border-border p-[35px] shadow-default xs:w-[350px] md:w-[400px]">
+    <div className="flex h-[500px] w-[200px] flex-col justify-between rounded-[40px] border border-border p-[35px] shadow-default xs:w-[300px] md:w-[360px]">
       <div className="flex flex-col">
         <p className="text-[18px] font-semibold">{title}</p>
 
@@ -116,7 +116,7 @@ const PricingItem = ({ title, price, description, optionList }: PricingItemProps
             </div>
           </div>
 
-          <p className="mt-[20px] text-[15px] text-defaultBlack">{description}</p>
+          <p className="mt-[20px] text-[13px] text-defaultBlack">{description}</p>
 
           <div className="mt-[20px] flex flex-row items-center gap-2">
             <p className="rounded-[30px] border border-main px-2 py-[2px] text-[13px] font-semibold text-main">
@@ -136,8 +136,8 @@ const PricingItem = ({ title, price, description, optionList }: PricingItemProps
         </div>
       </div>
 
-      <div className="flex w-full flex-col gap-2">
-        <p className="flex justify-end px-[12px] text-[14px] text-gray5">
+      <div className="flex w-full flex-col gap-3">
+        <p className="flex justify-end px-[12px] text-[13px] text-gray5">
           총 금액 : {(count * price).toLocaleString('kr-KR')} 원
         </p>
 
@@ -146,11 +146,11 @@ const PricingItem = ({ title, price, description, optionList }: PricingItemProps
             <Button
               onClick={() => trackAmplitudeEvent('pricing-pay-click')}
               type="full"
-              className="rounded-[40px] py-[15px]"
+              className="rounded-[40px] py-[13px]"
               shadow={true}
               disable={count === 0 || isDisabled}
             >
-              결제하기
+              <p className="text-[15px] font-medium">결제하기</p>
             </Button>
           </DialogTrigger>
           <DialogContent className="flex w-[320px] flex-col items-center justify-center gap-7 px-[20px] py-[40px] sm:w-[400px] md:w-[500px] md:px-[30px]">

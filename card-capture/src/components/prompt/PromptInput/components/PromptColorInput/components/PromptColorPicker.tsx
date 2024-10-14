@@ -35,7 +35,7 @@ const PromptColorPicker = ({ color, setColor, closeHandler }: PromptColorPickerP
   };
 
   return (
-    <div className="z-10 flex w-[320px] flex-col gap-[15px] rounded-[20px] border border-itembg bg-white px-[20px] pb-[15px] pt-[15px] drop-shadow-md duration-100 animate-in fade-in-0 zoom-in-95 sm:absolute sm:ml-[200px] sm:mt-[-120px] sm:w-[340px]">
+    <div className="z-10 flex w-[320px] flex-col gap-[15px] rounded-[20px] border border-itembg bg-white px-[20px] pb-[15px] pt-[15px] drop-shadow-md duration-200 animate-in fade-in-0 zoom-in-95 sm:absolute sm:ml-[200px] sm:mt-[-120px] sm:w-[340px]">
       {/* 탭 선택 부분 */}
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row gap-4 text-[14px] font-semibold text-gray4">

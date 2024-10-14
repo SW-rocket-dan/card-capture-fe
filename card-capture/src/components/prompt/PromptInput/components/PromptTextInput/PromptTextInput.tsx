@@ -3,6 +3,7 @@ import PromptTitleText from '@/components/prompt/PromptInput/components/common/P
 import PlusIcon from '@/components/common/Icon/PlusIcon';
 import { UseFieldArrayReturn, UseFormRegister } from 'react-hook-form';
 import { PromptInputFormType } from '@/app/prompt/PromptContent';
+import MinusIcon from '@/components/common/Icon/MinusIcon';
 
 type PromptTextInputProps = {
   register: UseFormRegister<PromptInputFormType>;
@@ -13,7 +14,7 @@ type PromptTextInputProps = {
 const MAX_PHRASES_LEN = 5;
 
 const PromptTextInput = ({ register, phraseFieldArray, emphasisFieldArray }: PromptTextInputProps) => {
-  const { fields, append: appendPhrase } = phraseFieldArray;
+  const { fields, append: appendPhrase, remove: removePhrase } = phraseFieldArray;
   const { append: appendEmphasis, remove, replace } = emphasisFieldArray;
 
   /**
@@ -23,6 +24,13 @@ const PromptTextInput = ({ register, phraseFieldArray, emphasisFieldArray }: Pro
     if (fields.length >= MAX_PHRASES_LEN) return;
 
     appendPhrase({ value: '' });
+  };
+
+  /**
+   * 문구 입력 창을 삭제하는 버튼
+   */
+  const removePhraseHandler = (index: number) => {
+    removePhrase(index);
   };
 
   return (
@@ -49,7 +57,7 @@ const PromptTextInput = ({ register, phraseFieldArray, emphasisFieldArray }: Pro
               className="w-[calc(100%-40px)] rounded-[10px] border border-border px-[15px] py-[11px] text-[13px] outline-none placeholder:text-gray5"
             />
 
-            {index === fields.length - 1 && (
+            {index === fields.length - 1 ? (
               <button
                 onClick={appendPhraseHandler}
                 className={`flex h-[27px] w-[27px] items-center justify-center rounded-full border-[1.5px] ${index === MAX_PHRASES_LEN - 1 ? 'cursor-default border-border' : 'border-main'}`}
@@ -59,6 +67,13 @@ const PromptTextInput = ({ register, phraseFieldArray, emphasisFieldArray }: Pro
                   className={`${index === MAX_PHRASES_LEN - 1 ? 'text-border' : 'text-main'}`}
                   strokeWidth={2}
                 />
+              </button>
+            ) : (
+              <button
+                onClick={() => removePhraseHandler(index)}
+                className={`flex h-[27px] w-[27px] items-center justify-center rounded-full border-[1.5px] ${index === MAX_PHRASES_LEN - 1 ? 'cursor-default border-border' : 'border-main'}`}
+              >
+                <MinusIcon width={12} className="text-main" strokeWidth={2} />
               </button>
             )}
           </div>

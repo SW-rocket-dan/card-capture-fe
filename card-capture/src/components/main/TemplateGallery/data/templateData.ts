@@ -10,11 +10,11 @@ export const INSTAGRAM_DUMMY_DATA: DummyTemplateType[] = [
   },
   {
     img: '/image/template-2.png',
-    tags: ['피부', '화장품'],
+    tags: ['홍보', '장학금', '학습'],
   },
   {
     img: '/image/template-3.png',
-    tags: ['홍보', '장학금', '학습'],
+    tags: ['피부', '화장품'],
   },
 ];
 
@@ -25,11 +25,11 @@ export const BLOG_DUMMY_DATA: DummyTemplateType[] = [
   },
   {
     img: '/image/template-2.png',
-    tags: ['피부', '화장품'],
+    tags: ['홍보', '장학금', '학습'],
   },
   {
     img: '/image/template-3.png',
-    tags: ['홍보', '장학금', '학습'],
+    tags: ['피부', '화장품'],
   },
 ];
 
@@ -40,10 +40,10 @@ export const ANYTHING_DUMMY_DATA: DummyTemplateType[] = [
   },
   {
     img: '/image/template-2.png',
-    tags: ['피부', '화장품'],
+    tags: ['홍보', '장학금', '학습'],
   },
   {
     img: '/image/template-3.png',
-    tags: ['홍보', '장학금', '학습'],
+    tags: ['피부', '화장품'],
   },
 ];

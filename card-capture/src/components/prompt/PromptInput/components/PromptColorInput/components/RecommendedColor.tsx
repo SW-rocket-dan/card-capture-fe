@@ -53,7 +53,7 @@ const RecommendedColor = ({ color, setColor }: RecommendedColorProps) => {
       <div className="flex flex-col gap-2">
         <div className="flex flex-row items-center justify-between">
           <p className="text-[14px] font-semibold">AI 추천 색상</p>
-          <div className="flex flex-row items-center gap-2.5 text-[11px]">
+          <div className="flex flex-row items-center gap-2 text-[11px]">
             <div className="flex flex-row gap-1 text-gray2">
               남은 횟수 <p className="w-4 font-medium">{freeCount}/3</p>
             </div>
@@ -61,7 +61,7 @@ const RecommendedColor = ({ color, setColor }: RecommendedColorProps) => {
               onClick={clickRetryHandler}
               className={`transition-transform duration-300 ${isRotated ? 'animate-rotate-180' : ''}`}
             >
-              <RetryIcon width={13} className="text-main" />
+              <RetryIcon width={13} className={freeCount > 0 ? 'text-main' : 'text-gray5'} />
             </button>
           </div>
         </div>
