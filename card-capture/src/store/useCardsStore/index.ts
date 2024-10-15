@@ -50,6 +50,7 @@ type useCardsStore = {
   setShapeLayerColor: (cardId: number, layerId: number, color: string) => void;
   getShapeLayer: (cardId: number, layerId: number) => Shape | null;
 
+  addLayer: (cardId: number, layer: Layer) => void;
   addTextLayer: (cardId: number) => void;
   addImageLayer: (
     cardId: number,
@@ -119,6 +120,7 @@ export const useCardsStore = create(
             ),
           ),
 
+        // command 등록용
         setLayer: (cardId, layerId, newLayer) =>
           set(
             produce(
@@ -206,6 +208,16 @@ export const useCardsStore = create(
                       }
                     : v,
                 );
+
+                const beforeLayer = get().getLayer(cardId, layerId);
+                if (!beforeLayer) return null;
+
+                useCommandStore.getState().addCommand({
+                  type: 'MODIFY_LAYER',
+                  cardId,
+                  layerId,
+                  layerData: beforeLayer,
+                });
               },
             ),
           ),
@@ -221,14 +233,14 @@ export const useCardsStore = create(
                 const card = draft.cards.find((card: Card) => card.id === cardId);
                 if (card) card.layers = card.layers.map(v => (v.id === layerId ? { ...v, position: position } : v));
 
-                const layerToModify = get().getLayer(cardId, layerId);
-                if (!layerToModify) return null;
+                const beforeLayer = get().getLayer(cardId, layerId);
+                if (!beforeLayer) return null;
 
                 useCommandStore.getState().addCommand({
                   type: 'MODIFY_LAYER',
                   cardId,
                   layerId,
-                  layerData: layerToModify,
+                  layerData: beforeLayer,
                 });
               },
             ),
@@ -251,6 +263,15 @@ export const useCardsStore = create(
               if (card) {
                 card.background = { ...card.background, ...background };
               }
+
+              const beforeBg = get().getBackground(cardId);
+              if (!beforeBg) return null;
+
+              useCommandStore.getState().addCommand({
+                type: 'MODIFY_BACKGROUND',
+                cardId,
+                backgroundData: beforeBg,
+              });
             }),
           );
         },
@@ -283,12 +304,22 @@ export const useCardsStore = create(
                 }>,
               ) => {
                 const card = draft.cards[cardId];
-                if (card) {
-                  const layer = card.layers.find(l => l.id === layerId);
-                  if (layer) {
-                    layer.content = image;
-                  }
-                }
+                if (!card) return null;
+
+                const layer = card.layers.find(l => l.id === layerId);
+                if (!layer) return null;
+
+                layer.content = image;
+
+                const beforeLayer = get().getLayer(cardId, layerId);
+                if (!beforeLayer) return null;
+
+                useCommandStore.getState().addCommand({
+                  type: 'MODIFY_LAYER',
+                  cardId,
+                  layerId,
+                  layerData: beforeLayer,
+                });
               },
             ),
           ),
@@ -297,14 +328,22 @@ export const useCardsStore = create(
           set(
             produce(draft => {
               const card = draft.cards.find((card: Card) => card.id === cardId);
+              if (!card) return null;
 
-              if (card) {
-                const layer = card.layers.find((layer: Layer) => layer.id === layerId);
-
-                if (layer && layer.type === 'shape') {
-                  (layer.content as Shape).color = color;
-                }
+              const layer = card.layers.find((layer: Layer) => layer.id === layerId);
+              if (layer && layer.type === 'shape') {
+                (layer.content as Shape).color = color;
               }
+
+              const beforeLayer = get().getLayer(cardId, layerId);
+              if (!beforeLayer) return null;
+
+              useCommandStore.getState().addCommand({
+                type: 'MODIFY_LAYER',
+                cardId,
+                layerId,
+                layerData: beforeLayer,
+              });
             }),
           ),
 
@@ -317,6 +356,34 @@ export const useCardsStore = create(
 
           return layer.content as Shape;
         },
+
+        addLayer: (cardId, layer) =>
+          set(
+            produce(
+              (
+                draft: Draft<{
+                  cards: Card[];
+                  zIndexMap: ZIndexMap;
+                }>,
+              ) => {
+                draft.cards[cardId].layers.push(layer);
+
+                if (!draft.zIndexMap[cardId]) {
+                  draft.zIndexMap[cardId] = {};
+                }
+                draft.zIndexMap[cardId][layer.id] = layer.position.zIndex;
+
+                useFocusStore.getState().updateFocus(cardId, layer.id);
+
+                useCommandStore.getState().addCommand({
+                  type: 'ADD_LAYER',
+                  cardId,
+                  layerId: layer.id,
+                  layerData: layer,
+                });
+              },
+            ),
+          ),
 
         addTextLayer: (cardId: number) =>
           set(
@@ -332,7 +399,7 @@ export const useCardsStore = create(
                 const newLayerId = maxLayerId + 1;
                 const newZIndex = Math.max(...Object.values(draft.zIndexMap[cardId] || {}), 0) + 1;
 
-                draft.cards[cardId].layers.push({
+                const newLayer: Layer = {
                   id: newLayerId,
                   type: 'text',
                   content: {
@@ -347,7 +414,9 @@ export const useCardsStore = create(
                     zIndex: newZIndex,
                     opacity: 100,
                   },
-                });
+                };
+
+                draft.cards[cardId].layers.push(newLayer);
 
                 if (!draft.zIndexMap[cardId]) {
                   draft.zIndexMap[cardId] = {};
@@ -355,6 +424,13 @@ export const useCardsStore = create(
                 draft.zIndexMap[cardId][newLayerId] = newZIndex;
 
                 useFocusStore.getState().updateFocus(cardId, newLayerId);
+
+                useCommandStore.getState().addCommand({
+                  type: 'ADD_LAYER',
+                  cardId,
+                  layerId: newLayerId,
+                  layerData: newLayer,
+                });
               },
             ),
           ),
@@ -373,7 +449,7 @@ export const useCardsStore = create(
                 const newLayerId = maxLayerId + 1;
                 const newZIndex = Math.max(...Object.values(draft.zIndexMap[cardId] || {}), 0) + 1;
 
-                draft.cards[cardId].layers.push({
+                const newLayer: Layer = {
                   id: newLayerId,
                   type: 'image',
                   content: {
@@ -392,7 +468,9 @@ export const useCardsStore = create(
                     zIndex: newZIndex,
                     opacity: 100,
                   },
-                });
+                };
+
+                draft.cards[cardId].layers.push(newLayer);
 
                 if (!draft.zIndexMap[cardId]) {
                   draft.zIndexMap[cardId] = {};
@@ -400,6 +478,13 @@ export const useCardsStore = create(
                 draft.zIndexMap[cardId][newLayerId] = newZIndex;
 
                 useFocusStore.getState().updateFocus(cardId, newLayerId);
+
+                useCommandStore.getState().addCommand({
+                  type: 'ADD_LAYER',
+                  cardId,
+                  layerId: newLayerId,
+                  layerData: newLayer,
+                });
               },
             ),
           ),
@@ -418,7 +503,7 @@ export const useCardsStore = create(
                 const newLayerId = maxLayerId + 1;
                 const newZIndex = Math.max(...Object.values(draft.zIndexMap[cardId] || {}), 0) + 1;
 
-                draft.cards[cardId].layers.push({
+                const newLayer: Layer = {
                   id: newLayerId,
                   type: 'shape',
                   content: {
@@ -434,7 +519,8 @@ export const useCardsStore = create(
                     zIndex: newZIndex,
                     opacity: 100,
                   },
-                });
+                };
+                draft.cards[cardId].layers.push(newLayer);
 
                 if (!draft.zIndexMap[cardId]) {
                   draft.zIndexMap[cardId] = {};
@@ -442,6 +528,13 @@ export const useCardsStore = create(
                 draft.zIndexMap[cardId][newLayerId] = newZIndex;
 
                 useFocusStore.getState().updateFocus(cardId, newLayerId);
+
+                useCommandStore.getState().addCommand({
+                  type: 'ADD_LAYER',
+                  cardId,
+                  layerId: newLayerId,
+                  layerData: newLayer,
+                });
               },
             ),
           ),
@@ -460,7 +553,7 @@ export const useCardsStore = create(
                 const newLayerId = maxLayerId + 1;
                 const newZIndex = Math.max(...Object.values(draft.zIndexMap[cardId] || {}), 0) + 1;
 
-                draft.cards[cardId].layers.push({
+                const newLayer: Layer = {
                   id: newLayerId,
                   type: 'illust',
                   content: {
@@ -475,7 +568,8 @@ export const useCardsStore = create(
                     zIndex: newZIndex,
                     opacity: 100,
                   },
-                });
+                };
+                draft.cards[cardId].layers.push(newLayer);
 
                 if (!draft.zIndexMap[cardId]) {
                   draft.zIndexMap[cardId] = {};
@@ -483,6 +577,13 @@ export const useCardsStore = create(
                 draft.zIndexMap[cardId][newLayerId] = newZIndex;
 
                 useFocusStore.getState().updateFocus(cardId, newLayerId);
+
+                useCommandStore.getState().addCommand({
+                  type: 'ADD_LAYER',
+                  cardId,
+                  layerId: newLayerId,
+                  layerData: newLayer,
+                });
               },
             ),
           ),
