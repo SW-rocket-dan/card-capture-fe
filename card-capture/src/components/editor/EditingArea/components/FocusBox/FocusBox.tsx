@@ -141,26 +141,31 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
           transformOrigin: 'center',
           pointerEvents: 'none', // 이벤트가 통과되어서 아래있는 요소(자식요소 아니고 아래 위치 요소)가 이벤트를 받도록 함
         }}
+        onClick={stopPropagation}
       >
         {/* 11시,1시,5시,7시 크기조절 바 */}
         <div
           className="absolute -left-1.5 -top-1.5 h-3 w-3 cursor-nwse-resize rounded-full border-2 border-main bg-white"
           onPointerDown={e => resizePointerDownHandler(e, 'nw')}
+          onClick={stopPropagation}
           style={{ pointerEvents: 'auto' }} // control 버튼들은 이벤트 받을 수 있도록 설정
         ></div>
         <div
           className="absolute -right-1.5 -top-1.5 h-3 w-3 cursor-nesw-resize rounded-full border-2 border-main bg-white"
           onPointerDown={e => resizePointerDownHandler(e, 'ne')}
+          onClick={stopPropagation}
           style={{ pointerEvents: 'auto' }}
         ></div>
         <div
           className="absolute -bottom-1.5 -left-1.5 h-3 w-3 cursor-nesw-resize rounded-full border-2 border-main bg-white"
           onPointerDown={e => resizePointerDownHandler(e, 'sw')}
+          onClick={stopPropagation}
           style={{ pointerEvents: 'auto' }}
         ></div>
         <div
           className="absolute -bottom-1.5 -right-1.5 h-3 w-3 cursor-nwse-resize rounded-full border-2 border-main bg-white"
           onPointerDown={e => resizePointerDownHandler(e, 'se')}
+          onClick={stopPropagation}
           style={{ pointerEvents: 'auto' }}
         ></div>
 
@@ -168,21 +173,25 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
         <div
           className="absolute -top-1.5 left-2/4 h-2.5 w-7 -translate-x-1/2 cursor-row-resize rounded border-[1.5px] border-main bg-white"
           onPointerDown={e => resizePointerDownHandler(e, 'n')}
+          onClick={stopPropagation}
           style={{ pointerEvents: 'auto' }}
         ></div>
         <div
           className="absolute -right-1.5 top-1/2 h-7 w-2.5 -translate-y-1/2 cursor-col-resize rounded border-[1.5px] border-main bg-white"
           onPointerDown={e => resizePointerDownHandler(e, 'e')}
+          onClick={stopPropagation}
           style={{ pointerEvents: 'auto' }}
         ></div>
         <div
           className="absolute -bottom-1.5 left-2/4 h-2.5 w-7 -translate-x-1/2 cursor-row-resize rounded border-[1.5px] border-main bg-white"
           onPointerDown={e => resizePointerDownHandler(e, 's')}
+          onClick={stopPropagation}
           style={{ pointerEvents: 'auto' }}
         ></div>
         <div
           className="absolute -left-1.5 top-1/2 h-7 w-2.5 -translate-y-1/2 cursor-col-resize rounded border-[1.5px] border-main bg-white"
           onPointerDown={e => resizePointerDownHandler(e, 'w')}
+          onClick={stopPropagation}
           style={{ pointerEvents: 'auto' }}
         ></div>
 
@@ -224,6 +233,7 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
                 isDrag ? 'cursor-grabbing' : 'cursor-grab'
               }`}
               style={{ opacity: curPosition.opacity / 100 }}
+              onClick={stopPropagation}
             >
               {layer.type === 'text' && React.isValidElement(children)
                 ? React.cloneElement(children, { isDoubleClicked })
