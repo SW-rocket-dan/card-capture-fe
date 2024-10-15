@@ -36,7 +36,7 @@ export const useCommandStore = create<commandStore>()((set, get) => ({
           draft.future.push(currentCommand);
 
           // 과거 기록 재실행
-          executeCommand(JSON.parse(JSON.stringify(pastCommand)));
+          undoCommand(JSON.parse(JSON.stringify(pastCommand)));
         }
       }),
     ),
@@ -93,6 +93,41 @@ const executeCommand = (command: Command) => {
   const cardStore = useCardsStore.getState();
 
   switch (type) {
+    case 'ADD_LAYER':
+      if ('layerData' in command && command.layerData) {
+        cardStore.addLayer(cardId, command.layerData as Layer);
+      }
+      break;
+    case 'DELETE_LAYER':
+      if ('layerId' in command && command.layerId !== undefined) {
+        cardStore.deleteLayer(cardId, command.layerId);
+      }
+      break;
+    case 'MODIFY_LAYER':
+      if ('layerId' in command && 'layerData' in command && command.layerId !== undefined && command.layerData) {
+        cardStore.setLayer(cardId, command.layerId, command.layerData);
+      }
+  }
+};
+
+/**
+ * 명령을 반대로 실행하는 함수
+ */
+const undoCommand = (command: Command) => {
+  const { type, cardId } = command;
+  const cardStore = useCardsStore.getState();
+
+  switch (type) {
+    case 'ADD_LAYER':
+      if ('layerData' in command && command.layerId) {
+        cardStore.deleteLayer(cardId, command.layerId);
+      }
+      break;
+    case 'DELETE_LAYER':
+      if ('layerId' in command && command.layerData && command.layerId !== undefined) {
+        cardStore.addLayer(cardId, command.layerData);
+      }
+      break;
     case 'MODIFY_LAYER':
       if ('layerId' in command && 'layerData' in command && command.layerId !== undefined && command.layerData) {
         cardStore.setLayer(cardId, command.layerId, command.layerData);
