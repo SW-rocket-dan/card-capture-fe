@@ -32,3 +32,12 @@ type CardCommand = BaseCommand & {
 };
 
 export type Command = LayerCommand | BackgroundCommand | CardCommand;
+
+// 타입 가드 함수
+export const isLayerCommand = (command: Command): command is LayerCommand => {
+  return ['ADD_LAYER', 'DELETE_LAYER', 'MODIFY_LAYER'].includes(command.type);
+};
+
+export const isBackgroundCommand = (command: Command): command is BackgroundCommand => {
+  return command.type === 'MODIFY_BACKGROUND';
+};
