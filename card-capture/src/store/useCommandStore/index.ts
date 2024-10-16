@@ -116,6 +116,11 @@ const executeCommand = (command: Command) => {
       if ('layerId' in command && 'layerData' in command && command.layerId !== undefined && command.layerData) {
         cardStore.setLayer(cardId, command.layerId, command.layerData);
       }
+      break;
+    case 'MODIFY_BACKGROUND':
+      if ('backgroundData' in command) {
+        cardStore.setBackground(cardId, command.backgroundData);
+      }
   }
 };
 
@@ -141,6 +146,11 @@ const undoCommand = (command: Command) => {
     case 'MODIFY_LAYER':
       if ('layerId' in command && 'layerData' in command && command.layerId !== undefined && command.layerData) {
         cardStore.setLayer(cardId, command.layerId, command.layerData);
+      }
+      break;
+    case 'MODIFY_BACKGROUND':
+      if ('backgroundData' in command) {
+        cardStore.setBackground(cardId, command.backgroundData);
       }
   }
 };
