@@ -78,7 +78,7 @@ const CardArea = ({ card }: { card: Card }) => {
   /**
    *
    */
-  const { redo, undo } = useCommandStore();
+  const { redo, undo, copy, paste } = useCommandStore();
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -94,8 +94,16 @@ const CardArea = ({ card }: { card: Card }) => {
               } else {
                 undo();
               }
-              break;
             }
+            break;
+
+          case 'c':
+            copy(cardId, focusedLayerId);
+            break;
+
+          case 'v':
+            paste(cardId);
+            break;
         }
       }
     };
@@ -105,7 +113,7 @@ const CardArea = ({ card }: { card: Card }) => {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [cardId, focusedLayerId]);
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-[10px] bg-editorbg">

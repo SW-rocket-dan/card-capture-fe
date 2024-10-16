@@ -13,6 +13,9 @@ type commandStore = {
   addCommand: (command: Command) => void;
   undo: () => void;
   redo: () => void;
+
+  copy: (cardId: number, layerId: number) => void;
+  paste: (cardId: number) => void;
 };
 
 export const useCommandStore = create<commandStore>()((set, get) => ({
@@ -61,6 +64,28 @@ export const useCommandStore = create<commandStore>()((set, get) => ({
         }
       }),
     ),
+
+  copy: (cardId, layerId) =>
+    set(
+      produce(draft => {
+        const cardsStore = useCardsStore.getState();
+        const currentLayer = cardsStore.getLayer(cardId, layerId);
+
+        if (!currentLayer) return;
+
+        draft.clipboard = currentLayer;
+      }),
+    ),
+  paste: cardId => {
+    set(
+      produce(draft => {
+        if (!draft.clipboard) return;
+
+        const cardsStore = useCardsStore.getState();
+        cardsStore.addDuplicateLayer(cardId, JSON.parse(JSON.stringify(draft.clipboard)));
+      }),
+    );
+  },
 }));
 
 /**
