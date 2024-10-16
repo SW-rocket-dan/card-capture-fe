@@ -20,7 +20,7 @@ const isEqual = (obj1: any, obj2: any): boolean => {
     if (!keys2.includes(key) || !isEqual(obj1[key], obj2[key])) return false;
   }
 
-  return false;
+  return true;
 };
 
 export default { isEqual };
