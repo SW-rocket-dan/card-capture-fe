@@ -51,6 +51,8 @@ type useCardsStore = {
   getShapeLayer: (cardId: number, layerId: number) => Shape | null;
 
   addLayer: (cardId: number, layer: Layer) => void;
+  addDuplicateLayer: (cardId: number, layer: Layer) => void;
+
   addTextLayer: (cardId: number) => void;
   addImageLayer: (
     cardId: number,
@@ -380,6 +382,50 @@ export const useCardsStore = create(
                   cardId,
                   layerId: layer.id,
                   layerData: layer,
+                });
+              },
+            ),
+          ),
+
+        addDuplicateLayer: (cardId, layer) =>
+          set(
+            produce(
+              (
+                draft: Draft<{
+                  cards: Card[];
+                  zIndexMap: ZIndexMap;
+                }>,
+              ) => {
+                // 현재 카드의 레이어 중 가장 큰 ID 값을 찾고 + 1
+                const maxLayerId = draft.cards[cardId].layers.reduce((max, layer) => Math.max(max, layer.id), -1);
+                const newLayerId = maxLayerId + 1;
+                const newZIndex = Math.max(...Object.values(draft.zIndexMap[cardId] || {}), 0) + 1;
+
+                // 복사한 레이어의 z-index, layerId 업데이트 함
+                const newLayer = {
+                  ...layer,
+                  id: newLayerId,
+                  position: {
+                    ...layer.position,
+                    zIndex: newZIndex,
+                    x: layer.position.x + 10, // 약간의 오프셋을 주어 겹치지 않게 함
+                    y: layer.position.y + 10,
+                  },
+                };
+                draft.cards[cardId].layers.push(newLayer);
+
+                if (!draft.zIndexMap[cardId]) {
+                  draft.zIndexMap[cardId] = {};
+                }
+                draft.zIndexMap[cardId][newLayerId] = newZIndex;
+
+                useFocusStore.getState().updateFocus(cardId, newLayerId);
+
+                useCommandStore.getState().addCommand({
+                  type: 'ADD_LAYER',
+                  cardId,
+                  layerId: newLayerId,
+                  layerData: newLayer,
                 });
               },
             ),
