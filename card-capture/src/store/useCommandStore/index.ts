@@ -1,8 +1,9 @@
 import { create } from 'zustand';
-import { Command } from '@/store/useCommandStore/type';
+import { Command, isBackgroundCommand, isLayerCommand } from '@/store/useCommandStore/type';
 import { produce } from 'immer';
 import { Layer } from '@/store/useCardsStore/type';
 import { useCardsStore } from '@/store/useCardsStore';
+import { commonUtils } from '@/utils';
 
 type commandStore = {
   past: Command[];
@@ -22,6 +23,15 @@ export const useCommandStore = create<commandStore>()((set, get) => ({
   addCommand: command =>
     set(
       produce(draft => {
+        const currentPast = get().past;
+
+        // 과거 커맨드와 비교해서 같으면 추가하지 않음
+        if (currentPast.length > 0) {
+          const pastCommand = currentPast[currentPast.length - 1];
+
+          if (areCommandsEqual(pastCommand, command)) return;
+        }
+
         // 새로 수행된 작업을 기록하고, 미래는 초기화
         draft.past.push(command);
         draft.future = [];
@@ -34,7 +44,6 @@ export const useCommandStore = create<commandStore>()((set, get) => ({
           const pastCommand = draft.past.pop();
           const currentCommand = getCurrentCommand(pastCommand);
           draft.future.push(currentCommand);
-
           // 과거 기록 재실행
           undoCommand(JSON.parse(JSON.stringify(pastCommand)));
         }
@@ -112,6 +121,7 @@ const executeCommand = (command: Command) => {
 
 /**
  * 명령을 반대로 실행하는 함수
+ * undo할 때 이전 명령을 취소하는 커맨드를 실행함
  */
 const undoCommand = (command: Command) => {
   const { type, cardId } = command;
@@ -133,4 +143,27 @@ const undoCommand = (command: Command) => {
         cardStore.setLayer(cardId, command.layerId, command.layerData);
       }
   }
+};
+
+/**
+ * 두 커맨드가 완전히 같은지 확인하는 함수 (깊은 비교)
+ * 커맨드가 같은 경우에는 스택에 추가하지 않기 위해서 사용됨
+ */
+const areCommandsEqual = (command1: Command, command2: Command): boolean => {
+  // 타입, 카드 아이디 비교
+  if (command1.type !== command2.type || command1.cardId !== command2.cardId) {
+    return false;
+  }
+
+  // LayerCommand 비교
+  if (isLayerCommand(command1) && isLayerCommand(command2)) {
+    return command1.layerId === command2.layerId && commonUtils.isEqual(command1.layerData, command2.layerData);
+  }
+
+  // BackgroundCommand 비교
+  if (isBackgroundCommand(command1) && isBackgroundCommand(command2)) {
+    return commonUtils.isEqual(command1.backgroundData, command2.backgroundData);
+  }
+
+  return false;
 };
