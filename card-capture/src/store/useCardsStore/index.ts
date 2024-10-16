@@ -333,9 +333,9 @@ export const useCardsStore = create(
               if (!card) return null;
 
               const layer = card.layers.find((layer: Layer) => layer.id === layerId);
-              if (layer && layer.type === 'shape') {
-                (layer.content as Shape).color = color;
-              }
+              if (!layer || layer.type !== 'shape' || (layer.content as Shape).color === color) return;
+
+              (layer.content as Shape).color = color;
 
               const beforeLayer = get().getLayer(cardId, layerId);
               if (!beforeLayer) return;

@@ -17,7 +17,7 @@ const ShapeModalBox = () => {
   /**
    * 색상 변경되면 store에 변경된 Layer 색상 업데이트하는 로직
    */
-  const [color, setColor] = useColor(focusedShape?.color || '#AAAAAA');
+  const [color, setColor] = useColor(focusedShape?.color || '#DDDDDD');
   const setShapeLayerColor = useCardsStore(state => state.setShapeLayerColor);
 
   useEffect(() => {
