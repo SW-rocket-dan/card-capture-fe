@@ -336,7 +336,7 @@ export const useCardsStore = create(
               }
 
               const beforeLayer = get().getLayer(cardId, layerId);
-              if (!beforeLayer) return null;
+              if (!beforeLayer) return;
 
               useCommandStore.getState().addCommand({
                 type: 'MODIFY_LAYER',
