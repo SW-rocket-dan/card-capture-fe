@@ -34,7 +34,7 @@ export const useCommandStore = create<commandStore>()((set, get) => ({
 
           if (areCommandsEqual(pastCommand, command)) return;
         }
-
+        
         // 새로 수행된 작업을 기록하고, 미래는 초기화
         draft.past.push(command);
         draft.future = [];
@@ -47,7 +47,7 @@ export const useCommandStore = create<commandStore>()((set, get) => ({
           const pastCommand = draft.past.pop();
           const currentCommand = getCurrentCommand(pastCommand);
           draft.future.push(currentCommand);
-          // 과거 기록 재실행
+
           undoCommand(JSON.parse(JSON.stringify(pastCommand)));
         }
       }),
@@ -159,7 +159,7 @@ const undoCommand = (command: Command) => {
 
   switch (type) {
     case 'ADD_LAYER':
-      if ('layerData' in command && command.layerId) {
+      if ('layerData' in command && command.layerId !== undefined) {
         cardStore.deleteLayer(cardId, command.layerId);
       }
       break;
