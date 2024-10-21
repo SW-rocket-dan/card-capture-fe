@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Point } from '@/components/editor/EditingArea/components/FocusBox/FocusBox.type';
 import { INITIAL_DRAG_OFFSET } from '@/components/editor/EditingArea/components/FocusBox/FocusBox.constant';
 import { LayerType, Position } from '@/store/useCardsStore/type';
 import { useCardsStore } from '@/store/useCardsStore';
+
+const DRAG_THRESHOLD = 1;
 
 type UseDragProps = {
   cardId: number;
@@ -30,6 +32,7 @@ const useDrag = ({
   const [dragOffset, setDragOffset] = useState<Point>({
     ...INITIAL_DRAG_OFFSET,
   });
+  const initialPositionRef = useRef<Point | null>(null);
 
   /**
    * 요소를 잡았을 때 초기 위치에서(layer.position) 마우스 위치(clientX, clientY)까지 어느정도의 offset이 있는지 계산하는 로직
@@ -61,6 +64,7 @@ const useDrag = ({
 
     setIsDrag(true);
     setDragOffset(calculateDragOffset(e));
+    initialPositionRef.current = { x: e.clientX, y: e.clientY };
   };
 
   /**
@@ -91,9 +95,18 @@ const useDrag = ({
    * 마지막 위치를 전역 상태에 저장하고, 기록된 상태를 초기화
    */
   const pointerUpDragHandler = (e: PointerEvent | MouseEvent) => {
+    if (!initialPositionRef.current) return;
+
     setDragOffset({ ...INITIAL_DRAG_OFFSET });
     setIsDrag(false);
-    setPosition(cardId, layerId, { ...curPosition, ...calculateCurPosition(e) });
+
+    // 위치 어느정도 변경되었는지 확인
+    const dx = e.clientX - initialPositionRef.current.x;
+    const dy = e.clientY - initialPositionRef.current.y;
+
+    if (Math.abs(dx) > DRAG_THRESHOLD && Math.abs(dy) > DRAG_THRESHOLD) {
+      setPosition(cardId, layerId, { ...curPosition, ...calculateCurPosition(e) });
+    }
   };
 
   /**
