@@ -76,7 +76,7 @@ const CardArea = ({ card }: { card: Card }) => {
   const { trackAmplitudeEvent } = useAmplitudeContext();
 
   /**
-   *
+   * command로 요소 조작하는 hook 사용
    */
   const { redo, undo, copy, paste } = useCommandStore();
 

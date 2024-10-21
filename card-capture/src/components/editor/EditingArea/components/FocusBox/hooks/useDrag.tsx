@@ -57,7 +57,7 @@ const useDrag = ({
 
   /**
    * Layer pointerDown시 실행되는 로직
-   * 이벤트 등록을 위해 상태 true로 변경.
+   * 이벤트 등록을 위해 상태 true로 변경. 초기값 기억해서 임계값 이하 이동은 무시
    */
   const pointerDownDragHandler = (e: React.PointerEvent | React.MouseEvent) => {
     e.stopPropagation();
@@ -93,6 +93,7 @@ const useDrag = ({
   /**
    * 드래그가 끝났을 때 실행되는 로직
    * 마지막 위치를 전역 상태에 저장하고, 기록된 상태를 초기화
+   * 임계값 처리를 해주지 않으면 layer -> focus 컴포넌트 변경시에 발생하는 미세한 이동이 적용되어서 불편함 존재
    */
   const pointerUpDragHandler = (e: PointerEvent | MouseEvent) => {
     if (!initialPositionRef.current) return;
@@ -104,6 +105,7 @@ const useDrag = ({
     const dx = e.clientX - initialPositionRef.current.x;
     const dy = e.clientY - initialPositionRef.current.y;
 
+    // 임계값 이하로 움직였으면 이동에 반영하지 않음
     if (Math.abs(dx) > DRAG_THRESHOLD && Math.abs(dy) > DRAG_THRESHOLD) {
       setPosition(cardId, layerId, { ...curPosition, ...calculateCurPosition(e) });
     }
