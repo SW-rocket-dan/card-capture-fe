@@ -105,8 +105,8 @@ const useDrag = ({
     const dx = e.clientX - initialPositionRef.current.x;
     const dy = e.clientY - initialPositionRef.current.y;
 
-    // 임계값 이하로 움직였으면 이동에 반영하지 않음
-    if (Math.abs(dx) > DRAG_THRESHOLD && Math.abs(dy) > DRAG_THRESHOLD) {
+    // 둘 다 임계값 이하로 움직였으면 이동에 반영하지 않음
+    if (Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD) {
       setPosition(cardId, layerId, { ...curPosition, ...calculateCurPosition(e) });
     }
   };
