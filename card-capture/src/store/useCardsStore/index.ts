@@ -51,7 +51,7 @@ type useCardsStore = {
   getShapeLayer: (cardId: number, layerId: number) => Shape | null;
 
   addLayer: (cardId: number, layer: Layer) => void;
-  addDuplicateLayer: (cardId: number, layer: Layer) => void;
+  addDuplicateLayer: (cardId: number, layer: Layer) => { layerId: number; layerData: Layer } | null;
 
   addTextLayer: (cardId: number) => void;
   addImageLayer: (
@@ -387,7 +387,10 @@ export const useCardsStore = create(
             ),
           ),
 
-        addDuplicateLayer: (cardId, layer) =>
+        addDuplicateLayer: (cardId, layer) => {
+          let newLayerId: number | undefined;
+          let newLayer: Layer | undefined;
+
           set(
             produce(
               (
@@ -398,11 +401,12 @@ export const useCardsStore = create(
               ) => {
                 // 현재 카드의 레이어 중 가장 큰 ID 값을 찾고 + 1
                 const maxLayerId = draft.cards[cardId].layers.reduce((max, layer) => Math.max(max, layer.id), -1);
-                const newLayerId = maxLayerId + 1;
                 const newZIndex = Math.max(...Object.values(draft.zIndexMap[cardId] || {}), 0) + 1;
 
+                newLayerId = maxLayerId + 1;
+
                 // 복사한 레이어의 z-index, layerId 업데이트 함
-                const newLayer = {
+                newLayer = {
                   ...layer,
                   id: newLayerId,
                   position: {
@@ -412,6 +416,7 @@ export const useCardsStore = create(
                     y: layer.position.y + 10,
                   },
                 };
+
                 draft.cards[cardId].layers.push(newLayer);
 
                 if (!draft.zIndexMap[cardId]) {
@@ -420,16 +425,17 @@ export const useCardsStore = create(
                 draft.zIndexMap[cardId][newLayerId] = newZIndex;
 
                 useFocusStore.getState().updateFocus(cardId, newLayerId);
-
-                useCommandStore.getState().addCommand({
-                  type: 'ADD_LAYER',
-                  cardId,
-                  layerId: newLayerId,
-                  layerData: newLayer,
-                });
               },
             ),
-          ),
+          );
+
+          if (newLayerId === undefined || newLayer === undefined) return null;
+
+          return {
+            layerId: newLayerId,
+            layerData: newLayer,
+          };
+        },
 
         addTextLayer: (cardId: number) =>
           set(

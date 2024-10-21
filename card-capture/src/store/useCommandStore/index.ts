@@ -23,7 +23,10 @@ export const useCommandStore = create<commandStore>()((set, get) => ({
   future: [],
   clipboard: null,
 
-  addCommand: command =>
+  addCommand: command => {
+    console.group('[addCommend]', command.type);
+    console.info(command);
+
     set(
       produce(draft => {
         const currentPast = get().past;
@@ -34,12 +37,15 @@ export const useCommandStore = create<commandStore>()((set, get) => ({
 
           if (areCommandsEqual(pastCommand, command)) return;
         }
-        
+
         // 새로 수행된 작업을 기록하고, 미래는 초기화
         draft.past.push(command);
         draft.future = [];
       }),
-    ),
+    );
+
+    console.groupEnd();
+  },
   undo: () =>
     set(
       produce(draft => {
@@ -82,11 +88,28 @@ export const useCommandStore = create<commandStore>()((set, get) => ({
         if (!draft.clipboard) return;
 
         const cardsStore = useCardsStore.getState();
-        cardsStore.addDuplicateLayer(cardId, JSON.parse(JSON.stringify(draft.clipboard)));
+
+        const newLayerData = cardsStore.addDuplicateLayer(cardId, JSON.parse(JSON.stringify(draft.clipboard)));
+        if (newLayerData === null) return;
+
+        const { layerId, layerData } = newLayerData;
+        draft.past.push({
+          type: 'ADD_LAYER',
+          cardId,
+          layerId: layerId,
+          layerData: layerData,
+        });
       }),
     );
   },
 }));
+
+// useCommandStore.subscribe(state => {
+//   console.trace('useCommandStore', state);
+//   if (typeof window !== 'undefined') {
+//     window.state = state;
+//   }
+// });
 
 /**
  * 현재 상태에 대한 command 가져오는 함수
