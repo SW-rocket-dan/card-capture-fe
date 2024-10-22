@@ -1,6 +1,6 @@
 /**
  * 객체를 깊은 비교하는 함수
- * 내부의 key-value들이 같은지 제귀적으로 확인함
+ * 내부의 key-value들이 같은지 재귀적으로 확인함
  */
 const isEqual = (obj1: any, obj2: any): boolean => {
   // 완전히 같은 객체, 같은 값을 가진 원사타입이면 true

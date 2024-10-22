@@ -122,7 +122,7 @@ const getCurrentCommand = (command: Command): Command => {
     case 'DELETE_LAYER':
     case 'MODIFY_LAYER':
       const layer = cardsStore.getLayer(command.cardId, command.layerId);
-      if (!layer) return command;
+      if (!layer) return { ...command };
 
       return {
         ...command,
@@ -137,7 +137,7 @@ const getCurrentCommand = (command: Command): Command => {
         backgroundData: bg,
       };
     default:
-      return command;
+      return { ...command };
   }
 };
 
