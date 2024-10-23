@@ -5,6 +5,7 @@ import { useCardsStore } from '@/store/useCardsStore';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ShapeType } from '@/store/useCardsStore/type';
 import { useFocusStore } from '@/store/useFocusStore';
+import React from 'react';
 
 const LayerAddBox = ({ cardId }: { cardId: number }) => {
   /**
@@ -12,7 +13,8 @@ const LayerAddBox = ({ cardId }: { cardId: number }) => {
    */
   const addTextLayer = useCardsStore(state => state.addTextLayer);
 
-  const addTextLayerHandler = () => {
+  const addTextLayerHandler = (e: React.PointerEvent | React.MouseEvent) => {
+    e.stopPropagation();
     addTextLayer(cardId);
   };
 
@@ -22,7 +24,9 @@ const LayerAddBox = ({ cardId }: { cardId: number }) => {
   const focusedCardId = useFocusStore(state => state.focusedCardId);
   const addShapeLayer = useCardsStore(state => state.addShapeLayer);
 
-  const addShapeLayerHandler = (type: ShapeType) => {
+  const addShapeLayerHandler = (e: React.PointerEvent | React.MouseEvent, type: ShapeType) => {
+    e.stopPropagation();
+
     addShapeLayer(focusedCardId, type);
   };
 
@@ -41,13 +45,13 @@ const LayerAddBox = ({ cardId }: { cardId: number }) => {
         <PopoverContent className="mt-2 flex flex-row p-1.5" style={{ zIndex: 10000 }}>
           <div className="flex flex-row gap-[5px]">
             <button
-              onClick={() => addShapeLayerHandler('circle')}
+              onClick={e => addShapeLayerHandler(e, 'circle')}
               className="flex h-[30px] w-[30px] cursor-pointer items-center justify-center overflow-hidden rounded-[5px] hover:bg-itembg"
             >
               <div className="h-[20px] w-[20px] rounded-full bg-gray7" />
             </button>
             <button
-              onClick={() => addShapeLayerHandler('triangle')}
+              onClick={e => addShapeLayerHandler(e, 'triangle')}
               className="flex h-[30px] w-[30px] cursor-pointer items-center justify-center overflow-hidden rounded-[5px] hover:bg-itembg"
             >
               <div
@@ -59,13 +63,13 @@ const LayerAddBox = ({ cardId }: { cardId: number }) => {
               />
             </button>
             <button
-              onClick={() => addShapeLayerHandler('rect')}
+              onClick={e => addShapeLayerHandler(e, 'rect')}
               className="flex h-[30px] w-[30px] cursor-pointer items-center justify-center overflow-hidden rounded-[5px] hover:bg-itembg"
             >
               <div className="h-[18px] w-[18px] bg-gray7" />
             </button>
             <button
-              onClick={() => addShapeLayerHandler('star')}
+              onClick={e => addShapeLayerHandler(e, 'star')}
               className="flex h-[30px] w-[30px] cursor-pointer items-center justify-center overflow-hidden rounded-[5px] hover:bg-itembg"
             >
               <div

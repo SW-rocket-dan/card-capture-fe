@@ -17,6 +17,7 @@ import useAmplitudeContext from '@/hooks/useAmplitudeContext';
 import usePosterDownloader from '@/hooks/usePosterDownloader';
 import DownloadProgressModal from '@/components/common/Progress/DownloadProgressModal';
 import ExportButton from '@/components/editor/EditingArea/views/ExportButton';
+import { useCommandStore } from '@/store/useCommandStore';
 
 const CardArea = ({ card }: { card: Card }) => {
   const cardId = card.id;
@@ -73,6 +74,46 @@ const CardArea = ({ card }: { card: Card }) => {
    * 에디터 페이지에서 버튼 클릭에 대한 tracking
    */
   const { trackAmplitudeEvent } = useAmplitudeContext();
+
+  /**
+   * command로 요소 조작하는 hook 사용
+   */
+  const { redo, undo, copy, paste } = useCommandStore();
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.ctrlKey || event.metaKey) {
+        // metaKey는 Mac의 command 키
+        switch (event.key.toLowerCase()) {
+          case 'z':
+            if (cardId !== null && focusedLayerId !== null) {
+              event.preventDefault();
+
+              if (event.shiftKey) {
+                redo();
+              } else {
+                undo();
+              }
+            }
+            break;
+
+          case 'c':
+            copy(cardId, focusedLayerId);
+            break;
+
+          case 'v':
+            paste(cardId);
+            break;
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [cardId, focusedLayerId]);
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-[10px] bg-editorbg">

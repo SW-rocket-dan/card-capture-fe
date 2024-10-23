@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Point } from '@/components/editor/EditingArea/components/FocusBox/FocusBox.type';
 import { INITIAL_DRAG_OFFSET } from '@/components/editor/EditingArea/components/FocusBox/FocusBox.constant';
 import { LayerType, Position } from '@/store/useCardsStore/type';
 import { useCardsStore } from '@/store/useCardsStore';
+
+const DRAG_THRESHOLD = 1;
 
 type UseDragProps = {
   cardId: number;
@@ -30,6 +32,7 @@ const useDrag = ({
   const [dragOffset, setDragOffset] = useState<Point>({
     ...INITIAL_DRAG_OFFSET,
   });
+  const initialPositionRef = useRef<Point | null>(null);
 
   /**
    * 요소를 잡았을 때 초기 위치에서(layer.position) 마우스 위치(clientX, clientY)까지 어느정도의 offset이 있는지 계산하는 로직
@@ -54,13 +57,14 @@ const useDrag = ({
 
   /**
    * Layer pointerDown시 실행되는 로직
-   * 이벤트 등록을 위해 상태 true로 변경.
+   * 이벤트 등록을 위해 상태 true로 변경. 초기값 기억해서 임계값 이하 이동은 무시
    */
   const pointerDownDragHandler = (e: React.PointerEvent | React.MouseEvent) => {
     e.stopPropagation();
 
     setIsDrag(true);
     setDragOffset(calculateDragOffset(e));
+    initialPositionRef.current = { x: e.clientX, y: e.clientY };
   };
 
   /**
@@ -89,11 +93,22 @@ const useDrag = ({
   /**
    * 드래그가 끝났을 때 실행되는 로직
    * 마지막 위치를 전역 상태에 저장하고, 기록된 상태를 초기화
+   * 임계값 처리를 해주지 않으면 layer -> focus 컴포넌트 변경시에 발생하는 미세한 이동이 적용되어서 불편함 존재
    */
   const pointerUpDragHandler = (e: PointerEvent | MouseEvent) => {
+    if (!initialPositionRef.current) return;
+
     setDragOffset({ ...INITIAL_DRAG_OFFSET });
     setIsDrag(false);
-    setPosition(cardId, layerId, { ...curPosition, ...calculateCurPosition(e) });
+
+    // 위치 어느정도 변경되었는지 확인
+    const dx = e.clientX - initialPositionRef.current.x;
+    const dy = e.clientY - initialPositionRef.current.y;
+
+    // 둘 다 임계값 이하로 움직였으면 이동에 반영하지 않음
+    if (Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD) {
+      setPosition(cardId, layerId, { ...curPosition, ...calculateCurPosition(e) });
+    }
   };
 
   /**

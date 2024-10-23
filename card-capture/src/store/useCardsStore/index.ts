@@ -4,6 +4,7 @@ import { Draft, produce } from 'immer';
 import ReactQuill from 'react-quill';
 import { useFocusStore } from '@/store/useFocusStore';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
+import { useCommandStore } from '@/store/useCommandStore';
 
 export const INITIAL_CARD: Card = {
   id: 0,
@@ -30,6 +31,7 @@ type useCardsStore = {
   setCard: (card: Card[]) => void;
   addCard: () => void;
 
+  setLayer: (cardId: number, layerId: number, newLayer: Layer) => void;
   getLayer: (cardId: number, layerId: number) => Layer | null;
   deleteLayer: (cardId: number, layerId: number) => void;
 
@@ -47,6 +49,9 @@ type useCardsStore = {
 
   setShapeLayerColor: (cardId: number, layerId: number, color: string) => void;
   getShapeLayer: (cardId: number, layerId: number) => Shape | null;
+
+  addLayer: (cardId: number, layer: Layer) => void;
+  addDuplicateLayer: (cardId: number, layer: Layer) => { layerId: number; layerData: Layer } | null;
 
   addTextLayer: (cardId: number) => void;
   addImageLayer: (
@@ -117,6 +122,26 @@ export const useCardsStore = create(
             ),
           ),
 
+        // command 등록용
+        setLayer: (cardId, layerId, newLayer) =>
+          set(
+            produce(
+              (
+                draft: Draft<{
+                  cards: Card[];
+                }>,
+              ) => {
+                const card = draft.cards.find(({ id }) => id === cardId);
+                if (!card) return;
+
+                const layerIndex = card.layers.findIndex(layer => layer.id === layerId);
+                if (layerIndex !== -1) {
+                  card.layers[layerIndex] = { ...card.layers[layerIndex], ...newLayer };
+                }
+              },
+            ),
+          ),
+
         getLayer: (cardId, layerId) => {
           const card = get().cards.find(({ id }) => id === cardId);
           if (!card) return null;
@@ -137,7 +162,18 @@ export const useCardsStore = create(
               ) => {
                 const card = draft.cards.find(({ id }) => id === cardId);
                 if (!card) return;
+
+                const layerToDelete = get().getLayer(cardId, layerId);
+                if (!layerToDelete) return;
+
                 card.layers = card.layers.filter(({ id }) => id !== layerId);
+
+                useCommandStore.getState().addCommand({
+                  type: 'DELETE_LAYER',
+                  cardId,
+                  layerId,
+                  layerData: layerToDelete,
+                });
               },
             ),
           );
@@ -174,6 +210,16 @@ export const useCardsStore = create(
                       }
                     : v,
                 );
+
+                const beforeLayer = get().getLayer(cardId, layerId);
+                if (!beforeLayer) return null;
+
+                useCommandStore.getState().addCommand({
+                  type: 'MODIFY_LAYER',
+                  cardId,
+                  layerId,
+                  layerData: beforeLayer,
+                });
               },
             ),
           ),
@@ -187,8 +233,17 @@ export const useCardsStore = create(
                 }>,
               ) => {
                 const card = draft.cards.find((card: Card) => card.id === cardId);
-
                 if (card) card.layers = card.layers.map(v => (v.id === layerId ? { ...v, position: position } : v));
+
+                const beforeLayer = get().getLayer(cardId, layerId);
+                if (!beforeLayer) return null;
+
+                useCommandStore.getState().addCommand({
+                  type: 'MODIFY_LAYER',
+                  cardId,
+                  layerId,
+                  layerData: beforeLayer,
+                });
               },
             ),
           ),
@@ -210,6 +265,15 @@ export const useCardsStore = create(
               if (card) {
                 card.background = { ...card.background, ...background };
               }
+
+              const beforeBg = get().getBackground(cardId);
+              if (!beforeBg) return null;
+
+              useCommandStore.getState().addCommand({
+                type: 'MODIFY_BACKGROUND',
+                cardId,
+                backgroundData: beforeBg,
+              });
             }),
           );
         },
@@ -242,12 +306,22 @@ export const useCardsStore = create(
                 }>,
               ) => {
                 const card = draft.cards[cardId];
-                if (card) {
-                  const layer = card.layers.find(l => l.id === layerId);
-                  if (layer) {
-                    layer.content = image;
-                  }
-                }
+                if (!card) return null;
+
+                const layer = card.layers.find(l => l.id === layerId);
+                if (!layer) return null;
+
+                layer.content = image;
+
+                const beforeLayer = get().getLayer(cardId, layerId);
+                if (!beforeLayer) return null;
+
+                useCommandStore.getState().addCommand({
+                  type: 'MODIFY_LAYER',
+                  cardId,
+                  layerId,
+                  layerData: beforeLayer,
+                });
               },
             ),
           ),
@@ -256,14 +330,22 @@ export const useCardsStore = create(
           set(
             produce(draft => {
               const card = draft.cards.find((card: Card) => card.id === cardId);
+              if (!card) return null;
 
-              if (card) {
-                const layer = card.layers.find((layer: Layer) => layer.id === layerId);
+              const layer = card.layers.find((layer: Layer) => layer.id === layerId);
+              if (!layer || layer.type !== 'shape' || (layer.content as Shape).color === color) return;
 
-                if (layer && layer.type === 'shape') {
-                  (layer.content as Shape).color = color;
-                }
-              }
+              (layer.content as Shape).color = color;
+
+              const beforeLayer = get().getLayer(cardId, layerId);
+              if (!beforeLayer) return;
+
+              useCommandStore.getState().addCommand({
+                type: 'MODIFY_LAYER',
+                cardId,
+                layerId,
+                layerData: beforeLayer,
+              });
             }),
           ),
 
@@ -275,6 +357,84 @@ export const useCardsStore = create(
           if (!layer) return null;
 
           return layer.content as Shape;
+        },
+
+        addLayer: (cardId, layer) =>
+          set(
+            produce(
+              (
+                draft: Draft<{
+                  cards: Card[];
+                  zIndexMap: ZIndexMap;
+                }>,
+              ) => {
+                draft.cards[cardId].layers.push(layer);
+
+                if (!draft.zIndexMap[cardId]) {
+                  draft.zIndexMap[cardId] = {};
+                }
+                draft.zIndexMap[cardId][layer.id] = layer.position.zIndex;
+
+                useFocusStore.getState().updateFocus(cardId, layer.id);
+
+                useCommandStore.getState().addCommand({
+                  type: 'ADD_LAYER',
+                  cardId,
+                  layerId: layer.id,
+                  layerData: layer,
+                });
+              },
+            ),
+          ),
+
+        addDuplicateLayer: (cardId, layer) => {
+          let newLayerId: number | undefined;
+          let newLayer: Layer | undefined;
+
+          set(
+            produce(
+              (
+                draft: Draft<{
+                  cards: Card[];
+                  zIndexMap: ZIndexMap;
+                }>,
+              ) => {
+                // 현재 카드의 레이어 중 가장 큰 ID 값을 찾고 + 1
+                const maxLayerId = draft.cards[cardId].layers.reduce((max, layer) => Math.max(max, layer.id), -1);
+                const newZIndex = Math.max(...Object.values(draft.zIndexMap[cardId] || {}), 0) + 1;
+
+                newLayerId = maxLayerId + 1;
+
+                // 복사한 레이어의 z-index, layerId 업데이트 함
+                newLayer = {
+                  ...layer,
+                  id: newLayerId,
+                  position: {
+                    ...layer.position,
+                    zIndex: newZIndex,
+                    x: layer.position.x + 10, // 약간의 오프셋을 주어 겹치지 않게 함
+                    y: layer.position.y + 10,
+                  },
+                };
+
+                draft.cards[cardId].layers.push(newLayer);
+
+                if (!draft.zIndexMap[cardId]) {
+                  draft.zIndexMap[cardId] = {};
+                }
+                draft.zIndexMap[cardId][newLayerId] = newZIndex;
+
+                useFocusStore.getState().updateFocus(cardId, newLayerId);
+              },
+            ),
+          );
+
+          if (newLayerId === undefined || newLayer === undefined) return null;
+
+          return {
+            layerId: newLayerId,
+            layerData: newLayer,
+          };
         },
 
         addTextLayer: (cardId: number) =>
@@ -291,7 +451,7 @@ export const useCardsStore = create(
                 const newLayerId = maxLayerId + 1;
                 const newZIndex = Math.max(...Object.values(draft.zIndexMap[cardId] || {}), 0) + 1;
 
-                draft.cards[cardId].layers.push({
+                const newLayer: Layer = {
                   id: newLayerId,
                   type: 'text',
                   content: {
@@ -306,7 +466,9 @@ export const useCardsStore = create(
                     zIndex: newZIndex,
                     opacity: 100,
                   },
-                });
+                };
+
+                draft.cards[cardId].layers.push(newLayer);
 
                 if (!draft.zIndexMap[cardId]) {
                   draft.zIndexMap[cardId] = {};
@@ -314,6 +476,13 @@ export const useCardsStore = create(
                 draft.zIndexMap[cardId][newLayerId] = newZIndex;
 
                 useFocusStore.getState().updateFocus(cardId, newLayerId);
+
+                useCommandStore.getState().addCommand({
+                  type: 'ADD_LAYER',
+                  cardId,
+                  layerId: newLayerId,
+                  layerData: newLayer,
+                });
               },
             ),
           ),
@@ -332,7 +501,7 @@ export const useCardsStore = create(
                 const newLayerId = maxLayerId + 1;
                 const newZIndex = Math.max(...Object.values(draft.zIndexMap[cardId] || {}), 0) + 1;
 
-                draft.cards[cardId].layers.push({
+                const newLayer: Layer = {
                   id: newLayerId,
                   type: 'image',
                   content: {
@@ -351,7 +520,9 @@ export const useCardsStore = create(
                     zIndex: newZIndex,
                     opacity: 100,
                   },
-                });
+                };
+
+                draft.cards[cardId].layers.push(newLayer);
 
                 if (!draft.zIndexMap[cardId]) {
                   draft.zIndexMap[cardId] = {};
@@ -359,6 +530,13 @@ export const useCardsStore = create(
                 draft.zIndexMap[cardId][newLayerId] = newZIndex;
 
                 useFocusStore.getState().updateFocus(cardId, newLayerId);
+
+                useCommandStore.getState().addCommand({
+                  type: 'ADD_LAYER',
+                  cardId,
+                  layerId: newLayerId,
+                  layerData: newLayer,
+                });
               },
             ),
           ),
@@ -377,7 +555,7 @@ export const useCardsStore = create(
                 const newLayerId = maxLayerId + 1;
                 const newZIndex = Math.max(...Object.values(draft.zIndexMap[cardId] || {}), 0) + 1;
 
-                draft.cards[cardId].layers.push({
+                const newLayer: Layer = {
                   id: newLayerId,
                   type: 'shape',
                   content: {
@@ -393,7 +571,8 @@ export const useCardsStore = create(
                     zIndex: newZIndex,
                     opacity: 100,
                   },
-                });
+                };
+                draft.cards[cardId].layers.push(newLayer);
 
                 if (!draft.zIndexMap[cardId]) {
                   draft.zIndexMap[cardId] = {};
@@ -401,6 +580,13 @@ export const useCardsStore = create(
                 draft.zIndexMap[cardId][newLayerId] = newZIndex;
 
                 useFocusStore.getState().updateFocus(cardId, newLayerId);
+
+                useCommandStore.getState().addCommand({
+                  type: 'ADD_LAYER',
+                  cardId,
+                  layerId: newLayerId,
+                  layerData: newLayer,
+                });
               },
             ),
           ),
@@ -419,7 +605,7 @@ export const useCardsStore = create(
                 const newLayerId = maxLayerId + 1;
                 const newZIndex = Math.max(...Object.values(draft.zIndexMap[cardId] || {}), 0) + 1;
 
-                draft.cards[cardId].layers.push({
+                const newLayer: Layer = {
                   id: newLayerId,
                   type: 'illust',
                   content: {
@@ -434,7 +620,8 @@ export const useCardsStore = create(
                     zIndex: newZIndex,
                     opacity: 100,
                   },
-                });
+                };
+                draft.cards[cardId].layers.push(newLayer);
 
                 if (!draft.zIndexMap[cardId]) {
                   draft.zIndexMap[cardId] = {};
@@ -442,6 +629,13 @@ export const useCardsStore = create(
                 draft.zIndexMap[cardId][newLayerId] = newZIndex;
 
                 useFocusStore.getState().updateFocus(cardId, newLayerId);
+
+                useCommandStore.getState().addCommand({
+                  type: 'ADD_LAYER',
+                  cardId,
+                  layerId: newLayerId,
+                  layerData: newLayer,
+                });
               },
             ),
           ),

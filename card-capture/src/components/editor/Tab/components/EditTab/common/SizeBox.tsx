@@ -40,11 +40,11 @@ const SizeBox = ({ type }: SizeBoxProps) => {
    */
   useEffect(() => {
     if (!position) return;
-    if (focusedLayerType !== type) return;
-
-    setWidth(Math.floor(position.width));
-    setHeight(Math.floor(position.height));
-    setRotate(Math.floor(position.rotate));
+    if (focusedLayerType === type || (focusedLayerType === 'illust' && type === 'shape')) {
+      setWidth(Math.floor(position.width));
+      setHeight(Math.floor(position.height));
+      setRotate(Math.floor(position.rotate));
+    }
   }, [position]);
 
   /**
