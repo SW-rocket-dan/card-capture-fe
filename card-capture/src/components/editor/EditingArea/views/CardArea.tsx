@@ -263,7 +263,7 @@ const CardArea = ({ card }: { card: Card }) => {
           </div>
         </div>
 
-        <LayerListBox />
+        <LayerListBox card={card} />
       </div>
     </div>
   );
