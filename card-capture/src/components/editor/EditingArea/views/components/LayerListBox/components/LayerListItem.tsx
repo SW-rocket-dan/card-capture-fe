@@ -1,6 +1,6 @@
 import EyeIcon from '@/components/common/Icon/EyeIcon';
 import { AlignJustify } from 'lucide-react';
-import { Layer } from '@/store/useCardsStore/type';
+import { isShapeContent, Layer, Shape, ShapeType } from '@/store/useCardsStore/type';
 import TrashIcon from '@/components/common/Icon/TrashIcon';
 import { useFocusStore } from '@/store/useFocusStore';
 import React from 'react';
@@ -32,7 +32,7 @@ const LayerListItem = ({ cardId, layer }: LayerListItemProps) => {
       onDoubleClick={focusLayerHandler}
     >
       <div className="flex flex-row gap-2">
-        <EyeIcon width={13} />
+        {/*<EyeIcon width={13} />*/}
         <button onClick={deleteLayerHandler}>
           <TrashIcon width={13} />
         </button>
@@ -40,7 +40,9 @@ const LayerListItem = ({ cardId, layer }: LayerListItemProps) => {
 
       <div className="flex flex-1 flex-row items-center gap-3">
         <div className="h-8 w-8 border border-border bg-white"></div>
-        <p className="text-xs">Layer {layer.id + 1}</p>
+        <p className="text-xs">
+          {layer.type} {layer.id + 1}
+        </p>
       </div>
       <AlignJustify width={13} className="text-gray2" />
     </div>
