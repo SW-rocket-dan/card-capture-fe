@@ -5,6 +5,7 @@ import TrashIcon from '@/components/common/Icon/TrashIcon';
 import { useFocusStore } from '@/store/useFocusStore';
 import React from 'react';
 import { useCardsStore } from '@/store/useCardsStore';
+import ShapeBox from '@/components/editor/EditingArea/components/ShapeBox/ShapeBox';
 
 type LayerListItemProps = {
   cardId: number;
@@ -39,7 +40,23 @@ const LayerListItem = ({ cardId, layer }: LayerListItemProps) => {
       </div>
 
       <div className="flex flex-1 flex-row items-center gap-3">
-        <div className="h-8 w-8 border border-border bg-white"></div>
+        <div className="relative h-8 w-8 border border-border bg-white p-1">
+          <div
+            className="absolute flex h-full w-full items-center justify-center"
+            style={{
+              width: layer.position.width,
+              height: layer.position.height,
+              transform: `scale(${Math.min(26 / layer.position.width, 26 / layer.position.height)}) rotate(${layer.position.rotate}deg)`,
+              transformOrigin: 'center',
+              position: 'absolute',
+              left: '50%',
+              top: '50%',
+              translate: '-50% -50%',
+            }}
+          >
+            {isShapeContent(layer.content) && <ShapeBox shapeType={layer.content.type} color={layer.content.color} />}
+          </div>
+        </div>
         <p className="text-xs">
           {layer.type} {layer.id + 1}
         </p>

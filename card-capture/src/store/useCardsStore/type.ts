@@ -65,3 +65,10 @@ export type ZIndexMap = {
     [layerId: number]: number;
   };
 };
+
+/**
+ * 타입 가드
+ */
+export const isShapeContent = (content: Layer['content']): content is Shape => {
+  return 'type' in content && 'color' in content;
+};
