@@ -25,6 +25,7 @@ const config = {
         main: '#6F6CFF',
         'dark-main': '#5E5BFF',
         'light-main': '#DADAFC',
+        'lighter-main': '#EDEDFC',
         border: '#DDDDDD',
         lightBorder: '#EEEEEE',
         icon: '#8E99A3',

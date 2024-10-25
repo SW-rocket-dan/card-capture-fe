@@ -31,13 +31,13 @@ const LayerListItem = ({ cardId, layer }: LayerListItemProps) => {
 
   return (
     <div
-      className={`flex w-full flex-row items-center gap-3 rounded border border-border px-2.5 py-[8px] ${isFocused ? 'bg-light-main' : 'bg-white'}`}
+      className={`flex w-full flex-row items-center gap-3 rounded border border-border px-2.5 py-[8px] ${isFocused ? 'bg-lighter-main' : 'bg-white'}`}
       onDoubleClick={focusLayerHandler}
     >
       <div className="flex flex-row gap-2">
         {/*<EyeIcon width={13} />*/}
         <button onClick={deleteLayerHandler}>
-          <TrashIcon width={13} />
+          <TrashIcon width={13} className="text-gray2 hover:text-defaultBlack" />
         </button>
       </div>
 
