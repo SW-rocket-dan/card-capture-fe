@@ -1,11 +1,13 @@
-import EyeIcon from '@/components/common/Icon/EyeIcon';
 import { AlignJustify } from 'lucide-react';
-import { isShapeContent, Layer, Shape, ShapeType } from '@/store/useCardsStore/type';
+import { isIllustContent, isImageContent, isShapeContent, isTextContent, Layer } from '@/store/useCardsStore/type';
 import TrashIcon from '@/components/common/Icon/TrashIcon';
 import { useFocusStore } from '@/store/useFocusStore';
 import React from 'react';
 import { useCardsStore } from '@/store/useCardsStore';
 import ShapeBox from '@/components/editor/EditingArea/components/ShapeBox/ShapeBox';
+import ImageBox from '@/components/editor/EditingArea/components/ImageBox/ImageBox';
+import IllustBox from '@/components/editor/EditingArea/components/IllustBox/IllustBox';
+import ReadOnlyTextBox from '@/components/common/Poster/components/ReadOnlyTextBox';
 
 type LayerListItemProps = {
   cardId: number;
@@ -54,7 +56,12 @@ const LayerListItem = ({ cardId, layer }: LayerListItemProps) => {
               translate: '-50% -50%',
             }}
           >
-            {isShapeContent(layer.content) && <ShapeBox shapeType={layer.content.type} color={layer.content.color} />}
+            {layer.type === 'shape' && isShapeContent(layer.content) && (
+              <ShapeBox shapeType={layer.content.type} color={layer.content.color} />
+            )}
+            {layer.type === 'image' && isImageContent(layer.content) && <ImageBox url={layer.content.url} />}
+            {layer.type === 'illust' && isIllustContent(layer.content) && <IllustBox url={layer.content.url} />}
+            {layer.type === 'text' && isTextContent(layer.content) && <ReadOnlyTextBox text={layer.content.content} />}
           </div>
         </div>
         <p className="text-xs">
