@@ -69,6 +69,19 @@ export type ZIndexMap = {
 /**
  * 타입 가드
  */
+
+export const isImageContent = (content: Layer['content']): content is Image => {
+  return 'url' in content;
+};
+
 export const isShapeContent = (content: Layer['content']): content is Shape => {
   return 'type' in content && 'color' in content;
+};
+
+export const isIllustContent = (content: Layer['content']): content is Image => {
+  return 'url' in content;
+};
+
+export const isTextContent = (content: Layer['content']): content is Text => {
+  return 'content' in content;
 };
