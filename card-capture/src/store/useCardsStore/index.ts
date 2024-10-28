@@ -29,6 +29,7 @@ type useCardsStore = {
 
   setTemplateId: (templateId: number) => void;
   setCard: (card: Card[]) => void;
+  getCard: (cardId: number) => Card | null;
   addCard: () => void;
 
   setLayer: (cardId: number, layerId: number, newLayer: Layer) => void;
@@ -108,6 +109,13 @@ export const useCardsStore = create(
               });
             }),
           ),
+
+        getCard: cardId => {
+          const card = get().cards.find(({ id }) => id === cardId);
+          if (!card) return null;
+
+          return card;
+        },
 
         addCard: () =>
           set(
