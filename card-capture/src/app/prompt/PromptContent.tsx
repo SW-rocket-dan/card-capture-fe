@@ -79,7 +79,14 @@ const PromptContent = () => {
 
   return (
     <div className="h-screen w-screen overflow-y-scroll font-Pretendard">
-      {isLoading && <Loading>카드뉴스 제작 중</Loading>}
+      {isLoading && (
+        <Loading>
+          <div className="flex flex-col items-center justify-center gap-2">
+            <p>카드뉴스 제작 중</p>
+            <p className="text-sm font-normal">시간이 오래 소요될 수 있어요! 조금만 기다려주세요</p>
+          </div>
+        </Loading>
+      )}
       <NavigationBar isTransparent={false} />
       <div className="flex h-full flex-col pt-[60px]">
         <Title title="카드뉴스 제작하기" content="제작에 필요한 정보들을 입력해주세요!" />
