@@ -13,7 +13,7 @@ const Promotion = () => {
   return createPortal(
     <div className="fixed bottom-[95px] right-6 flex flex-col gap-[14px] font-Pretendard">
       <TooltipProvider>
-        <Tooltip delayDuration={0}>
+        <Tooltip delayDuration={0} defaultOpen={true}>
           <TooltipTrigger asChild>
             <button
               className="flex h-[56px] w-[56px] items-center justify-center rounded-bl-[24px] rounded-br-[24px] rounded-tl-[24px] rounded-tr-[24px] border-[0.1px] border-border bg-heart shadow-drop-medium"
