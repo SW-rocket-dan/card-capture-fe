@@ -19,9 +19,41 @@ export type Background = {
 
 export type LayerType = 'text' | 'image' | 'shape' | 'illust';
 
-export type Layer = {
-  type: LayerType;
-  content: Image | Shape | Text | Illust;
+export type ContentType = Image | Shape | Text | Illust;
+
+// export type Layer = {
+//   type: LayerType;
+//   content: ContentType;
+//   id: number;
+//   position: Position;
+// };
+
+export type Layer = TextLayer | ImageLayer | ShapeLayer | IllustLayer;
+
+export type TextLayer = {
+  type: 'text';
+  content: Text;
+  id: number;
+  position: Position;
+};
+
+export type ImageLayer = {
+  type: 'image';
+  content: Image;
+  id: number;
+  position: Position;
+};
+
+export type ShapeLayer = {
+  type: 'shape';
+  content: Shape;
+  id: number;
+  position: Position;
+};
+
+export type IllustLayer = {
+  type: 'illust';
+  content: Illust;
   id: number;
   position: Position;
 };

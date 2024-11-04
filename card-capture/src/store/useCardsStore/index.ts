@@ -1,10 +1,29 @@
 import { create } from 'zustand';
-import { Background, Card, Image, Layer, Position, Shape, ShapeType, Text, ZIndexMap } from './type';
+import {
+  Background,
+  Card,
+  Image,
+  ImageLayer,
+  Layer,
+  Position,
+  Shape,
+  ShapeLayer,
+  ShapeType,
+  Text,
+  TextLayer,
+  ZIndexMap,
+} from './type';
 import { Draft, produce } from 'immer';
 import ReactQuill from 'react-quill';
 import { useFocusStore } from '@/store/useFocusStore';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
 import { useCommandStore } from '@/store/useCommandStore';
+import {
+  findCardAndLayer,
+  findDraftCardAndLayer,
+  findTypedDraftLayer,
+  findTypedLayer,
+} from '@/store/useCardsStore/utils';
 
 export const INITIAL_CARD: Card = {
   id: 0,
@@ -33,8 +52,10 @@ type useCardsStore = {
   addCard: () => void;
 
   setLayer: (cardId: number, layerId: number, newLayer: Layer) => void;
-  getLayer: (cardId: number, layerId: number) => Layer | null;
+  getLayer: (cardId: number, layerId: number) => Layer | null | undefined;
   deleteLayer: (cardId: number, layerId: number) => void;
+
+  getNewLayerInfo: (cardId: number) => { layerId: number; zIndex: number };
 
   getLayerText: (cardId: number, layerId: number) => ReactQuill.Value | null;
   setLayerText: (cardId: number, layerId: number, text: ReactQuill.Value) => void;
@@ -139,25 +160,21 @@ export const useCardsStore = create(
                   cards: Card[];
                 }>,
               ) => {
-                const card = draft.cards.find(({ id }) => id === cardId);
-                if (!card) return;
+                const found = findDraftCardAndLayer(draft.cards, cardId, layerId);
+                if (!found) return;
 
-                const layerIndex = card.layers.findIndex(layer => layer.id === layerId);
-                if (layerIndex !== -1) {
-                  card.layers[layerIndex] = { ...card.layers[layerIndex], ...newLayer };
-                }
+                const { card, layer, layerIndex } = found;
+
+                card.layers[layerIndex] = newLayer;
               },
             ),
           ),
 
         getLayer: (cardId, layerId) => {
-          const card = get().cards.find(({ id }) => id === cardId);
-          if (!card) return null;
+          const found = findCardAndLayer(get().cards, cardId, layerId);
+          if (!found) return;
 
-          const layer = card.layers.find(({ id }) => id === layerId);
-          if (!layer) return null;
-
-          return layer;
+          return found.layer;
         },
 
         deleteLayer: (cardId, layerId) => {
@@ -168,11 +185,10 @@ export const useCardsStore = create(
                   cards: Card[];
                 }>,
               ) => {
-                const card = draft.cards.find(({ id }) => id === cardId);
-                if (!card) return;
+                const found = findDraftCardAndLayer(draft.cards, cardId, layerId);
+                if (!found) return null;
 
-                const layerToDelete = get().getLayer(cardId, layerId);
-                if (!layerToDelete) return;
+                const { card, layer } = found;
 
                 card.layers = card.layers.filter(({ id }) => id !== layerId);
 
@@ -180,23 +196,28 @@ export const useCardsStore = create(
                   type: 'DELETE_LAYER',
                   cardId,
                   layerId,
-                  layerData: layerToDelete,
+                  layerData: layer,
                 });
               },
             ),
           );
         },
 
+        getNewLayerInfo: (cardId: number) => {
+          const maxLayerId = get().cards[cardId].layers.reduce((max, layer) => Math.max(max, layer.id), -1);
+          const maxZIndex = Math.max(...Object.values(get().zIndexMap[cardId] || {}), 0);
+
+          return {
+            layerId: maxLayerId + 1,
+            zIndex: maxZIndex + 1,
+          };
+        },
+
         getLayerText: (cardId, layerId) => {
-          const card = get().cards.find(({ id }) => id === cardId);
-          if (!card) return null;
+          const found = findTypedLayer<TextLayer>(get().cards, cardId, layerId, 'text');
+          if (!found) return null;
 
-          const layer = card.layers.find(({ id }) => id === layerId);
-          if (!layer) return null;
-
-          if (layer.type !== 'text') return null;
-
-          const { content } = layer.content as Text;
+          const { content } = found.layer.content;
           return content;
         },
 
@@ -208,16 +229,12 @@ export const useCardsStore = create(
                   cards: Card[];
                 }>,
               ) => {
-                draft.cards[cardId].layers = draft.cards[cardId].layers.map(v =>
-                  v.id === layerId
-                    ? {
-                        ...v,
-                        content: {
-                          content: text,
-                        },
-                      }
-                    : v,
-                );
+                const found = findTypedDraftLayer<TextLayer>(draft.cards, cardId, layerId, 'text');
+                if (!found) return null;
+
+                const { layer } = found;
+
+                layer.content = { content: text };
 
                 const beforeLayer = get().getLayer(cardId, layerId);
                 if (!beforeLayer) return null;
@@ -240,8 +257,12 @@ export const useCardsStore = create(
                   cards: Card[];
                 }>,
               ) => {
-                const card = draft.cards.find((card: Card) => card.id === cardId);
-                if (card) card.layers = card.layers.map(v => (v.id === layerId ? { ...v, position: position } : v));
+                const found = findDraftCardAndLayer(draft.cards, cardId, layerId);
+                if (!found) return;
+
+                const { layer } = found;
+
+                layer.position = position;
 
                 const beforeLayer = get().getLayer(cardId, layerId);
                 if (!beforeLayer) return null;
@@ -257,22 +278,19 @@ export const useCardsStore = create(
           ),
 
         getPosition: (cardId, layerId) => {
-          const card = get().cards.find(({ id }) => id === cardId);
-          if (!card) return null;
+          const found = findCardAndLayer(get().cards, cardId, layerId);
+          if (!found) return null;
 
-          const layer = card.layers.find(({ id }) => id === layerId);
-          if (!layer) return null;
-
-          return layer.position;
+          return found.layer.position;
         },
 
         setBackground: (cardId: number, background: Partial<Background>) => {
           set(
             produce(draft => {
               const card = draft.cards.find((card: Card) => card.id === cardId);
-              if (card) {
-                card.background = { ...card.background, ...background };
-              }
+              if (!card) return null;
+
+              card.background = { ...card.background, ...background };
 
               const beforeBg = get().getBackground(cardId);
               if (!beforeBg) return null;
@@ -294,15 +312,10 @@ export const useCardsStore = create(
         },
 
         getImageLayer: (cardId, layerId) => {
-          const card = get().cards.find(({ id }) => id === cardId);
-          if (!card) return null;
+          const found = findTypedLayer<ImageLayer>(get().cards, cardId, layerId, 'image');
+          if (!found) return null;
 
-          const layer = card.layers.find(({ id }) => id === layerId);
-          if (!layer) return null;
-
-          if (layer.type !== 'image') return null;
-
-          return layer.content as Image;
+          return found.layer.content;
         },
 
         setImageLayer: (cardId, layerId, image) =>
@@ -313,13 +326,10 @@ export const useCardsStore = create(
                   cards: Card[];
                 }>,
               ) => {
-                const card = draft.cards[cardId];
-                if (!card) return null;
+                const found = findTypedDraftLayer<ImageLayer>(draft.cards, cardId, layerId, 'image');
+                if (!found) return;
 
-                const layer = card.layers.find(l => l.id === layerId);
-                if (!layer) return null;
-
-                layer.content = image;
+                found.layer.content = image;
 
                 const beforeLayer = get().getLayer(cardId, layerId);
                 if (!beforeLayer) return null;
@@ -358,13 +368,10 @@ export const useCardsStore = create(
           ),
 
         getShapeLayer: (cardId, layerId) => {
-          const card = get().cards.find(({ id }) => id === cardId);
-          if (!card) return null;
+          const found = findTypedLayer<ShapeLayer>(get().cards, cardId, layerId, 'shape');
+          if (!found) return null;
 
-          const layer = card.layers.find(({ id }) => id === layerId);
-          if (!layer) return null;
-
-          return layer.content as Shape;
+          return found.layer.content;
         },
 
         addLayer: (cardId, layer) =>
