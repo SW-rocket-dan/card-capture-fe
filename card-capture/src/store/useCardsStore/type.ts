@@ -21,13 +21,6 @@ export type LayerType = 'text' | 'image' | 'shape' | 'illust';
 
 export type ContentType = Image | Shape | Text | Illust;
 
-// export type Layer = {
-//   type: LayerType;
-//   content: ContentType;
-//   id: number;
-//   position: Position;
-// };
-
 export type Layer = TextLayer | ImageLayer | ShapeLayer | IllustLayer;
 
 export type TextLayer = {
@@ -56,6 +49,20 @@ export type IllustLayer = {
   content: Illust;
   id: number;
   position: Position;
+};
+
+export type LayerTypeMap = {
+  text: TextLayer;
+  image: ImageLayer;
+  shape: ShapeLayer;
+  illust: IllustLayer;
+};
+
+export type LayerContentMap = {
+  text: TextLayer['content'];
+  shape: ShapeLayer['content'];
+  image: ImageLayer['content'];
+  illust: IllustLayer['content'];
 };
 
 export type Image = {
