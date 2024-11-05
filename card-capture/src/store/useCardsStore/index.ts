@@ -232,9 +232,7 @@ export const useCardsStore = create(
                 const found = findTypedDraftLayer<TextLayer>(draft.cards, cardId, layerId, 'text');
                 if (!found) return null;
 
-                const { layer } = found;
-
-                layer.content = { content: text };
+                found.layer.content = { content: text };
 
                 const beforeLayer = get().getLayer(cardId, layerId);
                 if (!beforeLayer) return null;
@@ -260,9 +258,7 @@ export const useCardsStore = create(
                 const found = findDraftCardAndLayer(draft.cards, cardId, layerId);
                 if (!found) return;
 
-                const { layer } = found;
-
-                layer.position = position;
+                found.layer.position = position;
 
                 const beforeLayer = get().getLayer(cardId, layerId);
                 if (!beforeLayer) return null;
@@ -347,13 +343,12 @@ export const useCardsStore = create(
         setShapeLayerColor: (cardId, layerId, color) =>
           set(
             produce(draft => {
-              const card = draft.cards.find((card: Card) => card.id === cardId);
-              if (!card) return null;
+              const found = findTypedDraftLayer<ShapeLayer>(draft.cards, cardId, layerId, 'shape');
+              if (!found) return;
 
-              const layer = card.layers.find((layer: Layer) => layer.id === layerId);
-              if (!layer || layer.type !== 'shape' || (layer.content as Shape).color === color) return;
-
-              (layer.content as Shape).color = color;
+              // 색상 같은지 체크 없으면 커맨드 기록에 오류 발생함
+              if (found.layer.content.color === color) return;
+              found.layer.content.color = color;
 
               const beforeLayer = get().getLayer(cardId, layerId);
               if (!beforeLayer) return;
