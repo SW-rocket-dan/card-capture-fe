@@ -4,8 +4,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import illustrationApi, { StickerDataType } from '@/api/illustrationApi';
 import FindIcon from '@/components/common/Icon/FindIcon';
 import { useFocusStore } from '@/store/useFocusStore';
-import { useCardsStore } from '@/store/useCardsStore';
-import { authUtils } from '@/utils';
+import { authUtils, commandUtils } from '@/utils';
 
 const IllustrationBox = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -88,10 +87,13 @@ const IllustrationBox = () => {
    * 선택된 스티커를 새로운 Illust Layer로 추가하는 로직
    */
   const focusedCardId = useFocusStore(state => state.focusedCardId);
-  const addIllustLayer = useCardsStore(state => state.addIllustLayer);
 
   const addIllustLayerHandler = (url: string) => {
-    addIllustLayer(focusedCardId, url);
+    commandUtils.dispatchCommand('ADD_LAYER', {
+      cardId: focusedCardId,
+      type: 'illust',
+      content: { url },
+    });
   };
 
   // 로그인 여부 확인

@@ -7,6 +7,7 @@ import useClickOutside from '@/hooks/useClickOutside';
 import ColorButton from '@/components/editor/Tab/components/EditTab/common/ColorButton';
 import { useColor } from 'react-color-palette';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { commandUtils } from '@/utils';
 
 const ShapeModalBox = () => {
   // 선택된 데이터 가져오기
@@ -27,10 +28,13 @@ const ShapeModalBox = () => {
   /**
    * 새로운 Shape Layer를 추가하는 로직
    */
-  const addShapeLayer = useCardsStore(state => state.addShapeLayer);
 
   const addShapeLayerHandler = (type: ShapeType) => {
-    addShapeLayer(focusedCardId, type);
+    commandUtils.dispatchCommand('ADD_LAYER', {
+      cardId: focusedCardId,
+      type: 'shape',
+      content: { type: type },
+    });
   };
 
   /**
