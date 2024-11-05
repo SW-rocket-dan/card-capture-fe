@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Position } from '@/store/useCardsStore/type';
-import { useCardsStore } from '@/store/useCardsStore';
+import { commandUtils } from '@/utils';
 
 type UseRotateProps = {
   cardId: number;
@@ -11,7 +11,6 @@ type UseRotateProps = {
 };
 
 const useRotate = ({ cardId, layerId, boxRef, curPosition, setCurPosition }: UseRotateProps) => {
-  const setPosition = useCardsStore(state => state.setPosition);
   const [isRotate, setIsRotate] = useState(false);
 
   /**
@@ -71,7 +70,12 @@ const useRotate = ({ cardId, layerId, boxRef, curPosition, setCurPosition }: Use
     if (!boxRef.current) return;
 
     const rotationDegrees = calculateRotationDegrees(e) || 0;
-    setPosition(cardId, layerId, { ...curPosition, rotate: rotationDegrees });
+
+    commandUtils.dispatchCommand('MODIFY_POSITION', {
+      cardId,
+      layerId,
+      position: { ...curPosition, rotate: rotationDegrees },
+    });
   };
 
   // rotate 이벤트 등록
