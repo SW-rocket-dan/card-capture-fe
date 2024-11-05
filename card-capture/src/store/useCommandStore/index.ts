@@ -1,9 +1,10 @@
 import { create } from 'zustand';
-import { Command, isBackgroundCommand, isLayerCommand } from '@/store/useCommandStore/type';
+import { isBackgroundCommand, isLayerCommand } from '@/store/useCommandStore/type';
 import { produce } from 'immer';
 import { Layer } from '@/store/useCardsStore/type';
 import { useCardsStore } from '@/store/useCardsStore';
 import { commonUtils } from '@/utils';
+import { Command } from '@/lib/commands/type';
 
 type commandStore = {
   past: Command[];
@@ -89,26 +90,26 @@ export const useCommandStore = create<commandStore>()((set, get) => ({
     );
   },
 }));
-
-/**
- * 두 커맨드가 완전히 같은지 확인하는 함수 (깊은 비교)
- * 커맨드가 같은 경우에는 스택에 추가하지 않기 위해서 사용됨
- */
-const areCommandsEqual = (command1: Command, command2: Command): boolean => {
-  // 타입, 카드 아이디 비교
-  if (command1.type !== command2.type || command1.cardId !== command2.cardId) {
-    return false;
-  }
-
-  // LayerCommand 비교
-  if (isLayerCommand(command1) && isLayerCommand(command2)) {
-    return command1.layerId === command2.layerId && commonUtils.isEqual(command1.layerData, command2.layerData);
-  }
-
-  // BackgroundCommand 비교
-  if (isBackgroundCommand(command1) && isBackgroundCommand(command2)) {
-    return commonUtils.isEqual(command1.backgroundData, command2.backgroundData);
-  }
-
-  return false;
-};
+//
+// /**
+//  * 두 커맨드가 완전히 같은지 확인하는 함수 (깊은 비교)
+//  * 커맨드가 같은 경우에는 스택에 추가하지 않기 위해서 사용됨
+//  */
+// const areCommandsEqual = (command1: Command, command2: Command): boolean => {
+//   // 타입, 카드 아이디 비교
+//   if (command1.type !== command2.type || command1.cardId !== command2.cardId) {
+//     return false;
+//   }
+//
+//   // LayerCommand 비교
+//   if (isLayerCommand(command1) && isLayerCommand(command2)) {
+//     return command1.layerId === command2.layerId && commonUtils.isEqual(command1.layerData, command2.layerData);
+//   }
+//
+//   // BackgroundCommand 비교
+//   if (isBackgroundCommand(command1) && isBackgroundCommand(command2)) {
+//     return commonUtils.isEqual(command1.backgroundData, command2.backgroundData);
+//   }
+//
+//   return false;
+// };
