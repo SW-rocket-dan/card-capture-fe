@@ -1,4 +1,4 @@
-import { Layer, LayerContentMap, LayerType, Position } from '@/store/useCardsStore/type';
+import { Layer, LayerContentMap, LayerType } from '@/store/useCardsStore/type';
 import { BasePosition } from '@/lib/commands/type';
 
 const DEFAULT_POSITION = {

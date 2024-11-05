@@ -9,7 +9,7 @@ export const createModifyBackgroundCommand = (cardId: number, background: Partia
   if (!previousBackground) throw new Error(`Background not found: ${cardId}`);
 
   return {
-    type: 'ADD_LAYER',
+    type: 'MODIFY_BACKGROUND',
     execute: () => {
       cardStore.setBackground(cardId, background);
     },

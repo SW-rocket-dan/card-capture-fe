@@ -54,7 +54,7 @@ export const createModifyTextLayerCommand = (cardId: number, layerId: number, te
   if (!previousText) throw new Error(`Text not found: ${layerId}`);
 
   return {
-    type: 'MODIFY_LAYER',
+    type: 'MODIFY_TEXT_LAYER',
     execute: () => {
       cardStore.setTextLayer(cardId, layerId, text);
     },
@@ -71,7 +71,7 @@ export const createModifyImageLayerCommand = (cardId: number, layerId: number, i
   if (!previousImage) throw new Error(`Image not found: ${layerId}`);
 
   return {
-    type: 'MODIFY_LAYER',
+    type: 'MODIFY_IMAGE_LAYER',
     execute: () => {
       cardStore.setImageLayer(cardId, layerId, image);
     },
@@ -88,7 +88,7 @@ export const createModifyShapeLayerCommand = (cardId: number, layerId: number, c
   if (!previousShape) throw new Error(`Shape not found: ${layerId}`);
 
   return {
-    type: 'MODIFY_LAYER',
+    type: 'MODIFY_SHAPE_LAYER',
     execute: () => {
       cardStore.setShapeLayerColor(cardId, layerId, color);
     },
@@ -105,7 +105,7 @@ export const createModifyLayerPositionCommand = (cardId: number, layerId: number
   if (!previousPosition) throw new Error(`Position not found: ${layerId}`);
 
   return {
-    type: 'MODIFY_LAYER',
+    type: 'MODIFY_POSITION',
     execute: () => {
       cardStore.setPosition(cardId, layerId, position);
     },

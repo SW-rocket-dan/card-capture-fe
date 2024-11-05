@@ -1,4 +1,5 @@
-import { Background, Layer, Position } from '@/store/useCardsStore/type';
+import { Background, Image, LayerContentMap, LayerType, Position } from '@/store/useCardsStore/type';
+import ReactQuill from 'react-quill';
 
 export type Command = {
   type: CommandType;
@@ -6,27 +7,54 @@ export type Command = {
   undo: () => void;
 };
 
-export type LayerCommandParams = {
-  cardId: number;
-  layerId: number;
-  layerData?: Layer;
-};
-
-export type BackgroundCommandParams = {
-  cardId: number;
-  backgroundData: Background;
-};
-
-export type CommandParams = LayerCommandParams | BackgroundCommandParams;
-
 export type CommandType =
   | 'ADD_LAYER'
   | 'DELETE_LAYER'
-  | 'MODIFY_LAYER'
+  | 'MODIFY_POSITION'
+  | 'MODIFY_TEXT_LAYER'
+  | 'MODIFY_IMAGE_LAYER'
+  | 'MODIFY_SHAPE_LAYER'
+  | 'MODIFY_ILLUST_LAYER'
   | 'MODIFY_BACKGROUND'
   | 'ADD_CARD'
   | 'DELETE_CARD'
   | 'COPY'
   | 'PASTE';
+
+export type CommandParamsMap = {
+  ADD_LAYER: {
+    cardId: number;
+    type: LayerType;
+    content: Partial<LayerContentMap[LayerType]>;
+  };
+  DELETE_LAYER: {
+    cardId: number;
+    layerId: number;
+  };
+  MODIFY_TEXT_LAYER: {
+    cardId: number;
+    layerId: number;
+    content: ReactQuill.Value;
+  };
+  MODIFY_IMAGE_LAYER: {
+    cardId: number;
+    layerId: number;
+    content: Image;
+  };
+  MODIFY_SHAPE_LAYER: {
+    cardId: number;
+    layerId: number;
+    color: string;
+  };
+  MODIFY_POSITION: {
+    cardId: number;
+    layerId: number;
+    position: Position;
+  };
+  MODIFY_BACKGROUND: {
+    cardId: number;
+    backgroundData: Background;
+  };
+};
 
 export type BasePosition = Omit<Position, 'zIndex'>;
