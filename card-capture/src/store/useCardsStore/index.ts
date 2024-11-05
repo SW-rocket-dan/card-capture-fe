@@ -5,6 +5,8 @@ import {
   Image,
   ImageLayer,
   Layer,
+  LayerType,
+  LayerTypeMap,
   Position,
   Shape,
   ShapeLayer,
@@ -52,13 +54,16 @@ type useCardsStore = {
   addCard: () => void;
 
   setLayer: (cardId: number, layerId: number, newLayer: Layer) => void;
-  getLayer: (cardId: number, layerId: number) => Layer | null | undefined;
+  getLayer: {
+    (cardId: number, layerId: number): Layer | null | undefined;
+    <T extends LayerType>(cardId: number, layerId: number, type: T): LayerTypeMap[T] | null | undefined;
+  };
   deleteLayer: (cardId: number, layerId: number) => void;
 
   getNewLayerInfo: (cardId: number) => { layerId: number; zIndex: number };
 
-  getLayerText: (cardId: number, layerId: number) => ReactQuill.Value | null;
-  setLayerText: (cardId: number, layerId: number, text: ReactQuill.Value) => void;
+  getTextLayer: (cardId: number, layerId: number) => ReactQuill.Value | null;
+  setTextLayer: (cardId: number, layerId: number, text: ReactQuill.Value) => void;
 
   setPosition: (cardId: number, layerId: number, position: Position) => void;
   getPosition: (cardId: number, layerId: number) => Position | null;
@@ -170,12 +175,19 @@ export const useCardsStore = create(
             ),
           ),
 
-        getLayer: (cardId, layerId) => {
-          const found = findCardAndLayer(get().cards, cardId, layerId);
-          if (!found) return;
+        getLayer: ((cardId: number, layerId: number, type?: LayerType) => {
+          if (type) {
+            const found = findTypedLayer(get().cards, cardId, layerId, type);
+            if (!found) return null;
 
-          return found.layer;
-        },
+            return found.layer;
+          } else {
+            const found = findCardAndLayer(get().cards, cardId, layerId);
+            if (!found) return null;
+
+            return found.layer;
+          }
+        }) as useCardsStore['getLayer'],
 
         deleteLayer: (cardId, layerId) => {
           set(
@@ -213,15 +225,14 @@ export const useCardsStore = create(
           };
         },
 
-        getLayerText: (cardId, layerId) => {
+        getTextLayer: (cardId, layerId) => {
           const found = findTypedLayer<TextLayer>(get().cards, cardId, layerId, 'text');
           if (!found) return null;
-
-          const { content } = found.layer.content;
-          return content;
+          
+          return found.layer.content.content;
         },
 
-        setLayerText: (cardId, layerId, text) =>
+        setTextLayer: (cardId, layerId, text) =>
           set(
             produce(
               (

@@ -47,10 +47,10 @@ const TextBox = ({
    * 변경되는 텍스트 값을 상태에 저장하는 함수.
    * 변경될 때마다 store에 저장 / blur로 저장하니 focusBox 변경될때 적용되지 않는 오류 발생함
    */
-  const prevText = useCardsStore(state => state.getLayerText(cardId, layerId));
+  const prevText = useCardsStore(state => state.getTextLayer(cardId, layerId));
   const [text, setText] = useState<ReactQuill.Value | null>(prevText);
 
-  const setLayerText = useCardsStore(state => state.setLayerText);
+  const setLayerText = useCardsStore(state => state.setTextLayer);
 
   const changeHandler: ReactQuill.ReactQuillProps['onChange'] = (value, delta, source, editor) => {
     setText(editor.getContents());

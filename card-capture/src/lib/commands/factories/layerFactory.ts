@@ -1,4 +1,5 @@
 import { Layer, LayerContentMap, LayerType, Position } from '@/store/useCardsStore/type';
+import { BasePosition } from '@/lib/commands/type';
 
 const DEFAULT_POSITION = {
   x: 200,
@@ -21,8 +22,6 @@ const DEFAULT_VALUES: Record<LayerType, LayerContentMap[LayerType]> = {
   },
   illust: { url: '' },
 };
-
-type BasePosition = Omit<Position, 'zIndex'>;
 
 export type LayerFactoryProps<T extends LayerType> = {
   type: T;
