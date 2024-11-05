@@ -1,14 +1,30 @@
-import { Layer, LayerContentMap, LayerType } from '@/store/useCardsStore/type';
+import { Layer, LayerContentMap, LayerType, Position } from '@/store/useCardsStore/type';
 import { BasePosition } from '@/lib/commands/type';
 
-const DEFAULT_POSITION = {
+const BASE_POSITION: Omit<Partial<Position>, 'zIndex'> = {
   x: 200,
   y: 200,
   width: 200,
   height: 200,
   rotate: 0,
   opacity: 100,
-} as const;
+};
+
+const TEXT_POSITION: Omit<Partial<Position>, 'zIndex'> = {
+  x: 190,
+  y: 250,
+  width: 200,
+  height: 60,
+  rotate: 0,
+  opacity: 100,
+};
+
+const DEFAULT_POSITION: Record<LayerType, Partial<Position>> = {
+  text: TEXT_POSITION,
+  image: BASE_POSITION,
+  shape: BASE_POSITION,
+  illust: BASE_POSITION,
+};
 
 const DEFAULT_VALUES: Record<LayerType, LayerContentMap[LayerType]> = {
   text: { content: '' },
@@ -41,7 +57,7 @@ export const LayerFactory = {
         ...(content as LayerContentMap[T]),
       },
       position: {
-        ...DEFAULT_POSITION,
+        ...DEFAULT_POSITION[type],
         ...position,
         zIndex,
       },

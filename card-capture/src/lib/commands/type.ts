@@ -25,7 +25,8 @@ export type CommandParamsMap = {
   ADD_LAYER: {
     cardId: number;
     type: LayerType;
-    content: Partial<LayerContentMap[LayerType]>;
+    content?: Partial<LayerContentMap[LayerType]>;
+    position?: Partial<BasePosition>;
   };
   DELETE_LAYER: {
     cardId: number;

@@ -1,4 +1,4 @@
-import { Command } from '@/lib/commands/type';
+import { BasePosition, Command } from '@/lib/commands/type';
 import { useCardsStore } from '@/store/useCardsStore';
 import { LayerFactory } from '@/lib/commands/factories/layerFactory';
 import { Image, LayerContentMap, LayerType, Position } from '@/store/useCardsStore/type';
@@ -7,7 +7,8 @@ import ReactQuill from 'react-quill';
 export const createAddLayerCommand = <T extends LayerType>(
   cardId: number,
   type: T,
-  content: Partial<LayerContentMap[T]>,
+  content?: Partial<LayerContentMap[T]>,
+  position?: Partial<BasePosition>,
 ): Command => {
   const cardStore = useCardsStore.getState();
   const { layerId, zIndex } = cardStore.getNewLayerInfo(cardId);
@@ -17,6 +18,7 @@ export const createAddLayerCommand = <T extends LayerType>(
     id: layerId,
     zIndex,
     content,
+    position,
   });
 
   return {
