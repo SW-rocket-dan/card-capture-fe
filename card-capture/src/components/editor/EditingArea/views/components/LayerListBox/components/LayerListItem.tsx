@@ -3,11 +3,11 @@ import { isIllustContent, isImageContent, isShapeContent, isTextContent, Layer }
 import TrashIcon from '@/components/common/Icon/TrashIcon';
 import { useFocusStore } from '@/store/useFocusStore';
 import React from 'react';
-import { useCardsStore } from '@/store/useCardsStore';
 import ShapeBox from '@/components/editor/EditingArea/components/ShapeBox/ShapeBox';
 import ImageBox from '@/components/editor/EditingArea/components/ImageBox/ImageBox';
 import IllustBox from '@/components/editor/EditingArea/components/IllustBox/IllustBox';
 import ReadOnlyTextBox from '@/components/common/Poster/components/ReadOnlyTextBox';
+import { commandUtils } from '@/utils';
 
 type LayerListItemProps = {
   cardId: number;
@@ -23,10 +23,11 @@ const LayerListItem = ({ cardId, layer }: LayerListItemProps) => {
     setFocusedLayerId(layer.id);
   };
 
-  const deleteLayer = useCardsStore(state => state.deleteLayer);
-
   const deleteLayerHandler = () => {
-    deleteLayer(cardId, layer.id);
+    commandUtils.dispatchCommand('DELETE_LAYER', {
+      cardId,
+      layerId: layer.id,
+    });
   };
 
   return (

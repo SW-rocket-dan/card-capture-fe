@@ -19,7 +19,6 @@ import { Draft, produce } from 'immer';
 import ReactQuill from 'react-quill';
 import { useFocusStore } from '@/store/useFocusStore';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
-import { useCommandStore } from '@/store/useCommandStore';
 import {
   findCardAndLayer,
   findDraftCardAndLayer,
@@ -382,7 +381,7 @@ export const useCardsStore = create(
             layerData: newLayer,
           };
         },
-        
+
         moveLayerForward: (cardId, layerId) =>
           set(
             produce((draft: Draft<{ cards: Card[]; zIndexMap: ZIndexMap }>) => {

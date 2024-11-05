@@ -1,6 +1,6 @@
 import { useFocusStore } from '@/store/useFocusStore';
-import { useCardsStore } from '@/store/useCardsStore';
 import React, { useEffect } from 'react';
+import { commandUtils } from '@/utils';
 
 type UseDeleteLayerProps = {
   cardId: number;
@@ -23,7 +23,6 @@ const useDeleteLayer = ({ cardId }: UseDeleteLayerProps) => {
    */
   const focusedCardId = useFocusStore(state => state.focusedCardId);
   const focusedLayerId = useFocusStore(state => state.focusedLayerId);
-  const deleteLayer = useCardsStore(state => state.deleteLayer);
 
   const deleteLayerOnKeyPressHandler = (e: KeyboardEvent) => {
     if (focusedCardId !== cardId) return;
@@ -31,7 +30,10 @@ const useDeleteLayer = ({ cardId }: UseDeleteLayerProps) => {
     if (isInputFocused()) return;
 
     if (focusedLayerId !== -1 && (e.key === 'Backspace' || e.key === 'Delete')) {
-      deleteLayer(cardId, focusedLayerId);
+      commandUtils.dispatchCommand('DELETE_LAYER', {
+        cardId,
+        layerId: focusedLayerId,
+      });
     }
   };
 
@@ -50,7 +52,10 @@ const useDeleteLayer = ({ cardId }: UseDeleteLayerProps) => {
   const deleteLayerOnClickHandler = (e: React.MouseEvent<HTMLDivElement> | React.MouseEvent<HTMLButtonElement>) => {
     if (focusedCardId !== cardId) return;
 
-    deleteLayer(cardId, focusedLayerId);
+    commandUtils.dispatchCommand('DELETE_LAYER', {
+      cardId,
+      layerId: focusedLayerId,
+    });
   };
 
   return { deleteLayerOnClickHandler };
