@@ -200,16 +200,9 @@ export const useCardsStore = create(
                 const found = findDraftCardAndLayer(draft.cards, cardId, layerId);
                 if (!found) return null;
 
-                const { card, layer } = found;
+                const { card } = found;
 
                 card.layers = card.layers.filter(({ id }) => id !== layerId);
-
-                useCommandStore.getState().addCommand({
-                  type: 'DELETE_LAYER',
-                  cardId,
-                  layerId,
-                  layerData: layer,
-                });
               },
             ),
           );
@@ -228,7 +221,7 @@ export const useCardsStore = create(
         getTextLayer: (cardId, layerId) => {
           const found = findTypedLayer<TextLayer>(get().cards, cardId, layerId, 'text');
           if (!found) return null;
-          
+
           return found.layer.content.content;
         },
 
@@ -244,16 +237,6 @@ export const useCardsStore = create(
                 if (!found) return null;
 
                 found.layer.content = { content: text };
-
-                const beforeLayer = get().getLayer(cardId, layerId);
-                if (!beforeLayer) return null;
-
-                useCommandStore.getState().addCommand({
-                  type: 'MODIFY_LAYER',
-                  cardId,
-                  layerId,
-                  layerData: beforeLayer,
-                });
               },
             ),
           ),
@@ -270,16 +253,6 @@ export const useCardsStore = create(
                 if (!found) return;
 
                 found.layer.position = position;
-
-                const beforeLayer = get().getLayer(cardId, layerId);
-                if (!beforeLayer) return null;
-
-                useCommandStore.getState().addCommand({
-                  type: 'MODIFY_LAYER',
-                  cardId,
-                  layerId,
-                  layerData: beforeLayer,
-                });
               },
             ),
           ),
@@ -298,15 +271,6 @@ export const useCardsStore = create(
               if (!card) return null;
 
               card.background = { ...card.background, ...background };
-
-              const beforeBg = get().getBackground(cardId);
-              if (!beforeBg) return null;
-
-              useCommandStore.getState().addCommand({
-                type: 'MODIFY_BACKGROUND',
-                cardId,
-                backgroundData: beforeBg,
-              });
             }),
           );
         },
@@ -337,16 +301,6 @@ export const useCardsStore = create(
                 if (!found) return;
 
                 found.layer.content = image;
-
-                const beforeLayer = get().getLayer(cardId, layerId);
-                if (!beforeLayer) return null;
-
-                useCommandStore.getState().addCommand({
-                  type: 'MODIFY_LAYER',
-                  cardId,
-                  layerId,
-                  layerData: beforeLayer,
-                });
               },
             ),
           ),
@@ -360,16 +314,6 @@ export const useCardsStore = create(
               // 색상 같은지 체크 없으면 커맨드 기록에 오류 발생함
               if (found.layer.content.color === color) return;
               found.layer.content.color = color;
-
-              const beforeLayer = get().getLayer(cardId, layerId);
-              if (!beforeLayer) return;
-
-              useCommandStore.getState().addCommand({
-                type: 'MODIFY_LAYER',
-                cardId,
-                layerId,
-                layerData: beforeLayer,
-              });
             }),
           ),
 
@@ -397,13 +341,6 @@ export const useCardsStore = create(
                 draft.zIndexMap[cardId][layer.id] = layer.position.zIndex;
 
                 useFocusStore.getState().updateFocus(cardId, layer.id);
-
-                useCommandStore.getState().addCommand({
-                  type: 'ADD_LAYER',
-                  cardId,
-                  layerId: layer.id,
-                  layerData: layer,
-                });
               },
             ),
           ),
@@ -497,13 +434,6 @@ export const useCardsStore = create(
                 draft.zIndexMap[cardId][newLayerId] = newZIndex;
 
                 useFocusStore.getState().updateFocus(cardId, newLayerId);
-
-                useCommandStore.getState().addCommand({
-                  type: 'ADD_LAYER',
-                  cardId,
-                  layerId: newLayerId,
-                  layerData: newLayer,
-                });
               },
             ),
           ),
@@ -551,13 +481,6 @@ export const useCardsStore = create(
                 draft.zIndexMap[cardId][newLayerId] = newZIndex;
 
                 useFocusStore.getState().updateFocus(cardId, newLayerId);
-
-                useCommandStore.getState().addCommand({
-                  type: 'ADD_LAYER',
-                  cardId,
-                  layerId: newLayerId,
-                  layerData: newLayer,
-                });
               },
             ),
           ),
@@ -601,13 +524,6 @@ export const useCardsStore = create(
                 draft.zIndexMap[cardId][newLayerId] = newZIndex;
 
                 useFocusStore.getState().updateFocus(cardId, newLayerId);
-
-                useCommandStore.getState().addCommand({
-                  type: 'ADD_LAYER',
-                  cardId,
-                  layerId: newLayerId,
-                  layerData: newLayer,
-                });
               },
             ),
           ),
@@ -650,13 +566,6 @@ export const useCardsStore = create(
                 draft.zIndexMap[cardId][newLayerId] = newZIndex;
 
                 useFocusStore.getState().updateFocus(cardId, newLayerId);
-
-                useCommandStore.getState().addCommand({
-                  type: 'ADD_LAYER',
-                  cardId,
-                  layerId: newLayerId,
-                  layerData: newLayer,
-                });
               },
             ),
           ),
