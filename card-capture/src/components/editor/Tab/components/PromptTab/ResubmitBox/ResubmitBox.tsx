@@ -6,7 +6,7 @@ import { useFocusStore } from '@/store/useFocusStore';
 import { useCardsStore } from '@/store/useCardsStore';
 import { Image } from '@/store/useCardsStore/type';
 import { templateApi } from '@/api';
-import { authUtils } from '@/utils';
+import { authUtils, commandUtils } from '@/utils';
 
 const ResubmitBox = () => {
   /**
@@ -15,7 +15,6 @@ const ResubmitBox = () => {
   const focusedCardId = useFocusStore(state => state.focusedCardId);
   const focusedLayerId = useFocusStore(state => state.focusedLayerId);
   const getImageLayer = useCardsStore(state => state.getImageLayer);
-  const setImageLayer = useCardsStore(state => state.setImageLayer);
 
   /**
    * id 기반으로 선택된 이미지의 정보를 가져오는 로직
@@ -56,11 +55,11 @@ const ResubmitBox = () => {
     const focusedLayer = getImageLayer(focusedCardId, focusedLayerId);
     if (!focusedLayer) return;
 
-    // store에 새 이미지 업데이트
-    setImageLayer(focusedCardId, focusedLayerId, {
-      ...focusedLayer,
-      imageId: changedAiImageId,
-      url: changedAiImageUrl,
+    // 새 이미지 업데이트
+    commandUtils.dispatchCommand('MODIFY_IMAGE_LAYER', {
+      cardId: focusedCardId,
+      layerId: focusedLayerId,
+      content: { imageId: changedAiImageId, url: changedAiImageUrl },
     });
   };
 

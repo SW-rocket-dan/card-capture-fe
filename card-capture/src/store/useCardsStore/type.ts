@@ -68,10 +68,10 @@ export type LayerContentMap = {
 export type Image = {
   imageId?: number;
   url: string;
-  cropStartX: number;
-  cropStartY: number;
-  cropWidth: number;
-  cropHeight: number;
+  cropStartX?: number;
+  cropStartY?: number;
+  cropWidth?: number;
+  cropHeight?: number;
 };
 
 export type ShapeType = 'rect' | 'circle' | 'triangle' | 'star';
