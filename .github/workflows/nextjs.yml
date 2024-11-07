@@ -7,11 +7,11 @@ name: Deploy Next.js site to Pages
 on:
   push:
     branches:
-      #      - test-pages
+      # - test-pages
       - main
   pull_request:
     branches:
-      #      - test-pages
+      # - test-pages
       - main
 
   # Allows you to run this workflow manually from the Actions tab
