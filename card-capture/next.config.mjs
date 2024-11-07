@@ -2,9 +2,11 @@ import { withSentryConfig } from '@sentry/nextjs';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',
   reactStrictMode: false,
   images: {
     domains: ['cardcaptureposterimage.s3.ap-northeast-2.amazonaws.com'],
+    unoptimized: true,
   },
 };
 
