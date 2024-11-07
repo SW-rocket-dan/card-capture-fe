@@ -12,6 +12,9 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+env: 
+  GITHUB_WORKSPACE: /home/runner/work/card-capture-fe/card-capture
+  
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
@@ -28,11 +31,14 @@ jobs:
   # Build job
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./card-capture
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        # with: 
-        #   path: ./card-capture
+
       - name: Detect package manager
         id: detect-package-manager
         run: |
