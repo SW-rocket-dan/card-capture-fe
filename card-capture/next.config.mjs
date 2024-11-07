@@ -6,6 +6,7 @@ const nextConfig = {
   reactStrictMode: false,
   images: {
     domains: ['cardcaptureposterimage.s3.ap-northeast-2.amazonaws.com'],
+    unoptimized: true,
   },
 };
 
