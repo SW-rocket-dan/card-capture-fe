@@ -45,7 +45,7 @@ const useTextStyle = () => {
       editor.off('text-change', updateTextStyle);
       editor.off('selection-change', updateTextStyle);
     };
-  }, [currentRef, getTextStyle]);
+  }, [currentRef]);
 
   /**
    * 특정 스타일이 적용되어 있는지 확인하는 함수
