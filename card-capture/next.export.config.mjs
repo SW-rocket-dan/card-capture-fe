@@ -1,14 +1,19 @@
 import { withSentryConfig } from '@sentry/nextjs';
 
+const isProduction = process.env.NODE_ENV === 'production';
+const repository = 'card-capture-fe';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',
+  basePath: isProduction ? `/${repository}` : '',
+  assetPrefix: isProduction ? `/${repository}/` : '',
   reactStrictMode: false,
   images: {
     domains: ['cardcaptureposterimage.s3.ap-northeast-2.amazonaws.com'],
     unoptimized: true,
   },
 };
-
 
 export default withSentryConfig(nextConfig, {
 // For all available options, see:

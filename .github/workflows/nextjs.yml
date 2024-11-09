@@ -82,6 +82,10 @@ jobs:
       - name: Check shell
         run: ls -al
 
+      - name: Replace next.config.mjs with export config
+        run: |
+          cp next.export.config.mjs next.config.mjs
+
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
 
