@@ -1,10 +1,9 @@
 import { create } from 'zustand';
-import { isBackgroundCommand, isLayerCommand } from '@/store/useCommandStore/type';
 import { produce } from 'immer';
 import { Layer } from '@/store/useCardsStore/type';
 import { useCardsStore } from '@/store/useCardsStore';
-import { commonUtils } from '@/utils';
 import { Command } from '@/lib/commands/type';
+import { shouldReplaceCommand } from '@/utils/commandUtils';
 
 type commandStore = {
   past: Command[];
@@ -23,6 +22,7 @@ export const useCommandStore = create<commandStore>()((set, get) => ({
   past: [],
   future: [],
   clipboard: null,
+  lastCommandTime: 0,
 
   addToHistory: command => {
     console.group('[addCommend]', command.type);
@@ -30,8 +30,25 @@ export const useCommandStore = create<commandStore>()((set, get) => ({
 
     set(
       produce(draft => {
+        const lastCommand = draft.past[draft.past.length - 1];
+
+        const currentTime = Date.now();
+        const timeDiff = currentTime - draft.lastCommandTime;
+
+        // 색상 변경과 같이 연속 변경되는 커맨드들은 push가 아닌 replace / 이전값을 유지해서 초기 배경값 유지
+        // 시간 차이 1초 이내일 때만 replace
+        if (shouldReplaceCommand(command, lastCommand, ['MODIFY_BACKGROUND']) && timeDiff < 1000) {
+          draft.past[draft.past.length - 1] = {
+            ...command,
+            initialBackgroundData: lastCommand.initialBackgroundData,
+          };
+
+          return;
+        }
+
         draft.past.push(command);
         draft.future = []; // 새 커맨드가 추가되면 future는 초기화
+        draft.lastCommandTime = currentTime; // 현재 시간 업데이트
       }),
     );
 
