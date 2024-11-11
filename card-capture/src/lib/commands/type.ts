@@ -54,7 +54,8 @@ export type CommandParamsMap = {
   };
   MODIFY_BACKGROUND: {
     cardId: number;
-    backgroundData: Background;
+    backgroundData: Partial<Background>;
+    initialBackgroundData: Background;
   };
 };
 

@@ -26,7 +26,8 @@ const commandImplementations: CommandImplementations = {
 
   MODIFY_POSITION: ({ cardId, layerId, position }) => createModifyLayerPositionCommand(cardId, layerId, position),
 
-  MODIFY_BACKGROUND: ({ cardId, backgroundData }) => createModifyBackgroundCommand(cardId, backgroundData),
+  MODIFY_BACKGROUND: ({ cardId, backgroundData, initialBackgroundData }) =>
+    createModifyBackgroundCommand(cardId, backgroundData, initialBackgroundData),
 };
 
 export const CommandFactory = {
