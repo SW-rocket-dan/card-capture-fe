@@ -4,7 +4,6 @@ import { IColor } from 'react-color-palette';
 import CloseIcon from '@/components/common/Icon/CloseIcon';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import useClickOutside from '@/hooks/useClickOutside';
-import usePreventCloseOnSelection from '@/components/editor/Tab/components/EditTab/TextEditBox/hooks/usePreventCloseOnSelection';
 import useTextStyle from '@/components/editor/Tab/components/EditTab/TextEditBox/hooks/useTextStyle';
 
 type ColorButtonProps = {
