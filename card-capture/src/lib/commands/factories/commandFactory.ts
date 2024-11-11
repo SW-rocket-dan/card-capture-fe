@@ -22,7 +22,8 @@ const commandImplementations: CommandImplementations = {
 
   MODIFY_IMAGE_LAYER: ({ cardId, layerId, content }) => createModifyImageLayerCommand(cardId, layerId, content),
 
-  MODIFY_SHAPE_LAYER: ({ cardId, layerId, color }) => createModifyShapeLayerCommand(cardId, layerId, color),
+  MODIFY_SHAPE_LAYER: ({ cardId, layerId, color, initialColor }) =>
+    createModifyShapeLayerCommand(cardId, layerId, color, initialColor),
 
   MODIFY_POSITION: ({ cardId, layerId, position }) => createModifyLayerPositionCommand(cardId, layerId, position),
 

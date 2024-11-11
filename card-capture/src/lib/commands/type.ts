@@ -46,6 +46,7 @@ export type CommandParamsMap = {
     cardId: number;
     layerId: number;
     color: string;
+    initialColor: string;
   };
   MODIFY_POSITION: {
     cardId: number;

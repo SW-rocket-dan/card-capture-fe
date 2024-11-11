@@ -83,11 +83,13 @@ export const createModifyImageLayerCommand = (cardId: number, layerId: number, i
   };
 };
 
-export const createModifyShapeLayerCommand = (cardId: number, layerId: number, color: string): Command => {
+export const createModifyShapeLayerCommand = (
+  cardId: number,
+  layerId: number,
+  color: string,
+  initialColor: string,
+): Command => {
   const cardStore = useCardsStore.getState();
-  const previousShape = cardStore.getShapeLayer(cardId, layerId);
-
-  if (!previousShape) throw new Error(`Shape not found: ${layerId}`);
 
   return {
     type: 'MODIFY_SHAPE_LAYER',
@@ -95,7 +97,7 @@ export const createModifyShapeLayerCommand = (cardId: number, layerId: number, c
       cardStore.setShapeLayerColor(cardId, layerId, color);
     },
     undo: () => {
-      cardStore.setShapeLayerColor(cardId, layerId, previousShape.color);
+      cardStore.setShapeLayerColor(cardId, layerId, initialColor);
     },
   };
 };
