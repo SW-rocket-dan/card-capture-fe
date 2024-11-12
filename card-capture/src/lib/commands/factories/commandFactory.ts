@@ -18,7 +18,8 @@ const commandImplementations: CommandImplementations = {
 
   DELETE_LAYER: ({ cardId, layerId }) => createDeleteLayerCommand(cardId, layerId),
 
-  MODIFY_TEXT_LAYER: ({ cardId, layerId, content }) => createModifyTextLayerCommand(cardId, layerId, content),
+  MODIFY_TEXT_LAYER: ({ cardId, layerId, text, initialText }) =>
+    createModifyTextLayerCommand(cardId, layerId, text, initialText),
 
   MODIFY_IMAGE_LAYER: ({ cardId, layerId, content }) => createModifyImageLayerCommand(cardId, layerId, content),
 

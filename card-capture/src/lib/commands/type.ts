@@ -35,7 +35,8 @@ export type CommandParamsMap = {
   MODIFY_TEXT_LAYER: {
     cardId: number;
     layerId: number;
-    content: ReactQuill.Value;
+    text: ReactQuill.Value;
+    initialText: ReactQuill.Value;
   };
   MODIFY_IMAGE_LAYER: {
     cardId: number;

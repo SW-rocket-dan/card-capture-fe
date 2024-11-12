@@ -49,11 +49,13 @@ export const createDeleteLayerCommand = (cardId: number, layerId: number): Comma
   };
 };
 
-export const createModifyTextLayerCommand = (cardId: number, layerId: number, text: ReactQuill.Value): Command => {
+export const createModifyTextLayerCommand = (
+  cardId: number,
+  layerId: number,
+  text: ReactQuill.Value,
+  initialText: ReactQuill.Value,
+): Command => {
   const cardStore = useCardsStore.getState();
-  const previousText = cardStore.getTextLayer(cardId, layerId);
-
-  if (!previousText) throw new Error(`Text not found: ${layerId}`);
 
   return {
     type: 'MODIFY_TEXT_LAYER',
@@ -61,7 +63,7 @@ export const createModifyTextLayerCommand = (cardId: number, layerId: number, te
       cardStore.setTextLayer(cardId, layerId, text);
     },
     undo: () => {
-      cardStore.setTextLayer(cardId, layerId, previousText);
+      cardStore.setTextLayer(cardId, layerId, initialText);
     },
   };
 };
