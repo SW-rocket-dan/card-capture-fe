@@ -39,6 +39,8 @@ const TextBox = ({
       const editorElement = editorRef.current.getEditor().root;
       const { width, height } = editorElement.getBoundingClientRect();
 
+      if (layer.position.height === height + 15) return;
+
       commandUtils.dispatchCommand('MODIFY_POSITION', {
         cardId,
         layerId,
@@ -54,16 +56,20 @@ const TextBox = ({
   const prevText = useCardsStore(state => state.getTextLayer(cardId, layerId));
   const [text, setText] = useState<ReactQuill.Value | null>(prevText);
 
-  const setLayerText = useCardsStore(state => state.setTextLayer);
-
   const changeHandler: ReactQuill.ReactQuillProps['onChange'] = (value, delta, source, editor) => {
-    setText(editor.getContents());
+    if (source !== 'user') return;
+
+    const newText = editor.getContents();
+
+    commandUtils.dispatchCommand('MODIFY_TEXT_LAYER', {
+      cardId,
+      layerId,
+      text: newText,
+      initialText: prevText || '',
+    });
+
     updateLayerSize();
   };
-
-  useEffect(() => {
-    if (text && type === 'focus') setLayerText(cardId, layerId, text);
-  }, [text]);
 
   /**
    * 현재 포커스된 TextBox의 ref를 store에 저장
@@ -101,7 +107,7 @@ const TextBox = ({
     <div>
       <ReactQuill
         ref={editorRef}
-        value={text || ''}
+        value={prevText || ''}
         onChange={changeHandler}
         modules={modules}
         style={{

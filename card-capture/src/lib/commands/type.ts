@@ -5,7 +5,6 @@ export type Command = {
   type: CommandType;
   execute: () => void;
   undo: () => void;
-  updateText?: (newText: ReactQuill.Value) => void;
 };
 
 export type CommandType =
@@ -38,6 +37,7 @@ export type CommandParamsMap = {
     layerId: number;
     text: ReactQuill.Value;
     initialText: ReactQuill.Value;
+    isFirstModification?: boolean;
   };
   MODIFY_IMAGE_LAYER: {
     cardId: number;
