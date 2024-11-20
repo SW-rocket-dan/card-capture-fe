@@ -5,6 +5,7 @@ export type Command = {
   type: CommandType;
   execute: () => void;
   undo: () => void;
+  updateText?: (newText: ReactQuill.Value) => void;
 };
 
 export type CommandType =

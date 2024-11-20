@@ -19,8 +19,6 @@ export type Background = {
 
 export type LayerType = 'text' | 'image' | 'shape' | 'illust';
 
-export type ContentType = Image | Shape | Text | Illust;
-
 export type Layer = TextLayer | ImageLayer | ShapeLayer | IllustLayer;
 
 export type TextLayer = {
@@ -104,6 +102,8 @@ export type ZIndexMap = {
     [layerId: number]: number;
   };
 };
+
+export type ContentType = Image | Shape | Text | Illust;
 
 /**
  * 타입 가드
