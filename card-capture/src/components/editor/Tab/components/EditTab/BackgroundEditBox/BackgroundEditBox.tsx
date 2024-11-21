@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import UpIcon from '@/components/common/Icon/UpIcon';
 import DownIcon from '@/components/common/Icon/DownIcon';
 import OpacityButton from '@/components/editor/Tab/components/EditTab/common/OpacityButton';
 import ImageButton from '@/components/editor/Tab/components/EditTab/common/ImageButton';
 import ColorButton from '@/components/editor/Tab/components/EditTab/common/ColorButton';
 import { IColor, useColor } from 'react-color-palette';
-import { useCardsStore } from '@/store/useCardsStore';
+import { INITIAL_CARD, useCardsStore } from '@/store/useCardsStore';
 import { useFocusStore } from '@/store/useFocusStore';
 import useImageUploader from '@/hooks/useImageUploader';
 import BackgroundDeleteBox from '@/components/editor/Tab/components/EditTab/BackgroundEditBox/components/BackgroundDeleteBox';
+import { commandUtils } from '@/utils';
+import { Background } from '@/store/useCardsStore/type';
 
 const BackgroundEditBox = ({ focused = false }: { focused?: boolean }) => {
   const focusedCardId = useFocusStore(state => state.focusedCardId);
@@ -20,16 +22,20 @@ const BackgroundEditBox = ({ focused = false }: { focused?: boolean }) => {
   const [color, setColor] = useColor(background?.color || '#FFFFFF');
   const [opacity, setOpacity] = useState<number>(background?.opacity || 100);
 
-  const setBackground = useCardsStore(state => state.setBackground);
-
   const changeColorHandler = (newColor: IColor) => {
-    setColor(newColor);
-    setBackground(focusedCardId, { color: newColor.hex, opacity });
+    commandUtils.dispatchCommand('MODIFY_BACKGROUND', {
+      cardId: focusedCardId,
+      backgroundData: { color: newColor.hex, opacity },
+      initialBackgroundData: background || INITIAL_CARD.background,
+    });
   };
 
   const changeOpacityHandler = (newOpacity: number) => {
-    setOpacity(newOpacity);
-    setBackground(focusedCardId, { color: color.hex, opacity: newOpacity });
+    commandUtils.dispatchCommand('MODIFY_BACKGROUND', {
+      cardId: focusedCardId,
+      backgroundData: { color: color.hex, opacity: newOpacity },
+      initialBackgroundData: background || INITIAL_CARD.background,
+    });
   };
 
   /**

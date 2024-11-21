@@ -4,6 +4,7 @@ import { useCardsStore } from '@/store/useCardsStore';
 import { useFocusStore } from '@/store/useFocusStore';
 import './custom-quill-styles.css';
 import './TextStyles.css';
+import { commandUtils } from '@/utils';
 
 /**
  * #toolbar를 id로 갖는 요소를 툴바로 사용하겠다고 선언
@@ -32,14 +33,19 @@ const TextBox = ({
    * 입력하면서 quill의 크기가 변경되면 해당 크기를 스토어의 position 값에 업데이트함
    */
   const layer = useCardsStore(state => state.cards[cardId].layers.filter(v => v.id === layerId)[0]);
-  const setPosition = useCardsStore(state => state.setPosition);
 
   const updateLayerSize = () => {
     if (editorRef.current) {
       const editorElement = editorRef.current.getEditor().root;
       const { width, height } = editorElement.getBoundingClientRect();
 
-      setPosition(cardId, layerId, { ...layer.position, height: height + 15 });
+      if (layer.position.height === height + 15) return;
+
+      commandUtils.dispatchCommand('MODIFY_POSITION', {
+        cardId,
+        layerId,
+        position: { ...layer.position, height: height + 15 },
+      });
     }
   };
 
@@ -47,19 +53,23 @@ const TextBox = ({
    * 변경되는 텍스트 값을 상태에 저장하는 함수.
    * 변경될 때마다 store에 저장 / blur로 저장하니 focusBox 변경될때 적용되지 않는 오류 발생함
    */
-  const prevText = useCardsStore(state => state.getLayerText(cardId, layerId));
+  const prevText = useCardsStore(state => state.getTextLayer(cardId, layerId));
   const [text, setText] = useState<ReactQuill.Value | null>(prevText);
 
-  const setLayerText = useCardsStore(state => state.setLayerText);
-
   const changeHandler: ReactQuill.ReactQuillProps['onChange'] = (value, delta, source, editor) => {
-    setText(editor.getContents());
+    if (source !== 'user') return;
+
+    const newText = editor.getContents();
+
+    commandUtils.dispatchCommand('MODIFY_TEXT_LAYER', {
+      cardId,
+      layerId,
+      text: newText,
+      initialText: prevText || '',
+    });
+
     updateLayerSize();
   };
-
-  useEffect(() => {
-    if (text && type === 'focus') setLayerText(cardId, layerId, text);
-  }, [text]);
 
   /**
    * 현재 포커스된 TextBox의 ref를 store에 저장
@@ -97,7 +107,7 @@ const TextBox = ({
     <div>
       <ReactQuill
         ref={editorRef}
-        value={text || ''}
+        value={prevText || ''}
         onChange={changeHandler}
         modules={modules}
         style={{

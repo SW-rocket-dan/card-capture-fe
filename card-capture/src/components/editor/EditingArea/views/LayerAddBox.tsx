@@ -6,28 +6,34 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { ShapeType } from '@/store/useCardsStore/type';
 import { useFocusStore } from '@/store/useFocusStore';
 import React from 'react';
+import { commandUtils } from '@/utils';
 
 const LayerAddBox = ({ cardId }: { cardId: number }) => {
   /**
    * 새로운 Text Layer를 추가하는 로직
    */
-  const addTextLayer = useCardsStore(state => state.addTextLayer);
-
   const addTextLayerHandler = (e: React.PointerEvent | React.MouseEvent) => {
     e.stopPropagation();
-    addTextLayer(cardId);
+
+    commandUtils.dispatchCommand('ADD_LAYER', {
+      cardId,
+      type: 'text',
+    });
   };
 
   /**
    * 새로운 Shape Layer를 추가하는 로직
    */
   const focusedCardId = useFocusStore(state => state.focusedCardId);
-  const addShapeLayer = useCardsStore(state => state.addShapeLayer);
 
   const addShapeLayerHandler = (e: React.PointerEvent | React.MouseEvent, type: ShapeType) => {
     e.stopPropagation();
 
-    addShapeLayer(focusedCardId, type);
+    commandUtils.dispatchCommand('ADD_LAYER', {
+      cardId: focusedCardId,
+      type: 'shape',
+      content: { type: type },
+    });
   };
 
   return (

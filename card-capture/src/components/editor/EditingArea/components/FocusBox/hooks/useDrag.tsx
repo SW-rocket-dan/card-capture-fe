@@ -3,6 +3,7 @@ import { Point } from '@/components/editor/EditingArea/components/FocusBox/Focus
 import { INITIAL_DRAG_OFFSET } from '@/components/editor/EditingArea/components/FocusBox/FocusBox.constant';
 import { LayerType, Position } from '@/store/useCardsStore/type';
 import { useCardsStore } from '@/store/useCardsStore';
+import { commandUtils } from '@/utils';
 
 const DRAG_THRESHOLD = 1;
 
@@ -26,7 +27,6 @@ const useDrag = ({
   isDoubleClicked,
 }: UseDragProps) => {
   const layer = useCardsStore(state => state.cards[cardId].layers.filter(v => v.id === layerId)[0]);
-  const setPosition = useCardsStore(state => state.setPosition);
 
   const [isDrag, setIsDrag] = useState(false);
   const [dragOffset, setDragOffset] = useState<Point>({
@@ -107,7 +107,11 @@ const useDrag = ({
 
     // 둘 다 임계값 이하로 움직였으면 이동에 반영하지 않음
     if (Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD) {
-      setPosition(cardId, layerId, { ...curPosition, ...calculateCurPosition(e) });
+      commandUtils.dispatchCommand('MODIFY_POSITION', {
+        cardId,
+        layerId,
+        position: { ...curPosition, ...calculateCurPosition(e) },
+      });
     }
   };
 

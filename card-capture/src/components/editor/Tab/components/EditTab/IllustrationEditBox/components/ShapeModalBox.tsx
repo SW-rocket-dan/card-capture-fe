@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import CloseIcon from '@/components/common/Icon/CloseIcon';
 import { ShapeType } from '@/store/useCardsStore/type';
-import { useCardsStore } from '@/store/useCardsStore';
+import { INITIAL_CARD, useCardsStore } from '@/store/useCardsStore';
 import { useFocusStore } from '@/store/useFocusStore';
 import useClickOutside from '@/hooks/useClickOutside';
 import ColorButton from '@/components/editor/Tab/components/EditTab/common/ColorButton';
-import { useColor } from 'react-color-palette';
+import { IColor, useColor } from 'react-color-palette';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { commandUtils } from '@/utils';
 
 const ShapeModalBox = () => {
   // 선택된 데이터 가져오기
@@ -18,19 +19,25 @@ const ShapeModalBox = () => {
    * 색상 변경되면 store에 변경된 Layer 색상 업데이트하는 로직
    */
   const [color, setColor] = useColor(focusedShape?.color || '#DDDDDD');
-  const setShapeLayerColor = useCardsStore(state => state.setShapeLayerColor);
 
-  useEffect(() => {
-    setShapeLayerColor(focusedCardId, focusedLayerId, color.hex);
-  }, [color]);
+  const changeColorHandler = (newColor: IColor) => {
+    commandUtils.dispatchCommand('MODIFY_SHAPE_LAYER', {
+      cardId: focusedCardId,
+      layerId: focusedLayerId,
+      color: newColor.hex,
+      initialColor: focusedShape?.color || '#DDDDDD',
+    });
+  };
 
   /**
    * 새로운 Shape Layer를 추가하는 로직
    */
-  const addShapeLayer = useCardsStore(state => state.addShapeLayer);
-
   const addShapeLayerHandler = (type: ShapeType) => {
-    addShapeLayer(focusedCardId, type);
+    commandUtils.dispatchCommand('ADD_LAYER', {
+      cardId: focusedCardId,
+      type: 'shape',
+      content: { type: type },
+    });
   };
 
   /**
@@ -52,7 +59,12 @@ const ShapeModalBox = () => {
       <div className="flex flex-col gap-2 rounded-[10px] border-[1px] border-border px-[10px] py-[10px]">
         <div className="flex flex-row items-center justify-between">
           <p className="text-xs text-gray4">도형</p>
-          <ColorButton className="h-4 w-[30px] rounded-[5px]" size="w-[30px] h-4" color={color} setColor={setColor} />
+          <ColorButton
+            className="h-4 w-[30px] rounded-[5px]"
+            size="w-[30px] h-4"
+            color={color}
+            setColor={changeColorHandler}
+          />
         </div>
         <div className="flex flex-row gap-[5px]">
           <button

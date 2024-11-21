@@ -1,6 +1,9 @@
 import { useFocusStore } from '@/store/useFocusStore';
+import { commandUtils } from '@/utils';
 
 const useTextFormatting = () => {
+  const cardId = useFocusStore(state => state.focusedCardId);
+  const layerId = useFocusStore(state => state.focusedLayerId);
   const editorRef = useFocusStore(state => state.currentRef);
 
   /**
@@ -14,6 +17,7 @@ const useTextFormatting = () => {
     const editor = editorRef.current.getEditor();
     const currentFormat = editor.getFormat();
     const range = editor.getSelection();
+    const prevText = editor.getContents();
 
     if (range && range.length > 0) {
       currentFormat[type] ? editor.format(type, false) : editor.format(type, true);
@@ -22,6 +26,13 @@ const useTextFormatting = () => {
         ? editor.formatText(0, editor.getLength(), type, false)
         : editor.formatText(0, editor.getLength(), type, true);
     }
+
+    commandUtils.dispatchCommand('MODIFY_TEXT_LAYER', {
+      cardId,
+      layerId,
+      text: editor.getContents(),
+      initialText: prevText,
+    });
   };
 
   /**
@@ -34,12 +45,20 @@ const useTextFormatting = () => {
 
     const editor = editorRef.current.getEditor();
     const range = editor.getSelection();
+    const prevText = editor.getContents();
 
     if (range && range.length > 0) {
       editor.format(type, val);
     } else {
       editor.formatText(0, editor.getLength(), type, val); // 전체 적용
     }
+
+    commandUtils.dispatchCommand('MODIFY_TEXT_LAYER', {
+      cardId,
+      layerId,
+      text: editor.getContents(),
+      initialText: prevText,
+    });
   };
 
   return { changeTextFormatHandler, changeStyleHandler };

@@ -8,7 +8,7 @@ import {
 import { INITIAL_RESIZE_OFFSET } from '@/components/editor/EditingArea/components/FocusBox/FocusBox.constant';
 import { LayerType, Position } from '@/store/useCardsStore/type';
 import { useFocusStore } from '@/store/useFocusStore';
-import { useCardsStore } from '@/store/useCardsStore';
+import { commandUtils } from '@/utils';
 
 type UseResizeProps = {
   cardId: number;
@@ -22,8 +22,6 @@ type UseResizeProps = {
 };
 
 const useResize = ({ cardId, layerId, type, children, curPosition, setCurPosition }: UseResizeProps) => {
-  const setPosition = useCardsStore(state => state.setPosition);
-
   const [resizeDirection, setResizeDirection] = useState<Direction>('none');
   const [resizeOffset, setResizeOffset] = useState<ResizeOffset>({
     ...INITIAL_RESIZE_OFFSET,
@@ -298,7 +296,11 @@ const useResize = ({ cardId, layerId, type, children, curPosition, setCurPositio
     const newPosition = calculatePositionAfterResize(e);
 
     if (newPosition) {
-      setPosition(cardId, layerId, { ...curPosition, ...newPosition });
+      commandUtils.dispatchCommand('MODIFY_POSITION', {
+        cardId,
+        layerId,
+        position: { ...curPosition, ...newPosition },
+      });
     }
     setResizeOffset({ ...INITIAL_RESIZE_OFFSET });
     setResizeDirection('none');

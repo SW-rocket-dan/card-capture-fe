@@ -2,7 +2,7 @@ import { imageApi } from '@/api';
 import { getImageDimensions, getImageQueryString, resizeImage } from '@/components/editor/Tab/utils/imageData';
 import { useFocusStore } from '@/store/useFocusStore';
 import { useCardsStore } from '@/store/useCardsStore';
-import { authUtils } from '@/utils';
+import { authUtils, commandUtils } from '@/utils';
 
 const useImageUploader = () => {
   /**
@@ -25,7 +25,6 @@ const useImageUploader = () => {
    * useCardStore에 새로운 Layer로 추가함
    */
   const focusedCardId = useFocusStore(state => state.focusedCardId);
-  const addImageLayer = useCardsStore(state => state.addImageLayer);
 
   const addImageLayerHandler = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
@@ -43,8 +42,13 @@ const useImageUploader = () => {
 
     const dimension = await getImageDimensions(imageUrl);
     const resizedDimension = resizeImage(dimension, 400);
-
-    addImageLayer(focusedCardId, imageUrl, resizedDimension);
+    
+    commandUtils.dispatchCommand('ADD_LAYER', {
+      cardId: focusedCardId,
+      type: 'image',
+      content: { url: imageUrl },
+      position: { width: resizedDimension.width, height: resizedDimension.height },
+    });
   };
 
   /**
