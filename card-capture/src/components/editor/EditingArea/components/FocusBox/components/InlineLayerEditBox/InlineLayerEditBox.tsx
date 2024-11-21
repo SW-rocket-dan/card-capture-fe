@@ -4,6 +4,7 @@ import TrashIcon from '@/components/common/Icon/TrashIcon';
 import useDeleteLayer from '@/components/editor/EditingArea/components/FocusBox/hooks/useDeleteLayer';
 import { useFocusStore } from '@/store/useFocusStore';
 import { useCommandStore } from '@/store/useCommandStore';
+import { commandUtils } from '@/utils';
 
 const InlineLayerEditBox = () => {
   const focusedCardId = useFocusStore(state => state.focusedCardId);
@@ -13,14 +14,18 @@ const InlineLayerEditBox = () => {
   const { deleteLayerOnClickHandler } = useDeleteLayer({ cardId: focusedCardId });
 
   // 복사, 붙여넣기 기능
-  const { copy, paste } = useCommandStore();
 
   const copyHandler = () => {
-    copy(focusedCardId, focusedLayerId);
+    commandUtils.dispatchCommand('COPY_LAYER', {
+      cardId: focusedCardId,
+      layerId: focusedLayerId,
+    });
   };
 
   const pasteHandler = () => {
-    paste(focusedCardId);
+    commandUtils.dispatchCommand('PASTE_LAYER', {
+      cardId: focusedCardId,
+    });
   };
 
   return (
