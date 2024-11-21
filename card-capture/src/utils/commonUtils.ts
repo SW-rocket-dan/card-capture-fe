@@ -23,4 +23,17 @@ const isEqual = (obj1: any, obj2: any): boolean => {
   return true;
 };
 
-export default { isEqual };
+/**
+ * ab test를 위한 해시 제작 함수
+ */
+const hashString = (str: string) => {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  return Math.abs(hash);
+};
+
+export default { isEqual, hashString };
