@@ -37,11 +37,12 @@ const PromptTextInput = ({ register, phraseFieldArray, emphasisFieldArray }: Pro
     <div className="flex w-full flex-col gap-[15px]">
       {/* 설명 부분 */}
       <PromptCategoryText>1. 카드뉴스 문구 입력</PromptCategoryText>
-      <div className="flex flex-col gap-[5px]">
+      <div className="flex w-[470px] flex-col gap-[5px]">
         <PromptTitleText>카드뉴스에 작성할 문구를 입력해주세요</PromptTitleText>
         <p className="text-[12px] font-light text-gray4">
-          입력 후에 강조할 문구를 드래그해서 선택해주세요. 카드뉴스에서 색상으로 강조됩니다. 예시) 우리의{' '}
-          <span className="text-main">제품</span>
+          {/*입력 후에 강조할 문구를 드래그해서 선택해주세요. 카드뉴스에서 색상으로 강조됩니다. 예시) 우리의{' '}*/}
+          원하는 문구를 자유롭게 작성해주세요. 최대 5개까지 입력 가능합니다
+          {/*<span className="text-main">제품</span>*/}
         </p>
       </div>
 
