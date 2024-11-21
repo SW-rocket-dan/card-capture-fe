@@ -38,7 +38,14 @@ export const useCommandStore = create<commandStore>()((set, get) => ({
         // 색상 변경과 같이 연속 변경되는 커맨드들은 push가 아닌 replace / 이전값을 유지해서 초기 배경값 유지
         // 시간 차이 1초 이내일 때만 replace
 
-        if (shouldReplaceCommand(command, lastCommand, ['MODIFY_BACKGROUND', 'MODIFY_SHAPE_LAYER']) && timeDiff < 300) {
+        if (
+          shouldReplaceCommand(command, lastCommand, [
+            'MODIFY_BACKGROUND',
+            'MODIFY_SHAPE_LAYER',
+            'MODIFY_TEXT_LAYER',
+          ]) &&
+          timeDiff < 200
+        ) {
           if (command.type === 'MODIFY_BACKGROUND')
             draft.past[draft.past.length - 1] = {
               ...command,
