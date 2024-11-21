@@ -11,7 +11,7 @@ import ImageBox from '@/components/editor/EditingArea/components/ImageBox/ImageB
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import React, { useEffect, useState } from 'react';
 import { useCardsStore } from '@/store/useCardsStore';
-import { jsonUtils } from '@/utils';
+import { commandUtils, jsonUtils } from '@/utils';
 import IllustBox from '@/components/editor/EditingArea/components/IllustBox/IllustBox';
 import useAmplitudeContext from '@/hooks/useAmplitudeContext';
 import usePosterDownloader from '@/hooks/usePosterDownloader';
@@ -79,7 +79,7 @@ const CardArea = ({ card }: { card: Card }) => {
   /**
    * command로 요소 조작하는 hook 사용
    */
-  const { redo, undo, copy, paste } = useCommandStore();
+  const { redo, undo } = useCommandStore();
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -99,11 +99,16 @@ const CardArea = ({ card }: { card: Card }) => {
             break;
 
           case 'c':
-            copy(cardId, focusedLayerId);
+            commandUtils.dispatchCommand('COPY_LAYER', {
+              cardId,
+              layerId: focusedLayerId,
+            });
             break;
 
           case 'v':
-            paste(cardId);
+            commandUtils.dispatchCommand('PASTE_LAYER', {
+              cardId,
+            });
             break;
         }
       }

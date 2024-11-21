@@ -59,7 +59,10 @@ type useCardsStore = {
   };
   deleteLayer: (cardId: number, layerId: number) => void;
 
-  getNewLayerInfo: (cardId: number) => { layerId: number; zIndex: number };
+  getNewLayerInfo: (cardId: number) => {
+    layerId: number;
+    zIndex: number;
+  };
 
   getTextLayer: (cardId: number, layerId: number) => ReactQuill.Value | null;
   setTextLayer: (cardId: number, layerId: number, text: ReactQuill.Value) => void;
@@ -77,7 +80,13 @@ type useCardsStore = {
   getShapeLayer: (cardId: number, layerId: number) => Shape | null;
 
   addLayer: (cardId: number, layer: Layer) => void;
-  addDuplicateLayer: (cardId: number, layer: Layer) => { layerId: number; layerData: Layer } | null;
+  getNewLayer: (
+    cardId: number,
+    layer: Layer,
+  ) => {
+    layerId: number;
+    layerData: Layer;
+  } | null;
 
   // z-index 변경 로직
   moveLayerForward: (cardId: number, layerId: number) => void;
@@ -104,23 +113,30 @@ export const useCardsStore = create(
 
         setCard: (cards: Card[] | Card) =>
           set(
-            produce((draft: Draft<{ cards: Card[]; zIndexMap: ZIndexMap }>) => {
-              if (Array.isArray(cards)) {
-                draft.cards = cards.flat(); // 중첩된 배열을 평탄화
-              } else {
-                draft.cards = [cards]; // 단일 Card 객체를 배열로 변환
-              }
+            produce(
+              (
+                draft: Draft<{
+                  cards: Card[];
+                  zIndexMap: ZIndexMap;
+                }>,
+              ) => {
+                if (Array.isArray(cards)) {
+                  draft.cards = cards.flat(); // 중첩된 배열을 평탄화
+                } else {
+                  draft.cards = [cards]; // 단일 Card 객체를 배열로 변환
+                }
 
-              // 설정하려는 card의 z-index를 추출해서 map에 저장하기
-              draft.zIndexMap = {};
-              draft.cards.forEach(card => {
-                draft.zIndexMap[card.id] = {};
+                // 설정하려는 card의 z-index를 추출해서 map에 저장하기
+                draft.zIndexMap = {};
+                draft.cards.forEach(card => {
+                  draft.zIndexMap[card.id] = {};
 
-                card.layers.forEach(layer => {
-                  draft.zIndexMap[card.id][layer.id] = layer.position.zIndex;
+                  card.layers.forEach(layer => {
+                    draft.zIndexMap[card.id][layer.id] = layer.position.zIndex;
+                  });
                 });
-              });
-            }),
+              },
+            ),
           ),
 
         getCard: cardId => {
@@ -332,7 +348,7 @@ export const useCardsStore = create(
             ),
           ),
 
-        addDuplicateLayer: (cardId, layer) => {
+        getNewLayer: (cardId, layer) => {
           let newLayerId: number | undefined;
           let newLayer: Layer | undefined;
 
@@ -362,13 +378,6 @@ export const useCardsStore = create(
                   },
                 };
 
-                draft.cards[cardId].layers.push(newLayer);
-
-                if (!draft.zIndexMap[cardId]) {
-                  draft.zIndexMap[cardId] = {};
-                }
-                draft.zIndexMap[cardId][newLayerId] = newZIndex;
-
                 useFocusStore.getState().updateFocus(cardId, newLayerId);
               },
             ),
@@ -384,98 +393,140 @@ export const useCardsStore = create(
 
         moveLayerForward: (cardId, layerId) =>
           set(
-            produce((draft: Draft<{ cards: Card[]; zIndexMap: ZIndexMap }>) => {
-              const cardZIndexMap = draft.zIndexMap[cardId];
-              if (!cardZIndexMap) return;
+            produce(
+              (
+                draft: Draft<{
+                  cards: Card[];
+                  zIndexMap: ZIndexMap;
+                }>,
+              ) => {
+                const cardZIndexMap = draft.zIndexMap[cardId];
+                if (!cardZIndexMap) return;
 
-              // 다음 z-index값 찾아서 swap
-              const currentZIndex = cardZIndexMap[layerId];
-              const nextHigherLayer = Object.entries(cardZIndexMap).find(
-                ([id, zIndex]) => zIndex === currentZIndex + 1,
-              );
+                // 다음 z-index값 찾아서 swap
+                const currentZIndex = cardZIndexMap[layerId];
+                const nextHigherLayer = Object.entries(cardZIndexMap).find(
+                  ([id, zIndex]) => zIndex === currentZIndex + 1,
+                );
 
-              if (nextHigherLayer) {
-                const [nextLayerId, nextZIndex] = nextHigherLayer;
-                cardZIndexMap[layerId] = nextZIndex;
-                cardZIndexMap[parseInt(nextLayerId)] = currentZIndex;
-              }
-            }),
+                if (nextHigherLayer) {
+                  const [nextLayerId, nextZIndex] = nextHigherLayer;
+                  cardZIndexMap[layerId] = nextZIndex;
+                  cardZIndexMap[parseInt(nextLayerId)] = currentZIndex;
+                }
+              },
+            ),
           ),
 
         moveLayerBackward: (cardId, layerId) =>
           set(
-            produce((draft: Draft<{ cards: Card[]; zIndexMap: ZIndexMap }>) => {
-              const cardZIndexMap = draft.zIndexMap[cardId];
-              if (!cardZIndexMap) return;
+            produce(
+              (
+                draft: Draft<{
+                  cards: Card[];
+                  zIndexMap: ZIndexMap;
+                }>,
+              ) => {
+                const cardZIndexMap = draft.zIndexMap[cardId];
+                if (!cardZIndexMap) return;
 
-              // 이전 z-index값 찾아서 z-index swap
-              const currentZIndex = cardZIndexMap[layerId];
-              const nextLowerLayer = Object.entries(cardZIndexMap).find(([id, zIndex]) => zIndex === currentZIndex - 1);
+                // 이전 z-index값 찾아서 z-index swap
+                const currentZIndex = cardZIndexMap[layerId];
+                const nextLowerLayer = Object.entries(cardZIndexMap).find(
+                  ([id, zIndex]) => zIndex === currentZIndex - 1,
+                );
 
-              if (nextLowerLayer) {
-                const [nextLayerId, nextZIndex] = nextLowerLayer;
-                cardZIndexMap[layerId] = nextZIndex;
-                cardZIndexMap[parseInt(nextLayerId)] = currentZIndex;
-              }
-            }),
+                if (nextLowerLayer) {
+                  const [nextLayerId, nextZIndex] = nextLowerLayer;
+                  cardZIndexMap[layerId] = nextZIndex;
+                  cardZIndexMap[parseInt(nextLayerId)] = currentZIndex;
+                }
+              },
+            ),
           ),
 
         moveLayerToFront: (cardId, layerId) =>
           set(
-            produce((draft: Draft<{ cards: Card[]; zIndexMap: ZIndexMap }>) => {
-              const cardZIndexMap = draft.zIndexMap[cardId];
-              if (!cardZIndexMap) return;
+            produce(
+              (
+                draft: Draft<{
+                  cards: Card[];
+                  zIndexMap: ZIndexMap;
+                }>,
+              ) => {
+                const cardZIndexMap = draft.zIndexMap[cardId];
+                if (!cardZIndexMap) return;
 
-              const highestZIndex = Math.max(...Object.values(cardZIndexMap));
-              const currentZIndex = cardZIndexMap[layerId];
+                const highestZIndex = Math.max(...Object.values(cardZIndexMap));
+                const currentZIndex = cardZIndexMap[layerId];
 
-              // 위로 보내고자 하는 z-index보다 큰 값 1씩 감소시킴
-              Object.keys(cardZIndexMap).forEach(id => {
-                const layerIdNum = parseInt(id);
-                if (cardZIndexMap[layerIdNum] > currentZIndex) {
-                  cardZIndexMap[layerIdNum]--;
-                }
-              });
+                // 위로 보내고자 하는 z-index보다 큰 값 1씩 감소시킴
+                Object.keys(cardZIndexMap).forEach(id => {
+                  const layerIdNum = parseInt(id);
+                  if (cardZIndexMap[layerIdNum] > currentZIndex) {
+                    cardZIndexMap[layerIdNum]--;
+                  }
+                });
 
-              // 가장 큰 값을 현재 z-index로 설정
-              cardZIndexMap[layerId] = highestZIndex;
-            }),
+                // 가장 큰 값을 현재 z-index로 설정
+                cardZIndexMap[layerId] = highestZIndex;
+              },
+            ),
           ),
 
         moveLayerToBack: (cardId, layerId) =>
           set(
-            produce((draft: Draft<{ cards: Card[]; zIndexMap: ZIndexMap }>) => {
-              const cardZIndexMap = draft.zIndexMap[cardId];
-              if (!cardZIndexMap) return;
+            produce(
+              (
+                draft: Draft<{
+                  cards: Card[];
+                  zIndexMap: ZIndexMap;
+                }>,
+              ) => {
+                const cardZIndexMap = draft.zIndexMap[cardId];
+                if (!cardZIndexMap) return;
 
-              const lowestZIndex = Math.min(...Object.values(cardZIndexMap));
-              const currentZIndex = cardZIndexMap[layerId];
+                const lowestZIndex = Math.min(...Object.values(cardZIndexMap));
+                const currentZIndex = cardZIndexMap[layerId];
 
-              // 밑으로 보내고자 하는 z-index보다 큰 값들을 1씩 증가시킴
-              Object.keys(cardZIndexMap).forEach(id => {
-                const layerIdNum = parseInt(id);
-                if (cardZIndexMap[layerIdNum] < currentZIndex) {
-                  cardZIndexMap[layerIdNum]++;
-                }
-              });
+                // 밑으로 보내고자 하는 z-index보다 큰 값들을 1씩 증가시킴
+                Object.keys(cardZIndexMap).forEach(id => {
+                  const layerIdNum = parseInt(id);
+                  if (cardZIndexMap[layerIdNum] < currentZIndex) {
+                    cardZIndexMap[layerIdNum]++;
+                  }
+                });
 
-              // 가장 작은 값을 현재 z-index로 설정
-              cardZIndexMap[layerId] = lowestZIndex;
-            }),
+                // 가장 작은 값을 현재 z-index로 설정
+                cardZIndexMap[layerId] = lowestZIndex;
+              },
+            ),
           ),
 
         setUsedColors: color =>
           set(
-            produce((draft: Draft<{ usedColors: string[] }>) => {
-              draft.usedColors = Array.from(new Set([...draft.usedColors, color]));
-            }),
+            produce(
+              (
+                draft: Draft<{
+                  usedColors: string[];
+                }>,
+              ) => {
+                draft.usedColors = Array.from(new Set([...draft.usedColors, color]));
+              },
+            ),
           ),
 
         setUsedFonts: fontList =>
           set(
-            produce((draft: Draft<{ usedFonts: string[] }>) => {
-              draft.usedFonts = Array.from(new Set([...draft.usedFonts, ...fontList]));
-            }),
+            produce(
+              (
+                draft: Draft<{
+                  usedFonts: string[];
+                }>,
+              ) => {
+                draft.usedFonts = Array.from(new Set([...draft.usedFonts, ...fontList]));
+              },
+            ),
           ),
       }),
 
@@ -489,19 +540,25 @@ useCardsStore.subscribe(
   state => state.zIndexMap,
   zIndexMap => {
     useCardsStore.setState(
-      produce((draft: Draft<{ cards: Card[] }>) => {
-        draft.cards.forEach(card => {
-          const cardZIndexMap = zIndexMap[card.id];
+      produce(
+        (
+          draft: Draft<{
+            cards: Card[];
+          }>,
+        ) => {
+          draft.cards.forEach(card => {
+            const cardZIndexMap = zIndexMap[card.id];
 
-          if (cardZIndexMap) {
-            card.layers.forEach(layer => {
-              if (cardZIndexMap[layer.id] !== undefined) {
-                layer.position.zIndex = cardZIndexMap[layer.id];
-              }
-            });
-          }
-        });
-      }),
+            if (cardZIndexMap) {
+              card.layers.forEach(layer => {
+                if (cardZIndexMap[layer.id] !== undefined) {
+                  layer.position.zIndex = cardZIndexMap[layer.id];
+                }
+              });
+            }
+          });
+        },
+      ),
     );
   },
 );

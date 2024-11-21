@@ -1,12 +1,14 @@
 import { Command, CommandParamsMap, CommandType } from '@/lib/commands/type';
 import {
   createAddLayerCommand,
+  createCopyCommand,
   createDeleteLayerCommand,
   createModifyBackgroundCommand,
   createModifyImageLayerCommand,
   createModifyLayerPositionCommand,
   createModifyShapeLayerCommand,
   createModifyTextLayerCommand,
+  createPasteCommand,
 } from '@/lib/commands/concreteCommands';
 
 type CommandImplementations = {
@@ -30,6 +32,10 @@ const commandImplementations: CommandImplementations = {
 
   MODIFY_BACKGROUND: ({ cardId, backgroundData, initialBackgroundData }) =>
     createModifyBackgroundCommand(cardId, backgroundData, initialBackgroundData),
+
+  COPY_LAYER: ({ cardId, layerId }) => createCopyCommand(cardId, layerId),
+
+  PASTE_LAYER: ({ cardId }) => createPasteCommand(cardId),
 };
 
 export const CommandFactory = {

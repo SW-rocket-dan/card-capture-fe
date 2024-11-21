@@ -18,8 +18,8 @@ export type CommandType =
   | 'MODIFY_BACKGROUND'
   | 'ADD_CARD'
   | 'DELETE_CARD'
-  | 'COPY'
-  | 'PASTE';
+  | 'COPY_LAYER'
+  | 'PASTE_LAYER';
 
 export type CommandParamsMap = {
   ADD_LAYER: {
@@ -59,6 +59,13 @@ export type CommandParamsMap = {
     cardId: number;
     backgroundData: Partial<Background>;
     initialBackgroundData: Background;
+  };
+  COPY_LAYER: {
+    cardId: number;
+    layerId: number;
+  };
+  PASTE_LAYER: {
+    cardId: number;
   };
 };
 

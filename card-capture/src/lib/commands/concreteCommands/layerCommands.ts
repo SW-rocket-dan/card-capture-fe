@@ -3,6 +3,7 @@ import { useCardsStore } from '@/store/useCardsStore';
 import { LayerFactory } from '@/lib/commands/factories/layerFactory';
 import { Image, LayerContentMap, LayerType, Position } from '@/store/useCardsStore/type';
 import ReactQuill from 'react-quill';
+import { useCommandStore } from '@/store/useCommandStore';
 
 export const createAddLayerCommand = <T extends LayerType>(
   cardId: number,
@@ -117,6 +118,45 @@ export const createModifyLayerPositionCommand = (cardId: number, layerId: number
     },
     undo: () => {
       cardStore.setPosition(cardId, layerId, previousPosition);
+    },
+  };
+};
+
+export const createCopyCommand = (cardId: number, layerId: number): Command => {
+  const cardStore = useCardsStore.getState();
+  const commandStore = useCommandStore.getState();
+
+  return {
+    type: 'COPY_LAYER',
+    execute: () => {
+      const layer = cardStore.getLayer(cardId, layerId);
+      if (layer) commandStore.setClipboard(layer);
+    },
+    undo: () => {
+      commandStore.setClipboard(null);
+    },
+  };
+};
+
+export const createPasteCommand = (cardId: number): Command => {
+  const cardStore = useCardsStore.getState();
+  const commandStore = useCommandStore.getState();
+  const clipboardLayer = commandStore.clipboard;
+
+  if (!clipboardLayer) throw new Error('Nothing to paste');
+
+  const newLayer = cardStore.getNewLayer(cardId, JSON.parse(JSON.stringify(clipboardLayer)));
+  if (!newLayer) throw new Error('Failed to paste layer');
+
+  const { layerId, layerData } = newLayer;
+
+  return {
+    type: 'PASTE_LAYER',
+    execute: () => {
+      cardStore.addLayer(cardId, layerData);
+    },
+    undo: () => {
+      cardStore.deleteLayer(cardId, layerId);
     },
   };
 };
