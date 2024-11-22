@@ -2,12 +2,14 @@ import { ChangeEventHandler, Dispatch, SetStateAction, useState } from 'react';
 import SearchIcon from '@/components/common/Icon/SearchIcon';
 
 type SearchTemplateBoxProps = {
-  searchWord: string;
-  onSearch: (word: string) => void;
+  searchWord?: string;
+  onSearch?: (word: string) => void;
 };
 
 const SearchTemplateBox = ({ searchWord, onSearch }: SearchTemplateBoxProps) => {
   const changeHandler: ChangeEventHandler<HTMLInputElement> = e => {
+    if (!onSearch) return;
+
     onSearch(e.target.value);
   };
 
@@ -16,7 +18,7 @@ const SearchTemplateBox = ({ searchWord, onSearch }: SearchTemplateBoxProps) => 
       <input
         className="flex-1 text-[13px] text-defaultBlack outline-none placeholder:text-gray5 md:text-[15px]"
         type="text"
-        value={searchWord}
+        value={searchWord || ''}
         onChange={changeHandler}
         placeholder="카드 뉴스를 검색해보세요. 예) 음식점 홍보"
       />
