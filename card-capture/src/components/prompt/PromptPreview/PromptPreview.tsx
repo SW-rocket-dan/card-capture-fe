@@ -23,6 +23,21 @@ const PromptPreview = ({ formData, onSubmit, isLoading }: PromptPreviewProps) =>
   const rgbColor = { ...hexToRgba(color), a: 1 };
   const imgUrl = `/image/${model}.png`;
 
+  const checkValidate = () => {
+    // 필수값 체크
+    const isPhrasesEmpty = phrases.some(p => !p.value);
+    const isPurposeEmpty = !purpose;
+    const isColorEmpty = !color;
+    const isModelEmpty = !model;
+
+    if (isPhrasesEmpty || isPurposeEmpty || isColorEmpty || isModelEmpty) {
+      alert('모든 필드를 입력해주세요.');
+      return false;
+    }
+    trackAmplitudeEvent('prompt-create-click');
+    return true;
+  };
+
   /**
    * 보유한 이용권의 개수를 가져오는 로직
    */
@@ -75,7 +90,11 @@ const PromptPreview = ({ formData, onSubmit, isLoading }: PromptPreviewProps) =>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
           <button
-            onClick={() => trackAmplitudeEvent('prompt-create-click')}
+            onClick={e => {
+              if (!checkValidate()) {
+                e.preventDefault(); // 모달이 열리는 것을 방지
+              }
+            }}
             className="flex flex-row items-center justify-center gap-1 rounded-[40px] bg-main px-[40px] py-[18px]"
             style={{ boxShadow: '0 0 14px rgba(111, 108, 255, 0.5)' }}
           >
