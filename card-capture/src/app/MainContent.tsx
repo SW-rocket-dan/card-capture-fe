@@ -9,6 +9,7 @@ import SearchTemplate from '@/components/main/SearchTemplate/SearchTemplate';
 import Footer from '@/components/common/Footer/Footer';
 import useChannelTalk from '@/hooks/useChannelTalk';
 import Promotion from '@/components/main/Promotion/Promotion';
+import Link from 'next/link';
 
 const MainContent = () => {
   useChannelTalk();
@@ -20,7 +21,9 @@ const MainContent = () => {
         <Banner />
         <Description />
         <TemplateGallery />
-        <SearchTemplate />
+        <Link href="/templates/all">
+          <SearchTemplate />
+        </Link>
         <Footer />
       </div>
       <Promotion />

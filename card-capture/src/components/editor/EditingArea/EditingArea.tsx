@@ -61,7 +61,7 @@ const EditingArea = () => {
     // 새로운 타이머 설정
     timeoutRef.current = setTimeout(() => {
       updateCardsMutation.mutate(cards);
-    }, 3000);
+    }, 1000);
 
     // 컴포넌트 언마운트 시 타이머 정리
     return () => {

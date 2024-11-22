@@ -6,18 +6,20 @@ import PromptInput from '@/components/prompt/PromptInput/PromptInput';
 import PromptPreview from '@/components/prompt/PromptPreview/PromptPreview';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { PromptSubmitType } from '@/api/templateApi';
-import { useCardsStore } from '@/store/useCardsStore';
 import { useRouter } from 'next/navigation';
 import useAuthRedirect from '@/hooks/useAuthRedirect';
 import { templateApi } from '@/api';
-import { jsonUtils } from '@/utils';
 import Title from '@/components/common/Title/Title';
 import Loading from '@/components/common/Loading/Loading';
 import useChannelTalk from '@/hooks/useChannelTalk';
 
 export type PromptInputFormType = {
-  phrases: { value: string }[];
-  emphasis: { value: string }[];
+  phrases: {
+    value: string;
+  }[];
+  emphasis: {
+    value: string;
+  }[];
   purpose: string;
   color: string;
   model: string;

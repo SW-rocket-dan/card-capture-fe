@@ -30,25 +30,21 @@ const BeforeLoginNav = () => {
 
       {!isMobile && (
         <ul className="flex flex-row gap-[30px] whitespace-nowrap text-[12px] font-semibold lg:gap-[50px] lg:text-[14px]">
-          <TooltipProvider>
-            <button
-              onClick={() => {
-                trackAmplitudeEvent('nav-pricing-click');
-                router.push('/pricing');
-              }}
-            >
-              요금제
-            </button>
-            <Tooltip delayDuration={0}>
-              <TooltipTrigger>다른 템플릿 보기</TooltipTrigger>
-              <TooltipContent>
-                <p className="font-normal">준비중!</p>
-              </TooltipContent>
-            </Tooltip>
-            <Link href="/login?create=true">
-              <p onClick={() => trackAmplitudeEvent('nav-create-a-click')}>제작하기</p>
-            </Link>
-          </TooltipProvider>
+          <button
+            onClick={() => {
+              trackAmplitudeEvent('nav-pricing-click');
+              router.push('/pricing');
+            }}
+          >
+            요금제
+          </button>
+          <Link href="/templates/all">
+            <p onClick={() => trackAmplitudeEvent('nav-click-templates')}>다른 템플릿 보기</p>
+          </Link>
+
+          <Link href="/login?create=true">
+            <p onClick={() => trackAmplitudeEvent('nav-create-a-click')}>제작하기</p>
+          </Link>
         </ul>
       )}
 

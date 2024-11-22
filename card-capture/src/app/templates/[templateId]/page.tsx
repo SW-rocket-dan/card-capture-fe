@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic';
 
 export async function generateStaticParams() {
-  return Array.from({ length: 200 }, (_, i) => ({
+  return Array.from({ length: 300 }, (_, i) => ({
     templateId: i.toString(),
   }));
 }
