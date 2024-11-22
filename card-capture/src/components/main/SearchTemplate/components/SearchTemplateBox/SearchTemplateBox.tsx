@@ -1,15 +1,19 @@
-import { ChangeEventHandler, useState } from 'react';
+import { ChangeEventHandler, Dispatch, SetStateAction, useState } from 'react';
 import SearchIcon from '@/components/common/Icon/SearchIcon';
 
-const SearchTemplateBox = () => {
-  const [searchWord, setSearchWord] = useState<string>('');
+type SearchTemplateBoxProps = {
+  searchWord: string;
+  onSearch: (word: string) => void;
+  onSubmit: () => void;
+};
 
+const SearchTemplateBox = ({ searchWord, onSearch }: SearchTemplateBoxProps) => {
   const changeHandler: ChangeEventHandler<HTMLInputElement> = e => {
-    setSearchWord(e.target.value);
+    onSearch(e.target.value);
   };
 
   return (
-    <div className="xs:w-[340px] flex h-[50px] w-[300px] flex-row items-center justify-between rounded-[15px] bg-white py-[20px] pl-[25px] pr-[10px] sm:h-[50px] sm:w-[600px] md:h-[55px] md:w-[650px]">
+    <div className="flex h-[50px] w-[300px] flex-row items-center justify-between rounded-[15px] border border-border bg-white py-[20px] pl-[25px] pr-[10px] xs:w-[340px] sm:h-[50px] sm:w-[600px] md:h-[55px] md:w-[650px]">
       <input
         className="flex-1 text-[13px] text-defaultBlack outline-none placeholder:text-gray5 md:text-[15px]"
         type="text"
