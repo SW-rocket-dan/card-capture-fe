@@ -83,7 +83,7 @@ const TemplateImage = ({ data }: TemplateImageProps) => {
         </div>
 
         <Button type="full" className="w-full rounded-[30px] py-3 shadow-default" shadow={true}>
-          <p className="text-[14px] font-medium">구매하기</p>
+          <p className="text-[14px] font-medium">구매하기 (추후 제공될 예정입니다)</p>
         </Button>
       </div>
     </div>
