@@ -229,7 +229,7 @@ const FocusBox = ({ children, cardId, layerId, type, initialMouseDown }: Props) 
         <ContextMenu>
           <ContextMenuTrigger>
             <div
-              className={`absolute inset-0 flex items-center justify-start p-3 ${
+              className={`absolute inset-0 flex items-center justify-center p-3 ${
                 isDrag ? 'cursor-grabbing' : 'cursor-grab'
               }`}
               style={{ opacity: curPosition.opacity / 100 }}

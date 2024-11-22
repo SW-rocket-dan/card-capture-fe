@@ -71,6 +71,8 @@ const TextBox = ({
     updateLayerSize();
   };
 
+  useEffect(() => {}, [layer]);
+
   /**
    * 현재 포커스된 TextBox의 ref를 store에 저장
    */
@@ -104,7 +106,7 @@ const TextBox = ({
   }, [isDoubleClicked]);
 
   return (
-    <div>
+    <div className="flex items-center justify-center">
       <ReactQuill
         ref={editorRef}
         value={prevText || ''}
