@@ -105,6 +105,23 @@ const getAllTemplateData = async () => {
 };
 
 /**
+ * 공유된 모든 템플릿 데이터를 가져오는 get api
+ */
+const getPublicTemplateData = async () => {
+  try {
+    const response = await customFetch(`${process.env.NEXT_PUBLIC_API_KEY}/api/v1/template/public`, {
+      method: 'GET',
+    });
+
+    const jsonData = await response.json();
+
+    return jsonData.data;
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+/**
  * ai가 생성한 이미지에 추가 프롬프트를 작성하여 변경된 새로운 이미지를 받아오는 post api
  */
 const changeImage = async (imageId: number, message: string) => {
@@ -133,5 +150,6 @@ export default {
   updateTemplate,
   getTemplateData,
   getAllTemplateData,
+  getPublicTemplateData,
   changeImage,
 };
