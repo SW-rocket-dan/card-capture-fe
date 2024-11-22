@@ -25,14 +25,14 @@ const TemplateGallery = () => {
   const { isMobile } = useIsMobile();
 
   return (
-    <div className="bg-bannerbg px- flex h-fit w-full items-center justify-center px-5 py-[80px] md:h-dvh">
+    <div className="px- flex h-fit w-full items-center justify-center bg-bannerbg px-5 py-[80px] md:h-dvh">
       <div className="flex flex-col items-center justify-center gap-[30px] md:gap-[40px]">
         <div className="flex flex-col items-center justify-center gap-[15px]">
-          <p className="xs:text-[26px] text-[23px] font-bold md:text-[40px] 2xl:text-[50px]">
-            다른 사람이 만든 카드뉴스 보기
+          <p className="text-[23px] font-bold xs:text-[26px] md:text-[40px] 2xl:text-[50px]">
+            다른 사람이 만든 포스터 보기
           </p>
-          <p className="xs:w-[350px] text-center text-[13px] font-light text-gray2 sm:w-[500px] md:w-[600px] md:text-[15px] 2xl:text-[17px]">
-            다른 사용자들이 Card Capture를 사용해서 만든 카드 뉴스를 확인해보세요! {!isMobile && <br />}
+          <p className="text-center text-[13px] font-light text-gray2 xs:w-[350px] sm:w-[500px] md:w-[600px] md:text-[15px] 2xl:text-[17px]">
+            다른 사용자들이 Card Capture를 사용해서 만든 포스터를 확인해보세요! {!isMobile && <br />}
             클릭하면 더 많은 템플릿을 볼 수 있어요
           </p>
         </div>

@@ -15,7 +15,7 @@ const TemplatePrompt = ({ prompt }: TemplatePromptProps) => {
       <div className="flex flex-col gap-7 px-1">
         <div className="flex flex-col gap-[7px]">
           <PromptCategoryText>1. 문구</PromptCategoryText>
-          <PromptTitleText>카드뉴스에 작성할 문구를 입력해주세요</PromptTitleText>
+          <PromptTitleText>포스터에 작성할 문구를 입력해주세요</PromptTitleText>
           {prompt.phraseDetails.phrases.map(str => (
             <p className="w-full rounded-[10px] border border-border bg-white px-[15px] py-[12px] text-[13px] text-gray2 outline-none">
               {str}

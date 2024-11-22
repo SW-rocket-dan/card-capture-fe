@@ -98,14 +98,14 @@ const PromptPreview = ({ formData, onSubmit, isLoading }: PromptPreviewProps) =>
             className="flex flex-row items-center justify-center gap-1 rounded-[40px] bg-main px-[40px] py-[18px]"
             style={{ boxShadow: '0 0 14px rgba(111, 108, 255, 0.5)' }}
           >
-            <p className="text-[13px] font-medium text-white">카드뉴스 제작하기</p>
+            <p className="text-[13px] font-medium text-white">포스터 제작하기</p>
             <StarsIcon width={18} className="text-white" />
           </button>
         </DialogTrigger>
         <DialogContent className="flex w-[320px] flex-col items-center justify-center px-[20px] py-[50px] sm:w-[450px] md:px-[30px]">
           {ticketCount > 0 ? (
             <div className="flex flex-col items-center justify-center gap-1">
-              <DialogTitle>이용권을 1개 차감하여 카드뉴스를 제작합니다</DialogTitle>
+              <DialogTitle>이용권을 1개 차감하여 포스터를 제작합니다</DialogTitle>
               <DialogDescription className="mb-5 text-[14px]">
                 현재 보유하고 있는 이용권은 <span className="text-[15px] font-semibold text-main">{ticketCount}개</span>{' '}
                 입니다.
@@ -120,7 +120,7 @@ const PromptPreview = ({ formData, onSubmit, isLoading }: PromptPreviewProps) =>
                   onSubmit(formData);
                 }}
               >
-                <p className="text-[13px] font-medium text-white">카드뉴스 제작하기</p>
+                <p className="text-[13px] font-medium text-white">포스터 제작하기</p>
                 <StarsIcon width={18} className="text-white" />
               </button>
             </div>
@@ -128,7 +128,7 @@ const PromptPreview = ({ formData, onSubmit, isLoading }: PromptPreviewProps) =>
             <div className="flex flex-col items-center justify-center gap-1">
               <DialogTitle>현재 보유한 이용권이 없습니다</DialogTitle>
               <DialogDescription className="mb-3 text-[14px]">
-                이용권 구매 후 카드뉴스 제작이 가능합니다!
+                이용권 구매 후 포스터 제작이 가능합니다!
               </DialogDescription>
               <Button
                 onClick={() => {

@@ -84,7 +84,7 @@ const PromptContent = () => {
       {isLoading && (
         <Loading>
           <div className="flex flex-col items-center justify-center gap-2">
-            <p>카드뉴스 제작 중</p>
+            <p>디지털 포스터 제작 중</p>
             <p className="text-sm font-normal">시간이 오래 소요될 수 있어요! 조금만 기다려주세요</p>
           </div>
         </Loading>

@@ -18,12 +18,12 @@ const LoginModal = () => {
 
   const title = isCreateButton ? (
     <>
-      <span className="text-dark-main">로그인 후</span>에 <br /> 카드뉴스를 제작할 수 있어요!
+      <span className="text-dark-main">로그인 후</span>에 <br /> 포스터를 제작할 수 있어요!
     </>
   ) : (
     <>
       지금 로그인하고
-      <br /> 3분 만에 카드 뉴스를 만들어보세요!
+      <br /> 3분 만에 포스터를 만들어보세요!
     </>
   );
 

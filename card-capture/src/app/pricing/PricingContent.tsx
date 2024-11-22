@@ -13,7 +13,7 @@ const PricingContent = () => {
     <div className="h-screen w-screen overflow-y-scroll font-Pretendard">
       <NavigationBar isTransparent={false} />
       <div className="flex h-full flex-col gap-[50px] pt-[60px]">
-        <Title title="결제 플랜" content="합리적인 가격으로 ai와 함께 카드뉴스를 제작해보세요!" />
+        <Title title="결제 플랜" content="합리적인 가격으로 ai와 함께 포스터를 제작해보세요!" />
         <SinglePayment />
       </div>
     </div>
