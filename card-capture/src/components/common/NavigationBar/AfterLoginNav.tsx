@@ -1,11 +1,10 @@
 import TempProfileIcon from '@/components/common/Icon/TempProfileIcon';
 import DownIcon from '@/components/common/Icon/DownIcon';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import useClickOutside from '@/hooks/useClickOutside';
 import UpIcon from '@/components/common/Icon/UpIcon';
 import useIsMobile from '@/hooks/useIsMobile';
 import { usePathname, useRouter } from 'next/navigation';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { tokenUtils, userUtils } from '@/utils';
 import userApi from '@/api/userApi';
 import { useQuery } from '@tanstack/react-query';
@@ -13,6 +12,7 @@ import useAmplitudeContext from '@/hooks/useAmplitudeContext';
 import Button from '@/components/common/Button/Button';
 import { templateApi } from '@/api';
 import { User } from '@/types';
+import Link from 'next/link';
 
 const AfterLoginNav = () => {
   const router = useRouter();
@@ -49,6 +49,7 @@ const AfterLoginNav = () => {
   const createEmptyTemplateHandler = async () => {
     const { templateId, editor } = await templateApi.createEmptyTemplate();
 
+    await new Promise(resolve => setTimeout(resolve, 1000));
     router.push(`/editor/${templateId}`);
   };
 
@@ -91,30 +92,25 @@ const AfterLoginNav = () => {
 
       {!isMobile && (
         <ul className="flex cursor-pointer flex-row gap-[30px] whitespace-nowrap text-[12px] font-semibold lg:gap-[50px] lg:text-[14px]">
-          <TooltipProvider>
-            <button
-              onClick={() => {
-                trackAmplitudeEvent('nav-pricing-click');
-                router.push('/pricing');
-              }}
-            >
-              요금제
-            </button>
-            <Tooltip delayDuration={0}>
-              <TooltipTrigger>다른 템플릿 보기</TooltipTrigger>
-              <TooltipContent>
-                <p className="font-normal">준비중!</p>
-              </TooltipContent>
-            </Tooltip>
-            <button
-              onClick={() => {
-                trackAmplitudeEvent('nav-create-c-click');
-                router.push('/prompt');
-              }}
-            >
-              제작하기
-            </button>
-          </TooltipProvider>
+          <button
+            onClick={() => {
+              trackAmplitudeEvent('nav-pricing-click');
+              router.push('/pricing');
+            }}
+          >
+            요금제
+          </button>
+          <Link href="/templates/all">
+            <p onClick={() => trackAmplitudeEvent('nav-click-templates')}>다른 템플릿 보기</p>
+          </Link>
+          <button
+            onClick={() => {
+              trackAmplitudeEvent('nav-create-c-click');
+              router.push('/prompt');
+            }}
+          >
+            제작하기
+          </button>
         </ul>
       )}
 
