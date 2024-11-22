@@ -7,16 +7,10 @@ import { useParams } from 'next/navigation';
 import AllTemplatesList from '@/components/templates/all/AllTemplatesList';
 
 const AllTemplatesContent = () => {
-  /**
-   * 라우팅된 아이디 기반으로 템플릿 데이터 가져오기
-   */
-  const params = useParams();
-  const id = params.templateId as string;
-
   return (
-    <div className="w-screen overflow-y-scroll font-Pretendard">
+    <div className="h-screen w-screen overflow-y-scroll font-Pretendard">
       <NavigationBar isTransparent={false} />
-      <div className="flex h-full flex-col items-center justify-center gap-10 pt-[60px]">
+      <div className="flex h-full flex-col pt-[60px]">
         <AllTemplatesList title="다른 템플릿 보기" content="다른 사용자가 만든 템플릿을 구경해보세요!" />
       </div>
     </div>

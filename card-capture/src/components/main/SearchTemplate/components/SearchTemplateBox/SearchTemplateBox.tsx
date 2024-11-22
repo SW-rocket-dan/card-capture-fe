@@ -4,7 +4,6 @@ import SearchIcon from '@/components/common/Icon/SearchIcon';
 type SearchTemplateBoxProps = {
   searchWord: string;
   onSearch: (word: string) => void;
-  onSubmit: () => void;
 };
 
 const SearchTemplateBox = ({ searchWord, onSearch }: SearchTemplateBoxProps) => {
