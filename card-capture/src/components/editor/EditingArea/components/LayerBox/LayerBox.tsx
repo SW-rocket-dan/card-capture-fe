@@ -49,7 +49,7 @@ const LayerBox = ({ children, position, onClick }: LayerBoxProps) => {
         onMouseLeave={() => setIsHovered(false)}
         onMouseDown={onClick}
       >
-        <div className="absolute inset-0 flex items-center justify-start p-3">{children}</div>
+        <div className="absolute inset-0 flex items-center justify-center p-3">{children}</div>
       </div>
     </>
   );

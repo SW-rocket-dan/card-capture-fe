@@ -47,10 +47,11 @@ const AfterLoginNav = () => {
   };
 
   const createEmptyTemplateHandler = async () => {
-    const { templateId, editor } = await templateApi.createEmptyTemplate();
-
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    router.push(`/editor/${templateId}`);
+    // const { templateId, editor } = await templateApi.createEmptyTemplate();
+    //
+    // await new Promise(resolve => setTimeout(resolve, 1000));
+    // router.push(`/editor/${templateId}`);
+    router.push(`/prompt`);
   };
 
   /**
@@ -85,7 +86,7 @@ const AfterLoginNav = () => {
           trackAmplitudeEvent('nav-logo-click');
           router.push('/');
         }}
-        className="text-md flex w-[300px] justify-start whitespace-nowrap"
+        className="text-md font-GmarketSans flex w-[300px] justify-start whitespace-nowrap"
       >
         Card Capture
       </button>
@@ -118,7 +119,7 @@ const AfterLoginNav = () => {
         <div ref={ref} className="relative">
           <div className="flex w-[300px] flex-row justify-end gap-4">
             <Button onClick={createEmptyTemplateHandler} type="full" className="h-[38px] w-[130px] rounded-[7px]">
-              <p className="text-[12.5px] font-medium">에디터 사용하기</p>
+              <p className="text-[12.5px] font-medium">포스터 제작하기</p>
             </Button>
             <div className="flex cursor-pointer flex-row justify-end gap-1.5" onClick={openHandler}>
               {userInfo ? (

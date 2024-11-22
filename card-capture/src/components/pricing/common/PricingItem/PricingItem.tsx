@@ -61,7 +61,7 @@ const PricingItem = ({ title, price, description, optionList }: PricingItemProps
     const toastDescription = isPaymentCompleted ? (
       <>
         <p>결제가 완료되었습니다.</p>
-        <p>이용권을 사용해 카드뉴스를 만들어보세요!</p>
+        <p>이용권을 사용해 포스터를 만들어보세요!</p>
       </>
     ) : (
       errorMessage

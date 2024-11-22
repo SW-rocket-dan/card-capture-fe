@@ -39,7 +39,7 @@ const DownloadProgressModal: React.FC<DownloadProgressModalProps> = ({ isOpen, o
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="flex w-[400px] flex-col items-center justify-center px-[20px] py-[40px]">
         <div className="flex flex-col items-center justify-center gap-1">
-          <DialogTitle>카드뉴스를 이미지로 변환하고 있어요!</DialogTitle>
+          <DialogTitle>포스터를 이미지로 변환하고 있어요!</DialogTitle>
           <DialogDescription>대기 창을 닫아도 다운로드는 문제없이 진행됩니다</DialogDescription>
         </div>
         <div className="flex flex-col">

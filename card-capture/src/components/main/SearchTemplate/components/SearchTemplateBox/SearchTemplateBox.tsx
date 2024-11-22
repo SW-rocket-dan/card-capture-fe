@@ -20,7 +20,7 @@ const SearchTemplateBox = ({ searchWord, onSearch }: SearchTemplateBoxProps) => 
         type="text"
         value={searchWord || ''}
         onChange={changeHandler}
-        placeholder="카드 뉴스를 검색해보세요. 예) 음식점 홍보"
+        placeholder="포스터를 검색해보세요. 예) 음식점 홍보"
       />
       <button className="flex h-[33px] w-[33px] items-center justify-center rounded-full bg-main md:h-[40px] md:w-[40px]">
         <SearchIcon width={20} className="text-white" />
