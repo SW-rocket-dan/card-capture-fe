@@ -23,7 +23,7 @@ const BeforeLoginNav = () => {
           trackAmplitudeEvent('nav-logo-click');
           router.push('/');
         }}
-        className="text-md flex w-[300px] justify-start whitespace-nowrap"
+        className="text-md font-GmarketSans flex w-[300px] justify-start whitespace-nowrap"
       >
         Card Capture
       </button>

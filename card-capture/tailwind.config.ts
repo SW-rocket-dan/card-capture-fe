@@ -48,6 +48,7 @@ const config = {
       },
       fontFamily: {
         Pretendard: ['Pretendard'],
+        GmarketSans: ['GmarketSansMedium', 'sans-serif'],
       },
       letterSpacing: {
         'little-tight': '-0.018em',
