@@ -40,9 +40,36 @@ jobs:
         with:
           node-version: "18"
 
-      # - name: Set Node.js memory limit
-      #   run: |
-      #     echo "NODE_OPTIONS=--max-old-space-size=8192" >> $GITHUB_ENV
+      # 네트워크 연결 테스트 단계 추가
+      - name: Test Network Connectivity
+        env:
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+        run: |
+          echo "=== Network Connectivity Test ==="
+
+          # 기본 연결성 테스트
+          echo "1. Ping test:"
+          ping -c 3 $SERVER_IP || echo "Ping failed"
+
+          # 포트 연결 테스트 (여러 방법)
+          echo "2. Port 22 connectivity test:"
+          timeout 10 bash -c "</dev/tcp/$SERVER_IP/22" && echo "Port 22 is open" || echo "Port 22 is closed/filtered"
+
+          # ncat/nc 테스트
+          echo "3. NC test:"
+          timeout 5 nc -zv $SERVER_IP 22 || echo "NC test failed"
+
+          # curl 테스트
+          echo "4. Curl test:"
+          timeout 5 curl -v telnet://$SERVER_IP:22 || echo "Curl test failed"
+
+          # GitHub Actions 러너의 IP 확인
+          echo "5. GitHub Actions Runner IP:"
+          curl -s https://api.ipify.org || echo "IP lookup failed"
+
+          echo "=== Test completed ==="
+
+      # SSH 연결 디버깅 단계
       - name: Debug SSH Connection
         env:
           SERVER_IP: ${{ secrets.SERVER_IP }}
@@ -58,15 +85,33 @@ jobs:
           echo "$SSH_PRIVATE_KEY" | tail -1
 
           # SSH 키 파일 생성
-          echo "$SSH_PRIVATE_KEY" > deployment_key.pem
-          chmod 600 deployment_key.pem
+          echo "$SSH_PRIVATE_KEY" > deployment_key_test.pem
+          chmod 600 deployment_key_test.pem
 
           # SSH 키 유효성 검사
-          ssh-keygen -l -f deployment_key.pem || echo "SSH 키 형식 오류"
+          echo "=== SSH Key Validation ==="
+          ssh-keygen -l -f deployment_key_test.pem || echo "SSH 키 형식 오류"
 
-          # SSH 연결 테스트 (실제 명령 실행 없이)
-          ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 -i deployment_key.pem $SERVER_USER@$SERVER_IP "echo 'SSH 연결 성공'" || echo "SSH 연결 실패"
+          # SSH known_hosts 설정
+          mkdir -p ~/.ssh
+          ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
 
+          # SSH 연결 테스트
+          echo "=== SSH Connection Test ==="
+          ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 -i deployment_key_test.pem $SERVER_USER@$SERVER_IP "echo 'SSH 연결 성공: $(whoami)@$(hostname)'" || {
+            echo "SSH 연결 실패"
+            echo "가능한 원인:"
+            echo "1. SSH 키가 서버에 등록되지 않음"
+            echo "2. 서버 IP/사용자명 오류: $SERVER_USER@$SERVER_IP"
+            echo "3. 방화벽/보안그룹 설정"
+            echo "4. SSH 서비스 미실행"
+            exit 1
+          }
+
+          # 정리
+          rm -f deployment_key_test.pem
+
+      # 기존 배포 단계
       - name: Deploy to Server
         env:
           SERVER_IP: ${{ secrets.SERVER_IP }}
